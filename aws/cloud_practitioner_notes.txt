@@ -1,0 +1,223 @@
+ 
+
+6 advantages of cloud computing:
+	* you only have to pay for what you use
+	* amazon has a lot of purchasing power, so don't have to worry about buying servers
+	* you don't have to guess purchasing capacity
+	* fast and agile
+	* you don't have to waste time managing and paying for datacenters
+	* you can go global really fast
+
+services that use the AWS Edge Network:
+	* CloudFront
+	* Route 53
+	* S3 Transfer Acceleration
+	* API Gateway
+
+Database services:
+	* DynamoDB
+	* DocumentDB
+	* RDS (Relational Database Service): 
+		* Aurora	
+		* Aurora Serverless
+	* Neptune
+	* Redshift
+	* ElastiCache
+
+Provisioning services:
+	* Elastic Beanstalk
+	* OpsWorks
+	* CloudFormation
+	* AWS Quickstart
+	* AWS Marketplace
+
+Computing services:
+	* EC2: All these use EC2 servers
+				     |
+				     v
+	* ECS
+	* Fargate
+	* EKS: same as ECS, but instead it runs on Kubernetes
+	* Lambda
+	* Elastic Beanstalk
+	* AWS Batch 
+
+Storage services:
+	* S3
+	* S3 Glacier  
+	* Storage Gateway
+	* EBS
+	* EFS
+	* Snowball
+	* Snowball Edge
+	* Snowmobile
+
+Acronyms:
+	* IAM: Identity and Access Management					* ELB: Elastic Load Balancer
+	* S3: Simple Storage Service							* ALB: Application Load Balancer
+	* SWF: Simple Workflow Service							* NLB: Network Load Balancer
+	* SNS: Simple Notification Service						* EC2: Elastic Cloud Compute
+	* SQS: Simple Queue Service							* ECS: Elastic Container Service
+	* SES: Simple Email Service							* ECR: Elastic Container Repository
+	* SSM: Simple Sessions Manager							* EBS: Elastic Block Storage
+	* RDS: Relational Database Service						* EFS: Elastic File Storage
+	* VPC: Virtual Private Cloud							* EMR: Elastic MapReduce
+	* VPN: Virtual Private Network							* EB: Elastic Beanstalk
+	* CFN: CloudFormation								* ES: ElasticSearch
+	* WAF: Web Application Firewall							* EKS: Elastic Kubernetes Service
+	* MQ: Amazon ActiveMQ								* MKS: Managed Kafka Service
+	* ASG: Auto Scaling Groups							* IoT: Internet of Things
+	* TAM: Technical Account Manager						* RI: Reserved Instances
+
+APN Partner path to success Tiers:
+	* Registered ---> Select ---> Advanced ---> Premier
+	  |___________________________________|
+		    Technology Partners
+	  |_______________________________________________|
+			Consulting Partners
+
+types of cloud computing:
+	* IaaS 
+	* PaaS
+	* SaaS
+
+3 types of cloud computing deployment models:
+	* public cloud
+	* private cloud/on-premise
+	* hybrid
+
+3 ways of accessing AWS:
+	* AWS console
+	* command line
+	* SDK's
+
+Data Warehousing options:
+	* Cognos
+	* Jaspersoft
+	* SQL Server Reporting Services
+	* Oracle
+	* Hyperion
+	* SAP NetWeaver
+
+how cloud computing is better than traditional computing:
+	* IT assets (servers, databases) are provisioned resources easily available to you instead of having to set up everything physically yourself
+	* global, available, and scaleable
+	* higher level managed services; ex: if you want machine-learning you don't have to hire machine-learning experts you can just use SageMaker
+	* secure
+	* you can build your architecture to be extremely cost-efficient
+	* Operations on AWS: your on premise solutions turn into already existing services that AWS provides
+
+Instantiating Compute Resources:
+	* Bootstrapping: writing a script to configure your machines for you, so you don't have to manually configure them every time
+	* Golden Images: disc images that you can run which create an exact clone of a server; it's like The One, and you can use it to create duplicates of The One
+	* Containers
+	* Hybrid: using a combination of containers and EC2 instances
+
+Infrastructure Management and Deployment:
+	* Elastic Beanstalk
+	* EC2 auto recovery
+	* AWS systems manager
+	* auto scaling
+
+alarms and events
+	* CloudWatch alarms
+	* CloudWatch events
+	* lambda scheduled events
+	* AWS WAF security automations
+
+always use managed services and server-less architectures 
+
+OLTP and OLAP services:
+	* OLTP services: Aurora, MySQL
+	* OLAP services: Redshift
+
+CloudSearch and ElasticSearch are Amazon's 2 search services
+
+Removing single points of failure when architecting:
+	* always introduce redundancy
+	* build a mechanism for detecting failure
+	* make it such that if one AZ fails, it automatically switches over to the other one
+	* scale horizontally as opposed to vertically
+	* fault isolation: so that if one goes down, the rest don't
+	* sharding: splitting up a single task across multiple machines
+	* durable data storage: talking about durability in terms of Storage Class
+
+global AWS services:
+	* IAM
+	* Route53
+	* CloudFront
+	* SNS
+	* SES
+
+AWS services that can be used on-premise: 
+	* Snowball
+	* Snowball Edge
+	* Storage Gateway
+	* CodeDeploy
+	* OpsWorks
+	* IoT Greengrass
+
+basic pricing principals:
+	* pay as you go
+	* pay less when you reserve
+	* pay less when you use more
+	* pay less as AWS grows
+	* custom pricing
+
+the 3 main drivers of cost with AWS:
+	* compute
+	* storage
+	* outbound data
+
+all free AWS services: IAM, Amazon VPC, Organizations, Consolidated Billing, AWS Cost Explorer
+	* free, but they CAN use AWS services that cost money: Auto Scaling, CloudFormation, Elastic Beanstalk, Opsworks, Amplify, AppSync, CodeStar
+
+Consulting Partner tier requirements:
+	--------   practitioner certs - associate certs - professional/specialty certs
+	* select:	2			2			2
+	* advanced:     4			4			6
+	* premier: 	10			10			10
+
+the 5 pillars of the AWS well architected framework:
+	* operational excellence
+		* perform operations as code
+		* make frequent, small, reversible changes
+		* refine operational procedures frequently
+		* anticipate failure
+		* learn from your failures
+	* reliability
+		* automatically recover from failure
+		* test recovery procedures
+		* scale horizontally
+		* stop guessing capacity
+		* use automation when changing your infrastructure
+	* security
+		* implement strong identity foundation
+		* enable traceability
+		* apply security at all layers
+		* automate security best practices
+		* protect data in transit and at rest
+		* keep people away from data
+		* prepare for security events
+	* performance efficiency
+		* democratize advanced technologies (split up the work effectively; aka don't make a newb learn advanced machine learning)
+		* go global fast
+		* use server less architectures
+		* experiment more often
+		* always consider the right tool for the job
+	* cost optimization
+		* implement Cloud Financial Management
+		* adopt a consumption model (aka pay only for the resources you require; don't pay based on complicated forecasting predictions)
+		* measure overall efficiency; meaning business output should be high, while cost should be low, the more you widen the gap, the more efficient
+		* stop spending money on database/server management
+		* accurately identify the usage and cost of current/future systems
+
+Cost Governance Best Practices:
+	* resource controls: identifying, monitoring, and categorizing resources: ex IAM, Organizations, etc.
+	* cost allocation: sharing costs between teams responsibly
+	* budgeting processes: reviewing budgets, accessing costs, and acting on that analysis smartly
+	* architecture optimization: continually refine workloads to optimize architecture performance and cost
+	* tagging and tagging enforcement: use tags to organize company resource costs and responsibilities
+AWS Acceptable Use Policy: outlines prohibited uses of the web services offered by AWS
+
+

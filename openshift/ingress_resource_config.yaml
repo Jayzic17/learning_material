@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: example
+  namespace: project_name
+spec:
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - patch: /testpath
+            backend:
+              serviceName: service_name
+              servicePort: 8080

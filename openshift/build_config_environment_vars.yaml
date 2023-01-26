@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: secret_example_build_config
+spec:
+  strategy:
+    sourceStrategy:
+      env:
+      - name: TEST_SECRET_USERNAME_ENV_VAR
+        valueFrom:
+          secretKeyRef:
+            name: my_secret_name
+            key: user_name

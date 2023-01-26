@@ -1,0 +1,51 @@
+server:
+  ssl: # configuring TLS and SSL
+    enabled: true         
+    key-alias: scg
+    key-store-password: scg1234
+    key-store: classpath:scg-keystore.p12
+    key-store-type: PKCS12
+spring:
+  cloud:
+    gateway:
+      routes: # This is where you define your Routes
+      - id: example_route_id
+        uri: https://example.org
+        predicates: # the conditions that match an API call to a specific Route
+        - After=2017-01-20T17:42:47.789-07:00[America/Denver] # matches any request made after this time
+        - Before=2017-01-20T17:42:47.789-07:00[America/Denver] # matches any request made before this time
+        - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver] # matches any request made between these times
+        - Cookie=chocolate, ch.p # matches requests with the Cookie name: chocolate, whose value matches the given regular expression
+        - Header=X-Request-Id, \d+ # matches requests with the Header name: X-Request_id, whose value matches the given regular expression
+        - Host=**.somehost.org,**.anotherhost.org # matches requests whose Host Header matches any of the regular expressions in the given list
+        - Method=GET,POST # matches either GET or POST HTTP Methods
+        - Path=/red/{segment},/blue/{segment} # matches requests if the request path matches either of the Spring PathMatcher patterns in the given list
+        - Query=red, gree. # matches requests that contain the query parameter: red, whose value matches the given regular expression
+        - RemoteAddr=192.168.1.1/24 # matches requests whose source is any of the list of IPv4/IPv6 CIDR-notation IP addresses
+        metadata:
+          response-timeout: 200 # local HTTP response timeout applied to this Route
+          connect-timeout: 200 # local HTTP connection timeout applied to this Route
+        filters: # lets you pre-process or post-process API calls
+        - AddRequestHeader=X-Request-red, blue # configures an AddRequestHeader and GatewayFilter with a name and value; adds the header to the downstream request's headers for all matching requests
+        - AddRequestParameter=red, blue # configures an AddRequestParameter GatewayFilter with a name and value; adds the header to the downstream request's headers for all matching requests
+        - AddResponseHeader=X-Response-Red, Blue # configures an AddResponseHeader GatewayFilter with a name and value; adds the header to the downstream request's headers for all matching requests
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin # removes duplicate instances of Response Headers in the given list of space-seperated Response Headers
+      - id: weight_high             #
+        uri: https://weighthigh.org #
+        predicates:                 #
+        - Weight=group1, 8          # 80% of traffic gets routed to: weighthigh.org and 20% gets routed to: weightlow.org
+      - id: weight_low              # 
+        uri: https://weightlow.org  #
+        predicates:                 #
+        - Weight=group1, 2          #
+      httpclient:
+        connect-timeout: 1000 # Global HTTP connection timeout applied to all Routes
+        response-timeout: 5s # Global HTTP response timeout applied to all Routes
+        ssl: # configuring TLS and SSL
+          useInsecureTrustManager: true # trust  all downstream certificates if you are routing to an HTTPS backend
+          trustedX509Certificates:
+          - cert1.pem
+          - cert2.pem
+          handshake-timeout-millis: 10000
+          close-notify-flush-timeout-millis: 3000
+          close-notify-read-timeout-millis: 0

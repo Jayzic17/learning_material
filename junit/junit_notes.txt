@@ -1,0 +1,134 @@
+
+
+prerequisites and setup to allow for JUnit testing on your project:
+	* create a pom.xml file at your project's root directory
+		* include the <dependencies> section
+		* specify the latest version of JUnit as a dependency
+			* see the Maven website for latest release
+	* make sure you store all your JUnit tests in a folder: src/test/java/, as this is proper convention
+		* whereas application source code is stored in: src/main/java/...
+	* make sure all JUnit files contain the imports:
+		* import static org.junit.jupiter.api.Assertions.*;
+		* import static org.junit.jupiter.api.Test;
+
+
+
+---EXAMPLE---
+Project
+  pom.xml
+  src
+    main
+      java
+        class1
+    test
+      java
+        class1Test
+
+
+
+class1.java:
+public class class1 {
+  public int add(int num1, int num2) {
+    return num1 + num2;
+  }
+}
+
+
+
+class1Test.java:
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.BeforeAll;
+import static org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.AfterAll;
+
+class class1JUnitTest {
+  @BeforeEach
+  void beforeEachMethod() {
+    //code to run before each new @Test method
+  }
+  @BeforeAll
+  void beforeAllMethod() {
+    //code to run before all @Test methods are ever run
+  }
+  @AfterEach
+  void afterEachMethod() {
+    //code to run after each new @Test method
+  }
+  @AfterAll
+  void afterAllMethod() {
+    //code to run after every @Test method has ran
+  }
+  @Test
+  void simpleTest() {
+    class1 obj = new class1();
+    assertEquals(4, obj.add(2, 2));
+    assertNotEquals(3, obj.add(2, 2));
+    assertTrue(4 == obj.add(2, 2));
+    assertFalse(3 == obj.add(2, 2))
+    assertNull(obj.add(2, 2));
+    assertNotNull(obj.add(2, 2));
+  }
+}
+
+
+
+how to run JUnit tests:
+	* in either Eclipse or IntelliJ you can just click on: "Run" and just run the JUnit test file by itself
+	* you can also run $ mvn test, and that will run every test in the project
+	* or if you're on IntelliJ you can click on the test target in the Maven window
+	* also on IntelliJ there will be a green arrow icon on the left-hand side you can click on to test a singular test
+
+Mockito: Mockito is used for Mock Testing; you would use this if the function you're testing depends on calling other functions in order to run
+	* we don't care about the result of those other functions; just the result of the function we're testing
+	* so we'll mock them by saying: "whenever you call this other function we don't care about with whatever, just return this fixed value and move on"
+	* void functions are ignored by Mockito by default; the one's we are Mocking return some value
+	* prerequisites:
+		* include Mockito in your pom
+		* import any Mockito methods you use when writting JUnit test cases in your src/test/java/... test file
+
+Mockito Example:
+class1Test.java:
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.BeforeAll;
+import static org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.AfterAll;
+
+class class1JUnitTest {
+
+  @InjectMocks
+  Class1 class1Test; //Object of the java class you're testing on
+
+  AutoCloseable closeable;
+
+  @Mock
+  ExampleService service; //Object that has any of the other functions that we don't care about and want to mock
+
+  @BeforeEach
+  void beforeEachMethod() {
+    closeable = MockitoAnnotations.openMocks(this);
+  }
+
+  @AfterEach
+  void afterEachMethod() {
+    closeable.close();
+  }
+
+  @Test
+  void simpleTest() {
+    class1 obj = new class1();
+    when(service.someOtherFunctionWeDontCareAbout(//some arguments)).thenReturn(//this instead);
+    class1Test.theMethodYoureTesting(obj);
+    Assertions.assertTrue(...)
+  }
+}
+
+
+
+
+
+
+

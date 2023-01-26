@@ -1,0 +1,533 @@
+
+
+
+---GLOBBING CHARACTERS--- (see: linux101_commands.txt for additional information)
+
+
+
+---BASH HOT KEYS---
+[CTRL] + [F2]: open up a new Bash shell
+[CTRL] + [ALT] + [F1]: navigate back one shell from the current Bash shell
+
+
+
+---FUNCTIONS--- (see: linux101_commands.txt for additional information)
+function [funciton_name]() {
+	* function_name() {: lets you create a multi-line function in the Bash shell, as opposed to creating one using a file
+	* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to complete your function, type: "}"
+	* to call this function, run: $[function_name]
+	* this is not a permenant change; it goes away as soon as you logout of the current Bash shell
+	* to make this change permanent, edit the: /home/.bashrc file
+#!: the Shebang character sequence at the top of a file that tells Linux that this file is a script
+	* EX: #!/bin/perl, #!bin/python, #!bin/bash, etc.
+# [comment_here]
+	* # comment_here: how to write comments when scripting
+$[number]
+	* $number: parameters that you can use as arguments for your shell scripts
+	* EX: $1
+	* parameters are Positional, meaning that the location of the parameter in the command determines which one it is
+	* parameters are not required; they are optional
+if [ [condition_here] ]; then
+	* if [ condition_here ]; then: this is how to write an "if" statement in the Bash shell, as opposed to creating one using a file
+	* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to include an else/if statement, type: "elif [ [condition_here] ]; then"
+		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to include an else statement, type: "else"
+		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to complete your statement, type: "fi"
+if test [condition_here]; then
+	* if test condition_here; then: this is how to write an "if" statement in the Bash shell, as opposed to creating one using a file, w/o having to use the "[]"s
+	* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to include an else/if statement, type: "elif [ [condition_here] ]; then"
+		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to include an else statement, type: "else"
+		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* to complete your statement, type: "fi"
+writing if/else statements in a file:
+	if [ [condition_here] ]; then
+	  [command_here]
+	elif [ [condition_here] ]; then
+	  [command_here]
+	else
+	  [command_here]
+	fi
+writing for loops in a file:
+	for [variable_here] in [list_here]
+	do
+	  [command_here]
+	done
+	* EX's of list_here:
+		* 1 2 3 4
+		* $([command_here])
+		* `[command_here]`
+writing while loops in a file:
+	while [ [condition_here] ]
+	do
+	  [command_here]
+	done
+writing until loops in a file:
+	until [ [condition_here] ]
+	do
+	  [command_here]
+	done
+writing while loops to read a file line-by-line in a file:
+	while read [variable_name]
+	do
+	  [command_here]
+	done < [file_here]
+exit [number]
+	* number: returns "number" as the exit code for the script
+
+
+
+---CONDITIONS---
+-d [directory_here]
+	* -d directory_here: condition that evaluates whether or not the given directory exists
+-f [file_here]
+	* -f file_here: condition that evaluates whether or not the given file exists, and that it's a regular file, meaning one we can actually use
+-e [file_here]
+	* -e file_here: condition that evaluates whether or not the given file exists, regardless of what type of file it is
+[number] -eq [number]
+	* number -eq number: determins if the two numbers are equal
+[number] -ne [number]
+	* number -ne number: determins if the two numbers are NOT equal
+[number] -gt [number]
+	* number -gt number: determins if the 1st number is greater than the 2nd
+[number] -lt [number]
+	* number -lt number: determins if the 1st number is less than the 2nd
+[number] -ge [number]
+	* number -ge number: determins if the 1st number is greater than or equal to the 2nd
+[number] -le [number]
+	* number -le number: determins if the 1st number is less than or equal to the 2nd
+
+
+
+---OPERATORS---
+|| = logical "OR" operator
+&& = logical "AND" operator
+= = logical equality operator
+!= = logical inequality operator
+[ [conditions_here] ]
+	* [ conditions_here ]: use the "[]"s whenever you're grouping together conditions via operators; like you would with "()"s
+	* whenever you have double ['s or ]'s, drop the whitespace in-between them
+		* EX: if [[ -d /opt || -f /derp ]]...
+
+
+
+---ENVIRONMENT VARIABLES--- (see: linux101_commands.txt for additional information)
+
+
+
+---LOCAL VARIABLES--- (see: linux101_commands.txt for additional information)
+
+
+
+env
+ls
+bash
+source
+cd
+cp
+mv
+mkdir
+clear
+vim
+unset
+echo
+su
+chmod
+touch
+$[$,!,?]
+runlevel
+grep
+telinit
+cat
+groups
+chown
+tail
+head
+man
+journalctl [-r, -e, -n, -f, -o, -x, -b] [verbose, json-pretty, --list-boots, --since, --until, --disk-usage, --rotate] [-u] [number] [service_name].service [boot_number] [####-##-##] [##:##:##]
+	* see: linux101_commands.txt for additional information
+	* journalctl: displays the journal with the oldest data at the top
+	* -r: reverses the display of the journal with the newest data at the top
+	* -e: jump straight to the end of the journal
+	* -n number: view the newest "number" lines
+	* -f: follow new entries in the journal as new entries are added
+	* -f -u service_name.service: follow new entries in the journal for the specified unit/Service as new entries are added
+	* -o verbose: prints verbose output of the journal
+	* -o json-pretty: prints the output of the journal in json format
+	* -x: shows log lines with some text that comes from the Service Catalog for help on debugging issues
+	* -b shows all journal entries since the most recent boot
+	* --list-boots: shows a list of boot sessions and their boot numbers (column 1)
+		* prerequisite: journal must be persistently-saved to disk
+	* -b [boot_number]: shows all journal entries for the specified boot session given its boot number
+		* prerequisite: journal must be persistently-saved to disk
+	* --since ####-##-## ##:##:##: shows all journal entries since the specified date and time
+		* EX: $ journalctl --since 2018-02-09 12:28:00
+		* prerequisite: journal must be persistently-saved to disk
+	* --until ####-##-## ##:##:##: shows all journal entries until the specified date and time
+		* prerequisite: journal must be persistently-saved to disk
+	* --disk-usage: displays the amount of disk space that the journal is consuming
+		* prerequisite: journal must be persistently-saved to disk
+	* --rotate: forces the journal to rotate the journal log files
+		* prerequisite: journal must be persistently-saved to disk
+dmesg [-x] [--level]=[err,warn]
+	* see: linux101_commands.txt for additional information
+	* dmesg: prints out the contents of the /var/log/dmesg file
+	* --level=err,warn: shows only error and warning log messages
+	* -x: prints out the contents of the /var/log/dmesg file with human-readable Facility an Priority- Level prefixes
+		* output:
+			* column 1: the Facility (EX: kern (a.k.a the Kernel))
+			* column 2: the Priority Level of the log (EX: warn)
+file [-i] [file_name]
+	* see: linux101_commands.txt for additional information
+	* -i file_name: prints out the given file's character encoding format
+passwd [-e] [user_name]
+	* see: linux101_commands.txt for additional information
+	* -e user_name: expires the given User's password after its 1st use, forcing the User to create a new password next time they log in (works just like a temporary password)
+systemctl [cat, start, enable] [list-timers] [daemon-reload] [service_name].service [--all] [timer].timer [timer].service
+	* see: linux101_commands.txt for additional information
+	* daemon-reload: reloads all systemd files
+		* you would run this after you made changes to systemd and want to immediately apply the changes in your current Bash shell
+	* start service_name.service: starts the specified Service
+		* EX: $ systemctl start chronyd.service: starts the chronyd Service, which is the modern NTP daemon used on systemd computers
+	* enable service_name.service: enables the specified Service
+	* list-timers -all: lists out all Timers on the computer
+		* output:
+			* column 1: the next time the Timer runs
+			* column 2: how much time before the Timer runs
+			* column 3: the last time the Timer ran
+			* column 4: 
+			* column 5: the associated Timer's .timer file
+			* column 6: the associated Timer's .service file
+	* cat timer.timer: prints out the contents of the given Timer's .timer file
+	* cat timer.service: prints out the contents of the given Timer's .service file
+export PATH=$PATH:[file_path]
+	* see: linux101_commands.txt for additional information
+	* PATH=$PATH:file_path: appends the path: file_path to the end of your $PATH Environment Variable
+		* this is not a permenant change; it goes away as soon as you logout of the current Bash shell
+		* to make this change permanent, edit the: /home/.bash_profile file
+. [file_name]
+	* file_name: mimics the exact same functionality as the $ source command
+set [-f, +f]
+	* see: linux101_commands.txt for additional information
+	* -f: disables Globbing
+	* +f: enables Globbing
+alias [alias_name]="[command_here]"
+	* alias_name=command_here: creates an alias named: alias_name that runs the command: command_here
+		* EX: $ alias ll="ls -lh"
+		      $ ll: output: (the same as running: $ ls -lh)
+	* this is not a permenant change; it goes away as soon as you logout of the current Bash shell
+	* to make this change permanent, edit the: /home/.bashrc file
+seq [first_number] [skip_number] [last_number]
+	* first_number last_number: prints out all integers from: first_number to: last_number
+	* first_number skip_number last_number: prints out every number from: first_number to: last_number, while skipping every: skip_number
+		* EX: $ seq 1 5 15: output: 1 6 11
+read [variable_name]
+	* read variable_name: takes input and assigns it to the variable: variable_name
+	* after you hit [ENTER], you'll be able to provide the input for variable_name
+exec [file_name]
+	* file_name: redirects all output from the current Bash shell to the file: file_name
+yum [grouplist, groupinstall] "[group_name]"
+	* see: linux101_commands.txt for additional information
+	* grouplist: lists out a list of all the groups in YUM
+	* groupinstall "group_name": installs the given group
+startx
+	* startx: starts the X Server, which will then start the computer's Window Manager
+	* not safe, because you log into the Window Manager as the Root User, and you bipass authentication and session managment of the Display Manager
+ssh [-Y, -C, -L] [User]@[IPv4_address] [port_number]:localhost:[port_number] [IPv4_address]
+	* User@IPv4_address: ssh to a computer as "User," given the computer's IPv4 address
+	* -Y User@IPv4_address: ssh to a computer as "User," given the computer's IPv4 address, while also invoking the $ xauth command to help secure and protect any remote X11 requests...
+		* ...that we send from the computer we are connecting to, to the one we were just connected to
+	* -C -L port_number:localhost:port_number IPv4_address: creates an SSH Tunnel btwn this computer and the remote computer given the remote computer's IP on the specified port
+Xorg [-configure] [-config] [config_file_name]
+	* -configure: used to create a new /etc/X11/xorg.conf file for your X Server
+		* creates your new configuration file as: /root/xorg.conf.new
+	* -config config_file_name: run your computer with the given xorg.conf file
+		* to exit, press: [CTRL] + [ALT] + [BACKSPACE]
+	* can also use the command: $ X (they both do the same thing)
+	* prerequisites:
+		* $ telinit 3
+		* back-up your current /etc/X11/xorg.conf file with: $ mv /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
+xdpyinfo
+	* xdpyinfo: displays info about the current X session and X Server instance
+	* output:
+		* the $DISPLAY variable contents
+		* X11 version number
+		* a list of all the extensions that your X Server has installed and are available to use
+		* the # of screens in-use, as well as what #'d screen each one is
+		* the resolution, dimensions, and color-depth of each screen
+xhost [+ -] [ipv4_address]
+	* +: allows all incoming connections to your X Server, regardless of where a User is coming from
+	* -: disallows all incoming connections to your X Server
+	* + ipv4_address: allows incomming connection from the given ipv4 address to your X Server 
+	* xhost is a legacy and insecure command of allowing client systems the ability to display X11 windows remotely to your computer
+ip [addr] [show]
+	* addr show: displays your computer's IP address
+xauth [list]
+	* list: shows what remote X sessions are currently running on your computer right now
+		* output: [hostname]:## [MIT-MAGIC-COOKIE] [password]
+			* the 2 digit number indicates the type of connection (EX: 10 for ssh connections)
+			* MIT-MAGIC-COOKIE: password used so that any X11 requests that are made from this remote X session are secure
+	* the xauth command allows a User to edit and view security info that grants a remote User the ability to control local X11 client windows remotely
+useradd [-m, -r] [-c] "[comment]" [-s] [shell_path] [-G] [group_name] [new_user_name] [new_system_name]
+	* new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name
+		* you will need to provide the password of the User you used to run this command in order to create this new User
+		* this command alone does NOT set the new User's password, for that you will have to also run: $ passwd [new_user_name]
+		* this does NOT create a /home directory for the new User, for that you are supposed to run: $ useradd -m [new_user_name] instead
+	* -m new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name, as well as creates them a new /home directory at: /home/[new_user_name]
+		* you will need to provide the password of the User you used to run this command in order to create this new User
+		* this command alone does NOT set the new User's password, for that you will have to also run: $ passwd [new_user_name]
+	* -c "comment" new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name, as well as adds a Comment to the User
+		* typically used to include the User's full name
+		* EX: $ useradd -c "Jonathan Gorczyca" jonathan
+	* -s shell_path new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name, and sets the default shell of the new User given the path to the shell
+		* EX: $ useradd -s /bin/tcsh jonathan: lets User jonathan use the C Shell as his default shell
+	* -G group_name new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name, and is also added to the Supplementary Group named: group_name
+		* prerequisite: group_name must already exist
+	* useradd -r new_system_name: creates a new System account
+	* prerequisite: must be logged in as the Root User
+[partial_command_here]\
+	* partial_command_here/: the special backslash character "\" lets Bash know that you will continue the rest of this command on the next line
+	* you do this if you're running out of space on your terminal window 
+userdel [-r] [user_name]
+	* user_name: deletes the specified User from the computer
+		* does NOT remove the User's /home folder
+	* -r user_name: deletes the specified User from the computer, as well as their /home folder
+	* prerequisite: must be logged in as the Root User
+groupadd [group_name]
+	* group_name: creates the given Group
+	* prerequisite: must be logged in as the Root User
+groupdel [group_name]
+	* group_name: removes the given Group from the computer
+	* prerequisite: must be logged in as the Root User
+getent [group, passwd, shadow] [group_ID, user_name, group_name]
+	* group group_ID: queries the /etc/group database file for the specified Group ID
+		* EX: $ getent group 100
+	* passwd user_name: queries the /etc/passwd database file for the specified User
+	* group group_name: queries the /etc/group database file for all members of the given Group
+	* shadow user_name: queries the /etc/shadow database file for the specified User
+	* prerequisite: must be logged in as the Root User
+usermod [-s, -a, -g, -L, -U, -d] [-G] [path_to_shell, path_to_home] [group_name] [user_name]
+	* -s path_to_shell user_name: change the default shell of the given User
+	* -G group_name user_name: changes the specified User's Supplementary Group to be: group_name (overwrites any existing Supplementary Groups)
+	* -a -G group_name user_name: APPENDS the specified User to the given Supplementary Group (doesn't overwrite any existing Supplementary Groups)
+	* -g group_name user_name: changes the specified User's Primary Group
+	* -L user_name: locks the specified User account
+	* -U user_name: unlocks the specified User account
+	* -d path_to_home user_name: changes the /home directory of the given User
+		* this does NOT automatically make the new /home directory for you
+	* prerequisite: must be logged in as the Root User
+chage [-E, -l, -W] [####]-[##]-[##] [-1] [number_days] [user_name]
+	* -E ###-##-## user_name: expires the given User's account on the specified date
+	* -l user_name: lists out the account options of the specified User
+	* -E -1 user_name: removes the expiration date on the User's account
+	* -W number_days user_name: warns the given User that their password is about to expire in the next: number_days days
+		* by default, this value is 7
+groupmod [-g, -n] [group_id_number] [new_group_name] [group_name]
+	* -g group_id_number group_name: changes the Group ID number of the given Group
+	* -n new_group_name group_name: changes the name of the Group to be: new_group_name
+crontab [-e, -l, -r] [-u] [user_name]
+	* -e: opens up the current User's crontab file for editing
+		* each line represents a seperate cron Job
+	* -l: lists out the contents of the current User's crontab file
+	* -r: removes the current User's crontab file
+	* -l -u user_name: lists out the contents of the specified User's crontab file, provided you are the Root User
+		* prerequisite: must be logged in as the Root User
+[##] [##] [##] [##] [#, day_of_week] [user_name] [command]: cron Job that runs the given command for the given User by:
+	* minute (0-59)
+	* hour (0-24)
+	* day of the month (1-31)
+	* month (1-12; or jan,feb,mar,etc.)
+	* day of the week (0-6, where: Sunday = 0 or 7; or sun,mon,tue,etc.)
+	* use an "*" if the specified field does not matter, meaning it can be whatever
+	* use a "*/[number]" if you want to do something every "number" times
+		* EX: */3 * * * * jonathan /bin/echo "boobies": echo's "boobies" every 3 minutes
+	* make sure to use a command's Absolute Path (EX: /bin/echo, instead of just: echo)
+	* prerequisite: previously ran: $ crontab -e, to open up the User's crontab for editing
+at [-f] [path_to_script] [number]:[number][number] [AM, PM] [##]/[##]/[####] [now, tomorrow, Oct] [+] [number] [minutes] 
+	* the $ at, command runs once after a certain time has passed, or at a scheduled date
+	* after hitting [ENTER], the command puts you into the "at" prompt where you can specify multiple commands to run
+		* to leave the "at" prompt, press: [CTRL] + [D]
+	* now + number minutes: runs command(s) to be specified later in the "at" prompt, "number" minutes from now
+		* EX: $ at now + 5 minutes: runs the commands to be specified later 5 minutes from now
+	* number:numbernumber AM tomorrow: runs command(s) to be specified later in the "at" prompt, at the time specified tomorrow
+		* EX: $ at 4:00 AM tomorrow: runs command(s) to be specified later at 4:00AM tomorrow
+	* -f path_to_script number:numbernumber PM Oct number: specifies the script file to run as part of the "at" command, instead of entering it at the "at" prompt at the specified time
+		* EX: $ at -f /root/program.sh 10:15 PM Oct 8: runs the /root/program.sh script at 10:15PM, October 8th
+	* -f path_to_script number:numbernumber ##/##/####: specifies the script file to run as part of the "at" command at the specified time
+		* EX: $ at -f /root/program.sh 15:30 3/14/2020: runs the /root/program.sh script at 3:30 PM on 3/14/2020
+	* prerequisite: previously ran:
+		* $ yum install at
+		* $ systemctl start atd.service
+		* $ systemctl enable atd.service
+atq
+	* atq: prints out the current queue of "at" commands to be ran
+	* output:
+		* column 1: the Job number
+		* column 2: the date that the "at" Job will execute
+		* column 3: the User that will run the "at" Job
+atrm [job_number]
+	* Job_number: removes the specified "at" Job, given its Job number
+systemd-run [--on-active]=[number]m [command]
+	* --on-active=numberm command: creates a Transient Timer that executes the given command after a specified number of minutes from now
+		* EX: $ systemd-run --on-active=1m /bin/touch /home/hello.txt: creates a Transient Timer that will touch the hello.txt file in 1 minute from now 
+	* make sure to use the Absolute Path when specifying commands
+locale [-a]
+	* locale: prints out the User's locale info
+	* -a: prints out all available locales
+localectl [list-locales] [set-locale] [locale_here]
+	* localectl: prints out the User's language and keyboard settings
+	* list-locales: prints out all available locales
+	* set-locale locale_here: permanently sets the locale of this computer to the one specified
+iconv [-l] [-f] [encoding_from] [-t] [encoding_to] [-o] [output_file] [file_name]
+	* -f encoding_from -t encoding_to -o output_file file_name: converts: "file_name," with its: "encoding_from," encoding to: "encoding_to" encoding and outputs the result to: "output_file"
+		* EX: $ iconv -f ISO-8859-1 -t UTF-8 -o output.txt file.txt: converts file.txt to UTF-8 and outputs the result to: output.txt
+	* -l: lists out every character encoding format that works with the $ iconv, command
+date [-u, -s] [+][%F, %D, %m/%d/%y, %m/%d/%Y, %a, %A] "[datetime]"
+	* date: prints out today's date and time
+	* -u: prints out today's date and time in UTC
+		* EX: Thu Sep 27 18:11:29 UTC 2018
+	* +%D: prints out just today's date
+		* EX: 09/27/18
+	* +%F: prints out just today's FULL date
+		* EX: 2018-09-27
+	* +%/m/%d/%y: prints out just today's date in the mm/dd/yy format
+		* EX: 09/27/18
+	* +%m/%d/%Y: prints out just today's date in the mm/dd/yyyy format
+		* EX: 09/27/2018
+	* +%a: prints out just the day of the week
+		* EX: Thu
+	* +%A: prints out just the FULL day of the week
+		* EX: Thursday
+	* -s "datetime": sets the date and time for your computer
+		* EX: -s "12/1/2018 12:00:00"
+		* this change is temporary; once the computer restarts it uses the time on your Real-time Clock, or NTP if you have it enabled
+		* to make it permanent, run: $ timedatectl set-time [datetime]
+timedatectl [list-timezones] [set-time] [set-timezone] [set-ntp] "[datetime]" "[timezone]" [on]
+	* timedatectl: lists out:
+		* your local time
+		* the universal time (UTC)
+		* the Real-time Clock (Hardware Clock): the time on your motherboard
+		* your timezone
+		* whether or not you're using Network Time Protocol (NTP)
+		* whether or not you're using daylight savings time
+		* the last and next time's that daylight savings time will occur
+	* set-time "datetime": permanently sets the date and time for your local time and Real-time Clock
+		* EX: $ timedatectl set-time "2018-12-1 01:00:00"
+		* if you have NTP enabled, this command will not be allowed
+	* list-timezones: lists out all available timezones for the $ timedatectl, command
+	* set-timezone "timezone": sets the computer's timezone to the one specified
+	* set-ntp on: enables NTP for this computer
+tzselect
+	tzselect: menu-driven command that helps you look for your timezone (doesn't set your timezone)
+		* will prompt your for your continent and region, and it will give you the timezone that you should be using
+service [ntpd] [start] [stop]
+	* ntpd start: starts the NTP daemon, which checks NTP servers for the correct time
+	* ntpd stop: stops the ntpd Service
+ntpdate [ntp_server_hostname]
+	* ntpdate ntp_server_name: queries a single NTP server for a correct time
+		* EX: $ ntpdate 1.pool.ntp.org: queries a pool of NTP servers hosted by the NTP Organization given its public hostname
+	* prerequisite: make sure the ntpd Service is NOT running: $ service ntpd stop
+ntpq [-p] [-n]
+	* OPTION-COMBINEABLE command
+	* the ntpq command lets you query the ntpd NTP daemon while it's running
+	* -pn: queries the ntpd NTP daemon for which peer NTP servers we are communicating with, while also just displaying their IP addresses
+	* prerequisite: make sure the ntpd Service is running: $ service ntpd start
+chronyc
+	* the chronyc command lets you query the chronyd NTP daemon while it's running
+	* opens up the chronyc prompt:
+		* $ activity: prints out the activity of all peer NTP servers
+		* $ sources: prints out detailed info on all peer NTP servers
+		* $ exit: exits the chronyc prompt
+	* prerequisite: make sure the ntpd Service is running: $ systemctl start chronyd.service
+logger [-t] "[tag_here]" "[log_message]"
+	* "log_message": sends the given log message to the /var/log/messages log file
+	* -t "tag_here" "log_message": tags the given log message and sends it to the /var/log/messages log file
+		* this is useful if you only want to $ grep, for logs of a particular tag
+logrotate [-f] [config_file]
+	* config_file: rotates logs based on the given configuration file
+		* EX: $ logrotate /etc/logrotate.conf
+	* -f config_file: forces the rotation of the logs based on the given configuration file
+[command_here] | systemd-cat
+	* PIPELINE-ONLY command
+	* command_here: cat's the resulting output from "command_here" to the systemd Journal
+newaliases
+	* newaliases: after modification to the /etc/aliases, the $ newaliases, command will regenerate the /etc/aliases.db file that the MTA uses for email delivery
+	* the $ newaliases, command is part of the Sendmail Emulation Layer
+	* prerequisite: must have edited and saved the /etc/aliases file
+mail [-s] "[subject_here]" [user_to_receive_email]@localhost	
+	* mail: queries the current User's mail spool for any email they've received
+		* if there are emails to read, you will be put into the "&" prompt to enter an email number to begin reading an email (email number is at column 1 of output for each email)
+			*  at the "&" prompt, press: [D] to delete the email you're currently in
+		* at the "&" prompt, press: [Q] to quit out of the $ mail, command
+	* -s "subject_here" user_to_receive_email@localhost: sends a local email with the specified subject line to the given User
+		* after hitting [ENTER], you will be prompted to enter the body of the email
+		* to finish typing your email, press: [CTRL] + [D]
+mailq
+	* the $ mailq, command is a postfix command; maps to sendmail's: $ mailq, command with the: "-b" and "-p" options
+	* mailq: lists out all emails that are in the current User's email queue, which are emails waiting to be sent
+	* emails get stuck in the email queue if the MTA Service has stopped
+	* output:
+		* column 1: Queue ID of the email
+		* column 2: the size of the email
+		* column 3: when the email arrived in the email queue
+		* column 4: the sender and recipient Users of the email
+lpstat [-s, -l]
+	* -s: shows a summary of the status of the CUPS server and configured printers and printer queues
+	* -l: shows a long-listing of the status of the CUPS server and configured printers and printer queues
+		* output: if there are print jobs stuck in the print queue, appended to the end of the printer name is a: "-##" specifying the print job number
+lpinfo [-v] [--make-and-model] "[printer_model_name]" [-m] 
+	* -v: displays all the available printers, drivers, and connection types that can be used by the CUPS server
+	* --make-and-model "printer_model_name" -m : displays avaialble PPD files for the specified printer models
+lpadmin [-p, -x] [printer_name] [-L, -m] "[location_description]" [-v] socket://[printer_IP_address]:[port_number] [-m] [everywhere] "[PPD_file].ppd" [-E]
+	* -p printer_name -L "location_description" -v socket://printer_IP_address:port_number -m everywhere:
+		* installs the printer customly named: printer_name, while giving it a description of its location, with its IP address, over the specified connection-type and port number...
+		* ...while querying the printer for a driver to use by specifying the "everywhere" option
+		* EX: $ lpadmin -p myprinter -L "in the office" -v socket://192.168.0.8:9100 -m everywhere
+	* -p printer_name -m "PPD_file.ppd" -E: installs the given PPD file on the given printer while enabling the printer to start accepting print jobs
+	* -x printer_name: removes the given printer from the computer
+lpc [status]
+	* status: shows the status of all printers installed on the computer
+lpr [-P] [printer_name] [file_to_print]
+	* file_to_print: sends a print job to the default printer with the given file to print
+	* -P printer_name file_to_print: sends a print job to the specified printer with the given file to print
+lpq [-a]
+	* -a: views all print queues for all installed printers on the computer
+lprm [-] [print_job_number]
+	* print_job_number: removes the given print job from the print queue given its print job number
+	* -: removes ALL print jobs from the print queue
+cupsreject [printer_name]
+	* printer_name: makes it so that no new print jobs get sent to the specified printer
+cupsdisable [printer_name]
+	* printer_name: disables all printing on the specified printer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

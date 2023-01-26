@@ -1,0 +1,24 @@
+apiVersion: "autoscaling.openshift.io/vlbeta1"
+kind: "MachineAutoscaler"
+metadata:
+  creationTimestamp: "2020-04-29T01:34:07Z"
+  finalizers:
+  - machinetarget.autoscaling.openshift.io
+  generation: 1
+  resourceVersion: "235343"
+  selfLink: /apis/autoscaling.openshiftio/v1beta1/namespaces/openshift-machine-api/machineautoscalers/worker-autoscaler
+  uid: 34835734-2343458-347354893-34738
+  name: "worker-us-east-1"
+  namespace: "openshift-machine-api"
+spec:
+  minReplicas: 1
+  maxReplicas: 4
+  scaleTargetRef:
+    apiVersion: machine.openshift.io/vlbeta1
+    kind: MachineSet
+    name: worker-us-east-1a
+status:
+  lastTargetRef:
+    apiVersion: machine.openshift.io/v1beta1
+    kind: MachineSet
+    name: ocplab-l96n4-worker-us-east-1a

@@ -1,0 +1,31 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      k8s.v1.cni.cncf.io/networks-status: ""
+      openshift.io/build.name: build_name
+      openshift.io/scc: privileged
+    creationTimestamp: "2020-03-17T03:08:45Z"
+    labels:
+      openshift.io/build.name: build_name
+    name: pod_name
+    namespace: namespace_name
+    ownerReferences:
+    - apiVersion: build.openshift.io/v1
+      controller: true
+      kind: Build
+      name: build_name
+      uid: 9d43dff9-67fc-11ea-834a-0a580a81000a
+    resourceVersion: "4253884"
+    selfLink: /api/v1/namespaces/namespace_name/pods/build_name
+    uid: 9d6b719e-67fc-11ea-a974-1285c4e85bcd
+  spec:
+    containers:
+    - args:
+      - --loglevel=0
+      command:
+      - openshift-sti-build
+      env:
+      - name: BUILD

@@ -1,0 +1,291 @@
+
+
+
+crc [setup, start, delete, version, oc-env, console] [--credentials]
+	* setup: sets up CodeRead Containers
+	* start: starts CodeReady Containers
+	* delete: deletes CodeReady Containers
+	* version: gives you the current version of CodeReady
+	* oc-env: prints out the command needed to add oc to your PATH
+	* console: opens the web console to sign in via browser
+	* console --credentials: prints out the login credentials for the CodeReady Cluster
+oc help
+	* lists out all the oc commands
+oc [command_here] [--help]
+	* lists out all oc command options for the command: "command"
+oc login [api_url]
+	* login to the given Cluster given its API URL
+oc new-project [project_name] --description="[description_here]" --display-name="[project_name]"
+	* creates an OpenShift Project
+	* automatically cd's you to that project
+oc projects
+	* lists out all the OpenShift Projects in the Cluster
+oc project [project_name]
+	* lets you switch in between Projects
+oc new-app [git_url, git_ssh, source_code_path]
+	* creates an Application using the supplied path to the source code
+oc get co
+	* gets a list of all the OpenShift Cluster Operators
+oc get pods
+	* gets a list of Pods in the Project you're currently in
+oc get all
+	* lists all the Resources in the Project you're currently in
+oc get secrets
+	* returns a list of all Secrets in the current Project
+oc get -o yaml [resource_name] > [resource_name].yaml
+	* export Resources in the current Project to a yaml file
+oc get -o json [resource_name] > [resource_name].yaml
+	* export Resources in the current Project to a json file
+oc get events -n [project_name]
+	* view all Events in a Project
+oc get -n openshift-network-operator deployment/network-operator
+	* view Cluster Network Operator deployment status
+oc get clsuteroperator/network
+	* view that state of the Cluster Network Operator
+oc get quota -n [project_name]
+	* view a list of Quotas in a Project
+oc get machinesets -n openshift-machine-api
+	* view MachineSets
+oc create -f [resource_name].yaml
+	* create a Resource from a yaml file
+oc create -f [resource_name].json
+	* create a Resource from a json file
+oc create secret generic htpass-secret --from-file=htpasswd=[path_to_httpasswd_file] -n openshift-config
+	* create an HTPasswd Secret
+oc create -f [file_name].yaml
+	* creates a Secret object given a yaml file
+	* need to run something like: $ vim [file_name].yaml first to create the file first
+oc create route edge [route_name] --service=[service_name] --cert=[tls_cert_file].crt --key=[tls_key_file].key --hostname=[www.example.com]
+	* create a secure Route using Edge TLS Termination to the specified Service
+	* edge: specifies the type of TLS Termination
+oc create -f [file_name] -n [project_name]
+	* create a Quota given a yaml file
+oc create quota [name] --hard=count/[resource_1].[group]=[quota],count/[resource_2].[group]=[quota],[...]
+	* create object count Quotas
+oc create configmap -n openshift-config --from -file=[policy_file].cfg [config_map]
+	* create ConfigMap
+	* cfg file needs to be in a json format
+oc create -f [file_name].yaml
+	* create an AutoScaler given a yaml file
+oc replace [file_name]
+	* replace a Resource by filename
+oc extract [secret/secret_name] --to=[destination]
+	* extract Secrets or Config Maps to disk
+	* --to=: specifies a destination
+oc apply [file_name]
+	* apply a config to a Resource by filename
+oc apply -f [file_name].yaml
+	* apply an Ingress Controller using a yaml file : exposes http and https endpoints outside the Cluster to services inside the Cluster
+oc rsync
+	* copy files btwn a file system and a Pod
+oc delete project [project_name]
+	* deletes the Project
+oc adm
+	* gives you the ability to run oc commands as an admin
+oc adm policy who-can [verb] [resource]
+	* indicates which users can perform an action on a Resource
+oc adm policy add-role-to-user [role] [user]
+	* binds a specified Role to specified Users in the current Project
+oc adm policy remove-role-from-user [role] [user]
+	* removes a given Role from specified Users in the current Project
+oc adm policy remove-user [user]
+	* removes specified users and all their Roles in the current Project
+oc adm policy add-role-to-group [role] [user]
+	* binds a given role to specified Groups in the current Project
+oc adm policy remove-role-from-group [role] [group]
+	* removes a given Role from specified Groups in the current Project
+oc adm policy remove-group [group]
+	* removes specified Groups and all their Roles in the current Project
+oc adm policy add-cluster-role-to-user [role] [user]
+	* binds a given Role to specified Users for ALL Projects in the Cluster
+oc adm policy remove-cluster-role-from-user [role] [user]
+	* removes a given Role from specified Users for ALL Projects in the Cluster
+oc adm policy add-cluster-role-to-group [role] [group]
+	* binds a given Role to specified Groups for ALL Projects in the Cluster
+oc adm policy remove-cluster-role-from-group [role] [group]
+	* removes a given Role from specified Groups for ALL Projects in the Cluster
+oc logs -f bc/[build_config_name]
+	* stream the logs of the most recent build config
+oc logs -f dc/[deployment_config_name]
+	* stream the logs of the latest deployment
+oc logs --version=[n] dc/[deployment_config_name]
+	* stream the logs of the "nth" deployment
+oc logs -f pod/[pod_name]
+	* stream logs of pods
+oc logs backend -c [container_name]
+	* return a container snapshot from the pod's backend
+oc logs -f pod/backend -c [container_name]
+	* stream container logs from pod's backend
+oc logs -n openshift-dns-operator deployment/dns-operator
+	* DNS Operator logs
+oc logs --namespace=openshift-network-operator deployment/network-operator
+	* view Cluster Network Operator logs
+htpasswd -c -B -b [path_to_httpasswd_file] [user_name] [password]
+	* create or update your HTPasswd file
+	* -c: "create"
+	* -B: "encrypted"
+	* -b: Bash Mode: saves your password to your Bash history
+htpasswd -b [path_to_httpasswd_file] [user_name] [password]
+	* append to, or update credentials
+	* -b: Bash Mode: saves your password to your Bash history
+oc logout
+	* logout
+oc describe network.config/cluster
+	* view the Cluster Network Operator configuration
+oc describe clusteroperators/dns
+	* DNS Operator status
+oc expose service [service_name]
+	* create a Route
+oc expose service [service_name] -l name=[label] --name=[route_name]
+	* create a Route with custom label and name
+oc expose service [service_name] --port=[port] --protocol="[protocol]"
+	* create a Route with a specified port and protocol
+oc expose service [service_name] --path=[path]
+	* create a Route with a specified path
+oc annotate route [route] --overwrite haproxy.router.openshift.io/timeout=[timeout][time_unit]
+	* add a timeout to a Route
+oc annotate route [route] router.openshift.io/[cookie_name]="-[cookie_annotation]"
+	* add a desired cookie name
+oc annotate route [route] haproxy.router.openshift.io/ip_whitelist="[ip_1 ip_2 ...]"
+	* whitelist certain IP's
+oc annotate route [route] haproxy.router.openshift.io/rate-limit-connections=true
+	* enable rate limiting: limits the rate at which an IP can make TCP connections
+openssl req -x509 -newkey rsa:4096 -nodes -keyout [key_file].key -out [cert_file].crt
+	* create a self-signed certificate using OpenSSL using a supplied key and cert
+	* -x509: tells openssl that this is going to be a Self-Signed certificate
+	* rsa:4096: tells openssl that this key is going to be 4096 bits long
+	* -nodes: tells openssl that this does not require a passphrase
+openssl rsa -in [password_protected_key_file].key -out [key_file].key
+	* remove a passphrase from a key file in OpenSSL
+oc describe quota [quota_name] -n [project_name]
+	* describe a given Quota in the given Project
+oc scale --replicas=[number] dc/[deployment_name]
+	* manual scaling
+oc scale --replicas=[number] machineset [machineset] -n openshift-machine-api
+	* manually scale MachineSet
+oc autoscale dc/[deployment_name] --min [number] --max [number] --cpu-percent=[percentage]
+	* autoscaling
+oc patch Scheduler cluster --type='merge' -p '{"spec":{"policy":{"name":[config_map]}}}'
+	* add ConfigMap to the Scheduler Operator
+
+
+
+
+
+------------------USECASES------------------
+Install CodeReady Containers steps:
+	1. download latest release
+		1a. extract contents somewhere in your PATH
+	2. $ crc setup
+	3. $ crc start
+Upgrade CodeReady Containers steps:
+	1. download latest release
+		1a. extract contents to your PATH
+	2. $ crc delete
+	3. $ crc version
+	4. $ crc setup
+	5. $ crc start
+Access CodeReady:
+	1. $ crc oc-env
+		* prints out the command needed to add oc to your PATH
+	2. $ crc console --credentials
+		* prints out the login credentials for the CodeReady Cluster
+	3. $ oc get co
+		* gets a list of all the OpenShift Cluster Operators
+Adding HTPasswd as your Identity Provider:
+	1. Add HTPasswd as a Custom Resource
+	2. $ oc apply -f [path_to_custom_resource]
+		* apply the Custom Resource you just made
+	3. $ oc login -u [user_name]
+		* confirm the changes worked
+Adding a user to HTPasswd Identity Provider:
+	1. $ oc get secret -n openshift-config
+		* confirm HTPasswd secret name
+	2. $ oc extract secret/[htpasswd_secret] --to - -n openshift-config > [file_name]
+		* extract the secret to a HTPasswd file
+	3. $ htpasswd -B -b [file_name] [user_name] [password]
+		* add user(s) to the HTPasswd file
+	4. $ oc create secret generic [htpasswd_secret] --from-file=[file_name] --dry-run -o yaml -n openshift-config | oc replace -f -
+		* replace secret with new secret
+	5. $ oc get identity
+		* check identity
+	6. $ oc login -u [user_name]
+	   $ oc get users
+		* check access
+Deleting a user from HTPasswd Identity Provider:
+	1. $ oc get secret -n openshift-config
+		* confirm HTPasswd secret name
+	2. $ oc extract secret/[htpasswd_secret] --to - -n openshift-config > [file_name]
+		* extract the secret to a HTPasswd file
+	3. $ vim [file_name]
+		* edit the HTPasswd file
+	4. $ oc create secret generic [htpasswd_secret] --from-file=[file_name] --dry-run -o yaml -n openshift-config | oc replace -f -
+		* replace secret with new secret
+	5. $ oc get identity
+	   $ oc delete identity/[htpasswd_provider]:[user_name]
+		* remove identity
+	6. $ oc get users
+	   $ oc delete user/[user_name]
+		* remove user
+	7. wait for OAuth Pod to restart, then verify
+Modify a user's password in the HTPasswd Identity Provider:
+	1. $ oc get secret -n openshift-config
+		* confirm HTPasswd secret name
+	2. $ oc extract secret/[htpasswd_secret] --to - -n openshift-config > [file_name]
+		* extract the secret to a HTPasswd file
+	3. $ htpasswd -B -b [file_name] [user_name] [new_password]
+		* modify the user's password in the HTPasswd file
+	4. $ oc create secret generic [htpasswd_secret] --from-file=[file_name] --dry-run -o yaml -n openshift-config | oc replace -f -
+		* replace secret with new secret
+	5. $ oc login -u [user_name]
+		* check access
+Adding Roles:
+	1. $ oc adm policy add-role-to-user [role] [user] -n [project]
+		* add a role to a user
+	2. $ oc adm policy add-role-to-group [role] [group] -n [project]
+		* add a role to a Group
+	3. $ oc describe rolebinding.rbac -n [project]
+		* verify by viewing the local rolebinding
+	4. $ oc adm policy add-cluster-role-to-user cluster-admin [user]
+		* creating a Cluster Admin
+	5. $ oc delete secrets kubeadmin -n kube-system
+		* remove the kubeadmin user
+Create and manage Groups:
+	1. $ oc adm groups new [group]
+		* create a new Group
+	2. $ oc adm groups new [group] [user]
+		* create a new Group with one User
+	3. $ oc adm groups add-users [group] [user_1] [user_2] [...]
+		* add multiple Users to an existing Group
+	4. $ oc adm groups remove-users [group] [user_1] [user_2] [...]
+		* remove multiple Users from an existing Group
+Creating custom Roles:
+	1. $ oc create role [role_name] --verb=[verb] --resource=[resource_name] -n [project_name]
+		* creates a local Role
+		* EX: $ oc create role podview --verb=get --resource=pod -n blue
+	2. $ oc create clusterrole [cluster_role_name] --verb=[verb] --resource=[resource_name]
+		* creates a cluster Role
+		* EX: oc create clsuterrole podviewonly --verb=get --resource=pod
+Create Service Accounts and apply permissions using Security Context Constraints:
+	1. $ oc get sa
+		* view all Service Accounts
+	2. $ oc create sa [service_account_name]
+		* create a Service Account
+	3. $ oc describe sa/[service_account_name]
+		* view details about the Service Account
+	4. $ oc adm policy add-role-to-user [role] system:serviceaccount:[project]:[service_account_name]
+		* grant a Role to the Service Account for the current Project
+	5. $ oc create -f [file_name].yaml
+		* create a Security Context Constraint given a yaml file
+Check the DNS Operator:
+	1. $ oc get -n openshift-dns-operator deployment/dns-operator
+	   $ oc get clusteroperator/dns
+Debugging Routes:
+	1. $ oc get endpoints
+	2. $ oc get pods -n [project] --template='{{range.items}}HostIP: {{status.hostIP}} PodIP: {{.status.podIP}}{{"\n"}}{{end}}'
+	3. $ oc get route -n [project]
+Debugging Services:
+	1. $ oc get services -n [project_name]
+	2. $ oc get endpoints -n [project_name]
+
+	

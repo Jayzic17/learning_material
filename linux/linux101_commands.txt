@@ -1,0 +1,1221 @@
+
+
+
+---GLOBBING CHARACTERS---
+. = current directory
+.. = parent directory
+~ = home directory
+/ = root directory
+- = previous working directory
+"" = anything in-between Weak Quotes is expected to have a variable with an assigned value
+	* provides the same output as having ommitted the double quotes to begin with
+	* EX: $ echo $PATH: output: /usr/local/...
+	      $ echo "$PATH": output: /usr/local/...
+	* EX: $ echo "here is your path variable: $PATH": output: here is your path variable: /usr/local/...
+'' = anything enclosed in Strong Quotes is just interpreted as whatever's in there literally
+	* EX: $ echo '$PATH': output: $PATH
+	* EX: $ echo 'here is your path variable: $PATH': output: here is your path variable: $PATH
+`` = anything enclosed in ticks is expected to be a command
+	* EX: $ echo "We are now in `pwd`"
+	* executes the enclosed command in-place w/o needing to use a sub-shell
+$() = anything enclosed in $() is expected to be a command
+	* EX: $ echo "We are now in $(pwd)"
+	* creates a sub-shell within the current Bash shell to execute the enclosed command
+* = matches 0 or more of any character
+? = matches exactly 1 of any character
+[abc] = matches exactly 1 of any of the characters in the given list (so in this example a, b, or c)
+[0-9] = matches exactly 1 of any of the range of characters in the given list (so in this example any number between 0 and 9 inclusive)
+[^abc] = matches exactly 1 of any character EXCEPT for the ones specified in the given list (so in this example any character except a, b, or c)
+
+
+
+---REGEX CHARACTERS---
+. = matches any single character
+^ = represents the beginning of a line
+$ = represents the end of a line
+[abc] = matches exactly 1 of any of the characters in the given list (so in this example a, b, or c)
+[^abc] = matches exactly 1 of any character EXCEPT for the ones specified in the given list (so in this example any character except a, b, or c)
+* = matches 0 or more occurences of what preceeds it (EX: [abc]*, [0-9]*)
+? = matches 0 or 1 occurence of what preceeds it (EX: [abc]?)
++ = matches 1 or more occurences of what preceeds it (EX: [abc]+)
+{i} = matches whatever preceeds it "i" times (EX: [abc]{1})
+{i,} = matches whatever preceeds it at least "i" times (EX: [abc]{1,})
+{i,j} = matches whatever preceeds it last "i" times and at most "j" times (EX: [abc]{1,3})
+regex_here|regex_here_2 = | is a logical OR operator (so a line will match if it contains either regex_here OR regex_here_2)
+ 
+
+
+
+---PERMISSIONS---
+[_] _,_,_ _,_,_ _,_,_ = the resource type
+	* d = directory
+	* b = block device
+	* - = file or Hard Link
+	* c = terminals, mice, keyboards, monitors, etc.
+	* l =  Symbolic Link
+_ [_,_,_] _,_,_ _,_,_ = the User that has ownership of the resource
+	* r = read access; octal value is 4
+	* w = write access; octal value is 2
+	* x = can execute/cd this resource; octal value is 1
+		* s = SUID (Set User ID): this allows any User to temporarly run this resource as the User that has resource ownership 
+	* - = no permission; octal value is 0
+_ _,_,_ [_,_,_] _,_,_ = the User that has ownership of the resource
+	* r = read access; octal value is 4
+	* w = write access; octal value is 2
+	* x = can execute/cd this resource; octal value is 1
+		* s = SGID (Set Group ID): this allows any User apart of the Group that has resource ownership to run this resource; this is good for shared Group directories
+	* - = no permission; octal value is 0
+_ _,_,_ _,_,_ [_,_,_] = Other (World Permissions): refers to Other Users who aren't the User that has resource ownership, or are part of the Group that has resource ownership (i.e everyone else)
+	* r = read access; octal value is 4
+	* w = write access; octal value is 2
+	* x = can execute/cd this resource; octal value is 1
+		* t = Sticky Bit: makes it so that ONLY the User that has ownership of the resource can delete the resource
+	* - = no permission; octal value is 0
+the default permissions for directories: 777 (prior to when the umask value is subtracted from: 777 - 002 = 775, or: drwxrwxr-x)
+the default permissions for files: 666 (prior to when the umask value is subtracted from: 666 - 002 = 664, or: -rw-rw-r--)
+the default umask value is: 002
+
+
+
+---ENVIRONMENT_VARIABLES---
+anything preceeding with a "$" is expected to be a variable
+export [environment_variable_name_here]=[value_here] = Environment Variable declaration and initialization
+echo $[environment_variable_name_here] = returns the value of the given Environment Variable
+
+
+
+---LOCAL VARIABLES---
+anything preceeding with a "$" is expected to be a variable
+[local_variable_name_here]=[value_here] = Local Variable declaration and initialization
+echo $[local_variable_name_here] = returns the value of the given Local Variable
+
+
+
+---FUNCTIONS---
+to run multi-line functions, you would make a function call within a shell script:
+	* EX:  #!/bin/bash
+	       hello_world () {
+                 echo 'hello world'
+                 echo 'this is Jonathan'
+	       }
+	       hello_world
+
+	* $ ./hello_world.sh:
+	* output:
+		* hello world
+		* this is Jonathan
+funciton [function_name] { [command_here]; }
+	* function_name { command_here; }: creates a single-line function in the current Bash shell named: function_name, which runs the command: command_here
+
+
+
+---OPTION SYNTAX---
+BSD Options: has no leading dash
+	* EX: $ ps a
+UNIX Options: has 1 leading dash
+	* EX: $ ps -a
+GNU Options: has 2 leading dashes, along with the full-name of the option
+	* EX: $ ps --all
+
+
+---REDIRECT COMMANDS---
+[command_here] | [command_here]
+	* the Pipe command takes the output of the left-most command and feeds it as input to the right-most command
+[command_here] > [file_name]
+	* the Output Redirect command takes the output of the left-most command and writes it to the specified file (overriting anything that was there previously)
+[command_here] >> [file_name]
+	* this version of the Output Redirect command takes the output of the left-most command and APPENDS it to the end of the specified file
+[command_here] < [file_name]
+	* Input Redirect command where the input provided to the command is a file rather than Standard Input coming from the User's keyboard
+[command_here] << [exit_string]
+	* this version of the Input Redirect command is where multiple strings can be entered, after pressing [ENTER] for this command, until a specified exit string: "exit_string" appears
+[command_here] <<< [string]
+	* this version of the Input Redirect command is where the input provided to the command is a single-line string rather than Standard Input coming from the User's keyboard
+[command_here] 2> [file_name]
+	* Standard Error Redirect command, where any errors produced as a result of this command gets redirected to some file as opposed to the User's screen
+[command_here] > [file_name] 2>&1 
+	* Standard Output Redirect command, where stdout is redirected to: "file_name"
+	* ...followed by a Standard Error Redirect command where stderr (2) is redirected to the target (&) for stdout (1), which is now: "file_name"
+	* this in total re-routes stdout and stderr to: "file_name" for the specified command
+[command_here] 2>&1
+	* Standard Error to Standard Output Redirect command, where any errors are redirected to Standard Output
+	* you can mix it up with any other number combinations, where: stdin=0, stdout=1, and stderr=2
+[command_here] &
+	* takes the specified command and sends it to the Background as a Job; also prints out the Job number and PID number of that created Job and Process
+
+
+
+---COMMANDS---
+uname [-m, -r, -a]
+	* gets basic info about the Kernel
+	* uname: what type of OS is on this computer?
+	* -m: machine hardware name
+	* -r: Kernel/OS release
+	* -a: all info about the Kernel
+lsmod
+	* lsmod: lists out all the Kernel Modules being used
+modinfo [-p] [module_name]
+	* module_name: get info about thet specified Kernel Module
+	* -p module_name: displays all the current parameters of the specified Kernel Module
+modprobe [-r] [module_name]
+	* module_name: lets you add an already-existing Kernel Module named: module_name to the Kernel
+	* -r module_name: lets you remove an already-existing Kernel Module named: module_name from the Kernel
+lspci [-k, -v]
+	* lspci: lists out all the PCI devices on the computer
+	* -k: lists out which PCI devices are being used with which Kernel Modules
+	* -v: verbosly lists out info on what each PCI device is capable of
+lsusb [-s] [bus_number]:[device_number] [-v, -t]
+	* lsusb: lists out all the usb devices attatched to the computer
+		* EX: $ lsusb: output: Bus 002 Device 002: ID 046d:c52f Logitech, Inc. Unifying Receiver
+		* the number after "Bus" is the USB device's Bus Number and the one after "Device" is the device's Device Number
+	* -v: more detailed information (verbose output)
+	* -t: shows in tree-view the mapping of each usb device to its host controller
+	* -s bus_number:device_number -v: gives verbose output of the specified USB device
+		* EX: $ lsusb -s 002:002 -v
+lscpu
+	* lscpu: lists out all cpu's on the computer and a detailed list of info on each of them
+lsblk [-f]
+	* lsblk: lists out all hard disks (blocks) attatched to the computer
+	* -f: lists out the filesystems associated with each hard disk
+blkid [partition_name]
+	* blkid: lists the Label, UUID, and filesystem type of the currently mounted filesystem	
+	* partition_name: lists the Label, UUID, and filesystem type of the specified partition
+		* EX: $ blkid /dev/sda3
+dmesg
+	* dmesg: used for viewing the Kernel Ring Buffer
+		* shows what hardware the Kernel can see and how it activates it
+	* prerequisite: must be logged in as the Root User
+journalctl [-k]
+	* journalctl: used for viewing the Kernel within the systemd journal
+		* logs every event that goes on within the computer
+	* use [UP] and [DOWN] arrow keys to scroll up and down, [Z] key to scroll down a page, and [Q] key to exit
+	* -k: means we want to see all Kernel messages
+systemctl [list-unit-files, list-units, get-default, set-default, status, isolate] [-t] [unit_file_name, target_type, target_name] [service_name].service
+	* list-unit-files: lists out all the Unit Files on your computer and whether they're enabled or disabled
+	* use [UP] and [DOWN] arrow keys to scroll up and down, [Z] key to scroll down a page, and [Q] key to exit
+	* -t target_type: indicates that you want to search for a particular type of Target
+		* EX: $ systemctl -t mount: lists out all the mount Targets
+	* list-units -t target_type: lists out all Targets of the specified type that are currently active
+		* EX: $ systemctl list-units -t mount: lists out all the currently active mount Targets
+	* get-default: lists out the default Target for this computer
+	* set-default target_name: change the default Target for this computer to the one specified
+	* status service_name.service: gets the status of the specified Service
+	* isolate target_name: changes the current running Target of the computer to the one specified
+		* EX: $ isolate reboot.target: reboots your computer
+		* EX: $ isolate poweroff.target: shuts down your computer
+		* EX: $ isolate shutdown.target: shuts down your computer
+runlevel
+	* runlevel: shows you what Runlevel your computer is currently in
+		* first number is the previous Runlevel ("N" means there wasn't one), the 2nd number is the current Runlevel
+su [-] [user_name]
+	* - : lets you switch to the Root User
+		* you will need to provide the Root User password to sign in, which is NOT the same as your User's login password
+	* - user_name: lets you switch to the specified User
+sudo [-i]
+	* -i: changes your current User's shell to be that of the Root User's shell
+		* requires your current User's password to sign in
+		* $ exit: exits you out of the Root User's shell and puts you back into the previous User's shell
+	* prerequisite: User must have sudo permissions
+init [0,1,2,3,4,5,6,Q]
+	* lets you change to a different Runlevel
+	* 6: reboots your computer
+	* 0: shuts down your computer
+	* Q: reloads the /etc/inittab file
+telinit [0,1,2,3,4,5,6,q]
+	* lets you change to a different Runlevel
+	* 6: reboots your computer
+	* 0: shuts down your computer
+	* q: reloads the /etc/inittab file
+reboot
+	* reboot: reboots the computer
+passwd [user_name]
+	* passwd: lets you change your current User's password
+	* user_name: lets you change the password for the specified User
+		* prerequisite: must be logged in as the Root User
+	* password must not be a palindrome or less than 8 characters
+shutdown [-r, -h, -c] [+][some_time, now] [minute]
+	* -r some_time: schedules your computer to reboot at the time specified
+		* EX: $ shutdown -r 12:00: shuts down the computer at 12PM
+	* -r now: reboots your computer immediately
+	* -h some_time minute: shuts down (haults) the computer after a specified number of minutes
+		* EX: $ shutdown -h 1 minute: the computer will shut down in 1 minute
+	* -h +some_time: shuts down (haults) the computer after a specified number of minutes
+	* -h some_time: shuts down (haults) the computer at the specified time
+		* EX: $ shutdown -h 22:00: the computer will shut down at 10PM
+	* -c: cancels a currently-scheduled shutdown or reboot previously ran by the $ shutdown, command
+wall
+	* wall: opens up a message box for you to type a message to all other logged in Users on the computer
+	* press the [ENTER] key when you're done typing your message, and then use Ctrl + D to send the message
+poweroff
+	* poweroff: shuts down your computer
+mount [-L, -a] [label_name] [-t] [device_name, filesystem_type] [-o] [options_here] [mount_point]
+	* mount: lists out every partition in every mount point currently in-use on the computer
+		* contains a lot of Pseudo Filesystems
+		* gets its info from the etc/mtab file, which is a Symbolic Link to the /proc/mounts file
+	* device_name mount_point: mounts the given filesystem at the specified Mount Point
+		* EX: $ mount /dev/sdb1 /srv/extra
+	* -t filesystem_type: lists out all partitions of the specified filesystem type
+		* EX: $ mount -t ext4
+	* -L label_name -t filesystem_type -o options_here mount_point: mounts the specified filesystem by Label and type to the specified Mount Point with specific options set
+		* EX: $ mount -L OPT -t xfs -o rw,noexec /opt: mounts the xfs filesystem with the OPT Label to the /opt directory with read/write permissions, but cannot execute .exe programs
+	* -a: scans the /etc/fstab file for any filesystems in there that aren't mounted, and will attempt to mount all of them if they're not already mounted
+fdisk [-l] [disk_name]
+	* -l disk_name: lists out all paritions on the disk specified
+		* EX: $ fdisk -l /dev/sda3
+	* disk_name: creates a legacy MBR(DOS) parition of the specified disk
+		* $ m: displays the help menu
+		* $ p: prints out the partition table of the current disk you're looking at
+		* $ w: completes and exits you out of the $ fdisk command by writing the new partition you've just created to the specified disk
+			* output:
+				* column 1: device name; column 2: start of partition; column 3: end of partition; column 4: how big (in blocks) is the partition
+				* column 5: partition ID
+					* EX: 83 = Linux filesystem, 82 = Linux Swap Partitions, 8E = Linux LVM volumes
+				* column 6: the Disk Label
+		* $ n: creates a new partition of the current disk you're looking at
+			* $ p: tells fdisk you want to create a new primary partition
+				* $ 1: tells fdisk you want this to be the 1st partition on the disk (goes up to 4)
+				* ...then it will prompt you for the location of the 1st sector (the beginning) of the disk (just accept the default by pressing [ENTER])
+				* $ [number][K,M,G]: tells fdisk you want the partition to be a a certain size (or just use the whole disk by pressing [ENTER])
+			* $ e: tells fdisk you want to create a new extended partition
+		* $ q: quits you out of fdisk w/o saving
+	* prerequisite: must be logged in as the Root User
+parted [disk_name]
+	* disk_name: creates either a modern MBR or GPT partition of the specified disk
+		* $ help: displays the help menu
+		* $ p: prints out the Partition Table of the current disk you're looking at
+		* $ mklabel [msdos, gpt]: makes a new Disk Label on the current disk's Partition Table with the specified partition type
+		* $ quit: quits you out of the $ parted command
+		* $ mkpart: makes a new partition on the current disk
+			* $ primary: tells parted you want to create a new primary partition
+				* ...then it will prompt you for the filesystem type (default is ext2, which is equivalent to the 83 Linux Disk Label, press [ENTER])
+				* $ [number]: what megabyte to start this partition on? (just enter 1 and hit [ENTER])
+				* $ [number]: what megabyte to end this partition on? (enter the size you want this partition to be in MB, and hit [ENTER])
+			* $ extended: tells parted you want to create a new extended partition
+	* prerequisite: must be logged in as the Root User
+gdisk [disk_name]
+	* disk_name: creates a GPT partition of the specified disk
+		* $ ?: displays the help menu
+		* $ p: prints out the Partition Table of the current disk you're looking at
+		* $ w: completes and exits you out of the gdisk command by writing the new partition you've just created to the specified disk (Y/N response)
+		* $ n: makes a new partition of the current disk
+			* $ [number]: gdisk asks what numbered partition is this going to be? (goes up to 128)
+			* ...then it will prompt you for the location of the 1st sector (the beginning) of the disk (just accept the default by pressing [ENTER])
+			* $ [number][K,M,G]: tells $ gdisk you want the partition to be a a certain size (a.k.a the last sector) (or just use the whole disk by pressing [ENTER])
+			* $ [number]: tells gdisk what Disk Lable this is going to be (a.k.a filesystem type) (or just use the default Linux filesystem type of 8300 by pressing [ENTER])
+		* $ q: quits you out of gdisk w/o saving
+	* prerequisite: must be logged in as the Root User
+swapon [--summary, -L, -U, -a] [label_name, UUID_here]
+	* --summary: shows a summary of the Swap Space usage on the computer
+		* you can also find this info by cd'ing to: /proc/swaps
+	* -L label_name: enables a Swap partition by Label
+		* IMPORTANT: this does not become a perminent change until you edit the /etc/fstab file
+		* prerequisites:
+			* must be logged in as Root User
+			* previously ran: $ mkswap -L label_name partition_name
+	* -U UUID_here: enables a Swap partition by UUID
+		* IMPORTANT: this does not become a perminent change until you edit the /etc/fstab file
+		* prerequisites:
+			* must be logged in as Root User
+			* previously ran: $ mkswap -L label_name partition_name
+	* -a: enables all Swap partitions that are marked as Swap Space in the /etc/fstab file
+		* prerequisites:
+			* must be logged in as Root User
+			* previously ran: $ mkswap -L label_name partition_name
+swapoff -L [label_name]
+	* -L label_name: disables a Swap partition by Label 
+mkswap [-L] [label_name] [partition_name]
+	* the mkswap command is used to format Swap partitions to be used as Swap Space after they've been created using either $ gdisk, $ fdisk, or the $ parted command
+	* -L label_name partition_name: creates a new Label named: label_name, assigns it to the specified partition, and formats the partition to be used as Swap Space
+		* EX: $ mkswap -L SWAP /dev/sda2: formats the /dev/sda2 partition to be used as Swap Space with a Label named: SWAP
+	* prerequisites:
+		* must be logged in as the Root User
+		* previously ran either:
+			* $ fdisk [disk_name]
+			* $ parted [disk_name]
+			* $ gdisk [disk_name]
+mkfs [-t] [filesystem_type] [-L] [filesystem_label] [disk_name]
+	* the Make Filesystem command creates a filesystem on a partition that is currently blank
+	* -t filesystem_type -L filesystem_label disk_name: creates a filesystem of the specified type with the specified Label named: filesystem_label on the specified disk
+		* EX: mkfs -t ext4 -L SRV /dev/sda1: writes the ext4 filesystem named: SRV to disk: /dev/sda1
+	* prerequisites:
+		* logged in as the Root User
+		* previously ran either:
+			* $ fdisk [disk_name]
+			* $ parted [disk_name]
+			* $ gdisk [disk_name]
+mkfs.ext2 [disk_name]
+	* disk_name: lets you create an ext2 filesystem on a partition that is currently blank
+		* you can swap the "ext2" for any other filesystem type
+			* EX: $ mkfs.ext3 dev/sda3: creates a new ext3 filesystem on dev/sda3
+pvs
+	* pvs: Physical Volume Scan; lists out the Physical Volumes, and their associated Volume Group
+	* prerequisites:
+		* must have lvm2 installed: $ sudo apt install lvm2
+		* must be logged in as the Root User
+pvcreate [physical_volume_name]
+	* physical_volume_name: creates a Physical Volume
+	* prerequisite: must be logged in as the Root User
+vgs
+	* vgs: Volume Group Scan; lists out the Volume Groups, and their associated Physical Volumes and Logical Volumes
+	* prerequisites:
+		* must have lvm2 installed: $ sudo apt install lvm2
+		* must be logged in as the Root User
+vgcreate [volume_group_name]
+	* volume_group_name: creates a Volume Group
+	* prerequisite: must be logged in as the Root User
+lvs
+	* lvs: Logical Volume Scan; lists out the Logical Volumes, and their associated Volume Group
+	* prerequisites:
+		* must have lvm2 installed: $ sudo apt install lvm2
+		* must be logged in as the Root User
+lvcreate [logical_volume_name]
+	* logical_volume_name: creates a Logical Volume
+	* prerequisite: must be logged in as the Root User
+grub-install [device_name]
+	* device_name: installs grub on the specified device
+		* EX: $ grub-install /dev/sda3 
+	* executing grub-install on a system that is actively running is very dangerous; usually it's already done for you
+findmnt [mount_point]
+	* findmnt: lists out all Mount Points and their associated devices/filesystems 
+	* mount_point: find the device/filesystem associated with the specified Mount Point
+		* EX: $ findmnt /: outputs where the root Mount Point is and what device it's attatched to	
+grub2-editenv [list]
+	* list: lists out the current GRUB Environment Variables and their values
+		* EX: $ grub2-editenv list
+	* prerequisite:
+		* use: "grub2-" for Red Hat-based distros and use: "grub-" for Debian-based distros
+grub2-mkconfig [-o] [file_name]
+	* grub2-mkconfig: creates or updates the /boot/grub2/grub.cfg file based on entries from the /etc/default/grub file
+	* -o file_name: outputs instead to: "file_name" based on entries from the /etc/default/grub file, as opposed to the prefered /boot/grub2/grub.cfg file
+	* prerequisites:
+		* must be logged in as the Root User
+		* use: "grub2-" for Red Hat-based distros and use: "grub-" for Debian-based distros
+update-grub
+	* update-grub: used to update the /boot/grub2/grub.cfg file after changes to /etc/default/grub have been made
+	* prerequisite:
+		* this command can only be used on Debian-based distros
+ldd [-u] [command_name]
+	* command_name: prints out all the Shared Objects (a.k.a Direct Dependencies) for a given command
+		EX: $ ldd /usr/bin/pwd: lists out all Shared Objects of the 'pwd' command
+	* -u command_name: prints out the unused Shared Objects of the given command 
+ldconfig [-v, -p]
+	* ldconfig: creates a cache of recently-used Shared Objects (a.k.a Direct Dependencies) and stores it in: /etc/ld.so.cache
+	* /etc/ld.so.conf: the file that $ ldconfig looks at in order to build the cache
+	* -v: gives verbose output on all Shared Objects
+	* -p: prints the ldconfig cache
+	* prerequisite: must be logged in as Root User
+apt-get [update, upgrade, install, remove, purge, dist-upgrade, download] [package_name]
+	* update: updates the /etc/apt/sources.list file with more links to packages that can be installed/upgraded/updated
+	* upgrade: upgrades all installed packages that have upgrades available
+		* doesn't install new packages, just updates existing ones
+	* install package_name: installs the specified package from the /etc/apt/sources.list file
+	* remove package_name: removes the specified package from your computer
+		* does NOT remove it's dependencies
+	* purge package_name: removes configuration files of an application
+		* prerequisites: previously ran:
+			* $ apt-get remove package_name
+			* $ apt autoremove
+	* dist-upgrade: upgrades all packages on the computer to the next release of the distribution
+		* includes the installation of new packages AND deletion of lower-priority packages
+	* download package_name: downloads the package specified, but doesn't install it
+		* you can run it w/o being the Root User so that the resulting download has the permissions of the User who downloaded it
+	* prerequisites: logged in as the Root User
+apt-cache [search, show, showpkg, depends] [package_name]
+	* search package_name: searches through the /etc/apt/sources.list file for the specified package
+	* show package_name: shows basic info about a particular package
+	* showpkg package_name: shows detailed info about a particular package
+	* depends package_name: displays the dependencies of the specified package
+	* prerequisites: logged in as the Root User
+apt-file [update, list, search] [package_name, file_name]
+	* update: updates the cache used for the $ apt-file command
+	* list package_name: lists the contents of the specified package
+	* search file_name: searches all packages for the specified file 
+apt [autoremove, install, show] [application_name]
+	* autoremove: removes dependency files of an application
+		* prerequisite: previously ran: $ apt-get remove package_name
+	* install application_name: downloads and installs the specified application
+		* EX: $ apt install vim: downloads and installs Vim onto your computer
+	* show application_name: shows basic info about a particular package
+	* prerequisite:
+		* logged in as the Root User
+dpkg [--info, --status, -l, -i, -L, -r, -P, -S, -I, -s] [package_name, string_to_match]
+	* --info package_name: displays information on the given package
+	* --status package_name: displays information on the given package, but with less detail
+	* -l string_to_match: lists out packages that match the provided string
+	* -i package_name: installs the specified package(s)
+		* prerequisites: logged in as the Root User
+	* -L package_name: lists out all files that were installed with the specified package
+	* -r package_name: removes the specified package
+		* does NOT remove config files
+		* prerequisite: logged in as the Root User
+	* -P package_name: removes the specified package's config files
+		* prerequisites:
+			* logged in as the Root User
+			* previously ran: $ dpkg -r package_name
+	* -S string_to_match: searches through the package database for anything that matches the specified string
+	* -I package_name: inspects the given package for its version, architecture, maitainer, dependencies, and a bunch of other stuff
+	* -s package_name: shows basic info about a particular package
+dpkg-reconfigure [config_tool_name]
+	* config_tool_name: allows you to modify an already-installed package by re-running the package's config tool
+	* prerequisite: logged in as the Root User
+zypper [repos, install, in] [package_name]
+	* repos: lists out all repos that Zypper uses
+	* install package_name: installs the specified package
+		* EX: $ zypper install vim: installs Vim
+	* in package_name: installs the specified package
+yum [-y] [update, search, info, list, clean, install, remove, autoremove, whatprovides, erase] [installed, all, --downloadonly] [package_name, file_name]
+	* update: searches online and updates /etc/yum.repos.d with new links on your computer
+		* prerequisite: logged in as the Root User
+	* search package_name: searches /etc/yum.repos.d for the specified package
+	* info package_name: lists info about the specified package
+	* list installed: lists out all installed packages on this computer
+	* clean all: cleans all of YUM's cache and its local database file
+	* install package_name: installs the specified package
+		* prerequisite: logged in as the Root User
+	* -y: answers "yes" to any questions asked during updates, installations, or removals
+		* EX: $ yum -y install vim
+	* remove package_name: removes the specified package
+		* does NOT remove dependencies
+		* prerequisite: logged in as the Root User
+	* erase package_name: removes the specified package
+		* does NOT remove dependencies
+		* prerequisite: looged in as the Root User
+	* autoremove: uninstalls a package's dependencies
+		* prerequisites:
+			* logged in as the Root User
+			* previously ran: $ yum remove package_name
+	* whatprovides file_name: looks for a particular package based off of the specified file
+		* EX: $ yum whatprovides */httpd: looks for the package that provides the httpd file
+	* reinstall package_name: reinstalls a fresh copy of the specified package
+		* prerequisite: logged in as the Root User
+	* install --downloadonly package_name: downloads the given package without installing it
+yumdownloader [package_name]
+	* package_name: downloads a package without actually installing it, much like APT
+	* prerequisite: installed yum-utils: $ yum install yum-utils
+rpm [-qpi, -qpl, -qa, -ivh, -Uvh, -e, -Va, -qf] [package_name, file_name]
+	* OPTION-COMBINEABLE command
+	* -qpi package_name: Query Package Info; displays info on the specified package
+	* -qpl package_name: Query Package List; lists files in a particular package
+	* -qa: Query All; lists out all installed packages on the computer
+	* -ivh package_name: Install Verbose output with Hash marks (progress bar); installs the specified package while showing verbose output and a progress bar  
+		* prerequisite: logged in as the Root User
+	* -Uvh package_name: Upgrade Verbose output with Hash marks (progress bar); upgrades an already-installed package with a newer version while showing verbose output and a progress bar
+		* prerequisite: logged in as the Root User
+	* -e package_name: Erase; deletes the specified package
+		* prerequisite: logged in as the Root User
+	* -Va: Verify All; verifies all installed packages on your computer
+		* prerequisite: logged in as the Root User
+	* -qf file_name: Query File; searches all installed packages for the specified file
+[command_here] | cpio [-o] > [cpo_archive].cpio
+	* PIPELINE-ONLY command
+	* -o > cpo_archive.cpio: takes in a list of files provided by "command_here" (typically $ ls) and Output Redirects it to a new .cpio package file named: cpo_archive.cpio
+		* EX: $ ls | cpio -o > archive.cpio
+rpm2cpio [rpm_package_name].rpm
+	* rpm_package_name: takes a .rpm package file and converts it to a .cpio package file
+env
+	* env: lists out all Bash shell Environment Variables and their values
+echo $[variable_name] [string_here]
+	* $variable_name: prints out the specified variable's value 
+		* anything preceeding with a "$" is expected to be a variable
+		* anything enclosed in Weak Quotes ("") is expected to have a variable with an assigned value (provides the same output as having ommitted the double quotes to begin with)
+			* EX: $ echo $PATH: output: /usr/local/...
+			      $ echo "$PATH": output: /usr/local/...
+		* anything enclosed in Strong Quotes ('') just interprets whatever's in there literally
+			* EX: $ echo '$PATH': output: $PATH
+	* string_here: prints the given string
+		* anything preceeding with a "$" is expected to be a variable
+		* anything enclosed in Weak Quotes ("") is expected to have a variable with an assigned value (provides the same output as having ommitted the double quotes to begin with)
+			* EX: $ echo "here is your path variable: $PATH": output: here is your path variable: /usr/local/...
+		* anything enclosed in Strong Quotes ('') just interprets whatever's in there literally
+			* EX: $ echo 'here is your path variable: $PATH': output: here is your path variable: $PATH
+set [-x, +x, -o, +o] [noclobber]
+	* set: displays Environment Variables and configurations for the current Bash session, as well as the source code for the $ set, command itself
+		* EX: $ set | head -83: lists out the first 83 lines, which contains just the current configurations and Environment Variables
+	* -x: turns on debugging
+	* +x: turns off debugging
+	* -o noclobber: turns on noclobber, meaning any Output Redirect commands to an output file by default will not overwrite the file itself, instead appending new entries to the end of the file
+		* EX: $ set -o noclobber
+		      $ cat /proc/cpu_info 2> error.txt: now error.txt will not have its contents overwritten.
+		* this is effectively the same as just using the ">>" operator in-place of the ">" operator, so kinda useless
+	* +o noclobber: turns off noclobber
+unset [-f] [environment_variable] [function_name]
+	* the $ unset command can remove any User or Bash-defined functions or variables (Local or Environment) from the current Bash shell (is not a permanent change)
+	* environment_variable: removes the given Bash Environment Variable
+		* EX: $ unset PATH
+	* -f function_name: removes a User-defined Bash shell function
+		* EX: $ function function_name { echo 'lmao'; }
+		      $ unset function_name
+shopt [-s] [option_name]
+	* shopt: shows all the Bash Shell Options (not to be confused with Environment Variables) for the current session and whether they are turned on or off
+	* -s option_name: switches the specified Bash shell option to be on or off
+		* EX: $ shopt -s nullglob: turns the nullglob option from off to: on
+export [variable_name]=[value]
+	* variable_name=value: creates an Environment Variable so that any new Bash shell that gets generated from the current Bash session also has that variable
+		* EX: $ export EXAMPLE=15
+		      $ bash (creates new Bash shell from the current session)
+		      $ echo $EXAMPLE: output: 15
+bash [script_name].sh
+	* bash: creates a new Bash shell
+	* script_name.sh: runs the given shell script
+		* EX: $ bash report.sh	
+pwd
+	* pwd: prints current working directory
+		* $PWD Environment Variable is how $ pwd knows where the current working directory is at all times
+		* $OLDPWD Environment Variable is how $ pwd knows the working directory you were in previously
+cd [~, ., .., -, /, $HOME]
+	* cd: changes to the current User's /home directory
+	* ~: changes to the current User's /home directory
+	* .: changes to the current directory
+	* ..: changes to the parent directory of the current working directory
+		* can combo it with forward slashes
+		* EX: $ cd ../..: changes to the parent's parent directory
+	* -: changes to the previous working directory you were just in
+	* /: changes to the root directory
+	* $HOME: changes to the current User's /home directory
+which [command_name]
+	* command_name: used to locate a command that is located within the current User's PATH variable and displays the Absolute Path of that command
+		* EX: $ which pwd: output: /usr/bin/pwd
+type [something]
+	* something: determines whether something is a function, file, alias, built-in Bash shell function, or keyword
+		* EX: $ type cd: output: cd is a function
+history
+	* history: displays Bash history of recently-ran commands in numerical order for the current User
+		* located in: /home/[user_name]/.bash_history
+			* the amount of entries in the .bash_history file are dictated by the: $HISTFILESIZE Environment Variable
+![number,!]
+	* !number: lets you re-run a command based on its numerical value in your Bash history, which is located in: /home/[user_name]/.bash_history
+	* !!: lets you re-run the last command you wrote
+$[$,!,?]
+	* $$: outputs the PID of the current Bash shell
+	* $!: outputs the PID of the last Process/Job that was ran in the Background
+	* $?: outputs the exit code of the last command that was ran
+		* 0: success
+ls [-a, -d, -l, -la, -lR, -lh, -i, -t, -tr] [directory_name]
+	* OPTION-COMBINEABLE command
+	* ls: lists out files and directories in the current working directory
+	* directory_name: list out the contents of the specified directory
+	* -a: lists out ALL files (including hidden ones) in the current working directory
+	* -d directory_name: lists just the directory itself, not its contents
+	* -l: long-listing of files in the current directory
+		* output: 1st column is the file permissions, 2nd column is the User owner, then the Group owner, then the size in bytes, and finally the date it was last modified
+	* -lh directory_name: long-listing of files in the current directory in human-readable format
+	* -la: long-listing of every file in the current directory, including the hidden files
+	* -lR directory_name: recursivly goes through the given directory and gives a long-listing of all its contents
+	* -i: lists out the files and directories in the current working directory, plus each file and folder's inode number
+	* -t: sorts the files and directories in the current working directory from most recently accessed/modified to oldest accessed/modified
+	* -tr: sorts the files and directories in the current working directory in REVERSE order, from oldest accessed/modified to most recently accessed/modified 
+man [section_number] [command_name, -k] [keyword_here]
+	* command_name: pulls up the man pages for this particular command, starting at Section 1
+		* EX: $ man grep: pulls up the Manual Pages for the $ grep command starting at Section 1
+	* use [UP] and [DOWN] arrow keys to scroll up and down the page and use the [Q] key to quit out
+	* [ESC] key: lets you type in a line number to navigate to
+		* $ [number]: brings you to the specified line number in the man page
+	* -k keyword_here: searches all the man pages currently on your computer based on a specified keyword
+		* EX: $ man -k grep: finds all man pages that have 'grep' in its name
+	* section_number command_name: pulls up the man pages for this particular command at the specified Section number
+		* EX: $ man 7 man: pulls up Section 7 of the $ man command's man pages
+info [command_name]
+	* command_name: pulls up the Documentation Pages of the given command in the 'info' format, which gives more detailed documentation compared to the Manual Pages
+apropos [keyword_here]
+	* keyword_here: searches all the man pages currently on our computer based on a specified keyword
+diff [file_name] [file_name_2]
+	* file_name file_name2: prints out only the differences between the 2 specified files
+		* if nothing outputs, then the 2 files are 100% identical
+cat [file_name] [file_name_2]
+	* file_name: view the contents of a file
+	* file_name file_name_2: concatenates the 2 file contents and displays the resulting output (doesn't modify the file)
+zcat [file_name].tgz
+	* file_name: temporarly unzips a .tgz file and displays its contents to the screen
+		* the .tar.gz extension also works; they mean the same thing
+		* does NOT unzip the file itself
+bzcat [file_name].bz2
+	* file_name: temporarly unzips a .bz2 file and displays its contents to the screen
+		* does NOT unzip the file itself
+xzcat [file_name].xz
+	* file_name: temporarly unzips a .xz file and displays its contents to the screen
+		* does NOT unzip the file itself
+less [file_name]
+	* file_name: view the contents of a file, like the $ cat command, but lets you Ctrl + F for stuff
+		* scroll up and down using the [UP] and [DOWN] arrow keys
+		* press the [Q] key to quit out of the $ less command
+		* $ /[keyword_here]: lets you Ctrl + F for a given keyword in the file
+			* press the [N] key to find the next instance of the keyword
+			* press the [P] key to find the previous instance of the keyword
+head -[number] [file_name]
+	* file_name: by default, displays the 1st 10 lines of a file
+	* -number file_name: displays the 1st "number" lines of a file
+tail [-f] -[number] [file_name]
+	* file_name: by default, displays the last 10 lines of a file
+	* -number file_name: displays the last "number" lines of a file
+	* -f file_name: follow new entries as they are created in the given file (used for continually-updated files like log trails)
+		* press Ctrl + C to stop following new entries
+nl [-b] [a] [file_name]
+	* file_name: prints the number of lines in a file
+		* skips blank lines by default
+	* -b a file_name: prints the number of lines in a file, including all blank lines
+wc [-w, -l, -c] [file_name]
+	* file_name: returns the number of words in a file
+		* output: # # # file_name
+			* 1st digit: number of lines in the file
+			* 2nd digit: number of words in the file
+			* 3rd digit: number of bytes in the file
+	* -w file_name: just displays the number of words in a file
+	* -l file_name: just displays the number of lines in a file
+	* -c file_name: just displays the number of bytes in a file
+od [-c, -a, -x, -An] [file_name]
+	* file_name: the Octal Dump command displays the contents of the file in octal format (doesn't modify the file)
+		* output: 1st column represents the byte offset
+	* -c file_name: looks at the octal data in character format (converts from octal to character unicode) (doesn't modify the file)
+	* -a file_name: looks at the octal data in ASCII format (doesn't modify the file)
+	* -x file_name: looks at the octal data in hexadecimal format
+	* -An file_name: removes the byte offset (a.k.a the 1st column) when outputing the data
+md5sum [-c] [file_name] [file_name].md5
+	* file_name: calculates and checks a file's hash based on the MD5 algorithm (doesn't modify the file)
+	* -c file_name.md5: checks to see if the MD5 hash remains the same; if it does that means the file hasn't been modified
+		* prerequisite: previously ran: $ md5sum file_name > file_name.md5
+sha256sum [-c] [file_name] [file_name].sha256
+	* file_name: calculates and checks a file's hash based on the SHA-256 algorithm (doesn't modify the file)
+	* -c file_name.sha256: checks to see if the SHA-256 hash remains the same; if it does that means the file hasn't been modified
+		* prerequisite: previously ran: $ sha256 file_name > file_name.sha256
+sha512sum [-c] [file_name] [file_name].sha512
+	* file_name: calculates and checks a file's hash based on the SHA-512 algorithm (doesn't modify the file)
+	* -c file_name.sha512: checks to see if the SHA-512 hash remains the same; if it does that means the file hasn't been modified
+		* prerequisite: previously ran: $ sha512 file_name > file_name.sha512
+sort [-n, -t, -u, -r] "[delimeter_here]" [-knumber_here] [file_name]
+	* file_name: sorts the lines in the given file based on the 1st column (a.k.a 1st character) of each line (doesn't modify the file)
+	* -n file_name: sorts the lines in the given file based on the 1st number of each line
+	* -t "delimeter_here" -knumber_here file_name: sorts the lines in the given file using a specified delimeter to determine which numbered field to sort based on
+		* EX: $ sort -t " " -k2 File1.txt: using a space as the delimiter to identify each individual field, sort the lines based on the 2nd field
+	* -u file_name: prints out only the unique lines of the given file
+	* -r file_name: sorts the given file in reverse order based on the 1st column (a.k.a 1st character) of each line (doesn't modify the file)
+uniq [-c, --group, -d, -u] [file_name]
+	* file_name: removes CONSECUTIVE duplicate lines (does NOT remove ALL duplicates) (doesn't modify the file)
+	* -c file_name: removes consecutive duplicate lines, while also counting the number of occurences
+	* --group file_name: groups all consecutive duplicate lines together and seperates each individual group by a newline
+	* -d file_name: shows only the duplicate lines in the given file
+		* prerequisite: previously ran: $ sort file_name
+	* -u file_name: shows only the unique lines in the given file
+[command_here] | tr [-d] '[character_to_translate]' '[result]'
+	* PIPELINE-ONLY command
+	* 'character_to_translate' 'result': the Translate command changes all occurences of: character_to_translate in a file to: result, and prints it to the screen (doesn't modify the file)
+	* -d 'character_to_translate': deletes all occurences of: character_to_translate and prints the result to the screen
+cut -d'[delimeter_here]' [-f] [number_here,number_2_here,...] [file_name]
+	* file_name: extracts fields of data from the given file (doesn't modify the file)
+		* default delimeter is the TAB character
+	* -d'delimeter_here' file_name: extracts fields of data from the given file using the specified delimeter
+	* -d'delimeter_here' -f number_here file_name: extracts the specified numbered field(s) of data from the given file using the specified delimeter
+paste [-d] '[delimeter_here]' -s [file_name] [file_name_2]
+	* file_name file_name_2: merges the lines of both specified files, so file_name is on the left-side and file_name_2 is on the right-side (doesn't modify the file)
+		* default delimeter is the TAB character
+	* -d 'delimeter_here' file_name file_name_2: file_name is on the left, file_name_2 is on the right, and seperated by the specified delimeter
+	* -s file_name file_name_2: serialized format of both files (similar to cat) where file_name is on the top and file_name_2 is on the bottom
+sed [-i, -n] 's/[word_here]/[word_2_here]/' 's/[word_here]/[word_2_here]/g' '/[regex_here]/p' '/[regex_here]/d' [file_name]
+	* the Stream Editor command
+	* 's/word_here/word_2_here/' file_name: substitutes the 1st occurences of: word_here with: word_2_here in each line in the given file (doesn't modify the file)
+	* 's/word_here/word_2_here/g' file_name: substitutes ALL occurences of: word_here with: word_2_here in the given file (doesn't modify the file)
+	* -i 's/word_here/word_2_here/' file_name: substitutes the 1ist occurence of: word_here with: word_2_here in each line the given file AND updates the file in-place
+	* -n '/regex_here/p' file_name: prints out each line in the given file that matches the given regular expression (doesn't modify the file)
+	* '/regex_here/d' file_name: prints out each line in the given file that DOES NOT match the given regular expression (doesn't modify the file)
+split [-b, -d] [--verbose] -n[number_here] -l[number_here] [number_here][K, M, G] [file_name]
+	* file_name: splits up a file into 1000-line pieces
+		* by default, each piece is set to be: 1000 lines
+	* -b number_here file_name: splits the given file into pieces that are each no larger than "number_here" bytes long
+		* you can also specify: K = kilobyte, M = Megabyte, G=Gigabyte
+	* -d file_name: splits the given file into pieces, but names the resulting files with decimal notation
+	* --verbose file_name: splits the given file into pieces, while also showing verbose output
+	* -nnumber_here file_name: splits the given file into "number_here" pieces
+		* EX: $ split -n5 File1.txt: splits the File1.txt file into 5 pieces
+	* -lnumber_here file_name: splits the given file into "number_here"-line-long pieces
+		* EX: $ split -l4 File1.txt: splits the File1.txt file into pieces that are each 4 lines-long
+rm [-i, -f, -rf] [file_name, directory_name]
+	* OPTION-COMBINEABLE command
+	* file_name: removes the specified file
+	* -i file_name: prompts you first if you're sure you want to delete the file (y/n response)
+	* -f file_name: forces the deletion of: file_name without prompting
+	* -rf directory_name: forcefully and recursively removes all the contents of the given directory, followed by the removal of the directory itself
+touch [-m, -a, -am] [file_name]
+	* OPTION-COMBINEABLE command
+	* file_name: creates a blank file named: file_name, assuming one doesn't already exist in the current working directory
+		* doesn't have an extension/type (you will have to specify it when supplying "file_name")
+		* EX: $ touch file_name.txt: creates a text file named: "file_name" in the current working directory
+		* IMPORTANT: if file_name already exists, then the $ touch, command updates the date it was last accessed AND modified
+	* -m file_name: modifies the timestamp of the file: file_name, which updates the date it was last modified
+	* -a file_name: modifies the timestamp of the file: file_name, which updates the date it was last accessed
+	* -am file_name: modifies the timestamp of the file: file_name, which updates the date it was last accessed AND modified
+cp [-R, -vR, -i, -f] [file_name, directory_name] [file_name_2, directory_name_2]
+	* OPTION-COMBINEABLE command
+	* IMPORTANT: if file_name_2 or directory_name_2 already exist, then file_name or directory_name will override their contents
+	* file_name file_name_2: makes a copy of the file: file_name, and names it: file_name_2
+	* -R directory_name directory_name_2: recursively copies all the contents in: directory_name to a new directory named: directory_name_2
+	* -vR directory_name directory_name_2: recursively copies all the contents in: directory_name to a new directory named: directory_name_2 AND shows verbose output
+	* -i file_name file_name_2: first prompts the User before the copy is performed (y/n response)
+	* -f file_name file_name_2: forces an override of the copy command
+mv [-i, -f] [file_name] [file_name_2, directory_name]
+	* file_name file_name_2: renames the file named: file_name, to be: file_name_2
+		* IMPORTANT: if file_name_2 already exists, then file_name will override its contents
+	* file_name directory_name: moves file_name to the directory named: directory_name
+	* -i file_name file_name_2: prompts the User before the $ move command is performed (y/n response)
+	* -f file_name file_name_2: forces an override of the $ move command
+file [file_name]
+	* file_name: determines the given file's type
+mkdir [-p] [directory_name]
+	* directory_name: makes the directory: directory_name in the current working directory
+	* -p directory_name: creates a directory, along with any parent and children directories
+		* EX: $ mkdir -p jonathan/paige: creates the jonathan directory, as well as the child directory: "paige" 
+rmdir [-p] [directory_name]
+	* directory_name: removes the specified directory (assuming it's empty)
+		* to remove a directory along with it's contents, reference the $ rm command
+	* -p directory_name: deletes the given directory along with its parent directory
+		* EX: $ rmdir -p dir/dir2: deletes dir2 along with its parent directory dir
+	* prerequisite: directory_name must be empty
+dd [if=drive_name] [of=drive_name_2] [of=image_file].img [bs=number] [count=number_2]
+	* if=drive_name of=image_file.img: backs-up the drive to the specified image file
+		* EX: $ dd if=/dev/sda3 of=partition.img
+	* if=drive_name of=drive_name_2: backs-up the drive: drive_name to: drive_name_2
+		* EX: $ dd if=/dev/sda of=/dev/sdb
+	* if=drive_name of=image_file.img bs=number count=number_2: backs-up the drive to an image file in "number" byte-sized chunks "number_2" times
+		* EX: $ dd if=/dev/sda3 of=partition.img bs=1024 count=2: will back up two 1024 byte-sized chunks of /dev/sda3 to the image file (total of 2048 bytes of data)
+	* prerequisite: must be logged in as the Root User
+tar [-cf, -tf, -xf, -czf, -xzf -cjf, -xvjf] [file_name].tar [file_name].tar.gz [file_name].bz2 [directory_name]
+	* OPTION-COMBINEABLE command
+		* c -> "create an archive file"
+		* f -> "we'll be specifying a filename"
+		* t -> "list the contents of the tar file"
+		* x -> "unzip in-place"
+		* z -> "we're specifying a gzip file"
+		* j -> "we're specifying a bzip2 file"
+		* v -> "verbose output"
+	* -cf file_name.tar directory_name: creates an archive file (Tarball) named: file_name from the directory: directory_name
+	* -tf file_name.tar: lists the contents of the archive file named: file_name (doesn't modify the file)
+	* -xf file_name.tar: unzips the specified tar file in-place
+	* -czf file_name.tar.gz directory_name: compresses the contents of the directory: directory_name, into a gzip file named: file_name
+		* you can also use the: .tgz extension instead of: tar.gz (they both mean the same thing)
+	* -xzf file_name.tar.gz: unzips the gzip file in-place
+		* you can also use the: .tgz extension instead of: tar.gz (they both mean the same thing)
+	* -cjf file_name.bz2 directory_name: compresses the contents of the directory: directory_name, into a bzip2 file named: file_name
+		* more CPU overhead than gzip
+	* -xvjf file_name.bz2: unzips the bzip2 file in-place
+gzip [file_name]
+	* file_name: compresses the file: file_name into a gzip (tar.gz or .tgz) archive file named: file_name, in-place, and removes the original-uncompressed version
+gunzip [file_name].tar.gz
+	* file_name: unzips the gzip file: file_name in-place and removes the compressed version
+	* the: .tgz extension also works (they both mean the same thing)
+bzip2 [file_name]
+	* file_name: compresses the file: file_name into a bzip2 archive file named: file_name, in-place, and removes the original-uncompressed version
+bunzip2 [file_name].bz2
+	* file_name: unzips the bzip2 file: file_name in-place and removes the compressed version
+xz [file_name]
+	* file_name: compresses the file: file_name into a xz archive file named: file_name, in-place, and removes the original-uncompressed version
+	* the xz compression algorithm is like a compromise btwn gzip and bzip2, has higher compression rates than bzip2, and requires more CPU and memory than bzip2
+	* the xz compression algorithm is a compression format that is typically used at the time of file distribution, and is the go-to format for distributing Kernel source code
+unxz [file_name].xz
+	* file_name: unzips the xz file: file_name in-place and removes the compressed version
+find [directory_name, /] [-name, -iname, -ctime, -atime, -mtime, -newer, -empty, -type, -maxdepth, -not, -size] [+,-][number][b,k,M,G] [type_here, -exec] [file_name, number, command_here] [{}] [\;]
+	* OPTION-COMBINEABLE command
+	* directory_name -name file_name: recursively looks in the specified directory for a file named: file_name
+	* / -name file_name: recursively searches the whole computer for a file named: file_name, starting at the root directory
+		* prerequisite: must be logged in as the Root User
+	* directoy_name -iname file_name: recursively looks in the specified directory for a file named: file_name (case-insensitive)
+	* directory_name -mtime number: finds any files that were last MODIFIED (having its contents changed) exactly "number" days in the given directory
+	* directory_name -mtime -number: finds any files that were last MODIFIED (having its contents changed) in the past "number" days in the given directory
+	* directory_name -mtime +number: finds any files that were last MODIFIED (having its contents changed) more than "number" days ago in the given directory
+	* directory_name -ctime number: finds any files that were last CHANGED (either having its contents or permissions modified) exactly "number" days in the given directory
+	* directory_name -atime number: finds any files that were last ACCESSED exactly "number" days in the given directory
+	* directory_name -newer file_name: finds any files in the given directory that are newer than the specified file
+	* directory_name -empty: finds all files and directories in the given directory that are empty
+	* directory_name -empty -type type_here: finds all empty items of the specified type in the given directory
+		* EX: directory_name -empty -type f: looks for all empty files in the current directory
+		* EX: directory_name -empty -type d: looks for all empty directories in the current directory
+		* EX: directory_name -empty -type l: looks for all empty Symbolic Links in the current directory
+	* directory_name -empty -exec command_here {} \;: executes the command: command_here, based on the results of the given $ find command
+		* in this example, it will run a command based off of all the empty files and directories in the specified directory
+		* the "{}" is a short-hand way of saying: "run this command for each individual item that the $ find command returns"
+		* the "\;" is how you would close the -exec command
+	* directory_name -maxdepth number -name file_name: finds the given file starting at the given directory, while only searching "number" directories deep
+	* directory_name -not -name file_name: finds all files that DO NOT match the specified filename starting at the given directory
+	* directory_name -size +numberG: finds all files in the specified directory that are larger than a specified number of gigabytes
+		* EX: $ find / -size +2G: finds all files on the computer that are larger than 2GB
+		* can also specify bytes, kilobytes, or megabytes, as well as specify "-" to look for files less-than the specified size
+[command_here] | tee [-a] [file_name]
+	* PIPELINE-ONLY command
+	* file_name: while "command_here" is writing its results to the screen, the $ tee command will also write the same results to a specified file (tee-up)
+	* -a file_name: while "command_here" is writing its results to the screen, the $ tee command will APPEND the results to the specified file (as opposed to overwriting the file's contents)
+	* you can chain multiple tee commands together like this: [command] | [tee] [file] | [command] [tee] [file] | ...
+[command_here] | xargs [command_here_2]
+	* PIPELINE-ONLY command
+	* command_here_2: takes the Standard Output of "command_here" and uses it as Standard Input on "command_here_2" as arguments
+		* EX: $ find test -empty | xargs rm -f: finds all empty files and directories in test/ and forcefully deletes them
+	* different from: $ find -exec, in that it processes everything in batch, so much faster
+ps [-u, -e, -eH, -efH, -a, -x] [--forest] [user_name]
+	* OPTION-COMBINEABLE command
+	* ps: prints a SNAPSHOT of the status of all Processes currently running in your current Bash shell
+	* -u user_name: lists the status of all Processes currently running for the specified User
+	* -e: lists the status of all Processes currently running for ALL Users (the whole computer)
+	* -eH: lists the status and hierarchy of all Processes currently running on the computer
+	* -e --forest: lists the status and hierarchy (using \|_ characters) of all Processes currently running on the computer
+	* -efH: provides a full-listing of the status and hierarchy of all Processes currently running on the computer
+	* -a: shows all Processes with a Terminal (TTY)
+	* -x: shows all Processes without a Terminal (TTY)
+	* output:
+		* 1st column: PID
+		* 4th column: the name of the Process
+			* 4th column indentation indicates hierarchial relationship when using the "H" switch
+	* ps gets all this information from the /proc directory
+top
+	* top: lists-out in REAL-TIME the status of all Processes currently running on your computer for all Users
+		* $ [K] key: tells the $ top command that you want to kill a Process
+			* then enter the PID of the Process you want to kill, then press the [ENTER] key
+		* $ [U] key: tells the $ top command that you only want to see Processes associated with a certain User
+			* then enter the User you want to specify, then press the [ENTER] key
+		* $ [R] key: lets you change the Nice Level of a Process by PID number
+			* if running as a non-Root User, you can only increase the Nice Level; must be Root User if you want to decrease it
+			* then enter in the PID number, then press the [ENTER] key
+			* then enter the new Nice Level you want to change it to, then press the [ENTER] key
+		* [M] key: sorts the data by memory usage
+		* [N] key: sorts the Processes by PID number
+		* [T] key: sorts the Processes by running time
+		* [P] key: sorts the Processes by %CPU usage
+		* [H] key: displays the help menu
+		* [C] key: shows the Absolute Path of each Process
+		* [V] key: displays the Processes in forest/hierarchy format
+		* $ [Q] key: quits you out of the $ top command
+uptime
+	* uptime:
+		* output: (columns seperated by ','):
+			* column 1: how long the computer has been running for
+			* column 2: # of Users currently logged in
+			* column 3: CPU Load Avgerage (where 1.00 = 100% usage of 1 CPU) 
+				* 1st number: CPU load avg. for the past minute
+				* 2nd number: CPU load avg. for the past 5 minutes
+				* 3rd number: CPU load avg. for the past 15 minutes
+free [-m, -k]
+	* free: displays information about the RAM in bytes
+	* -m: displays RAM info in megabytes
+	* -k: displays RAM info in kilobytes
+	* output:
+		* 1st column: the amount of total RAM
+		* 2nd column: the amount of used RAM
+		* 3rd column: the amount of free RAM
+pgrep [-a, -u] [process_name, user_name]
+	* process_name: returns a list of PIDs that match the given Process name
+	* -a process_name: lists out all information on Processes that match the given Proccess name
+	* -u user_name: returns a list of PIDs that are associated with the specified User
+kill [-l, -signal_number] [PID_here]
+	* PID_here: kills the Process given it's PID and all its children Processes by passing a SIGTERM Signal by default
+		* prerequisite: must be logged in as the Root User
+	* -signal_number PID_here: kills a Process and all its children Processes using the given Signal number
+		* prerequisite: must be logged in as the Root User
+	* -l: lists out all the Signals you can pass to the kill command
+		* SIGHUP: 1; command will continue to run should a terminal windows close; the Process will still run as long as the login session is not terminated
+		* SIGTERM: 15; gracefully terminates a Process
+		* SIGKILL: 9; abruptly kills a Process
+		* SIGINT: 2; interrupts and stops a command; this happens whenever you Ctrl + C a command
+pkill [-x] [process_name]
+	* process_name: kills all related Processes whose name contains the given Process name and each of their children Processes
+	* -x process_name: kills all related Processes that EXACTLY match the given Process name and each of their children Processes
+killall [-s] [signal_number] [process_name]
+	* proccess_name: kills all related Process that whose name contains the given Process name and each of their children Processes
+	* -s signal_number process_name: kills a Process and all its children Processes using the given Signal number
+	* prerequisite: must be logged in as the Root User
+watch [-n] [time_interval] [command_name]
+	* the $ watch command is good for monitoring commands that run periodically
+	* command_name: watches the given command every 2 seconds
+	* -n time_interval command_name: watches the given command every "time_interval" seconds
+		* $ [Ctrl] + [C]: quit out
+screen [-r, -ls, -t] [screen_ID_number, screen_name]
+	* screen: creates an isolated session in your Bash (kind of like a pseudo shell) where you can leave commands running in the background, detach from them, and then reattatch to them later
+		* $ [Ctrl] + [A] + [D]: lets you detatch from your current screen session
+		* $ [Ctrl] + [A] + [N]: navigate to the next screen
+		* $ [Ctrl] + [A] + [P]: navigate to the previous screen
+		* $ [Ctrl] + [A] + [number]: navigate to the screen given its screen ID number
+		* $ [Ctrl] + [A] + [K]: kill the screen you're currently in
+		* $ exit: lets you end the screen session you're currently in (as opposed to just detatching from it, this actually kills the screen session)
+	* -r: reattatches you to your previously running screen session
+	* -r screen_ID_number: reattatches you to the specified screen session
+	* -ls: lists out all the currently running screen sessions
+		* the number before the: ".pts" is that screen session's screen ID number
+	* -t screen_name: creates a new screen, while also giving it a name
+	* prerequisite:
+		* must install screen: $ sudo apt install screen
+tmux [-t, ls] [tmux_ID_number]
+	* tmux: creates an isolated session in your Bash (kind of like a pseudo shell) where you can leave commands running in the background, detach from them, and then reattatch to them later
+		* [Ctrl] + [B] + [D]: lets you detatch from your current tmux session
+		* $ [Ctrl] + [B] + [N]: navigate to the next tmux session
+		* $ [Ctrl] + [B] + [P]: navigate to the previous tmux session
+		* $ [Ctrl] + [B] + [number]: navigate to the tmux session given its screen ID number
+		* $ [Ctrl] + [B] + [&]: kill the tmux session you're currently in
+		* $ exit: lets you end the tmux session you're currently in (as opposed to just detatching from it, this actually kills the screen session)
+	* -t tmux_ID_number: reattatches you to your previously running tmux session
+	* ls: lists out all the currently running tmux sessions
+		* the number on the far left before the ":" is that tmux session's tmux ID number
+	* prerequisite:
+		* must install tmux: $ sudo apt install tmux
+nohup [command_here]
+	* command_here: the specified command will receive a SIGHUP 1 Signal, so that should a terminal windows close, the Process will still run as long as the login session is not terminated
+		* generates a nohup.out file in the current User's /home directory, which contains output info as the specified command runs
+jobs [-l, -s, -r] %[job_ID_number, keyword, +, -]
+	* jobs: lists-out all the Jobs that are in the Background
+		* output:
+			* [#] = the Job ID number
+			* [+] = the last Job that was sent to the Background
+			* [-] = the Job that was previously: "+" before the current Job with the: "+"
+	* -l: lists-out all the Jobs that are in the Background, along with their PID numbers
+		* output:
+			* [####] = the PID ID number of that Job
+	* -s: lists-out all Jobs that are stopped
+	* -r: lists-out all Jobs that are currently running
+	* %job_ID_number: lists-out the Job by it's Job ID number
+	* %keyword: lists-out all Jobs whose command contains the given keyword
+	* %+: lists-out the Job that was last sent to the Background
+	* %-: lists-out the previous Job (the one that was previously "+" before the current "+")
+fg %[job_ID_number]
+	* %job_ID_number: brings the specified Job to the Foreground from the Background
+		* [Ctrl] + [Z]: brings the Job currently in the Foreground back to the Background AND stops the Job as well
+		* [Ctrl] + [C]: brings the Job currently in the Foreground back to the Background AND TERMINATES the Job as well
+bg %[job_ID_number]
+	* %job_ID_number: brings the Job currently in the Foreground back to the Background while it keeps running
+nice [-n] [nice_level] [command_here]
+	* -n nice_level command_here: creates a new Process and sets its Nice Level to the specified value
+		* EX: $ nice -15 pwd: creates a new Process with the $ pwd command and sets the initial Nice Level to 15
+		* nice_level must be >0 if you're logged in as a normal User, meaning you can only lower the priority
+		* only Root Users can raise the priority by lowering the Nice Level up to -20
+	* command_here: creates a new Process and sets its Nice Level to be 10 by default
+renice [-n] [nice_level] [PID_here]
+	* -n nice_level PID_here: changes the Nice Level of an existing Process by PID number
+		* EX: $ renice -15 9999: sets the Nice Level to 15
+		* nice_level must be greater than its current value if you're logged in as a normal User, meaning you can only lower the priority
+		* only Root Users can raise the priority by lowering the Nice Level up to -20
+	* prerequisite: previously ran:
+		* $ nice -n [nice_level] [command_here]
+grep [-i, -v] '[regex_here]' [file_name]
+	* 'regex_here' file_name: prints out all lines in the given file that match the given regular expression
+	* -i 'regex_here' file_name: prints out all lines in the given file that match the given regular expression (case-insensitive), so it will match capitals and lower-case
+	* -v 'regex_here': prints out all lines in the given file that do NOT match the given regular expression
+egrep [-c, -v] '[regex_here]' [file_name]
+	* egrep stands for: extended grep, meaning it is grep, except it will always use Extended Regular Expressions (a.k.a: will always imply the -E option)
+	* 'regex_here' file_name: prints out all lines that match the given Extended Regular Expression from the given file
+	* -c 'regex_here' file_name: prints out a count of the total number of lines that match the given Extended Regular Expression from the given file
+	* -v 'regex_here': prints out all lines in the given file that do NOT match the given Extended Regular Expression
+fgrep [-f] [string_file] [file_name]
+	* fgrep stands for file grep, meaning it is grep, except it will always match certain strings provided in a specified file (a.k.a: will always imply the -F option)
+		* this makes it easier to parse a file based on a list of keywords
+	* -f string_file file_name: prints out all lines in file_name that contain any of the strings listed in "string_file"
+vim [-R] [file_name]
+	* IMPORTANT: some of these shortcut keys are only in vi (I didn't have enough time to label them...)
+	* vim: starts up the VIM text editor with a newly-created file
+	* file_name: starts up the VIM text editor by opening up the specified file and immediately puts you in Command Mode
+	* -R file_name: starts up the VIM text editor by opening up the specified file with read-only permissions in Command Mode
+	* [H][J][K][L] keys: moves your cursor left, down, up, and right
+	* [:] key: puts you into X Mode
+	* Command Mode: you can move the cursor around, change text, or change to another mode
+		* you're in Command Mode as soon as you open up VIM
+		* Command Mode is indicated when there's no text displaying at the bottom line of the screen
+		* [I] key: puts you into Insert Mode
+		* [O] key: moves your cursor to the next line and puts you into Insert Mode (i.e opens-up a line below your cursor for editing)
+		* [V] key: puts you into Visual Mode
+		* [P] key: performs a Ctrl + v on the text you highlighted (EX: in Visual Mode when you were using the [Y] key), or by some other means
+		* [U] key: Undo's the previous action that you made last time your were in Insert Mode
+		* [W] key: moves your cursor over to the next word in the line
+		* [X] key: deletes the current character your cursor is hovering over
+		* [:] key: puts you into X Mode
+		* [D] + [D] keys: deletes the current line that your cursor is on
+		* [SHIFT] + [G] keys: moves your cursor to the bottom of the file
+		* [G] + [G] keys: moves your cursor to the top of the file
+		* [number] + [G] + [G] keys: lets you delete the current line, followed by the next "number - 1" lines
+			* EX: 20DD: deletes the current line, followed by the next 19 lines 
+		* [SHIFT] + [A] keys: lets you append text to the end of a line and puts you into Insert Mode
+		* [Y] + [Y] keys: lets you Ctrl + C the current line your cursor is on
+		* [number] + [Y] + [Y] keys: lets you Ctrl + C the current line, followed by the next "number - 1" lines
+			* EX: 20YY: copies the current line, followed by the next 19 lines 
+		* [SHIFT] + [Z] + [Z]: saves and closes the file
+		* [SHIFT] + [Z] + [Q]: closes, but does NOT save the file
+		* [SHIFT] + [(]: go to the beginning of a sentence
+		* [SHIFT] + [)]: go to the end of a sentence
+		* [SHIFT] + [{]: go to the beginning of a paragraph
+		* [SHIFT] + [}]: go to the end of a paragraph
+		* [/]: lets you Ctrl + F for a keyword 
+			* $ keyword: supply the keyword you want to search for, then press [ENTER]
+			* [N]: see the next occurence of "keyword"
+		* [?]: lets you Ctrl + F for a keyword IN REVERSE
+			* $ keyword: supply the keyword you want to search for, then press [ENTER]
+			* [N]: see the next occurence of "keyword"
+	* Insert Mode [I] key: you can enter text into a file
+		* Insert Mode is indicated when the bottom line of the screen displays: --- INSERT ---
+		* [ESC] key: exits you out of Insert Mode back into Command Mode
+	* Visual Mode [V] key: lets you copy text to later past in Command Mode
+		* Visual Mode is indicated when the bottom line of the screen displays: --- VISUAL ---
+		* [Y] key: performs a Ctrl + c on the text you highlighted by using the [H][J][K][L] keys and exits you out of Insert Mode back into Command Mode
+		* [ESC] key: exits you out of Visual Mode back into Command Mode
+	* X Mode [:] key: lets you save a file and exit VIM
+		* $ w [file_name]: saves the changes you've made in VIM and names the resulting file: file_name
+		* $ r file_name: lets you add (read-in) the contents of "file_name" to the current file you have open in VIM starting at the line at which your cursor is positioned
+		* $ wq: saves the changes you've made in VIM and quits you out of VIM
+		* $ x: saves the changes you've made in VIM and quits you out of VIM
+		* $ q: quits you out of VIM without saving
+		* $ q!: quits you out of VIM without saving
+		* $ ![command_here]: lets you run a command without having to leave Vim
+	* prerequisite:
+		* must first install Vim: $ sudo apt install vim
+df [--total] [-h, -i] [mount_point, device_name]
+	* OPTION-COMBINEABLE command
+	* df: the disk free command; shows you every filesystem on the computer, how much space they used, how much space is available, it's % usage, and the Mount Point for each filesystem
+	* -h: shows you the output of the df command in human-readable format
+	* mount_point: shows you the filesystem usage, availability, and % usage for that particular Mount Point
+		* EX: $ df /: gives you the filesystem usage for the filesystem whose Mount Point is at Root
+	* device_name: shows you the filesystem usage, availability, and % usage for that particular disk
+		* EX: $ df /dev/xvda1
+	* --total: includes every filesystem on the computer, including the Pseudo filesystems
+	* -i: shows you the output of the df command, plus inode info about each filesystem
+du [-h, -s, -sh] [--max-depth=number_here, --inode] [directory_here]
+	* OPTION-COMBINEABLE command
+	* du: the disk usage command; lists the disk space that is in use within the current working directory and all its contents in bytes
+	* -h directory_here: outputs the result of running the disk usage command in human-readable format
+	* -s directory_here: outputs a summary of the result of running the disk usage command (so just the total usage as opposed to listing out every file)
+	* -sh directory_here: outputs a summary (so just the total usage as opposed to listing out every file) of running the disk usage command in human-readable format
+	* --max-depth=number_here directory_here: prints out the results of the disk usage command, but only at a maximum depth of "number_here" directories down from the: "directory_here" directory
+	* --inode directory_here: shows you the amount of inode usage for a particular directory 
+fsck [-r, -n, -y, -f, -c] [disk_name, LABEL=label_name]
+	* the Filesystem Check Utility command
+	* -r disk_name: generates a report of the specified filesystem by name
+		* EX: $ fsck -r /dev/sda2
+	* -r LABEL=label_name: generates a report of the specified filesystem by Label
+	* -n disk_name: runs a filesystem check on the specified disk, but specifies no changes to be made
+	* -y disk_name: runs a filesystem check on the specified disk, while saying "yes" to all recomended changes
+	* -f disk_name: forces a re-run of the disk check on the specified disk
+		* you would do this in cases where you know the disk has issues, but the disk check comes back as: "clean"
+	* -c disk_name: checks for any bad blocks on the specified disk
+	* prerequisites:
+		* must be logged in as the Root User
+		* the specified disk must be unmounted first using the  $ unmount command
+umount [disk_name, label_name, mount_point]
+	* disk_name: unmounts the disk with the name: "disk_name"
+	* label_name: unmounts the disk with the Label: "label_name"
+	* mount_point: unmounts the disk attached to the "mount_point" Mount Point
+	* prerequisite: must be logged in as the Root User
+e2fsck [-f, -p] [disk_name]
+	* the Filesystem Check Utility command for ext2, ext3, and ext4 filesystems
+	* disk_name: runs a disk check on the specified disk, assuming that disk is an ext2, ext3, or ext4 filesystem
+		* EX: $ e2fsck /dev/sda3
+	* -f disk_name: forces a re-run of the disk check on the specified disk, assuming that disk is an ext2, ext3, or ext4 filesystem
+		* you would do this in cases where you know the disk has issues, but the disk check comes back as: "clean"
+	* -p disk_name: automatically repairs the specified filesystem on disk
+		* if any errors are found, the -p option will force the disk check to repair anything it finds w/o prompting you
+		* you would run this after running the "-f" option, and are still skeptical about the results returning "clean" when you think it shouldn't
+mke2fs [-t] [filesystem_type] [-L] [label_name] [device_name]
+	* the Make e2 filesystem command is used to create new ext2, ext3, or ext4 filesystems (it gets ran in the background when running $ mkfs for an ext filesystem)
+	* -t filesystem_type -L label_name device_name: creates a new filesystem of the specified type with the specified Label with the specified name
+		* EX: $ mke2fs -t ext4 -L EXTRA /dev/sdb1
+	* prerequisite: must be logged in as the Root User
+tune2fs [-l, -i, -j] [number]w [device_name]
+	* a filesystem utility used to adjust parameters on an ext2, ext3, or ext4 filesystem
+	* -l device_name: lists out all the filesystem parameters of the specified disk
+		* EX: $ tune2fs -l /dev/sda3
+	* -i numberw device_name: sets the Check Interval parameter of the given filesystem, so that a system check is performed every "number" weeks
+		* a Check Interval value of "0" indicates that a system check on this filesystem will never happen
+		* after a system check occurs, a directory gets created at the Root of the filesystem called: "lost+found"
+			* you would need to mount the filesystem in order to see this directory
+			* the lost+found directory captures any corrupted data that is detected during a system check
+	* -j device_name: lets you turn Journaling on, meaning you can take a given ext2 filesystem named: "device_name" and turn it into an ext3 filesystem
+	* prerequisite: must be logged in as the Root User
+xfs_repair [device_name]
+	* a filesystem utility used to repair XFS filesystems
+	* device_name: repairs the specified XFS filesystem
+		* EX: $ xfs_repair /dev/vdb1
+	* prerequisite: must be logged in as the Root User
+xfs_fsr [mount_point]
+	* a filesystem utility used to reorganize/defrag an XFS filesystem
+		* you would use this in cases where you've run this filesystem for a long time and deleted and added a bunch of files, which makes data more spaced-out and slower to access
+	* mount_point: defrags the specified XFS filesystem at the specified Mount Point
+		* EX: $ xfs_fsr /opt
+	* prerequisites:
+		* must be logged in as the Root User
+		* filesystem must be mounted
+xfs_db [device_name]
+	* device_name: filesystem utility used to debug the given XFS filesystem
+		* $ frag: checks on the filesystem's fragmentation
+		* $ freesp: shows you the amount of free space on the given filesystem
+	* prerequisites:
+		* must be logged in as the Root User
+		* filesystem must be unmounted
+chmod [-R] 1[octal_number] 2[octal_number] 4[octal_number] [octal_number] [u,g,o][+,-][r,w,x,s,t] [u=][r,w,x],[g=][r,w,x],[o=][r,w,x] [file_name, directory_name]
+	* OPTION-COMBINEABLE command
+	* the change mode command updates the permissions of files and/or directories
+	* o-r file_name: removes read access for Other Users on the specified file
+	* u=rwx file_name: gives the ownership User read, write, and executable privelages
+	* octal_number file_name: updates the permissions of the specified number using an octal number representation
+		* EX: chmod 760 test.sh: updates the permissions of the test.sh file to be: -rwxrw----
+	* 4octal_number file_name: updates the permissions of the specified file using an octal number representation, while also setting the SUID for the User that has resource ownership
+		* EX: chmod 4760 test.sh: updates the permissions of the test.sh file to be: -rwsrw----
+	* 2octal_number file_name: updates the permissions of the specified file using an octal number representation, while also setting the SGID for the Group that has resource ownership
+		* EX: chmod 2670 test.sh: updates the permissions of the test.sh file to be: -rwxrws---
+	* -R 2octal_number directory_name: updates the permissions of the specified directory recursively to all its contents using an octal number representation, while also setting the SGID for the Group that has resource ownership
+		* EX: chmod -R 2670 /srv/team: updates the permissions of everything in "directory_name" to be: -rwxrws---
+		* IMPORTANT: the effect of the SGID bit will only apply to future files that are created within the directory that had its permissions changed
+		* IMPORTANT: any files created within the directory that had its permissions changed will inherit the permissions of the directory itself
+	* 1octal_number file_name: updates the permissions of the specified file using an octal number representation, while also setting the Sticky Bit for Other Users
+		* EX: chmod 1670 test.sh: updates the permissions of test.sh to be: -rwxrw---t
+chown [user_name] [user_name]:[group_name] [user_name].[group_name] [file_name, directory_name]
+	* the change ownership command changes the ownership permissions of a file or directory  
+	* :group_name file_name: changes the Group ownership permissions of "file_name" to: "group_name"
+	* user_name: file_name: changes the User ownership permissions of "file_name" to: "user_name"
+		* prerequisites: must be logged in as the Root User
+	* user_name file_name: changes the User ownership permissions of "file_name" to: "user_name"
+		* prerequisites: must be logged in as the Root User
+		* is the same exact thing as running: $ chown user_name: file_name
+	* .group_name file_name: changes the Group ownership permissions of "file_name" to: "group_name"
+		* prerequisites: must be logged in as the Root User
+		* is the same exact thing as running: $ chown :group_name file_name
+	* user_name.group_name file_name: changes the User ownership and Group ownership permissions of "file_name"
+		* prerequisites: must be logged in as the Root User
+		* is the same exact thing as running: $ chown user_name:group_name file_name
+chgrp [group_name] [file_name, directory_name]
+	* the change Group command changes the Group ownership permissions of a file or directory
+	* group_name file_name: changes the Group ownership permissions of "file_name" to: "group_name"
+groups
+	* groups: lists out all the Groups that the current User belongs to
+exit
+	* exit: logs you out of the User that you are currently signed in as and quits you out of the current Bash shell
+umask [u=][r,w,x],[g=][r,w,x],[o=][r,w,x]
+	* OPTION-COMBINEABLE command
+	* umask: shows the current default umask value for the current User that gets subtracted from a file or directory's default permissions
+		* EX: $ umask: output: 0002
+	* u=rwx,g=,o=: sets the current User's umask value such that:
+		* everytime the User creates a directory, the default permissions of that directory will now be: 777 - 077 = 700, or: drwx------
+		* everytime the User creates a file, the default permissions of that file will now be: 666 - 077 = 600, or: -rw-------
+	* gets this information from the etc/bashrc file, which contains the umask value for the entire system
+	* the umask value is reset everytime you log in
+		* to make the change permanent for your current User, update the: /home/[user_name]/.bashrc file by appending a new line to the file with the format:
+			* $ umask [new_umask_value_here]
+source [file_name]
+	* file_name: Bash will re-read the specified file, and apply it to your current Bash shell session
+		* this is good for when you've just made configuration changes and want to apply them immediately w/o having to sign out and sign back in again
+ln [-s] [file_path] [link_name]
+	* file_path link_name: creates a Hard Link named: link_name to a file given its path, meaning it will only work on the filesystem of the file
+		* EX: $ ln file1.txt test_link
+		      $ cat test_link: output: [the contents of file1.txt]
+		* IMPORTANT: moving the path of the file or renaming the originating file does NOT break the Hard Link
+		* IMPORTANT: in the case of Hard Links, you cannot create a link to a file that is on a different filesystem
+	* -s file_path link_name: creates a Symbolic Link named: link_name, that points to the specified file in the file path
+		* creates a Symbolic Link to a file or directory, meaning it can traverse filesystems
+		* IMPORTANT: moving the path of the file or renaming the originating file WILL break the Symbolic link
+locate [keyword_here]
+	* keyword_here: locates the entire filesystem for any files or directories that match the given keyword
+		* EX: $ locate file1.txt
+	* gets its information for its own local database, as opposed to $ find where it just looks at the current state of the filesystem, so much faster
+		* HOWEVER, it needs to have its local database updated periodically in order to stay up-to-date with recent additions and deletions
+			* to update the database manually, you would run the $ updatedb command
+	* prerequisite:
+		* must install plocate: $ sudo apt install plocate
+updatedb
+	* updatedb: updates the local database of the $ locate command
+	* configuration of the updatedb command can be found in the updatedb.config file: this contains info about certain locations that get excluded as part of running $ updatedb
+		* you can edit this file to exclude more paths you don't want $ updatedb to include as part of updating the local database for the $ locate command
+	* prerequisites: must be logged in as the Root User
+whereis [command_name]
+	* command_name: searches the filesystem for any binaries, source code, or man pages relating to the specified command
+		* EX: $ whereis pwd 
+whatis [command_name]
+	* command_name: prints out the "Name" field in Section 1 of the man page for that command; essentially giving a one-line description of what the command does 
+		* EX: $ whatis pwd: output: pwd(1)	- print name of current/working directory
+
+

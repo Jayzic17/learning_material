@@ -1,0 +1,469 @@
+
+
+cloud computing: using remote servers to host, manage, run, and process all your data
+SaaS: software that is run and managed by a company for customers 
+PaaS: infrastructure that is run and managed by a company for developers
+IaaS: networking, data storage, and servers that are run and managed by a company for admins
+DaaS: essentially a virtual desktop in the cloud that you can access and use. Don't have the big fancy computer? Control one remotely!
+cloud deployment model: "public cloud"; companies that fully utilize cloud computing; ex: startups
+on-premise deployment model: "private cloud," companies that host their own servers and data centers on-site; ex: government
+hybrid deployment model: companies that use a mix btwn cloud and on-premise models; ex: banks and legacy on-premise companies
+regions: a location on earth that contains multiple availability zones
+	* each region has at least 2 AZ's, every region is physically isolated from one another, AWS largest region is US-EAST-1, and billing is always in US-EAST-1
+	* not all services are available in all regions and < 10ms latency btwn AZs
+availability zones: discrete AWS data centers
+edge locations: an AWS data center that is owned and run by a trusted AWS partner; offers low latency access for customers
+	* endpoints of Amazon's Content Delivery Network (CDN) that are used to cache content, so that latency is reduced as much as possible for customers
+	* edge locations allow users to have low latency requests no matter where they are geographically located
+multi-AZ: distributing your companies instances over multiple AZ's in case one goes down
+GovCloud regions: regions only operated by U.S employees on U.S soil; controlled unclassified data and workloads that comply with government regulations
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+EC2: elastic cloud compute; it's a name that Amazon gives their servers
+	* EC2 Pricing Models:
+		* on demand: useful for low costs, flexibility, no commitment, used for apps with unpredictable/spiky/short-term workloads and apps that are being tested on EC2 for the first time
+			* default pricing; you're charged by the hour, so no up-front or long-term payment; best for short-term or unpredictable workloads
+			* linux systems are charged by the second however
+		* reserved: useful for apps with predictable usage, apps that require reserved capacity, users who want to make their payments upfront to reduce costs even further
+			* you commit to a 1-3 year contract. Best used for predictable workloads and/or if you want to reserve servers for specific timeframes. Best long-term solution
+			* reserved instances can be sold at the Reserved Instance Marketplace, and can be shared btwn multiple accounts in the same org
+			* EC2 reserved pricing: TERM x CLASS OFFERING x PAYMENT OPTION
+				* 1 or 3-year contracts; the longer the TERM, the greater the savings
+				* all upfront, partial upfront, and no upfront; the greater the PAYMENT OPTION (all upfront being the best), the greater the savings
+				* CLASS OFFERINGs:
+					* standard: 75% savings compared to on-demand pricing, but can't change RI attributes
+					* convertible: 54% savings compared to on-demand pricing, and allows you to change RI attributes
+					* scheduled: allows you to reserve servers for specific timeframes
+		* spot: useful for apps that have flexible start and end times, apps that don't require a lot of power to run, and when you urgently need more computing power immediately
+			* it's AWS trying to give discounts for idle servers they don't use. 90% savings compared to on-demand pricing, so best savings solution, but they can be terminated at any time
+			* spot instances are designed for small applications and/or have flexible start and end times
+			* spot instances can be terminated at any time if AWS needs the servers for on-demand customers. You don't get charged after AWS terminates it, but you do if you're the one that terminated it
+		* dedicated hosts: useful for regulatory requirements that don't support multi-tenancy; also good for licensing of software
+			* can be purchased on-demand, which gets charged hourly
+			* only 70% savings compared to on-demand, so most expensive, but the trade-off is you get a single tenant deployment as opposed to a multi-tenant one
+	* you can apply roles to EC2 instances
+	* EC2 auto recovery: used to automatically recover your EC2 instances when CloudWatch detects a problem with that EC2 server; like if it's broken or something 
+	* factors that impact the price paid for an EC2 instance:
+		* the instance type
+		* load balancing
+		* the region
+		* the # of instances
+		* the Pricing Model used
+multi-tenant: multiple companies sharing the same physical server
+single-tenant: one company gets their own physical server
+SSM: simple sessions manager; it's what you use to start, record, and log all user sessions that go on in your servers
+AMI: amazon machine image; disk image copy of your server
+auto-scaling groups: allows you to increase or decrease the number of servers automatically
+elastic load balancer: allows you manage the load traffic across all of your servers
+	* load balancers come in 3 different flavors:
+		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
+		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games
+		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+U2F Security Key: a type of MFA device that customers can use to protect their AWS resources
+S3: simple storage service; allows you to manage your buckets: it's where you put your objects
+	* object storage for immutable files; files can be from 0 bytes to 5 TB; unlimited storage; it's key/value storage; 99.9% availability, and 11 x 9's durability
+	* buckets in S3 must be unique globally
+	* objects in S3 consist of:
+		* key: name of the object
+		* value: data of the object
+	* PUTS to "new" objects in S3 are consistent, but UPDATES and DELETES to existing objects takes some time to propagate to the newer version, so sometimes you can get the old version back
+	* S3 features:
+		* tiered storage
+		* lifecycle management; you can set up lifecycle policies that can move files to different storage classes based on how frequently they're accessed; ex: from standard to Glacier
+		* versioning
+		* encryption
+		* access control list: a list used in S3 that you create that has a list that says who can access which files in S3
+		* bucket policies: same thing as access control, but it's for entire Buckets instead of individual files; list that says who gets access to which buckets; you can use it to make buckets public
+	* S3 buckets are always private by default
+	* 3 ways of restricting bucket access in S3:
+		* access control list
+		* bucket policies
+		* IAM Policies
+	* storage classes in S3:
+		most expensive	* S3 standard: data stored redundantly in multiple locations
+			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access; cheaper than S3, but you're charged a retrieval fee
+			  | 	* S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing
+			  |	* S3 Intelligent tiering: uses machine learning to move data through the above 3 access tiers ^ to optimize cost and performance
+			  v 	* S3 Glacier: low cost storage class for archiving data; retrieval time from minutes to hours; 90 days minimum storage duration
+					* for archiving and long-term backup; lower cost than S3 Buckets, but takes a while to get data from there and you're charged every time you request info from those buckets
+		least expensive	* S3 Glacier Deep Archive: same as S3 Glacier, but with even longer retrieval times (12 hours or more); 180 days minimum storage duration
+	* you can use S3 to make a static website, S3 scales automatically with respect to high incoming traffic, stores all versions of an object, good at backup, and versioning cannot be disabled
+	* S3 integrates with life cycling rules and can use MFA with S3
+	* use S3 when you got large files to store; ex: audio, video, and images
+	* S3 is a regional AWS service that gives global views
+	* S3 is used for storing objects; can't install databases or OS's on it
+	* Cross Region Replication in S3: allows you to have duplicative buckets in multiple regions
+	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's network, as opposed to just the regular internet
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CloudFront: cloud distribution network; you use it to copy your data to multiple edge locations, so that users can access that data as quick as possible
+	* content delivery network (CDN); content is cached to nearest edge location for ~24 hrs, so don't have to keep downloading something from the origin
+	* you can use CloudFront to store dynamic websites, streaming, and interactive content 
+	* 2 types of distributions in CloudFront:
+		* Web Distributions: websites
+		* RTMP: streaming
+	* Distribution: name given to the CDN which consists of a collection of edge locations
+RDS: fully managed relational database service; allows you to setup relational databases, where if you add a column to the table it affects all rows/entries
+	* non-relational databases is just like relational databases, but as opposed to affecting the columns to all entries when adding a column, you can add a column for one entry and it won't affect the others
+	* 2 key features of Relational Databases (RDS):
+		* Multi-AZ
+		* Read Replicas: replicas of your production database for users to read instead of the main production database, which minimizes traffic and increases performance
+	* Relational Databases on AWS:
+		* SQL Server
+		* Oracle
+		* MySQL Server
+		* PostgreSQL
+		* Aurora
+		* MariaDB
+Lambda: server-less applications/functions that you perform w/o provisioning servers; they last 15 minutes! You can also add triggers for when you want them to run; you pay only for the compute time they consume
+	* Lambda supports: Node.js, C#, Java, Go, Python, PowerShell; essentially it can support any programming language using an API
+	* Lambda supports version control (you can pull up old versions of your code) and it scales out automatically
+	* 2 ways Lambda is priced:
+		* the first 1 million requests are free, then $0.20 per 1 million requests after that
+		* Duration of the execution time
+Scale Up: increasing computing power of one machine
+Scale Out: adding multiple machines
+	* different types of scaling out:
+		* Stateless Applications: apps that don't remember the user
+		* Distribute Load to Multiple Nodes: distributing traffic to multiple servers; not just one
+		* Stateless Components (machines): machines don't remember user
+		* Stateful Components (machines): machines remember user; ex: how Amazon remembers what you were looking at when you were shopping; even if you weren't signed into an account
+		* Implement Session Affinity: cookies
+		* Distributed Processing and Implement Distributed Processing: using a whole fleet of EC2 instances to work on a single problem; like making a super computer 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+support plans:
+	* basic support plan: free, no 3rd party support, you get 7 trusted advisor checks, and email support but only for billing and account help
+	* developer support plan: $20/month, no 3rd party support, 7 trusted advisor checks, tech support via email(~24 hrs), General Guidance(< 24 hrs) and System Impaired(< 12 hrs) support
+	* business support plan: $100/month, yes 3rd party, all trusted advisor checks, tech support via email, tech support via chat and phone 24/7, General Guidance, System Impaired help...
+		* ...Production System Impaired(< 4 hrs) Production System Down(<1hr), and AWS Infrastructure Event Management w/ an additional fee 
+	* enterprise support plan: $15,000/month, yes 3rd party, (business support plan)^ + Business-Critical System Down support(< 15 min), a personal concierge, a technical account manager,...
+		*... and AWS Infrastructure Event Management is free
+		* the personal concierge is primarily used for billing and account questions and the TAM is your technical expert on all things AWS
+AWS trusted advisor: a service that advises you on saving money, security, performance, service limits, and fault-tolerance; essentially it coaches you on AWS best practices
+	* 5 categories of AWS trusted advisor:
+		* cost optimization
+		* performance
+		* security
+		* fault tolerance
+		* service limits
+			* you can contact AWS support to increase your service limits and you can assign different service limits to different IAM users
+	* 2 types:
+		* Core Checks and Recommendations: free
+		* Full Trusted Advisor: Business and Enterprise companies only
+	* to unlock Trusted Advisor, you need to upgrade your support plan to Business
+AWS marketplace: place where you can buy and download AWS software already made by other people for AWS
+cost explorer: allows you to visually see the billing of each member associated with your account
+	* allows you to visualize and understand your AWS costs and usage over time; you use it to explore costs AFTER they've been incurred
+	* gives highly accurate cost forecasts for up to 12 months ahead
+AWS budgets: lets you set up alarms in the event you go over budget, or are about to. Can be budgets based on cost, usage, or reservation (EC2, RDS, Redshift, ElasticCache). can track by mnth, qt, or yr
+	* used to set custom budgets and it alerts you if your costs exceed or are forecasted to exceed your budget amount; used to budget costs BEFORE they have been incurred
+TCO calculator: total cost of ownership; provides reports and presentations that show how much your business would save if you switched from on-premise to cloud. It's only an approximation!
+	* "what is the cost of [this] on-premise vs in the cloud?"; can also generate reports you can give to exec's for whether or not you want to move to the cloud
+	* you're mostly considering the physical maintenance and labor of your on-premise compared with how much you will save if you switch to AWS
+AWS cost and usage report: generates a spreadsheet that gives you the most granular data about your AWS costs and usage
+	* you can put the spreadsheet you get from AWS Cost and Usage Report into Athena and query your database with it, use QuickSight to turn it into graphs, or put it into an S3 bucket
+AWS Simple Monthly Calculator: "how much will [this] cost me on a monthly basis?"
+AWS pricing calculator: is used to create an estimated cost for your new solution to be deployed on AWS
+consolidated billing: is where you can combine all billing and payment methods across multiple AWS accounts into one bill, where the master account pays the charges for all the member accounts
+	* consolidated billing allows you to save money by taking advantage of volume discounts.
+	* Ex: you save more money by combining multiple accounts and expenses into 1 bill, as opposed to paying for the expenses of each account separately 
+	* paying/root account pays the bills of all the linked accounts; paying account is independent from linked accounts, and linked accounts are independent; limit of 20 linked accounts
+		* the paying/root account is the email address you use to set up your AWS account; has full admin access; don't let anyone have this!
+	* Consolidated Billing has the advantage of having volume pricing discount, since one account pays for everything, and all other accounts are just linked to that one
+		* ex: netflix family plan, verizon family phone plan, etc.
+Billing and Cost Management Console: this is where you can see your account's past billing information
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+AWS landing zone: helps enterprises getting started with SETTING UP a basic multi-account AWS account through AVM (account vending machine) which auto-generates new accounts via an AWS Service Catalog template
+	* helps customers quickly setup a secure, multi-account AWS organization environment using AWS best practices; different than ControlTower
+ControlTower: allows you to PROVISION multiple AWS accounts in minutes, which comply with the companies existing policies; used by enterprises that already have multiple AWS accounts (automated w/ predefined layouts)
+	* allows admins to automate the process of AWS landing zone
+AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS. These IT services can include everything from virtual machine images, servers, software, etc
+AWS quickStarts: pre-built templates by AWS Partners that help you deploy popular stacks: a collection of resources that you can manage. All the resources in the stack are defined by the stack's AWS CloudFormation template
+	* you can use it to deploy environments quickly using CloudFormation templates made by AWS Solutions Architects who are experts in their respective technologies
+	* 3 parts to AWS quickStarts:
+		* a reference architecture for the deployment
+		* AWS CloudFormation templates for automating and configuring the deployment
+		* following the deployment guide 
+AWS CloudFormation template: the template you use to configure resources into your company's cloud
+	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
+	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does
+	* CloudFormation is Infrastructure as code
+AWS Organizations: allows you to manage billing, control access, security, compliance, and share resources across all AWS accounts in your org's AWS main account
+	* is where you manage all AWS accounts in your organization
+	* 2 feature sets of AWS Organizations: 
+		* Consolidated Billing
+		* All features
+	* best practices for AWS Organizations:
+		* strong secure password for root account
+		* use multi-factor authentication
+		* root/paying account should be used for billing purposes only
+VPC: virtual private cloud; portion of the AWS cloud network in a region you specify where you can launch AWS services and also launch VPN's
+VPC peering: a network connection btwn 2 VPC's that allows you to route traffic btwn the two
+	* the 2 VPC's can be in separate AWS accounts in different regions and STILL be able to share data with each other
+	* can be used to replicate data to geographically distinct locations for redundancy, disaster recovery, and fault-tolerance
+AWS Transit Gateway: simplifies the connection management of multiple VPC's across multiple accounts in a company's network
+	* acts as a central hub for which all connections connect to, and then Transit Gateway routes traffic where it needs to go
+subnets: result of partitioning an IP network into smaller networks; can be public (internet accessible) or private (non-internet accessible); the OG IP that is being referred to is the VPC you create
+Internet Gateway (IGW): enables servers access to the Internet from your VPC out into the Internet
+route tables: determines where network traffic from your subnets are directed when being sent out into the internet
+Security Groups: Firewalls for your servers and databases
+NACLs: Firewalls for your subnets
+	* you can create ALLOW and DENY rules for NACLs, but you can only create ALLOW rules for Security Groups
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Elastic Beanstalk: allows you to deploy and scale web applications by setting up dev environments to run and test your applications on, so you don't have to setup all that yourself just to test it
+	* Elastic Beanstalk handles all the provisioning, load balancing, scaling, and health monitoring of your application so that you don't have to set all that up yourself just to run your code
+CodeDeploy: allows you to deploy code to your on-premise architecture and/or EC2 instances
+	* fully managed deployment service that automates software deployments to compute services
+OpsWorks: allows you to programmatically configure how servers are configured, managed, and deployed; uses managed instances of Chef and Puppet (configuration management tools)
+	* CodeDeploy, but automated
+configuration management tools: DevOps tools that automate the process of making code changes, deploying them, and tracking them
+codePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
+codeCommit: fully managed source control service that hosts secure Git-based repos
+codeBuild: fully managed build server: it compiles your source code, runs tests, and makes software packages
+AWS cloud9: IDE accessed via the web browser
+AWS CodeStar: development service that lets you quickly develop, build, and deploy applications on AWS; helps you manage you project development activities with unified UI and dashboards
+Storage Gateway: hybrid btwn cloud storage and local caching; acts as an extension of on-premise storage into the cloud; enables your on-premise apps to use AWS cloud storage
+	* either physical or virtual device that works like Snowball in that it's storage, but it stays on premise; you use it to cache files from your on-premise directly into S3
+EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, HHD, etc.)
+	* allows you to create storage volumes and attach them to EC2 instances, essentially cloud storage for servers
+	* 2 types of EBS:
+		* SSD
+			* general purpose SSD
+			* provisioned IOPS SSD
+		* Magnetic: lower cost than SSD
+			* throughput optimized HDD
+			* Cold HDD
+			* Magnetic
+	* EBS is used for installing databases and OS's; you can change the size of the disk, but doesn't do it automatically; virtual disk attached to an EC2
+	* you can use EBS snapshots to save a copy of your storage for fault tolerance and disaster recovery
+		* the amount of data you store in snapshots affects EBS pricing
+EFS: Elastic File Storage; file storage that you can mount to multiple EC2 servers at the same time
+	* EFS is EBS except it automatically can change it's storage size to accommodate more or less data (elastic); multiple EC2's can pull from the same EFS; virtual disk attached to an EC2
+Snowball: physically transferring lots of data using a computer suitcase; default: 50-80 TB; Snowball Edge: 100TB; Snowmobile: a whole-ass shipping container pulled by a semi (100PB)
+	* Snowball: 80TB disc you load up to the snowball, and then send it back to AWS
+	* Snowball Edge: it's the Snowball storage ^ plus a computer for if you for some reason don't have connectivity to the AWS network and want to run compute services on it
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Amazon Connect: Call center app
+WorkSpaces: Virtual Remote Desktop app; lets you access your work computer remotely
+IoT Greengrass: connects your devices up to the AWS cloud
+WorkDocs: essentially the AWS version of Drive
+Chime: essentially the AWS version of Microsoft Teams
+WorkMail: essentially the Outlook of AWS
+Pinpoint: Marketing campaign management system for sending targeted emails, SMS, notifications, and voice messages
+SES: Simple Email Service; same as Pinpoint, but it's more for when you send out messages as part of your application, like "purchase confirmation" and "one-time code" msg's; good for marketers
+QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
+Direct Connect: Dedicated network connection from your on-premise to the AWS network; it's like having a direct fibre optic cable straight to AWS, so really lowers the latency
+Site-to-Site VPN: securely connecting your on-premise to your AWS network  
+Client VPN: securely connecting your clients to your AWS network
+Active Directory: lets you integrate directory-aware workloads and AWS resources in conjunction; allows the organization of hierarchies of data across multiple dimensions   
+CloudTrail: logs all API calls btwn AWS services, so you can see who created a bucket, launched an EC2 instance, etc.
+	* monitors all API calls; good for auditing changes in your cloud; you can collect logs by making a bucket in the root account, then have all linked accounts write to it
+CloudWatch: logs performance data for AWS services (ex: CPU usage, memory usage, etc.); also includes the ability to create metrics, events, alarms, and dashboards: a visualization of your metrics
+	* you can use CloudWatch to set up billing alerts
+	* CloudWatch is all about monitoring performance of your cloud
+Shared Responsibility Model: Your responsible for security IN the cloud, and AWS is responsible for security OF the cloud
+	* encryption, patch management, training, and database controls are shared responsibilities btwn you and AWS tho
+	* hypervisors are entirely handled by AWS
+inherited controls: controls that the customer fully inherits from AWS, so physical and environmental controls
+shared controls: controls that apply to both the infrastructure and customer layers; for example:
+	* patch management: AWS patches the infrastructure, but the customer has to patch their own OS's and applications
+	* configuration management: AWS maintains the configuration of their infrastructure devices, but the customer has to maintain config for their own...
+		* OS's, applications, and databases
+	* AWS must train their employees, but the customer is responsible for training their own employees
+AWS Artifact: generates pdfs that give you access to AWS's security and compliance reports for any Compliance Program; asking the question: "why should we trust AWS?"
+AWS Inspector: runs a security benchmark to make sure your EC2 servers are as secure as possible; can perform network and host checks; asks the question "are your servers secure? Prove it!"
+	* Amazon Inspector audits a single EC2 instance and generates a report of security checks, whereas Trusted Advisor just gives you general recommendations on your whole system and teaches you best practices
+	* Inspector is an automated security assessment service that helps you improve security and compliance with AWS by finding vulnerabilities and deviations from best practices for you and gives
+	  you a report of those finding, which are prioritized by level of severity; it searches for these in your EC2 and the applications you make
+API Gateway: used for creating and communicating with API: it's how applications talk to each other
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+AWS WAF: protects your web applications from the 10 most common web exploits; can use rules and rulesets to allow and deny HTTP requests; can be added to CloudFront and Application Load Balancer
+	* web application firewall; operates at layer 7; protects you from the most common web exploits for layers 1-7
+AWS certificate manager: used for issuing verified certificates for SSL/HTTPS on AWS resources like ELB, WAF, etc.
+AWS Shield: managed DDoS protection service for apps on AWS; protects you from Layer 3,4, and 7 attacks; when you route traffic through Route53 or CloudFront, you're using AWS Shield Standard
+	* protects you from DDoS attacks; everyone has a shield by default
+AWS Shield Advanced: protection against larger DDoS'; $3000/yr; visibility into attacks, 24/7 access to DDoS experts, available on: Route53, CloudFront, ELB, Elastic IP, and AWS Global Accelerator
+PenTesting: penetration testing; simulated cyber attack on a computer system to evaluate if the system is secure
+	* You can PenTest on AWS, but only on the following services:
+		* EC2 servers, NAT Gateways, and ELB
+		* RDS
+		* CloudFront
+		* Aurora
+		* API Gateways
+		* AWS Lambda and Lambda@Edge functions
+		* Lightsail resources
+		* Elastic Beanstalk environments
+	* Prohibited PenTest activities:
+		* DNS zone walking via Route53 Hosted Zones
+		* DoS, DDoS, Simulated DoS, Simulated DDoS
+		* Port flooding
+		* Protocol flooding
+		* Request flooding
+	* if you wanted to PenTest against something that isn't one of the pre-approved services, you'll need to submit a request to AWS, takes 7 days to reply
+Amazon Guard Duty: an IDS/IPS that uses machine learning to analyze your CloudTrail, VPC, and DNS logs; will alert you of findings and you can automate incident responses to those findings
+	* uses machine-learning that auto detects anomalies and 3rd-party data to protect your account and alerts you; free 30-day trial
+	* GuardDuty gets its data from CloudTrail event logs, VPC Flow Logs, and DNS logs
+IDS/IPS: Intrusion Detection System and Intrusion Protection System
+Key Management Service: (KMS) lets you create and manage encryption keys; multi-tenant HSM; uses envelope encryption; a lot of AWS services allow you to encrypt your data with KMS
+	* regional; manages your keys for encryption and decryption for S3 objects; KMS is on shared physical hardware (multi-tenant)
+HSM: hardware security module; specific type of hardware for storing encryption keys; extremely secure at AWS data centers; stored in memory, so there's never a write to disk
+	* single-tenant; more expensive than KMS; complies with FIPS 140-2 level 3; can use it for multi-AZ
+Envelope Encryption: encrypting your encryption key with a master key; pretty much just an additional layer of security
+Amazon Macie: fully managed machine learning service that monitors your S3 bucket usage by analyzing your CloudTrail logs to detect and alert you on unauthorized access or potential data leaks
+	* security service that uses machine learning to identify whether stuff in your S3 contains PII to prevent ID theft; gives you dashboards, reporting, and alerts on those discoveries
+PII: Personally Identifiable Information; personal data used to ID someone
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Elastic Transcoder: (old) transcodes videos to streaming formats 
+MediaConvert: (new) Elastic Transcoder + overlays images, insert video clips, extracts caption data, more robust UI
+AWS Kinesis: fully managed and scalable platform for streaming live data to your applications 
+AWS Partner Network: Global Partner Program that utilizes Technology and Consulting partners to build solutions for customers; helps build, market, and sell their AWS offerings but providing business, technical, and marketing support
+	* AWS Partner Network contains:
+		* Consulting Partners: design, architect, build, migrate, and manage your workloads and apps on AWS
+		* Technology Partners: they provide hardware, software, and network solutions
+agility: how fast you can do things
+elasticity: ability to dynamically add or remove resources based on changing workloads
+scalability: scaling up by adding resources; ex: adding more servers
+IAM: allows you to manage users and their level of access to the AWS console
+	* IAM is global, meaning you do not have to specify a region when using IAM
+	* the default security credentials used to sign in to IAM are a username and password, whereas Access Keys are used to make programatic requests to AWS
+	* IAM key terms:
+		* users
+		* groups: collection of users; all users in the group inherit the same permissions
+		* policy: a JSON file that applies permissions to users, groups, and/or roles; a list of ALLOW and DENY rules to a certain resource
+		* roles: a role contains a collection of policies that can be temporarily assigned to a user; ex: john assumes the DynamoReadWrite Role, giving him access to the DynamoRead policy and the DynamoWrite policy
+		* entities: the objects that are used in IAM for authentication purposes, so users and roles; not groups and policies 
+		* principal: a person/application that is authenticated as a root account/IAM user/role to make requests and actions to AWS; a principal itself is an entity
+		* identities: users, groups, and roles; essentially it's the object's name, or way of identifying the object, so that you can give it permissions 
+		* resources: ex: aurora, dynamoDB, S3, etc.
+	* IAM offers:
+		* multi-factor authentication
+		* centralized control of your AWS account
+		* shared access to your AWS account
+		* can give temp access to users, devices, and services when necessary
+		* you can customize your own password rotation policy
+		* you can define who has access to which service
+	* IAM best practices:
+		* make a root account
+		* 1 human for each user
+		* always put users in groups, then apply policies to the groups
+		* MFA
+		* use roles
+		* use access keys
+		* use IAM credential reports to audit user/account permissions
+	* steps to mitigate compromised IAM credentials:
+		* Determine: what do the credentials have access to?
+		* Invalidate: suspend and delete those credentials so they can no longer be able to access your account
+		* Consider: consider invalidating any temporary security credentials that might have been made with those credentials
+		* Restore: restore the appropriate access to the user
+		* Review: make sure everything's all good
+	* credential report: a report that you can download in IAM that lists meta data about user's passwords, access keys, and whether MFA is enabled
+	* principal of least privilege: when making IAM policies, give users the least amount of privilege necessary to do their job
+	* IAM policy simulator: service in IAM that lets you test and debug policies you create in IAM before assigning them to users and roles
+	* there is a non-explicit deny to all new IAM users added
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Online Transaction Processing (OLTP): query the database for 1 record; looking for a specific record
+Online Analytics Processing (OLAP): query the database for multiple records; looking for all records that fit a certain criteria and analyze those data sets
+Data Warehousing: useful when you want to query your production database without doing it directly on production, which would affect its performance; good for business analytics
+Redshift: Amazon's Data Warehousing solution; Column-based database, can handle petabytes worth of data
+	* Redshift is scalable, can be used in multiple AZ's, but it's not meant for online transaction processing (OLTP)
+ElastiCache: essentially improves the performance of web applications by caching the most common queries
+	* 2 engines that are supported by ElastiCache:h
+		* Memcached
+		* Redis
+	* you use ElastiCache for things like application caching and you use CloudFront for things like edge caching
+Refactoring: translating your existing on-premise solutions/services into existing solutions that AWS provides
+Rearchitecting: same thing as Refactoring ^ but with architecture (servers, databases, etc.)
+Loose Coupling: a design practice (abstraction) where 2 components are connected, but they aren't dependent on each other, so that if one fails the other doesn't
+	* Loose Coupling best practices
+		* Well Defined Interfaces: ex: creating your own APIs
+		* Service Discovery: allowing one component of AWS to discover other components of AWS as to prevent outages (if one component goes down, it can always find another)
+		* Distributed Systems: when there's an error with an application, have a good way of reporting that back to the user as well as the developers (graceful failure in practice)
+Asynchronous Integration: a type of loose coupling where one component produces events and the other consumes them, so consuming components are separated by producing components, so if one fails it's ok
+Service health Dashboard: gives you the health status of every AWS service in every region (globally), meaning this applies to everyone using AWS, not just your companies resources
+Personal Health Dashboard: gives you the health status of the AWS services YOUR COMPANY uses across the AWS regions and also detailed troubleshooting on your services when/if they go down
+Capex: (capital expenses) refers to expenses you pay upfront
+Opex: (operational expenses) refers to ongoing expenses
+tags: words that act as meta-data for making relationships btwn resources
+	* tags also help with automating stuff, for example if all EC2 instances have a similar tag, you can automate a process to have them all do something by referencing that tag
+Tag Editor: where you edit and use tags
+AWS cost allocation tags: tags that lets you organize your resource costs to help you track and categorize your AWS costs
+Rekognition: converts images into tags/text; kind of like those questions that ask you "which of these pictures have stop signs?"
+resource groups: group of resources that share one or more of the same tag
+AWS Config: monitors the configuration of your AWS resources
+	* lets you assess, audit, and evaluate the configurations of your AWS resources; unlike opsWorks which sets up those configurations as opposed to auditing them
+Parameter Store: server-less storage for passwords and connection strings; can store them using KMS or as plaintext; can also set Time To Live to expire those; free; limit of 10,000 params per account
+Secrets Manager: similar to Parameter Store, but costs money; auto rotate passwords for you, can generate random passwords for you, and applies the new password in RDS for you; no storage limit
+Security Hub: a central location where you can view all security alerts and finding in your company across all AWS security services, across all AWS accounts in your company (god view)
+Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all server less and you pay per query you make
+	* you can use Athena to generate reports based on data stored in S3 and analyze cost and usage reports by querying them
+Lex: what you use for making an Alexa (chat bot)
+Polly: converts text to a life-like voice
+Transcribe: converts speech into text
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web applications and websites for small developers who don't need complex functionality from their servers
+	* you use it to launch VPS's (Virtual Private Servers)
+Serverless Application Repository: allows you to deploy pre-made server less applications
+AWS Outposts: a way of extending AWS compute services to your own on-premise data centers
+EC2 Image Builder: lets you build custom EC2 images for Linux and Windows
+SNS: used for sending plain text emails that are triggered by AWS services, whereas SES is optimized for just emails; can send html emails, receive emails, email templates, custom domain names, etc.
+always design for failure: meaning redundantly duplicate stuff across multiple availability zones
+Route53: how you get and manage domains, domain names, and domain traffic; Route53 is global just like IAM and S3; also use it to reroute network traffic to other IP's
+	* DNS is how you use domain names to look up IP addresses 
+Amazon Neptune: a Graph Database
+AWS systems manager: the HQ of where you control your entire AWS infrastructure as well as manage operational and automative tasks across all your AWS resources (databases + servers)
+AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
+	* this prevents packet loss, latency, and improves the user's performance by 60%
+DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relational database system
+	* DynamoDB is also scalable, can be used in multiple AZ's, but you wouldn't use DynamoDB if you got complex queries like JOINs
+	* automatically scales to increases in throughput capacity and offers extremely low latency
+Global Tables: DynamoDB replication service that automatically replicates data across multiple regions globally, thus offering low latency to global users
+	* good for big, global applications
+DAX: (DynamoDB Accelerator): in-memory cache for DynamoDB which delivers 10x performance improvement from milliseconds to microseconds; fully-managed and highly available 
+DocumentDB: NoSQL document database, mongoDB-compatible
+Aurora: relational database; database is fully managed; MySQL 5x faster, and PSQL 3x faster
+	* Aurora is scalable, can be used in multiple AZ's, and you would use Aurora if you got complex queries like JOINs 
+Aurora Serverless: same as Aurora, but only runs when you need it
+ECS: Elastic Container Service; servers that come preconfigured with Docker running on it for launching Microservices
+	* Docker is a container orchestration tool that automates scheduling, deploying, networking, health-monitoring, and management of containers (Microservices)
+Fargate: same as ECS, but you don't have to worry about EC2 servers; AWS covers it for you, so you only pay for the runtime and computing time of your containers
+AWS Batch: uses spot pricing to launch a bunch of EC2 servers for you to run batch workloads for any kind of AWS computing service
+EKS: same as ECS, but instead it runs on Kubernetes
+AWS database migration service: allows you to quickly and securely migrate entire databases to AWS
+AWS Server Migration Service: allows you to migrate on-premise workloads and/or servers to AWS
+AWS Application Discovery Service: migrating on-premise applications to the cloud, whereas Database Migration Service is for databases
+AWS Migration Hub: TRACKS the progress of APPLICATIONS being migrated into the cloud
+AWS X-ray: helps developers debug their applications by showing them an end-to-end view of the requests as they transit your applications and shows you a map of your app's underlying components
+Amazon Cognito: allows you to sign in using your AWS credentials or with a 3rd party such as Facebook, LinkedIn, Google, etc.; "sign in using Google, or Facebook"
+AWS Abuse Team:  responsible for helping you when your AWS resources are being maliciously being abused by hackers: (DOS, distributing spam, distributing malware, etc.)
+AWS Security Team: responsible to Security of AWS Services
+Security Bulletins: it's where AWS publishes the latest security and privacy events with AWS
+AWS Elastic MapReduce: processes Big Data using a cluster of processors running in parallel on Hadoop; it's fully managed by AWS, so you never set anything up, they do everything for you and you just focus on analysis
+AWS SQS: fully managed; enables you to send messages between components at any volume, without losing messages or requiring other services to be available; lets you decouple application components so that they run independently
+AWS Professional Services: trains enterprises in their goals to achieve cloud adoption and use cloud computing by training your enterprises team
+Data sovereignty: the idea that digitized data is subject to the laws and regulations of the country it's stored in
+
+
+
+
+

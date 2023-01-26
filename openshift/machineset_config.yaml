@@ -1,0 +1,28 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  creationTimestamp: "2020-04-17T21:52:44Z"
+  generation: 2
+  labels:
+    machine.openshift.io/cluster-api-cluster: ocplab-l96n4
+  name: ocplab-l96n4-worker-us-east-1a
+  namespace: openshift-machine-api
+  resourceVersion: "2345453"
+  selfLink: /apis/machine.openshift.io/v1beta1/namespaces/openshift-machine-api/machinesets/ocplab-l96n4-worker-us-east-1a
+  uid: 340943-45t4594-34545-4545-45344324
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: ocplab-l96n4
+      machine.openshift.io/cluster-api-machineset: ocplab-l96n4-worker-us-east-1a
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        machine.openshift.io/cluster-api-cluster: ocplab-l96n4
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: ocplab-l96n4-worker-us-east-1a
+spec:
+  [...]

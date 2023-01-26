@@ -1,0 +1,154 @@
+
+
+
+3 installation methods:
+	* installer-provisioned: the openshift installer provisions everything for you
+		* supports aws, azure, gcp, openstack, and RHEV
+	* user-provisioned: the user/customer provisions everything; little harder but more granular
+		* supports aws, azure, gcp, vmware, ibm z, ibm power, and bare metal
+	* laptop/desktop-provisioned:
+		* uses CodeReady Containers to provision everything on your local computer using a VM
+CodeReady Containers: runs in a single VM; gives you a minimal OpenShift 4 Cluster on your local computer
+	* easy setup and configuration
+	* it is ephermeral, meaning it doesn't last forever. Wouldn't be good for a PROD environment. Good for learning
+3 hardware requirements for running CodeReady Containers:
+	* vCPUs: need 4 virtual CPUs
+	* Memory: need 9 GB of free memory
+	* Storage Space: need 35 GB of free storage
+OS requirements for CodeReady Containers:
+	* Windows:
+		* windows 10 and up
+	* macOS:
+		* Sierra or newer
+	* Linux (all with NetworkManager installed):
+		* Supported:
+			* RHEL/CentOS 7.5 or newer
+			* Fedora -2 latest release
+		* Unsupported:
+			* Ubuntu 18.04 or newer
+			* Debian 10 or newer
+.openshift_install.log file contains info about the url where your CodeReady Cluster was deployed, a username, and password when you first create it
+HTPasswd: one of the Identity Providers available to you with OpenShift that you can set up
+Default Cluster Roles:
+	* admin: can view and modify any Resource in the Project except for Quota
+	* basic-user: can get basic information about Projects and Users
+	* clsuter-admin: Super-user with any action for any Project on any Resource, including Quota
+	* cluster-status: can get basic Cluster status information
+	* edit: can modify most objects in a Project, but does not have the power to view or modify Roels or Bindings
+	* self-provisioner: can create their own Projects
+	* view: can see most objects in a Project; can't view Roles or Bindings
+Default Virtual Groups:
+	* system:authenticated
+	* system:authenticated:oauth
+	* system:unauthenticated
+Types of Secrets:
+	* kubernetes.io/service-account-token
+	* kubernetes.io/basic-auth
+	* kubernetes.io/ssh-auth
+	* kubernetes.io/tls
+	* Opaque: means no authentication or validation
+Self-Signed Certificate: a certificate that is not signed by a Certificate Authority (CA) it's signed by you
+OpenShift does not support password-protected (passphrase) certificates
+4 types of Quota Scopes:
+	* Terminating
+	* Non-Terminating
+	* Best Effort
+	* Not Best Effort
+Service Account: an account that exists in a Project which allows for accessing the API without having to share a regular user's credentials
+Cluster Network Operator: an OpenShift Operator that deploys and manages the Cluster network components on a Cluster
+Security Context Constraints: lets you control what actions and access the Pods in your Container have
+MachineSets: the physical hardware that runs in the background, so if Nodes run Pods, then machines refer to the physical hardware of the Nodes
+Web Console left navigation pane (Administrator):
+	- Home
+		- Dashboards
+			- Details
+				- Cluster ID
+				- Provider: AWS, Azure, etc.
+				- Version: OpenShift version
+			- Cluster Inventory
+				- Number of Nodes
+				- Number of Pods
+				- Persistent storage volume claims
+			- Cluster Capacity
+				- CPU time
+				- Memory allocation
+				- Storage consumed
+				- Network resources consumed
+			- Cluster Utilization: Capacity of various Resources over a specified period of time
+			- Events
+			- Top Consumers
+			- Cluster Health
+		- Projects
+			- Create Project
+		- Search
+		- Explore
+		- Events
+	- Operators
+		- OperatorHub
+		- Installed Operators
+	- Workloads
+		- Pods
+			- Pod Details
+				- Environment
+				- Events
+				- Terminal
+				- Logs
+		- Deployments
+		- Deployment Configs
+		- Stateful Sets
+		- Secrets
+		- Config Maps
+		- Cron Jobs
+		- Jobs
+		- Daemon Sets
+		- Replica Sets
+		- Replication Controllers
+		- Horizontal Pod AutoScalers
+	- Networking
+		- Services
+		- Routes
+		- Ingresses
+		- Network Policies
+	- Storage
+		- Persistent Volumes
+		- Persistent Volume Claims
+		- Storage Classes
+	- Builds
+		- Build Configs
+		- Buils
+		- Image Streams
+	- Monitoring
+		- Alerting
+			- Silences: alerts that you get really often, but you don't want to be constantly notified about
+		- Metrics
+		- Dashboards
+	- Compute
+		- Nodes
+		- Machines
+		- Machine Sets
+		- Machine Autoscalers
+		- Machine Configs
+		- Machine Config Pools
+	- Administration
+		- Cluster Settings
+			- Global Configuration
+				- OAuth
+		- Namespaces
+		- Service Accounts
+		- Roles
+		- Role Bindings
+		- Resource Quotas
+		- Limit Ranges
+		- Custom Resource Definitions
+Web Console left navigation pane (Developer):
+	- +Add
+	- Topology
+	- Builds
+	- Advanced
+		- Projects
+		- Events
+		- Search
+
+
+
+

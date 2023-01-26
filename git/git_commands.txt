@@ -1,0 +1,39 @@
+
+
+
+ssh-keygen -t rsa
+	* generates pub/private keypair
+
+git reset --hard HEAD~[n]
+	* removes the last "n" commits from the local branch
+	* WARNING: this deletes all unstaged changes
+
+git reset --hard HEAD~[n]
+git push --force
+	* forces the removal of the last "n" commits from the remote branch
+
+git push -u origin [branch_name]
+	* if you created a branch locally named: "branch_name" that doesn't exist remotely and you're committing...
+	* ...changes for the first time, use the upstream option "-u" to create the remote branch
+
+git checkout [branch_name]
+git branch [new_branch_name]
+	* creates a new branch from the branch you're currently in
+
+git checkout [some_other_branch]
+git branch -d [branch_to_delete]
+	* deletes the local branch: "branch_to_delete"
+
+git config --global user.name "Jonathan Gorczyca"
+	* sets your Git username for all repos on your computer
+
+git config --global user.email "youremail@yourdomain.com"
+	* sets your Git email for all repos on your computer
+
+git restore --staged path_to_file
+	* undo all the changes to a modified file that is currently staged
+
+git restore path_to_file
+	* undo all the changes to a modified file that isn't staged
+
+

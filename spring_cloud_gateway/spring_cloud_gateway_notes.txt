@@ -1,0 +1,26 @@
+
+
+Link: https://cloud.spring.io/spring-cloud-gateway/reference/html/#gateway-starter
+Spring Cloud Gateway: The API Gateway that Java Spring Boot uses
+API Gateway: allows clients to make API calls to an application
+Route: The thing that routes an API call to the application
+	* has 3 parts:
+		* ID
+		* URI:
+			* 		     URL
+			* |----------------------------------------|
+			*			   URN
+			*        |---------------------------------------|
+			* http://thinkzarahatke.com/author/amty.html#posts
+			  ----					---- -----
+			 method					 |  resource
+			 		              	     location: where resource is
+			  |______________________________________________|
+			  			URI
+		* collection of Predicates
+		* collection of Filters
+Predicates: the conditions that match an API call to a specific Route
+	* lets you match on anything from the HTTP request
+Filter: lets you pre-process or post-process API calls
+Gateway Client (the client for the Gateway) -> Gateway Handler(handles the Predicates) -> Gateway Web Handler(handles the Filters) -> Service
+Global Filters: Filters that apply globally to all routes

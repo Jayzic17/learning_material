@@ -1,0 +1,588 @@
+
+
+
+GNU/Linux OS: GNU part refers to the Bash shell; the Linux portion refers to the Kernel itself
+GNU: the free open source version of the UNIX operating system
+Kernel: core framework of the OS
+	* it's Monolithic: meaning:
+		* it handles all memory and hardware interactions
+		* extra functionality can be loaded and unloaded dynamically to the Kernel via Kernel Modules
+		* ensures the computer doesn't need to be rebooted into a different Kernel image for added functionality
+	* many 3rd party Kernel Modules are device drivers
+		* Kernel Modules: drivers that are used to talk with Linux hardware
+udev: device manager that detects when devices are added to the computer
+D-Bus: the Data Bus service that passes information about everything that goes on in the computer to other services and devices
+how Linux device management works:
+	* udev detects external device
+	* udev sends device data via D-Bus to the /dev directory
+	* when a user queries for the device data via terminal, /dev sends the device data via D-Bus to the terminal via Standard Output
+what happens when a linux computer boots?
+	* computer starts
+	* BIOS checks all I/O devices
+		* POST: process performed by BIOS that tests if all I/O devices attatched to the motherboard are available for use
+	* GRUB: Boot Program; begins looking for section of hard drive that contains data needed to boot OS and Kernel
+	* Kernel is loaded:
+		* Initial RAM Disk (initramfs): contains a bunch of device drivers; is loaded and starts to load the computer's drivers, so that the Initialization System can eventually mount the filesystems from the hard disk
+		* Initialization System starts mounting the computer's filesystems and starts to load services
+	* Initial RAM Disk gets removed, since it's no longer needed at this point
+Boot logs: logs that are generated when the computer boots up
+	* volatile, meaning they are gone once the computer reboots
+	* generated from the Kernel Ring Buffer: an area of RAM that the Kernel writes all of its system messages to
+list of Kernel boot parameters:
+	* quiet: by-passes most of the messages generated during the boot process
+	* silent: enables silent mode
+	* no-show: don't show startup and error messages
+	* mem: use the maximum amount of RAM on startup
+	* ro: read-only mode
+init: the first Initialization System that was used to initialize a Linux computer
+	* synonimous with System V: UNIX Initialization System that used init
+	* services are started one after the other, which is slow
+	* begins after Initial RAM Disk is started:
+		* Kernel then looks for an Initialization System to hand over control of the computer
+		* Kernel first looks at /sbin/init and starts it
+		* init program is now in control:
+			* first thing it does is read the config settings in /etc/inittab to see what Runlevel the computer should be operating in
+				* Runlevel: a configuration that tells the computer what mode to operate in
+					* can only operate in one Runlevel at a time
+					* 0 (Halt): init runs scripts that stop services and shut down the computer
+					* 1 (Single User Mode): Root User is the only user allowed to login to the computer; used for maintenance and repair
+					* 2 (Multi-user Mode): used for multiple users to login, but no networking capabilities or remote filesystems allowed
+					* 3 (Multi-user Mode with Networking): same as 2, but with networking capabilities allowed
+					* 4 (unused): is never used, but is available in case an admin wants to setup a custom Runlevel environment
+					* 5 (Multi-user with Networking and Graphical Desktop): same as 3, but with a graphical desktop allowed
+					* 6 (Reboot): init stops services and restarts the computer
+				* /etc/inittab looks like:
+					* [identifier]:[Runlevel]:[action]:[process]
+					* EX: id:3:initdefault:
+					* EX: si::sysinit:/etc/rc.d/rc.sysinit
+					* EX: 10:0:wait:/etc/rc.d/rc 0
+						* wait: the specified process will start once the Runlevel is entered, then init will wait for it to complete before moving on
+					* the typical locations for scripts that are used to start up the computer can be located in 2 different places depending on the Linux distribution:
+						* Red Hat-based: /etc/rc.d/
+							* rc: run commands
+							* contains directories that store run command scripts depending on the Runlevel (EX: rc0.d, rc1.d)
+								* these scripts are Symbolic Links that link back to the original script files under etc/rc.d
+								* the naming convention of these scripts are as follows: K = kill this script, S = start this script, ## = when to process
+									* EX: K02smb (process this script 2nd; kill this script)
+									* EX: S01network (process this script 1st (so before K35smb); start this script)
+							* contains rc.sysinit, which does some house-cleaning before we enter our Runlevel
+							* contains rc.local, which runs after the Runlevel is completely loaded
+								* usually contains custom tasks added by an admin to start up extra services or tasks that don't have their own init scripts
+							* etc/rc.d/rc: executes when a Runlevel is entered; starts scripts based on the Runlevel that the computer is changing to
+						* Debian-based: /etc/init.d
+upstart: Initialization System; unlike init, it offers asynchronous starting of services, so much faster
+	* it not only starts and stops services, but continually monitors their availability as well
+	* begins after Initial RAM Disk is started
+	* upstart vs. init:
+		* init:
+			* /sbin/init
+			* /etc/inittab
+			* /etc/rc.d/rc.sysinit
+			* /etc/rc.d/rc##.d (in sequential order)
+		* upstart:
+			* startup(7) event
+				* mountall(8) tool: used by startup to mount the drives that make up the computer's filesystem; loads drivers for the hardware
+				* /etc/init/rc-sysinit.conf script: ran by startup to see if there is an /etc/inittab file that contains configuration options
+					* telinit(8): ran by /etc/init/rc-sysinit.conf to switch into the default Runlevel via the Runlevel command
+						* the Runlevel is then passed to: /etc/init/rc.conf as an argument
+	* init is static: meaning it doesn't respond to changes to the computer, while upstart is dynamic and does respond to changes
+		* EX: plugging a new monitor in after boot: init wouldn't automatically recognize it, but upstart would
+	* when something new is detected on a computer, it triggers an Event, which triggers an upstart Job
+		* the job is then divided into Tasks and Services
+			* Tasks: will do what it's told, and then return to a Waiting State once it has finished
+				* Waiting State: the initial state of a Job; waiting to do something
+				* Starting State: Job is about to start
+				* Running State: Job is currently running
+					* Respawning State: occurs after something went wrong with the Job, like quitting unexpectedly
+						* upstart will attempt Respawn State up to 10 times at 5 second intervals before the Job is dropped entirely
+				* Stopping State: intermediate state where the Job has processed a section of its configuration known as Prestop
+				* Killed State: Job is actually stopping as determined by the Stopping State
+				* Post-Stop State: Job has completely stopped; goes back to Waiting State
+			* Services: will not stop by itself: the upstart daemon will monitor each Service and it will only kill a Service if an Event calls for it
+systemd: another different Initialization System
+	* begins after Initial RAM Disk is started
+	* init ran with a lot of Bash scripts; systemd removed the "need" to have Bash scripts
+		* this was because running each script had to be ran through the Bash interpreter, which would spawn multiple Processes and open up multiple libraries, which was slow
+	* systemd gets around using Bash scripts by converting it all into C code
+	* systemd is still backwards compatible with older System V computers
+	* Unit files:
+		* 3 locations:
+			* /usr/lib/systemd/system: default location where Unit Files are installed via packages
+			* /etc/systemd/system: Unit File location for admins; these take precedence over the ones in /usr
+			* /run/systemd/system: Runtime Unit file location
+		* components of the Unit file:
+			* [Unit]: states that this is a Unit File
+			* Description=Multi-User System: indicates what the Unit File is for
+			* Documentation=man:systemd.special(7): indicates any documentation associated with the Unit File
+			* Requires=basic.target: indicates what Unit files will also be triggered as a result of running this Unit File
+				* orWants=: if the Unit File specified fails, it does not prevent the Unit File as a whole from completing
+			* Conflicts=rescue.service rescue.target: indicates what Unit files cannot be running while this Unit file is running
+			* After=basic.target rescue.service rescue.target: indicates a list of Unit files that must be started before this one
+			* Before=basic.target rescue.service rescue.target: indicates a list of Unit files that must be started after this one
+		* MOUNT Unit: the Unit file used for managing filesystem mounts
+			* is automatically generated from /etc/fstab
+			* if mounting of a filesystem is done manually, the Mount Unit is generated with the same name as the specified Mount Point and will be handled by systemd
+	* how it works:
+		* Kernel looks for /sbin/init just as before, but instead /sbin/init just contains a Symbolic Link that goes to: /lib/systemd/systemd where systemd starts
+	* Target: a Unit that syncs up other Units when the computer boots or changes state
+		* often used to bring the computer to a new state
+		* other Units associate themselves with a Target as part of the overall setup of the Target
+		* types of Targets:
+			* multi-user.target: multi-user environment similar to Runlevel 3
+			* graphical.target: multi-user environment with a desktop, similar to Runlevel 5
+			* rescue.target: provides an isolated environment for the Root User to make repairs to the computer, similar to Runlevel 1
+			* basic.target: a basic environment that's used during the boot process before another Target takes over
+			* sysinit.target: environment for system initialization; is what gets started right after systemd takes over for the Kernel
+acpid: Advanced Configuration and Power Interface
+	* configuration files for acpid are located in /etc/acpi
+		* /etc/acpi/events/: contains power.conf and video.conf
+			* power.conf looks for when the physical power button is pressed to shut down the computer by running: $ shutdown -h now
+Swap Space: temporary storage like RAM, but it exists on your physical hard drive
+	* when a certain percentage of RAM is full, the Kernel will move less-used data to Swap Space
+	* the most common set-up with Swap Space is a Swap partition that is a dedicated partition on your hard drive used for Swap Space
+		* there's also a Swap file set-up where instead of the partition itself, you write memory to a file in the partition, but it's slow as heck 
+	* sizing of the Swap Space:
+		* the old rule-of-thumb was to partition 1.5x to 2.0x of the size of your available RAM as Swap Space
+		* nowadays, it doesn't really matter, but no less than 50% of your available RAM
+partitions:
+	* /dev/sda: your 1st hard drive on the computer that the Kernel recognizes
+	* hard drive partitions will be named like: /dev/sda1, /dev/sda2, etc., where "a" is the first disk and "1" is the first partition
+	* if you see something like: "XVD", that means it's a virtual disk under the Xen hypervisor, or you'll see HD, SD, or NVMe as well...
+	* directories that MUST remain mounted on the / partition:
+		* /sbin, /etc, /bin, /lib, /media, /mnt, /proc, /sys, /dev
+Mount Points: when you take a partition of a disk (or the whole disk) and you mount it to a specific directory on the computer
+	* so for example you might have the /dev/sda1 partition mounted to the / directory 
+LVM: Logical Volume Manager; allows for the creation of Volume Groups of physical volumes (PV) or partitions that can be assembled into a single filesystem or multiple filesystems
+	* Volume Groups(VG): a collection of physical disks
+	* Logical Volumes(LV): partitions of your Volume Group; and then attatched to each of those Logical Volumes are filesystems
+	* you can use it for all Mount Points except for /boot; /boot has to be a regular filesystem because GRUB can't read LVM metadata
+	* LVM lets you resize volumes
+	* LVM lets you take snapshots of volumes
+GRUB: Boot Program; Grand Unified Boot Loader
+	* Stage 1:
+		* BIOS looks for boot.img: exists in the Master Boot Record (MBR): the first 512 bytes of the computer's physical hard disk that's marked with the Boot Flag
+	* Stage 1.5: 
+		* boot.img runs core.img: the file that locates the actual boot partition of the computer
+	* Stage 2:
+		* boot partition gets read in /boot/grub, and is looking for either a grub.conf file (Red Hat-based) or menu.lst file (Debian-based)
+		* then it looks for the device.map file: indicates which device contains the actual Kernel and the OS that needs to be booted
+		* once device.map is read the Kernel gets loaded by GRUB and the computer boots up
+	* Using the GRUB Menu:
+		* while your computer is booting up, continually keep pressing the [ESC] key (before the Linux logo shows up) until the GRUB menu shows up
+		* [A] Key: append options to the Kernel boot line
+		* [C] Key: open up the GRUB command line
+			* in GRUB, /root refers to: /
+			* $ set [variable_name]=[value_here]: sets the specified GRUB variable to a new specified value
+				* EX: $ set pager=1: sets the pager GRUB variable so that you can scroll through output using the [DOWN] arrow key
+				* EX: $ set root=(hd0,msdos1): sets the root partition to be the msdos1 partition on the 1st disk
+			* $ help: prints out the GRUB help menu
+			* $ find [file_name]: search for a file in all partitions and list the devices the file is on while in GRUB
+				* EX: $ find /grub/stage1: finds the device attatched to the /grub/stage1 file for starting GRUB
+			* $ setup [device_name]: lets you install/re-install GRUB on the given device
+				 * EX: $ setup /dev/sda3
+			* $ initrd [initial_RAM_disk].img: loads the Initial RAM disk, given the full path of the Initial RAM Disk image file
+			* $ root(device_name,number): sets the root partition of the computer to be at the specified disk at the specified partition number (0-indexed in GRUB, and 1-indexed in GRUB2)
+				* EX: $ root(hd0,0): in GRUB, this means the root partition will be in the 1st disk in the 1st partition
+			* $ default: indicates the default system for GRUB to boot
+			* $ single: forces GRUB to boot in Single User Mode(Runlevel: 1)
+			* $ kernel [path_to_kernel]: loads the Linux Kernel given its path
+			* $ quit: quits you out of the GRUB shell
+		* [ESC] Key: used to go to a previous menu item
+		* [ARROW] Keys: navigate in the GRUB Menu
+		* [ENTER] Key: boot
+Master Boot Record Partition Table (MBR):
+	* used in GRUB
+	* supported only 26 partitions
+	* supports up to 4 primary partitions, 1 of which is allowed to be an extended partition (ext2, ext3, etc.)
+	* partition size limited to 2TB
+	* uses regular BIOS to boot
+GRUB2: another Boot Program 
+	* Stage 1:
+		* UEFI BIOS looks for the boot.img in MBR like GRUB
+		* GPT Header is found, which is just a way of saying that the boot.img disk is a GPT-style disk (and not an MBR-style disk like in GRUB)
+		* Partition Entry Array is found, which is just a large list of all partitions, their ID's, and where they're located
+	* Stage 1.5:
+		* core.img is found (just like in GRUB); usually found in empty sectors after the Partition Entry Array
+		* core.img looks for the /boot/efi partition, a.k.a the EFI System Partition (ESP), which must be a VFAT32 or FAT32 format filesystem
+			* this is where your actual boot images are located for an EFI computer
+	* Stage 2:
+		* starts at /boot/grub2, where the grubenv file and themes file are ran
+	* Using the GRUB2 Menu:
+		* while your computer is booting up, continually keep pressing the [ESC] key (before the Linux logo shows up) until the GRUB menu shows up
+		* [C] Key: open up the GRUB command line
+			* $ ls: lists out all disks and partitions accessible by GRUB2
+			* $ linux [path_to_kernel]: loads the Linux Kernel given its path
+			* $ insmod [kernel_module]: loads the given Kernel Module
+			* $ menuentry {[grub_commands_here]}: defines the list of GRUB commands to run when the computer boots
+				* this is what GRUB will do whenever the computer boots 
+			* $ title [title_name_here]: lets you give your menuentry a custom name
+			* $ GRUB_DEFAULT: indicates which system should be started by default
+			* $ GRUB_TIMEOUT: indicates the timeout before booting the Kernel
+		* [ARROW] Keys: navigate in the GRUB Menu
+		* [E] Key: used to edit a GRUB Menu item
+		* [ESC] Key: used to go to a previous menu item
+		* Ctrl + X |or| [F10] |or| [ENTER] Key: boot
+GUID Partition Table (GPT):
+	* used in GRUB2
+	* supports 128 partitions
+	* partition size goes up to ZB (zettabytes)
+	* needs UEFI (Unified Extensible Firmware Interface) to boot:
+		* replaces tradidtional BIOS, and can act in legacy BIOS mode if needed to
+		* requires a 64bit OS
+		* prevents unauthorized OS's from booting on the computer
+Shared Library (a.k.a Shared Objects; a.k.a Direct Dependencies): files containing functionality that other applications can use
+	* these files end in a .so extension for: Shared Object
+	* Shared Libraries are located in:
+		* /lib
+		* /lib64
+		* /usr/lib
+		* /usr/lib64
+		* /usr/local/lib
+		* /usr/share
+	* 2 types of Shared Objects:
+		* Dynamic: ends in .so
+		* Statically Linked: end in .a; you would use this when you need a specific application to pre-compile functionality and always guarantee it's the same version of the file everytime
+	* $LD_LIBRARY_PATH: Environment Variable that points to a path where Shared Objects can be read from
+APT: Advanced Packaging Tool; the default package manager for Debian-based computers
+	* installs applications + all their dependencies
+	* removes applications
+	* updates and upgrades packages
+	* how it works:
+		* reads the /etc/apt/sources.list file: contains a list or URLs to all software repos that you can install software from
+DPKG: Debian Package Utility 
+	* works with .deb packages
+	* .deb files contain:
+		* the application
+		* default config files
+		* instructions on how/where to install
+		* list of all dependencies required
+			* these dependencies need to already be installed or installed with the package (i.e it does not handle dependencies for you, unlike APT)
+RPM: Red Hat Package Manager
+	* .rpm files contain:
+		* the application
+		* the default config files for the application
+		* how and where to install the files that come with the package
+		* a list of dependencies that the package requires
+	* the RPM Database:
+		* located in: /var/lib/rpm
+		* uses the: $ rpm --rebuilddb command to repair a corrupted RPM Database
+	* dependencies need to already be installed, or installed with the package (just like .deb files)
+		* YUM handles dependencies for you, RPM does not
+YUM: Yellowdog Updater Modified; an RPM (Red Hat Package Manager)
+	* handles RPM (Red Hat Package Manager files: .rpm) dependencies, meaning it will calculate all the dependencies for us, as opposed to use just continuously downloading whole packages manually
+	* can install, upgrade, and remove packages as well
+	* used on Red Hat Enterprise Linux (RHEL), CentOS, Scientific Linux, and older versions of Fedora
+	* setup of YUM:
+		* a global YUM config, which is set in: /etc/yum.conf
+		* YUM reads repo info from files within: /etc/yum.repos.d/ (unlike APT where all repos are in a single file; here each repo gets its own config file)
+			* contains a bunch of: .repo files
+				* the baseurl= line is the online web address where the repo is located
+		* caches the latest repo info in a directory under: /var/cache/yum
+Zypper: another type of RPM
+	* used on SUSE Linux distros
+DNF: Dandified YUM;
+	* used on Fedora distros
+	* uses same syntax as YUM
+	* intended to replace YUM for Red Hat Enterprise Linux
+Virtual Machines:
+	* Hypervisor: what's used as the intermediary for the VM to communicate with the host OS that is hosting the VM (a.k.a the software used to create VM's)
+		* Example Hypervisors:
+			* KVM: Kernel Virtual Machine
+			* QEMU
+			* VMWare
+			* Xen
+			* VirtualBox
+	* 3 types of VM's:
+		* Full Virtualization: Guest system (VM) is not aware that it is a VM
+		* Paravirtualization: Guest system (VM) is aware that it is a VM by using Guest Drivers
+			* Guest Drivers: drivers that are installed on the Host OS to improve the performance and usability of the Guest VM's
+		* Hybrid Virtualization: using Guest Drivers with Full Virtualization 
+	* VM's can be cloned or turned into templates to rapidly deploy new systems
+		* be careful with using multiple VM's simultaneously that use the same host:
+			* you'll need to make sure each VM's D-Bus Machine ID is unique using: $ dbus-uuidgen
+			* this is to ensure the host knows which VM it's communicating with at any given time
+		* if you're using a cloned VM in the cloud, use: $ cloud-init to ensure that userdata is completely new, like for example $ cloud-init:
+			* creates new SSH keys
+			* sets the VM's default location in case you need to change the VM's timezone or language
+			* sets the VM's host name, so that each VM gets its own unique hostname
+			* sets up Mount Points, so that VM's can communicate with underlying storage
+		* things that aren't duplicated when cloning VM's:
+			* SSH host key
+			* Machine ID
+			* UUID
+			* IP address
+Containers:
+	* Containers make use of Control Groups (a.k.a cgroups): a mechanism within the Linux Kernel that lets you partition system resources like memory, cpu, disk, and networking for individual applications
+	* some examples:
+		* Docker
+		* LXC
+		* OpenVZ
+	* 2 types:
+		* Machine Containers: each Container shares a Kernel and filesystem with the host computer
+		* Application Containers: containers shares everything with the host computer EXCEPT for the application files and library files that the application needs
+	* the reason why Containers are better than VM's is because VM's emulate virtual hardware, so duplicate hardware, filesystems, OS', etc.
+		* with Containers, all of that is shared, so more efficient use of resources
+resources that are provided by IaaS:
+	* VM's/instances
+	* Virtual Network
+	* Block Storage
+OpenSSH: most popular method for accessing a remote VM/instance
+Linux Shells:
+	* Bash: the default
+	* csh: C programming-style shell
+	* ksh: KornShell; based on Bourne shell with some features of csh added
+	* zsh: Z Shell; a mix of Bash and KornShell
+Environment Variables: values that dictate how your Bash shell is set up
+Bash Shell Options: features as part of you Bash shell that can be enabled or disabled
+Manual Pages (man pages): built-in documentation
+	* broken up into Sections:
+		* Section 1: Executable programs or shell commands
+		* Section 2: System Calls: functions provided by the Kernel itself
+		* Section 3: Library Calls: functions within application libraries
+		* Section 4: special files which are typically found in the /dev directory
+		* Section 5: file formats and conventions used
+			* EX: config files
+		* Section 6: games
+		* Section 7: miscellaneous items and other conventions
+		* Section 8: system admin commands that are usually reserved for the Root User
+		* Section 9: lists any non-standard Kernel routines
+Documentation Pages: built-in documentation, but more detailed info compared to Manual Pages
+Absolute Path: the ENTIRE path to a file or folder; always starts at the root (/)
+	* EX: /etc/systemd
+	* $PATH Environment Variable: contains all the Absolute Paths for which you are allowed to run an application from, each seperated by a colon (:)
+		* it also means you don't have to specify the Absolute Path to a command, assuming the command is within the $PATH variable
+			* EX: typing: $ free, as opposed to having to type: $ /usr/bin/free
+			* this is also why it's common to use: "./" to execute a custom script:
+				* you're executing a script from the current working directory (which isn't in the PATH), but its parent is within the PATH, so you need to specify one more directory: "./"
+			* btw the LAST directory in each Absolute Path of PATH is what matters here:
+				* EX: if test.sh was in: /usr/local, but the PATH only specifies: /usr/local/bin, then test.sh won't run
+Relative Path: a path to a file or folder that is relative to your current location
+	* EX: $ cd etc/
+	      $ cd systemd/
+File Globbing: a way of searching for files or directories using Wildcard Characters
+	* Wildcard Characters: things like: *, /, ~, etc.
+	* the word: Globbing comes from the phrase: Global Command
+	* originated from an old UNIX globbing application called: Etc Glob
+		* Bash shell has since inherited this functionality into its own shell
+Standard Output: the place where all output goes to on UNIX-based computers
+	* abbreviated as stdout
+	* you can see stdout everytime a command returns a result to your screen everytime you run a command
+		* you can redirect Standard Output by using the '>' and '>>" characters
+	* its File Handle is: 1
+Standard Input: your keyboard, files, and Standard Output from commads that can be used as input for another command
+	* abbreviated as stdin
+	* you can redirect Standard Input by using the '<' and '|' characters
+	* its File Handle is: 0
+Standard Error: typically written to the screen as a result of a command
+	* abbreviated as stderr
+	* you can redirect Standard Error using the '2>' command to redirect the output to some file instead of the screen
+	* its File Handle is: 2
+Processes: seperate individual Tasks running on the computer behind the scenes
+	* PID: Process ID
+	* PID1: the first process that the Kernel starts once it's done booting (is either init or systemd)
+		* every child Process under PID1 is defined as User Space: what the User is able to interact with
+		* every child Process under PID2 (Kernel) is defined as Kernel Space: Processes that are handled and generated by the Kernel
+CPU Load Average: the average number of Processes that are either in a Runnable or Uninterruptible State
+Runnable State: a Process that is either using the CPU or waiting to use the CPU
+Uninterruptible State: a Process that is waiting for some type of I/O to happen
+Job: a command that is started by a User and sent to the Background
+	* this is seperate from a Process in that a Job has a Job ID number in addition to a PID number
+	* a Job is created by the User
+Background: an isolated session (kind of like a pseudo shell) that contains all currently running Jobs
+Foreground: represents the current Bash shell when talking about Jobs
+Process Priority: dictates how much time the CPU grants each Process
+	* Process Priority values (a.k.a Nice Levels) can range from:
+		* -20: the highest priority, meaning this Process would get the CPU's full attention
+		* 19: lowest priority, meaning it requires the least amount of CPU time
+		* 0: the default priority for Processes that haven't been created using the $ nice, command
+	* only the Root User can lower the Nice Level, which in turn means a higher priority
+		* however EVERY User on the computer can raise Nice Levels (lowering priority)
+VIM is the modern version of VI, so use VIM cause it has more features
+Partition Table: each disk has a Partition Table that shows a layout of all the different partitions that exist on the current disk
+Disk Label: refers to the type of Partition Table/filesystem currently on disk
+	* EX: 83 |or| 8300 |or| 0x83 = Linux filesystem, 82 |or| 8200 |or| 0x82 = Linux Swap Partitions, 8E |or| 8E00 |or| 0x8E = Linux LVM volumes
+Non-Journaling filesystems:
+	* ext2: legacy Linux filesystem
+Journaling filesystems: uses a journal to keep track of changes that have not yet been written to the filesystem
+	* ext3: ext2, but with Journaling
+	* ext4: added extra features on top of ext3; was meant to be a "stop-gap" until a better solution came along
+	* the "ext" refers to: "extended"
+	* XFS: originally created for the IRIX OS, which has since been ported to Linux
+		* extremely fast parallel-operating filesystem
+Btrfs filesystem: instead of just writing files to disk, it uses something called: CoW (Copy on Write)
+	* CoW: essentially, whenever you modify an existing file, Btrfs makes a temporary copy of the OG contents, and your modifications gets written to the original copy
+		* this means that only the CHANGES are recorded within these files on the filesystem
+		* this also makes it good in situations where you need to roll-back changes
+		* file is created with a pre-defined upper size limit, and only increases when new data is written to disk
+	* Subvolumes: used in Btrfs; a small part of the whole filesystem with its own independant file/directory hierarchy and inode number namespace
+		* Snapshots: used in Btrfs; a Subvolume that is a snapshot in time of the current state of a Subvolume's files and directories
+RAW: full disk-type; unlike CoW, a file has all its space pre-allocated and remains at a fixed value even when new data is added to it
+FAT filesystems: File Allocation Table (uses short file names)
+	* Linux can use VFAT (Virtual File Allocation Table), which allows for longer file names
+	* EFI boot partitions need to use a FAT partititon (on Linux this will be a VFAT partition)
+exFAT: Extended FAT filesystem; supports files that are larger than 2GB
+	* primarily used for external disk drives, thumb drives, etc.
+Index Node: inode; stores metadata about files and directories
+	* stores info such as:
+		* permissions
+		* ownership
+		* file type
+	* most filesystems contain a maximum number or inodes that it can contain, which is a function of the type of filesystem it uses, plus the size of the disk that the filesystem is stored on
+		* this means you can fill-up a disk w/o actually using-up all the disk space by just having a large amount of small files that use-up all the inodes for a filesystem
+Symbolic Links: essentially a shortcut to a resource; it can traverse filesystems; breaks when the OG resource name/path is changed
+	* can be used for both directories and files
+	* doesn't have to be on the same partition/filesystem as the file/directory it's linking to
+	* does NOT share the same inode number as the file/directory it's linking to
+		* because of this, it does NOT share the permissions as the file/directory it's linking to
+	* the size of the Symbolic Link is equal to the amount of characters of the file it's linking to
+	* indicates the file/directory it's linking to with the "->" sign
+Hard Links: a.k.a Physical Links; essentially a shortcut to a resource; it will only work on the same filesystem as the originating file; does not break when the OG resource name/path is changed
+	* can only be used for files
+	* must be on the same partition/filesystem as the file it's linking to
+	* DOES share the same inode number as the file it's linking to
+		* because of this, it also shares the same exact permissions as the file it's linking to
+	* the size of the Hard Link is equal to the file size of the file it's linking to
+Pseudo Filesystem: unlike a normal filesystem where files and folders are on a physical disk, Pseudo Filesystems only exist in RAM
+Extended Regular Expressions vs basic regular expressions: basic regular expressions need a preceeding: '\' to treat these characters: ?, +, {, }, (, ), |, as special meta-characters instead of literal characters
+	* so for this reason it's best to always used Extended Regular Expressions
+	* inversly, Extended Regular Expressions need a preceeding: '\' to treat these characters: ?, +, {, }, (, ), |, as literal characters instead of special meta-characters
+alternative editors besides vi:
+	* Vim
+	* Emacs
+	* Nano
+important Environment Variables:
+	* $PATH: contains all the Absolute Paths for which you are allowed to run an application from, each seperated by a colon (:)
+	* $HISTFILE: contains the Absolute Path to the User's .bash_history file
+	* $HISTFILESIZE: the Environment Variable that dictates the amount of entries in the .bash_history file
+	* $LD_LIBRARY_PATH: Environment Variable that points to a path where Shared Objects can be read from
+	* $PWD: is how $ pwd knows where the current working directory is at all times
+	* $OLDPWD: is how $ pwd knows the working directory you were in previously
+	* $EDITOR: contains the default text editor to use in Bash
+	* $HOME: contains the Absolute Path to the current User's home directory
+important files:
+	* uses the Filesystem Hierarchy Standard (FHS)
+	* inverted tree with a single root: /
+	* case-sensitive
+	* paths are delimited by a '/'
+	* '.' refers to hidden files or folders
+	* /
+		* /bin: contains executable programs that regular Users can run (EX: ls, cd, echo, etc.)
+		* /boot: contains the boot files necessary for the computer to boot-up, as well as the Kernel itself
+			* /boot/grub2/grub.cfg: configuration file for GRUB2
+			* /boot/grub: is where the boot partition for GRUB gets read-in
+			* /boot/efi: the default Mount Point of the EFI System Partition (ESP) that core.img looks for when running GRUB2 
+			* /boot/grub2: is where the boot partition for GRUB2 gets read-in
+			* /boot/grub.conf: (Red Hat-based) file that GRUB is looking for after loading the boot partition
+				* specifies the root partition
+			* /boot/menu.lst: (Debian-based) file that GRUB is looking for after loading the boot partition
+				* specifies the root partition
+				* EX: root(hd0,3): in GRUB, this means the root partition is the 4th partition of the 1st disk
+				* in GRUB, the partition number starts at 0, whereas in GRUB2 it starts at 1
+			* /boot/device.map file: indicates which drive contains the actual Kernel and the OS that needs to be booted when running GRUB
+		* /dev: the location where all devices attatched to the computer are referenced from (EX: hard drives, keyboards, USB sticks, etc.)
+			* it's a Pseudo Filesystem; contains the Handles to all other devices on the computer
+			* Handle: a unique identifier that identifies each individual filesystem and device attatched to the computer
+			* also contains info about partitions for individual devices
+			* /dev/cpu: contains info on the number of cores available on the computer
+			* /dev/dri: Direct Rendering Interface; contains info about the video cards on the computer
+		* /etc: contains configuration files for most of the computer's services and system information
+			* /etc/fstab: the Filesystem Table configuration file is what your computer uses when it boots up to locate where its filesystems are and how they should be configured and mounted
+				* a typical row entry is as follows:
+					* column 1: the name of the filesystem (this can be by Label, UUID, or by partition name)
+						* EX: $ LABEL=[label_name]
+						* EX: $ UUID=efffb090-88d1-44f6-a476-2bbc486af321
+						* EX: $ /dev/sda2
+					* column 2: where the specified device is going to end up at when we go to mount it on startup (a.k.a: its Mount Point)
+						* EX: $ /
+						* EX: $ /boot
+						* EX: $ swap
+					* column 3: what type of filesystem exists on this particular device?
+						* EX: $ xfs
+						* EX: $ vfat
+						* EX: $ swap
+					* column 4, 5, and 6: how is this filesystem going to be mounted?
+						* 5: will this file system allow for dumping? (0 if no, 1 if yes)
+						* 6: in what order will the $ fsck command be ran? ("/" should be 1, and "/boot" should be 2)
+							* a value of "0" means that filesystem will NOT get checked by the $ fsck command
+						* EX: $ defaults 0 0 (these are the default options to just mount the filesystem normally)
+					* users: option that allows any User on the computer to mount and unmount the specified partition/disk
+					* user: option that allows any User on the computer to mount the specified partition/disk, but only the User who previously mounted it can unmount it
+					* nouser: option that disallows Other Users from mounting the specified partition/disk
+					* remount: option that allows the specified partition/disk to remount itself without having to unmount
+					* auto: option that specifies that the spefified disk/partition is automatically mounted on start-up
+					* noauto: option that specifies that the spefified disk/partition is NOT automatically mounted on start-up
+					* ro: option that sets the specified disk/partition to be read-only
+			* /etc/mke2fs.conf: a configuration file that the $ mke2fs command uses when creating filesystems of the ext type
+				* contians the specifics of the 'defaults' mount option for ext-type filesystems when you type: 'defaults' as part of the /etc/fstab file
+				* also lists out the filesystem types for ext2, ext3, and ext4
+			* /etc/mtab: Mount Table configuration file; Symbolic Link that points to the /proc/mounts file, which is a file that contains info on every partition, filesystem, and Mount Point on the computer
+			* /etc/default/grub: file that contains default configurations for GRUB
+				* to change GRUB configurations, you would edit this file, then run either the $ grub2-mkconfig or $ update-grub to apply those changes
+			* /etc/ld.so.conf: configuration file that is used to generate a cache of recently-used Shared Objects
+			* /etc/ld.so.cache: file that contains a cache of recently-accessed Shared Objects 
+			* /etc/apt/sources.list: list of links to packages available to download with APT
+			* /etc/yum.repos.d: list of links to packages available to download wiht YUM
+			* /etc/updatedb.config: configuration file for the local database of the $ locate command; is referenced when updating the local database of the $ locate command using the $ updatedb command
+			* /etc/acpi/events/power.conf: shuts down the computer by running: $ shutdown -h now, when the physical power button is pressed
+			* /etc/yum.conf: configuration file used to configure YUM
+			* /etc/inittab: file that is read by init to see what scripts in what Runlevel it should run in
+				* contains a bunch of lines like: [identifier]:[Runlevel]:[action]:[process]
+			* /etc/rc.d: (Red Hat) directory that contains Run Command files for init
+			* /etc/init.d: (Debian) directory that contains Run Command files for init
+			* /etc/init/rc-sysinit.conf: ran by upstart to see if there is an /etc/inittab file that contains configuration options
+			* /etc/init/rc.conf: ran by upstart to pass the eventual Runlevel that the computer should be operating in on start-up
+			* /etc/modprobe.d/myconfig.conf: configuration file that contains settings for the $ modprobe command
+				* output:
+					* $ Alias: adds an alias to the Kernel Module
+					* $ BLACKLIST: specifies Kernel Modules that you don't want to load
+					* $ OPTIONS: specifies the default parameters for each Kernel Module
+					* $ Install: specifies commands that run when loading a specific Kernel Module
+					* $ Remove: specifies commands that run when unloading specific Kernel Modules
+			* /etc/dpkg/dpkg.cfg: configuration file for DPKG
+			* /etc/udev/rules.d: contains device configuration info for udev
+		* /home: contains each User's personal directory and files
+			* /home/.bash_history: a hidden file for each User on the computer that contains the recorded history of each command they've ran
+			* /home/[user_name]/.bashrc: a hidden file that lets you update the umask value for a particular user
+			* /home/lost+found: directory that captures any corrupted data that is detected during a system check by a filesystem utility 
+		* /lib, /lib64: contains library files and other dependency code that is shared amongst multiple applications on the computer
+			* /lib/systemd/systemd: the place where systemd starts
+		* /media: is where media devices are automatically mounted to by default, such as CD's, DVD's, USB devices, thumb drives, external hard drives, etc.
+		* /mnt: the mount directory is a temporary Mount Point for devices (similar to /media), but use this one whenever you're manually mounting a filesystem
+		* /opt: the optional directory is an optional location for applications to be stored if they aren't already saved to the /bin directory
+			* often used by 3rd-party software vendors
+			* gets used a lot by enterprise environments
+		* /proc: provides info about the computer that is currently running
+			* it's a Pseudo Filesystem
+			* the Kernel outputs a bunch of info to this directory, which many applicaitons use to run themselves
+			* contains PID ID's that represents Processes currently being run on the computer
+			* /proc/dma: file that contains info about DMA channels
+				* DMA: a method of directing traffic between RAM and peripheral devices without having to go through the CPU
+			* /proc/mounts: a file that contains info on every partition, filesystem, and Mount Point on the computer
+			* /proc/self/mounts: a file that contains info on the currently mounted filesystem
+			* /proc/swaps: a file that contains info on the computer's Swap Space usage
+			* /proc/bus/pci/devices: file that contains info on all PCI devices on the computer
+			* /proc/bus/usb/devices: file that contains info on all USB devices on the computer
+			* /proc/interrupts: file that contains info on interrupt requests (IRQ's) sent from peripheral devices like mice and keyboards
+				* IRQ's are sequentially numbered from 0 to 2, and are created as Processes for the CPU
+			* /proc/modules: file that contains info on the Kernel Modules that are currently loaded to the Kernel
+			* /proc/scsi/scsi: file that contains info on SCSI devices
+			* /proc/cpuinfo: file that contains info about the CPU
+			* /proc/meminfo: file that contains info about memory usage
+			* /proc/ioports: file that contains I/O port address info
+		* /root: the /home directory for the Root User
+		* /sbin: the system administrator /bin directory; contains executable programs that only sysadmin Users can run (typically just the Root User)
+			* /sbin/init: the first place the Kernel looks for when handing control over to an Initialization System when booting the computer
+		* /srv: location typically used for server applications such as web servers
+		* /sys: contains info about the physical system hardware that is on the computer (lower-level than /dev)
+			* it's a Pseudo Filesystem
+			* contains the hardware associated with the computer including the Kernel
+			* /sys/fs: contains info on the computer's filesystem including what types of filesystems are currently on it and on what partitions those filesystems exist
+		* /tmp: used by applications to store temporary data
+		* /usr: a seperate but identical copy of the filesystem hierarchy tree of the '/root' directory, but everything is read-only; contains more applications, configuration files, and system documentation
+			* /usr/share/doc: contains the Documentation Pages
+			* /usr/share/man: contains the Manual Pages
+		* /var: contains log files, printer files, local system email files, etc. (basically, files that VARY in size, a.k.a dynamic content)
+			* /var/lib/rpm: the RPM local database
+			* /var/cache/yum: the local YUM cache
+
+
