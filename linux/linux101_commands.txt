@@ -59,7 +59,7 @@ _ [_,_,_] _,_,_ _,_,_ = the User that has ownership of the resource
 	* x = can execute/cd this resource; octal value is 1
 		* s = SUID (Set User ID): this allows any User to temporarly run this resource as the User that has resource ownership 
 	* - = no permission; octal value is 0
-_ _,_,_ [_,_,_] _,_,_ = the User that has ownership of the resource
+_ _,_,_ [_,_,_] _,_,_ = the Group that has ownership of the resource
 	* r = read access; octal value is 4
 	* w = write access; octal value is 2
 	* x = can execute/cd this resource; octal value is 1
@@ -99,14 +99,14 @@ to run multi-line functions, you would make a function call within a shell scrip
                  echo 'this is Jonathan'
 	       }
 	       hello_world
-
 	* $ ./hello_world.sh:
 	* output:
 		* hello world
 		* this is Jonathan
-funciton [function_name] { [command_here]; }
-	* function_name { command_here; }: creates a single-line function in the current Bash shell named: function_name, which runs the command: command_here
-
+funciton [function_name] () { [command_here]; }
+	* function_name () { command_here; }: creates a single-line function in the current Bash shell named: function_name, which runs the command: command_here
+[function_name] () { [command_here]; }
+	* function_name () { command_here; }: creates a single-line function in the current Bash shell named: function_name, which runs the command: command_here
 
 
 ---OPTION SYNTAX---
@@ -190,7 +190,7 @@ journalctl [-k]
 		* logs every event that goes on within the computer
 	* use [UP] and [DOWN] arrow keys to scroll up and down, [Z] key to scroll down a page, and [Q] key to exit
 	* -k: means we want to see all Kernel messages
-systemctl [list-unit-files, list-units, get-default, set-default, status, isolate] [-t] [unit_file_name, target_type, target_name] [service_name].service
+systemctl [list-unit-files, list-units, get-default, -default, status, isolate] [-t] [unit_file_name, target_type, target_name] [service_name].service
 	* list-unit-files: lists out all the Unit Files on your computer and whether they're enabled or disabled
 	* use [UP] and [DOWN] arrow keys to scroll up and down, [Z] key to scroll down a page, and [Q] key to exit
 	* -t target_type: indicates that you want to search for a particular type of Target
@@ -538,9 +538,9 @@ set [-x, +x, -o, +o] [noclobber]
 		      $ cat /proc/cpu_info 2> error.txt: now error.txt will not have its contents overwritten.
 		* this is effectively the same as just using the ">>" operator in-place of the ">" operator, so kinda useless
 	* +o noclobber: turns off noclobber
-unset [-f] [environment_variable] [function_name]
+unset [-f, -v] [environment_variable] [function_name]
 	* the $ unset command can remove any User or Bash-defined functions or variables (Local or Environment) from the current Bash shell (is not a permanent change)
-	* environment_variable: removes the given Bash Environment Variable
+	* -v environment_variable: removes the given Bash Environment Variable
 		* EX: $ unset PATH
 	* -f function_name: removes a User-defined Bash shell function
 		* EX: $ function function_name { echo 'lmao'; }
@@ -582,7 +582,7 @@ history
 	* history: displays Bash history of recently-ran commands in numerical order for the current User
 		* located in: /home/[user_name]/.bash_history
 			* the amount of entries in the .bash_history file are dictated by the: $HISTFILESIZE Environment Variable
-![number,!]
+![number, !]
 	* !number: lets you re-run a command based on its numerical value in your Bash history, which is located in: /home/[user_name]/.bash_history
 	* !!: lets you re-run the last command you wrote
 $[$,!,?]
@@ -1006,7 +1006,6 @@ vim [-R] [file_name]
 	* file_name: starts up the VIM text editor by opening up the specified file and immediately puts you in Command Mode
 	* -R file_name: starts up the VIM text editor by opening up the specified file with read-only permissions in Command Mode
 	* [H][J][K][L] keys: moves your cursor left, down, up, and right
-	* [:] key: puts you into X Mode
 	* Command Mode: you can move the cursor around, change text, or change to another mode
 		* you're in Command Mode as soon as you open up VIM
 		* Command Mode is indicated when there's no text displaying at the bottom line of the screen
@@ -1023,7 +1022,7 @@ vim [-R] [file_name]
 		* [G] + [G] keys: moves your cursor to the top of the file
 		* [number] + [G] + [G] keys: lets you delete the current line, followed by the next "number - 1" lines
 			* EX: 20DD: deletes the current line, followed by the next 19 lines 
-		* [SHIFT] + [A] keys: lets you append text to the end of a line and puts you into Insert Mode
+		* [SHIFT] + [A] keys: lets you append text to the end of a line by moving your cursor to the end of the line and putting you into Insert Mode
 		* [Y] + [Y] keys: lets you Ctrl + C the current line your cursor is on
 		* [number] + [Y] + [Y] keys: lets you Ctrl + C the current line, followed by the next "number - 1" lines
 			* EX: 20YY: copies the current line, followed by the next 19 lines 

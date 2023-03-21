@@ -1,4 +1,4 @@
-
+	
 
 
 ssh-keygen -t rsa
@@ -35,5 +35,22 @@ git restore --staged path_to_file
 
 git restore path_to_file
 	* undo all the changes to a modified file that isn't staged
+rm -rf .git
+	* uninitializes the git repo
+git config --global http.sslVerify false
+	* disables SSL
+	* DO NOT DO THIS UNLESS ABSOLUTELY NECESSARY
+git config --global http.sslVerify true
+	* enables SSL
+git pull origin [remote_branch_name] --allow-unrelated-histories
+	* if you get an "unrelated histories" issue when pushing to remote, use this flag when pulling from the remote for resolution
+
+
+---AWS---
+
+git remote -v
+	* lists out all remote branch nicknames that CodeCommit connects to
+git remote rm [remote_branch_nickname]
+	* removes the remote CodeCommit branch by nickname
 
 

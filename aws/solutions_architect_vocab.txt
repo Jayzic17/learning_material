@@ -541,7 +541,7 @@ VPC:
 	* CIDR blocks: the first part of the bit sequence that comprises the binary representation of the IP address. EX: 0.0.0.0/0 (the first 4 digits with dots around them)
 		* 0.0.0.0/0 represents all possible IP addresses, i.e allows all traffic to go through
 		* you can use an IPv4 Cidr Block or a IPv6 Cidr Block for the address of the VPC
-	* route tables: determines where network traffic is directed; each subnet in your VPC must be associated with a route table
+	* Route Table: determines where network traffic is directed; each subnet in your VPC must be associated with a route table
 		* a subnet can only be associated with one VPC at a time, but you can associate multiple subnets with the same route table
 	* Network Address Translation (NAT): the method of re-mapping one IP address space into another; EX: needing to re-map a private network IP to a public IP to gain outbound access to the Internet
 	* Internet Gateway: allows your VPC to get access to the Internet; provides a target for your route tables for internet-routable traffic, and provides Network Address Translation(NAT) for instances that...

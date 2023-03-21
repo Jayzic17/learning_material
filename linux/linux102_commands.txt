@@ -1,20 +1,16 @@
 
 
 
----GLOBBING CHARACTERS--- (see: linux101_commands.txt for additional information)
-
-
-
 ---BASH HOT KEYS---
 [CTRL] + [F2]: open up a new Bash shell
-[CTRL] + [ALT] + [F1]: navigate back one shell from the current Bash shell
+[CTRL] + [ALT] + [F1] |or| [F6]: navigate back one shell from the current Bash shell
 
 
 
 ---FUNCTIONS--- (see: linux101_commands.txt for additional information)
-function [funciton_name]() {
-	* function_name() {: lets you create a multi-line function in the Bash shell, as opposed to creating one using a file
-	* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+function [funciton_name] () {
+	* function_name () {: lets you create a multi-line function in the Bash shell, as opposed to creating one using a file
+	* it will then prompt you to enter commands into your function as indicated with the preceeding ">" symbol
 	* to complete your function, type: "}"
 	* to call this function, run: $[function_name]
 	* this is not a permenant change; it goes away as soon as you logout of the current Bash shell
@@ -26,23 +22,18 @@ function [funciton_name]() {
 $[number]
 	* $number: parameters that you can use as arguments for your shell scripts
 	* EX: $1
-	* parameters are Positional, meaning that the location of the parameter in the command determines which one it is
+	* parameters are Positional: meaning that the location of the parameter in the command determines which one it is
 	* parameters are not required; they are optional
 if [ [condition_here] ]; then
 	* if [ condition_here ]; then: this is how to write an "if" statement in the Bash shell, as opposed to creating one using a file
-	* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* it will then prompt you to enter commands into your function as indicated with the preceeding ">" symbol
 	* to include an else/if statement, type: "elif [ [condition_here] ]; then"
-		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+		* it will then prompt you to enter commands into your function as indicated with the preceeding ">" symbol
 	* to include an else statement, type: "else"
-		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+		* it will then prompt you to enter commands into your function as indicated with the preceeding ">" symbol
 	* to complete your statement, type: "fi"
 if test [condition_here]; then
-	* if test condition_here; then: this is how to write an "if" statement in the Bash shell, as opposed to creating one using a file, w/o having to use the "[]"s
-	* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
-	* to include an else/if statement, type: "elif [ [condition_here] ]; then"
-		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
-	* to include an else statement, type: "else"
-		* it will then allow you to enter commands into your function as indicated with the preceeding ">" symbol
+	* if test [condition_here]; then: this is how to write an "if" statement in the Bash shell without the braces
 	* to complete your statement, type: "fi"
 writing if/else statements in a file:
 	if [ [condition_here] ]; then
@@ -78,6 +69,18 @@ writing while loops to read a file line-by-line in a file:
 	done < [file_here]
 exit [number]
 	* number: returns "number" as the exit code for the script
+writing case statements in a file:
+	case "$[VARIABLE_HERE]" in
+				[string_match1] | [string_match2] | ...)
+			[command(s)_here]
+		;;
+				[string_match1] | [string_match2] | ...)
+			[command(s)_here]
+		;;
+				*)
+			[command(s)_here]
+		;;
+	esac
 
 
 
@@ -88,6 +91,8 @@ exit [number]
 	* -f file_here: condition that evaluates whether or not the given file exists, and that it's a regular file, meaning one we can actually use
 -e [file_here]
 	* -e file_here: condition that evaluates whether or not the given file exists, regardless of what type of file it is
+-z [variable_here]: tests if the given variable is empty (zero size)
+-n [variable_here]: tests if the given variable is NOT empty
 [number] -eq [number]
 	* number -eq number: determins if the two numbers are equal
 [number] -ne [number]
@@ -105,51 +110,107 @@ exit [number]
 
 ---OPERATORS---
 || = logical "OR" operator
+-o = logical "OR" operator
 && = logical "AND" operator
+-a = logical "AND" operator
 = = logical equality operator
 != = logical inequality operator
+! [condition_here] = evaluates if the given condition is false
+< = tests if the 1st operand comes first alphabetically before the 2nd operand
+> = tests if the 1st operand comes second alphabetically after the 2nd operand
 [ [conditions_here] ]
-	* [ conditions_here ]: use the "[]"s whenever you're grouping together conditions via operators; like you would with "()"s
+	* [ conditions_here ]: use extra []'s whenever you're grouping together conditions via operators; like you would with "()"s in other languages
 	* whenever you have double ['s or ]'s, drop the whitespace in-between them
 		* EX: if [[ -d /opt || -f /derp ]]...
 
 
 
----ENVIRONMENT VARIABLES--- (see: linux101_commands.txt for additional information)
+---GLOBBING CHARACTERS---
+see: linux101_commands.txt for additional information
+
+
+
+---PERMISSIONS---
+see: linux101_commands.txt for additional information
+
+
+
+---ENVIRONMENT VARIABLES---
+see: linux101_commands.txt for additional information
 
 
 
 ---LOCAL VARIABLES--- (see: linux101_commands.txt for additional information)
+readonly [variable_name]=[value]
+	* variable=value: sets a Local Variable to be read-only
+[variable_name]=( number1 number2 ... )
+	* variable_name=( number1 number2 ... ): initializes the given variable as an array
+	* to print out the vaue of the 1st entry, use: $ echo ${variable_name[0]}
 
 
 
-env
-ls
-bash
-source
+---REDIRECT COMMANDS---
+see: linux101_commands.txt for additional information
+
+
+
+---COMMANDS CONTINUED FROM LINUX 101--- (see: linux101_commands.txt for additional information)
+sudo
+init
+telinit
+unset
+shopt
+pwd
 cd
+grep
+!
+ls
+man
+cat
+less
+head
+tail
+rm
+touch
 cp
 mv
 mkdir
-clear
+rmdir
 vim
-unset
-echo
-su
 chmod
-touch
-$[$,!,?]
-runlevel
-grep
-telinit
-cat
-groups
 chown
-tail
-head
-man
-journalctl [-r, -e, -n, -f, -o, -x, -b] [verbose, json-pretty, --list-boots, --since, --until, --disk-usage, --rotate] [-u] [number] [service_name].service [boot_number] [####-##-##] [##:##:##]
-	* see: linux101_commands.txt for additional information
+chgrp
+groups
+exit
+source
+$[#, @, *, _]
+	* #: the number of arguments passed to the last command
+	* @: lists the arguments passed to the last command
+	* *: lists the arguments passed to the last command
+	* _: lists out the last parameter passed in as part of the last command |or| the name of the last script ran if there were no parameters
+env [-i] [bash]
+	* -i bash: launches a new bash shell with almost all Environment Variables ignored
+bash [-l, --login, -i, --noprofile, --norc, --rcfile] [file_name]
+	* -l: launches a bash Login Shell
+	* --login: launches a bash Login Shell
+	* -i: launches a bash Interactive Shell
+	* --noprofile: launches a Login Shell that ignores the /etc/profile, /home/.bash_profile, /home/.bash_login, and /home/.profile files
+	* --norc: launces an Interactive Shell that ignores the /etc/bash.bashrc and /home/.bashrc files
+	* --rcfile file_name: launches an Interactive Shell that uses "file_name" as the start-up file, as opposed to /etc/bash.bashrc and /home/.bashrc
+su [-, -l, --login, user_name] [user_name]
+	* - user_name: starts an Interactive Login Shell as user_name
+	* -l user_name: starts an Interactive Login Shell as user_name
+	* --login user_name: starts an Interactive Login Shell as user_name
+	* user_name: starts an Interactive Non-Login Shell as user_name
+echo $[0]
+	* $0: shows you what type of shell you're currently running
+		* EX: $ echo $0: output: -bash
+		* a preceeding "-" means you're running an Interactive Login Shell
+		* no preceeding "-" means you're running an Interactive Non-Login Shell
+find [directory] [-perm] [-u+s, -g+s]
+	* directory -perm -u+s: finds any files within the specified directory that has the SUID permission set
+	* directory -perm -g+s: finds any files within the specified directory that has the SGID permission set
+journalctl [-r, -e, -n, -f, -o, -x, -b, --list-boots, --since, --until, --disk-usage, --rotate] [-u, verbose, json-pretty, number, boot_number, ####-##-##, ##:##:##] "[yesterday, today, tomorrow, now]" [service_name].service
 	* journalctl: displays the journal with the oldest data at the top
 	* -r: reverses the display of the journal with the newest data at the top
 	* -e: jump straight to the end of the journal
@@ -159,7 +220,7 @@ journalctl [-r, -e, -n, -f, -o, -x, -b] [verbose, json-pretty, --list-boots, --s
 	* -o verbose: prints verbose output of the journal
 	* -o json-pretty: prints the output of the journal in json format
 	* -x: shows log lines with some text that comes from the Service Catalog for help on debugging issues
-	* -b shows all journal entries since the most recent boot
+	* -b: shows all journal entries since the most recent boot
 	* --list-boots: shows a list of boot sessions and their boot numbers (column 1)
 		* prerequisite: journal must be persistently-saved to disk
 	* -b [boot_number]: shows all journal entries for the specified boot session given its boot number
@@ -173,22 +234,38 @@ journalctl [-r, -e, -n, -f, -o, -x, -b] [verbose, json-pretty, --list-boots, --s
 		* prerequisite: journal must be persistently-saved to disk
 	* --rotate: forces the journal to rotate the journal log files
 		* prerequisite: journal must be persistently-saved to disk
+	* --since "yesterday": shows all journal entries since yesterday
+	* --since "today": shows all journal entries since midnight today
+	* --until "tomorrow": shows all journal entries up until tomorrow at midnight
+	* --since "now": shows all journal entries up until now
 dmesg [-x] [--level]=[err,warn]
-	* see: linux101_commands.txt for additional information
-	* dmesg: prints out the contents of the /var/log/dmesg file
+	* dmesg: prints out the contents of the /var/log/dmesg file as part of the Kernel Ring Buffer
 	* --level=err,warn: shows only error and warning log messages
-	* -x: prints out the contents of the /var/log/dmesg file with human-readable Facility an Priority- Level prefixes
+	* -x: prints out the contents of the /var/log/dmesg file, along with Facility and Priority Level
 		* output:
 			* column 1: the Facility (EX: kern (a.k.a the Kernel))
 			* column 2: the Priority Level of the log (EX: warn)
 file [-i] [file_name]
-	* see: linux101_commands.txt for additional information
 	* -i file_name: prints out the given file's character encoding format
-passwd [-e] [user_name]
-	* see: linux101_commands.txt for additional information
+passwd [-e, -d, -l, -u, -w, -S] [number] [user_name]
 	* -e user_name: expires the given User's password after its 1st use, forcing the User to create a new password next time they log in (works just like a temporary password)
-systemctl [cat, start, enable] [list-timers] [daemon-reload] [service_name].service [--all] [timer].timer [timer].service
-	* see: linux101_commands.txt for additional information
+	* -d user_name: deletes the User's password, thus locking the User
+	* -l user_name: locks the User
+	* -u user_name: unlocks the User
+	* -w number user_name: warns the given User that their password is about to expire in the next: number, days 
+	* -S gets the status of the current User's account
+		* output:
+			* column 1: User name
+			* column 2:
+				* P: User has a valid password
+				* L: User's password is locked
+				* NP: User doesn't have a password
+			* column 3: min # of days between password changes
+			* column 4: max # of days password is valid for
+			* column 5: # of days prior to password expiration (the User will be warned of this)
+			* column 6: # of days after password expiration before User is locked
+				* -1: removes User account expiration date
+systemctl [cat, start, enable, restart] [list-timers] [daemon-reload] [service_name].service [--all] [timer].timer [timer].service [socket].socket
 	* daemon-reload: reloads all systemd files
 		* you would run this after you made changes to systemd and want to immediately apply the changes in your current Bash shell
 	* start service_name.service: starts the specified Service
@@ -204,44 +281,59 @@ systemctl [cat, start, enable] [list-timers] [daemon-reload] [service_name].serv
 			* column 6: the associated Timer's .service file
 	* cat timer.timer: prints out the contents of the given Timer's .timer file
 	* cat timer.service: prints out the contents of the given Timer's .service file
+	* status socket.socket: gives the status of the specified socket
+	* restart service_name.service: restart the given Service
 export PATH=$PATH:[file_path]
-	* see: linux101_commands.txt for additional information
-	* PATH=$PATH:file_path: appends the path: file_path to the end of your $PATH Environment Variable
+	* PATH=$PATH:file_path: appends the path: "file_path" to the end of your current $PATH Environment Variable
 		* this is not a permenant change; it goes away as soon as you logout of the current Bash shell
 		* to make this change permanent, edit the: /home/.bash_profile file
+set [-f, +f]
+	* -f: enables Globbing
+	* +f: disables Globbing
+yum [grouplist, groupinstall] "[group_name]"
+	* grouplist: lists out a list of all the groups in YUM
+	* groupinstall "group_name": installs the given group
+
+
+---COMMANDS---
 . [file_name]
 	* file_name: mimics the exact same functionality as the $ source command
-set [-f, +f]
-	* see: linux101_commands.txt for additional information
-	* -f: disables Globbing
-	* +f: enables Globbing
-alias [alias_name]="[command_here]"
-	* alias_name=command_here: creates an alias named: alias_name that runs the command: command_here
+alias [alias_name]="[command_here]" [alias_name]="[command_here];[command2_here];[...]" 
+	* alias_name="command_here": creates an alias named: alias_name that runs the command: command_here
 		* EX: $ alias ll="ls -lh"
 		      $ ll: output: (the same as running: $ ls -lh)
+	* alias_name="command_here;command2_here;...": concatenates multiple commands for a single alias
+		* EX: $ alias git_info="which git;git --version"
 	* this is not a permenant change; it goes away as soon as you logout of the current Bash shell
 	* to make this change permanent, edit the: /home/.bashrc file
+unalias [alias_here]
+	* alias_here: unaliases the specified alias
 seq [first_number] [skip_number] [last_number]
 	* first_number last_number: prints out all integers from: first_number to: last_number
 	* first_number skip_number last_number: prints out every number from: first_number to: last_number, while skipping every: skip_number
-		* EX: $ seq 1 5 15: output: 1 6 11
+		* EX: $ seq 1 5 15
+		* output:
+			1
+			6
+			11
 read [variable_name]
 	* read variable_name: takes input and assigns it to the variable: variable_name
-	* after you hit [ENTER], you'll be able to provide the input for variable_name
-exec [file_name]
+	* after you hit [ENTER], you'll be prompted for the input for variable_name
+exec [command] [file_name]
+	* command: runs the specified command by replacing the current bash shell Process with this new Process (i.e the specified command)
+		* this makes it so that you don't have to create a new Process everytime. Instead, you just update the current one (more efficient)
 	* file_name: redirects all output from the current Bash shell to the file: file_name
-yum [grouplist, groupinstall] "[group_name]"
-	* see: linux101_commands.txt for additional information
-	* grouplist: lists out a list of all the groups in YUM
-	* groupinstall "group_name": installs the given group
 startx
 	* startx: starts the X Server, which will then start the computer's Window Manager
 	* not safe, because you log into the Window Manager as the Root User, and you bipass authentication and session managment of the Display Manager
-ssh [-Y, -C, -L] [User]@[IPv4_address] [port_number]:localhost:[port_number] [IPv4_address]
+ssh [-Y, -L, -x] [User]@[IPv4_address] [local_port_number]:localhost:[port_number] [IPv4_address]
 	* User@IPv4_address: ssh to a computer as "User," given the computer's IPv4 address
 	* -Y User@IPv4_address: ssh to a computer as "User," given the computer's IPv4 address, while also invoking the $ xauth command to help secure and protect any remote X11 requests...
 		* ...that we send from the computer we are connecting to, to the one we were just connected to
-	* -C -L port_number:localhost:port_number IPv4_address: creates an SSH Tunnel btwn this computer and the remote computer given the remote computer's IP on the specified port
+		* enables X11Forwarding: lets us open up X window applications from a remote computer on our computer, while connecting to the specified computer
+	* -L local_port_number:localhost:port_number IPv4_address: creates an SSH Tunnel on this computer's local port that redirects to the specified IP on the specified port
+	* -x User@IPv4_address: disables X11Forwarding, while connecting to the specified computer
+	* once a connection is successful, the remote computer gets added to the local User's list of known hosts in the /home/.ssh directory
 Xorg [-configure] [-config] [config_file_name]
 	* -configure: used to create a new /etc/X11/xorg.conf file for your X Server
 		* creates your new configuration file as: /root/xorg.conf.new
@@ -259,19 +351,18 @@ xdpyinfo
 		* a list of all the extensions that your X Server has installed and are available to use
 		* the # of screens in-use, as well as what #'d screen each one is
 		* the resolution, dimensions, and color-depth of each screen
-xhost [+ -] [ipv4_address]
+xhost [+ -][IPv4_address]
+	* xhost is a legacy and insecure command of allowing client systems the ability to display X11 windows remotely to your computer
 	* +: allows all incoming connections to your X Server, regardless of where a User is coming from
 	* -: disallows all incoming connections to your X Server
-	* + ipv4_address: allows incomming connection from the given ipv4 address to your X Server 
-	* xhost is a legacy and insecure command of allowing client systems the ability to display X11 windows remotely to your computer
-ip [addr] [show]
-	* addr show: displays your computer's IP address
+	* +IPv4_address: allows incomming connection from the given ipv4 address to your X Server
+	* IPv4_address: allows incomming connection from the given ipv4 address to your X Server 
 xauth [list]
+	* the xauth command allows a User to edit and view security info that grants a remote User the ability to control local X11 client windows remotely
 	* list: shows what remote X sessions are currently running on your computer right now
 		* output: [hostname]:## [MIT-MAGIC-COOKIE] [password]
 			* the 2 digit number indicates the type of connection (EX: 10 for ssh connections)
 			* MIT-MAGIC-COOKIE: password used so that any X11 requests that are made from this remote X session are secure
-	* the xauth command allows a User to edit and view security info that grants a remote User the ability to control local X11 client windows remotely
 useradd [-m, -r] [-c] "[comment]" [-s] [shell_path] [-G] [group_name] [new_user_name] [new_system_name]
 	* new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name
 		* you will need to provide the password of the User you used to run this command in order to create this new User
@@ -287,67 +378,94 @@ useradd [-m, -r] [-c] "[comment]" [-s] [shell_path] [-G] [group_name] [new_user_
 		* EX: $ useradd -s /bin/tcsh jonathan: lets User jonathan use the C Shell as his default shell
 	* -G group_name new_user_name: adds a new User to the computer with its own Primary Group also named: new_user_name, and is also added to the Supplementary Group named: group_name
 		* prerequisite: group_name must already exist
-	* useradd -r new_system_name: creates a new System account
+	* -r new_system_name: creates a new System account
 	* prerequisite: must be logged in as the Root User
-[partial_command_here]\
-	* partial_command_here/: the special backslash character "\" lets Bash know that you will continue the rest of this command on the next line
+usermod [-s, -a, -g, -L, -U, -d, -e] [-G] [path_to_shell, path_to_home] [group_name] [expire_date] [user_name] 
+	* -s path_to_shell user_name: change the default shell of the given User
+		* EX: $ usermod -s /sbin/nologin kenny: removes the kenny User's ability to use a Login Shell by switching his shell to a Non-Login Shell
+	* -G group_name user_name: changes the specified User's Supplementary Group to be: group_name (overwrites any existing Supplementary Groups)
+	* -a -G group_name user_name: APPENDS the specified User to the given Supplementary Group (doesn't overwrite any existing Supplementary Groups)
+	* -g group_name user_name: changes the specified User's Primary Group
+	* -L user_name: locks the specified User's account
+	* -e expire_date user_name: expires the specified User's account at the given date, subsequently locking the account
+		* EX: $ usermod -e 1 kenny: immediately locks the kenny User's account
+	* -U user_name: unlocks the specified User account
+	* -d path_to_home user_name: changes the /home directory of the given User
+		* this does NOT automatically make the new /home directory for you
+	* prerequisite: must be logged in as the Root User
+chage [-E, -l, -W, -m, -M, -d, -I] [####]-[##]-[##] [-1] [number_days] [user_name]
+	* the change age command is used to change the age of passwords for Users
+	* -E ###-##-## user_name: expires the given User's account on the specified date
+	* -l user_name: lists out info about the specified User's account
+	* -E -1 user_name: removes the expiration date on the User's account
+	* -W number_days user_name: warns the given User that their password is about to expire in the next: number_days days
+		* by default, this value is 7
+	* -m number_days user_name: sets min # of days between password changes
+	* -M number_days user_name: sets max # of days the password will be valid for
+		* setting number_days to 9999 disables password expiration
+	* -d number_days user_name: sets # of days since password was last changed
+		* setting number_days to 0 forces the User to change their password
+	* -I number_days user_name: sets # of inactive days after password expiration
+printf "[string_here]" [string_here] [number_here]
+	* "string_here" string_here number_here: prints to the terminal the same way as $ echo, does but with more control
+		* EX: "My name is:%s\tand I am:%d\tyears old\n" Jonathan 24
+			* output: My name is:Jonathan	and I am:24	years old
+[partial_command_here] \
+	* partial_command_here \: the special backslash character "\" lets Bash know that you will continue the rest of this command on the next line
 	* you do this if you're running out of space on your terminal window 
 userdel [-r] [user_name]
 	* user_name: deletes the specified User from the computer
 		* does NOT remove the User's /home folder
 	* -r user_name: deletes the specified User from the computer, as well as their /home folder
 	* prerequisite: must be logged in as the Root User
-groupadd [group_name]
+groupadd [-g] [GID_number] [group_name]
 	* group_name: creates the given Group
+	* -g GID_number group_name: creates the given Group with the specified Group ID
 	* prerequisite: must be logged in as the Root User
 groupdel [group_name]
 	* group_name: removes the given Group from the computer
 	* prerequisite: must be logged in as the Root User
-getent [group, passwd, shadow] [group_ID, user_name, group_name]
-	* group group_ID: queries the /etc/group database file for the specified Group ID
-		* EX: $ getent group 100
-	* passwd user_name: queries the /etc/passwd database file for the specified User
-	* group group_name: queries the /etc/group database file for all members of the given Group
-	* shadow user_name: queries the /etc/shadow database file for the specified User
-	* prerequisite: must be logged in as the Root User
-usermod [-s, -a, -g, -L, -U, -d] [-G] [path_to_shell, path_to_home] [group_name] [user_name]
-	* -s path_to_shell user_name: change the default shell of the given User
-	* -G group_name user_name: changes the specified User's Supplementary Group to be: group_name (overwrites any existing Supplementary Groups)
-	* -a -G group_name user_name: APPENDS the specified User to the given Supplementary Group (doesn't overwrite any existing Supplementary Groups)
-	* -g group_name user_name: changes the specified User's Primary Group
-	* -L user_name: locks the specified User account
-	* -U user_name: unlocks the specified User account
-	* -d path_to_home user_name: changes the /home directory of the given User
-		* this does NOT automatically make the new /home directory for you
-	* prerequisite: must be logged in as the Root User
-chage [-E, -l, -W] [####]-[##]-[##] [-1] [number_days] [user_name]
-	* -E ###-##-## user_name: expires the given User's account on the specified date
-	* -l user_name: lists out the account options of the specified User
-	* -E -1 user_name: removes the expiration date on the User's account
-	* -W number_days user_name: warns the given User that their password is about to expire in the next: number_days days
-		* by default, this value is 7
+declare [-a, -f] [variable_name]
+	* -a variable_name: declares the given variable as an array
+	* -f: lists out all User-defined functions
+printenv [ENVIRONMENT_VARIABLE]
+	* ENVIRONMENT_VARIABLE: prints out the value of the given Environment Variable
+id [user_name]
+	* user_name: prints out the User ID, Group ID, and Groups of the given User
 groupmod [-g, -n] [group_id_number] [new_group_name] [group_name]
 	* -g group_id_number group_name: changes the Group ID number of the given Group
 	* -n new_group_name group_name: changes the name of the Group to be: new_group_name
 crontab [-e, -l, -r] [-u] [user_name]
 	* -e: opens up the current User's crontab file for editing
 		* each line represents a seperate cron Job
+		* $ [##] [##] [##] [##, month] [#, day_of_week] [user_name] [command]: cron Job that runs the given command for the given User by:
+			* minute (0-59)
+			* hour (0-24)
+			* day of the month (1-31)
+			* month (1-12; or jan,feb,mar,etc.)
+			* day of the week (0-6, where: Sunday = 0 or 7; or sun,mon,tue,etc.)
+			* use an "*" if the specified field does not matter, meaning it can be whatever
+			* use a "*/[number]" if you want to do something every "number" times
+				* EX: */3 * * * * jonathan /bin/echo "hi": echo's "hi" every 3 minutes
+			* use a "," to specify a list of possible values
+				* EX: * * 1,2,3 * * jonathan /bin/echo "hi": echo's "hi" on the 1st, 2nd, and 3rd days of the month
+			* use a "-" to specify a range of possible values
+				* EX: * * 1-3 * * jonathan /bin/echo "hi": echo's "hi" on the 1st, 2nd, and 3rd days of the month
+		* $ @[reboot, hourly, daily, midnight, weekly, monthly, yearly, annually] [user_name] [command]: cron Job that runs the given command for the given User
+			* @reboot user_name command: runs the given command once after reboot for the given User
+			* @hourly user_name command: runs the given command once an hour for the given User
+			* @daily user_name command: runs the given command once a day at midnight for the given User
+			* @midnight user_name command: runs the given command once a day at midnight for the given User
+			* @weekly user_name command: runs the given command once a week at midnight on Sunday for the given User
+			* @monthly user_name command: runs the given command once a month at midnight on the 1st day of the month for the given User
+			* @yearly user_name command: runs the given command once a year at midnight on the 1st of January for the given User
+			* @annually user_name command: runs the given command once a year at midnight on the 1st of January for the given User
+		* remember to use a command's Absolute Path, since this directory isn't in your $PATH by default (EX: /bin/echo, instead of just: echo)
 	* -l: lists out the contents of the current User's crontab file
 	* -r: removes the current User's crontab file
 	* -l -u user_name: lists out the contents of the specified User's crontab file, provided you are the Root User
 		* prerequisite: must be logged in as the Root User
-[##] [##] [##] [##] [#, day_of_week] [user_name] [command]: cron Job that runs the given command for the given User by:
-	* minute (0-59)
-	* hour (0-24)
-	* day of the month (1-31)
-	* month (1-12; or jan,feb,mar,etc.)
-	* day of the week (0-6, where: Sunday = 0 or 7; or sun,mon,tue,etc.)
-	* use an "*" if the specified field does not matter, meaning it can be whatever
-	* use a "*/[number]" if you want to do something every "number" times
-		* EX: */3 * * * * jonathan /bin/echo "boobies": echo's "boobies" every 3 minutes
-	* make sure to use a command's Absolute Path (EX: /bin/echo, instead of just: echo)
-	* prerequisite: previously ran: $ crontab -e, to open up the User's crontab for editing
-at [-f] [path_to_script] [number]:[number][number] [AM, PM] [##]/[##]/[####] [now, tomorrow, Oct] [+] [number] [minutes] 
+at [-f] [path_to_script] [number]:[number][number] [AM, PM] [##]/[##]/[####] [now, tomorrow, teatime, Oct] [+] [number] [minutes] 
 	* the $ at, command runs once after a certain time has passed, or at a scheduled date
 	* after hitting [ENTER], the command puts you into the "at" prompt where you can specify multiple commands to run
 		* to leave the "at" prompt, press: [CTRL] + [D]
@@ -359,6 +477,7 @@ at [-f] [path_to_script] [number]:[number][number] [AM, PM] [##]/[##]/[####] [no
 		* EX: $ at -f /root/program.sh 10:15 PM Oct 8: runs the /root/program.sh script at 10:15PM, October 8th
 	* -f path_to_script number:numbernumber ##/##/####: specifies the script file to run as part of the "at" command at the specified time
 		* EX: $ at -f /root/program.sh 15:30 3/14/2020: runs the /root/program.sh script at 3:30 PM on 3/14/2020
+	* teatime: runs command(s) to be specified later at 4:00PM
 	* prerequisite: previously ran:
 		* $ yum install at
 		* $ systemctl start atd.service
@@ -372,21 +491,21 @@ atq
 atrm [job_number]
 	* Job_number: removes the specified "at" Job, given its Job number
 systemd-run [--on-active]=[number]m [command]
-	* --on-active=numberm command: creates a Transient Timer that executes the given command after a specified number of minutes from now
-		* EX: $ systemd-run --on-active=1m /bin/touch /home/hello.txt: creates a Transient Timer that will touch the hello.txt file in 1 minute from now 
-	* make sure to use the Absolute Path when specifying commands
+	* --on-active=numberm command: creates a temporary Transient Timer that executes the given command after a specified number of minutes from now
+		* EX: $ systemd-run --on-active=1m /bin/touch /home/hello.txt: creates a temporary Transient Timer that will touch the hello.txt file in 1 minute from now 
+	* make sure to use the Absolute Path when specifying commands here
 locale [-a]
 	* locale: prints out the User's locale info
 	* -a: prints out all available locales
 localectl [list-locales] [set-locale] [locale_here]
-	* localectl: prints out the User's language and keyboard settings
+	* localectl: prints out the current User's language and keyboard settings
 	* list-locales: prints out all available locales
 	* set-locale locale_here: permanently sets the locale of this computer to the one specified
 iconv [-l] [-f] [encoding_from] [-t] [encoding_to] [-o] [output_file] [file_name]
 	* -f encoding_from -t encoding_to -o output_file file_name: converts: "file_name," with its: "encoding_from," encoding to: "encoding_to" encoding and outputs the result to: "output_file"
 		* EX: $ iconv -f ISO-8859-1 -t UTF-8 -o output.txt file.txt: converts file.txt to UTF-8 and outputs the result to: output.txt
 	* -l: lists out every character encoding format that works with the $ iconv, command
-date [-u, -s] [+][%F, %D, %m/%d/%y, %m/%d/%Y, %a, %A] "[datetime]"
+date [MMddhhmmYYYY].[ss] [-u, -s] [+][%F, %D, %m/%d/%y, %m/%d/%Y, %a, %A] "[datetime]"
 	* date: prints out today's date and time
 	* -u: prints out today's date and time in UTC
 		* EX: Thu Sep 27 18:11:29 UTC 2018
@@ -405,36 +524,55 @@ date [-u, -s] [+][%F, %D, %m/%d/%y, %m/%d/%Y, %a, %A] "[datetime]"
 	* -s "datetime": sets the date and time for your computer
 		* EX: -s "12/1/2018 12:00:00"
 		* this change is temporary; once the computer restarts it uses the time on your Real-time Clock, or NTP if you have it enabled
+	* MMddhhmmYYYY.ss: sets the computer's clock to be the specified time
+		* EX: $ date 072019302010.20: sets the time to be: 19:30:20 on 07/20/2010
 		* to make it permanent, run: $ timedatectl set-time [datetime]
-timedatectl [list-timezones] [set-time] [set-timezone] [set-ntp] "[datetime]" "[timezone]" [on]
+timedatectl [list-timezones] [set-time] [set-timezone] [set-ntp] "[datetime]" "[timezone]" [on, no]
 	* timedatectl: lists out:
 		* your local time
 		* the universal time (UTC)
-		* the Real-time Clock (Hardware Clock): the time on your motherboard
+		* the Real-time Clock
 		* your timezone
 		* whether or not you're using Network Time Protocol (NTP)
 		* whether or not you're using daylight savings time
 		* the last and next time's that daylight savings time will occur
-	* set-time "datetime": permanently sets the date and time for your local time and Real-time Clock
+	* set-time "datetime": permanently sets the date and time for your local time AND Real-time Clock
 		* EX: $ timedatectl set-time "2018-12-1 01:00:00"
 		* if you have NTP enabled, this command will not be allowed
 	* list-timezones: lists out all available timezones for the $ timedatectl, command
 	* set-timezone "timezone": sets the computer's timezone to the one specified
 	* set-ntp on: enables NTP for this computer
+	* set-ntp no: disables NTP for this computer
 tzselect
 	tzselect: menu-driven command that helps you look for your timezone (doesn't set your timezone)
 		* will prompt your for your continent and region, and it will give you the timezone that you should be using
-service [ntpd] [start] [stop]
-	* ntpd start: starts the NTP daemon, which checks NTP servers for the correct time
-	* ntpd stop: stops the ntpd Service
-ntpdate [ntp_server_hostname]
-	* ntpdate ntp_server_name: queries a single NTP server for a correct time
-		* EX: $ ntpdate 1.pool.ntp.org: queries a pool of NTP servers hosted by the NTP Organization given its public hostname
+service [service_name] [start] [stop]
+	* service_name start: starts the given Service
+		* EX: $ service ntpd start: starts the NTP daemon, which checks NTP servers for the correct time
+	* service_name stop: stops the ntpd Service
+hwclock [--systohc, --hctosys]
+	* hwclock: prints the Real-Time Clock
+	* --systohc: sets the computer's clock to be that of the Hardware Clock (i.e Real-Time Clock)
+	* --hctosys: sets the hardware clock (i.e Real-Time Clock) to be that of the computer's clock
+	* prerequisite: must be logged in as the Root User
+ntpdate [ntp_server_hostname, 1.pool.ntp.org]
+	* ntp_server_name: queries a single NTP server for a correct time and sets it for the computer
+	* 1.pool.ntp.org: queries a pool of NTP servers hosted by the NTP Organization for a correct time and sets it for the computer
 	* prerequisite: make sure the ntpd Service is NOT running: $ service ntpd stop
-ntpq [-p] [-n]
+ntpq [-p] [-n] [-pn]
 	* OPTION-COMBINEABLE command
 	* the ntpq command lets you query the ntpd NTP daemon while it's running
-	* -pn: queries the ntpd NTP daemon for which peer NTP servers we are communicating with, while also just displaying their IP addresses
+	* -pn: queries the ntpd NTP daemon for which peer NTP servers we are communicating with, while also just displaying their IP addresses (i.e no name resolution)
+	* output:
+		* remote: hostname of the NTP provider
+		* refid: reference ID of the NTP provider
+		* st: Stratum of the provider
+		* when: # of seconds since the last query
+		* poll: # of seconds between queries
+		* reach: status ID to indicate whether a server was reached. Successfull connections will increment this value by 1
+		* delay: time in ms between query and response by the server
+		* offset: time in ms between the computer's time and the NTP time
+		* jitter: the offset in ms between the computer's time and the NTP time in the last query ran
 	* prerequisite: make sure the ntpd Service is running: $ service ntpd start
 chronyc
 	* the chronyc command lets you query the chronyd NTP daemon while it's running
@@ -442,9 +580,11 @@ chronyc
 		* $ activity: prints out the activity of all peer NTP servers
 		* $ sources: prints out detailed info on all peer NTP servers
 		* $ exit: exits the chronyc prompt
-	* prerequisite: make sure the ntpd Service is running: $ systemctl start chronyd.service
+		* $ tracking: prints NTP status
+		* $ ntpdata: prints NTP info from the last call
+	* prerequisite: make sure the chronyd Service is running: $ systemctl start chronyd.service
 logger [-t] "[tag_here]" "[log_message]"
-	* "log_message": sends the given log message to the /var/log/messages log file
+	* "log_message": sends the given log message to the /var/log/syslog log file
 	* -t "tag_here" "log_message": tags the given log message and sends it to the /var/log/messages log file
 		* this is useful if you only want to $ grep, for logs of a particular tag
 logrotate [-f] [config_file]
@@ -458,7 +598,7 @@ newaliases
 	* newaliases: after modification to the /etc/aliases, the $ newaliases, command will regenerate the /etc/aliases.db file that the MTA uses for email delivery
 	* the $ newaliases, command is part of the Sendmail Emulation Layer
 	* prerequisite: must have edited and saved the /etc/aliases file
-mail [-s] "[subject_here]" [user_to_receive_email]@localhost	
+mail [-s] "[subject_here]" [-a] [file_name] [user_to_receive_email]@localhost	
 	* mail: queries the current User's mail spool for any email they've received
 		* if there are emails to read, you will be put into the "&" prompt to enter an email number to begin reading an email (email number is at column 1 of output for each email)
 			*  at the "&" prompt, press: [D] to delete the email you're currently in
@@ -466,8 +606,9 @@ mail [-s] "[subject_here]" [user_to_receive_email]@localhost
 	* -s "subject_here" user_to_receive_email@localhost: sends a local email with the specified subject line to the given User
 		* after hitting [ENTER], you will be prompted to enter the body of the email
 		* to finish typing your email, press: [CTRL] + [D]
+	* -a file_name user_to_receive_email@localhost: attatches the given file to the local email to be sent to the given User
 mailq
-	* the $ mailq, command is a postfix command; maps to sendmail's: $ mailq, command with the: "-b" and "-p" options
+	* the $ mailq, command is a postfix command; equivalent to sendmail's: $ mailq, command with the: "-b" and "-p" options
 	* mailq: lists out all emails that are in the current User's email queue, which are emails waiting to be sent
 	* emails get stuck in the email queue if the MTA Service has stopped
 	* output:
@@ -481,11 +622,11 @@ lpstat [-s, -l]
 		* output: if there are print jobs stuck in the print queue, appended to the end of the printer name is a: "-##" specifying the print job number
 lpinfo [-v] [--make-and-model] "[printer_model_name]" [-m] 
 	* -v: displays all the available printers, drivers, and connection types that can be used by the CUPS server
-	* --make-and-model "printer_model_name" -m : displays avaialble PPD files for the specified printer models
+	* --make-and-model "printer_model_name" -m: displays avaialble PPD files for the specified printer models
 lpadmin [-p, -x] [printer_name] [-L, -m] "[location_description]" [-v] socket://[printer_IP_address]:[port_number] [-m] [everywhere] "[PPD_file].ppd" [-E]
 	* -p printer_name -L "location_description" -v socket://printer_IP_address:port_number -m everywhere:
 		* installs the printer customly named: printer_name, while giving it a description of its location, with its IP address, over the specified connection-type and port number...
-		* ...while querying the printer for a driver to use by specifying the "everywhere" option
+		* ...while querying the printer to use ANY driver by specifying the "everywhere" option
 		* EX: $ lpadmin -p myprinter -L "in the office" -v socket://192.168.0.8:9100 -m everywhere
 	* -p printer_name -m "PPD_file.ppd" -E: installs the given PPD file on the given printer while enabling the printer to start accepting print jobs
 	* -x printer_name: removes the given printer from the computer
@@ -494,40 +635,288 @@ lpc [status]
 lpr [-P] [printer_name] [file_to_print]
 	* file_to_print: sends a print job to the default printer with the given file to print
 	* -P printer_name file_to_print: sends a print job to the specified printer with the given file to print
+lp [-d] [printer_name] [file_to_print]
+	* -d printer_name file_to_print: sends a print job to the specified printer with the given file to print 
 lpq [-a]
 	* -a: views all print queues for all installed printers on the computer
 lprm [-] [print_job_number]
 	* print_job_number: removes the given print job from the print queue given its print job number
+		* you can find print job numbers by running: $ lpstat -l, where appended to the end of every printer name is a: "-##" specifying the print job number
 	* -: removes ALL print jobs from the print queue
+cancel [printer_name]-[print_job_number]
+	* cancel: stops the current print job
+	* printer_name-print_job_number: stops the given print job given its job number and printer
 cupsreject [printer_name]
 	* printer_name: makes it so that no new print jobs get sent to the specified printer
 cupsdisable [printer_name]
 	* printer_name: disables all printing on the specified printer
+nmcli [-f] [ipv4.dns] [dev, con, device, general, networking, radio, connection, agent, monitor] [show, down, up, delete, status, add, edit, mod] [con-name] [connection_name] [type] [ethernet] [ip4] [###.###.###.###/##] [gw4] [###.###.###.###] [ifname] [device_name] [autoconnect, connect] [network_name] [password] [password_here]
+	* dev show: shows a list of Devices in NetworkManager on this computer
+		* output: device, type, mac address, IP address, gateway IP address, route, and DNS IP address
+	* con show: shows the Connections for each Device in NetworkManager on this computer
+		* output: name, UUID, and type 
+	* con down connection_name: brings down the given Connection
+	* device status: shows the status of each Device in NetworkManager
+	* con up connection_name: brings up the given Connection
+	* connection delete connection_name: deletes the given Connection
+	* dev show device_name: shows the Connection settings for the specified Device
+	* con add con-name connection_name type ethernet ip4 ###.###.###.###/## gw4 ###.###.###.### ifname device_name autoconnect:
+		* creates a new ethernet Connection with the given IP address and gateway IP address and assigns it to the specified Device
+		* automatically bringings up this Connection whenever the computer starts
+	* con edit: lets you create a new Connection by using a prompt that asks you for each value
+		* same thing as the $ con add, command but with a prompt
+	* con show connection_name: shows info on the specified Connection
+	* con mod connection_name ipv4.dns ###.###.###.###: updates the IPv4 address of the specified Connection
+	* -f ipv4.dns con show connection_name: shows the IPv4 address of the specified Connection
+	* general: shows NetworkManager's general status
+	* networking: shows NetworkManager's overall networking control
+	* radio: shows NetworkManager's radio switches
+	* agent: shows the NetworkManager agent
+	* monitor: lets you monitor NetworkManager changes
+	* device device_name connect network_name: connects to the given network using the specified Device
+	* device device_name connect network_name password password_here: connects to the given network using the specified Device and password
+ip [addr, route, link] [add, show, del, set] [default] [via] [###.###.###.###] [###.###.###.###/##] [dev] [device_name] [down, up] 
+	* addr show: shows the IP address info on this computer
+	* route show: displays the computer's routing table
+	* addr show device_name: shows info on the specified Device
+	* addr add ###.###.###.###/## dev device_name: TEMPORARLY adds the IP address to the given Device; change is reverted once the Device is brought down
+	* addr del ###.###.###.###/## dev device_name: removes the IP address from the given Device
+	* link set device_name down: brings down the given Device
+	* link set device_name up: brings up the given Device
+	* route add default via ###.###.###.### dev device_name: changes the default route for the specified Device
+	* route del default via ###.###.###.### dev device_name: deletes the default route for the specified Device
+hostnamectl [set-hostname] "[new_hostname]"
+	* set-hostname "new_hostname": changes the hostname for your computer
+hostname
+	* hostname: displays the hostname for this computer
+ifconfig [-a] [device_name] [###.###.###.###]
+	* ifconfig: displays info on all Devices/Interfaces currently configured on this computer
+	* device_name ###.###.###.###: TEMPORARLY changes the IP address of the given Device/Interface; change is reverted once the Device is brought down
+	* -a: shows all available Interfaces
+ifdown [device_name]
+	* device_name: brings down the given Device/Interface
+ifup [device_name]
+	* device_name: brings up the given Device/Interface
+route [-n] [del, add] [default, -net] [netmask] [###.###.###.###] [gw] [###.###.###.###]
+	* route: displays the computer's routing table
+	* -n: displays the computer's routing table, but with IP addresses instead of names (i.e no name resolution)
+	* del default: deletes the default route from the routing table
+	* add default gw ###.###.###.###: adds the route to the computer's route table as the default route
+	* add -net ###.###.###.### netmask ###.###.###.### gw ###.###.###.###: 
+		* adds the given network to the computer's routing table with all traffc destined for the network going to the specified gateway
+ping [-6] [-c] [number] [###.###.###.###, domain_name] [IPv6_address]
+	* the $ ping, command tests the computer's ability to communicate with another computer by sending ICMP packets accross a network
+		* will return: "time out" or "location was unreachable" in the event of an error
+	* ###.###.###.###: sends a ping to the specified IP address
+	* domain_name: sends a ping to the specified domain_name
+	* -c number ###.###.###.###: sends the specified number of ICMP packets to the specified IP address as part of pinging the IP
+	* -6 -c number IPv6_address: pings the specified IPv6 address with the specified number of ICMP packets
+	* to exit the $ ping, command press: [CTRL] + [C]
+ping6 [-c] [number] [IPv6_address, domain_name]
+	* the $ ping6, command tests the computer's ability to communicate with another computer by sending ICMP packets accross a network
+		* will return: "time out" or "location was unreachable" in the event of an error
+	* IPv6_address: sends a ping to the specified IPv6 address
+	* domain_name: sends a ping to the specified domain_name
+	* -c number IPv6_address: sends the specified number of ICMP packets to the specified IP address as part of pinging the IP
+	* to exit the $ ping6, command press: [CTRL] + [C]
+traceroute [-6] [-T] [###.###.###.###] [domain_name, IPv6_address]
+	* ###.###.###.###: shows a list of Devices an ICMP packet had to traverse to get to the specified IP
+	* -T domain_name: shows a list of Devices a TCP packet had to traverse to get to the specified domain_name
+	* -6 IPv6_address: shows a list of Devices an ICMP packet had to traverse to get to the specified IPv6 address
+	* output: 
+		* if the 2nd-to-last column is: "!N", that means the network was unreachable
+		* if the last column is: "*", that means the $ traceroute, command didn't get back a response in the last 5 seconds
+traceroute6 [-T] [domain_name, IPv6_address]
+	* IPv6_address: shows a list of Devices an ICMP packet had to traverse to get to the specified IP
+	* -T domain_name: shows a list of Devices a TCP packet had to traverse to get to the specified domain_name
+	* output: 
+		* if the 2nd to last column is: "!N", that means the network was unreachable
+		* if the last column is: "*", that means the $ traceroute, command didn't get back a response in the last 5 seconds
+tracepath [###.###.###.###, domain_name]
+	* the $ tracepath, command is a replacement for the $ traceroute, command
+	* ###.###.###.###: shows a list of Devices a UDP packet had to traverse to get to the specified IP
+	* domain_name: shows a list of Devices a UDP packet had to traverse to get to the specified domain name
+tracepath6 [IPv6_address, domain_name]
+	* the $ tracepath6, command is a replacement for the $ traceroute6, command
+	* IPv6_address: shows a list of Devices a UDP packet had to traverse to get to the specified IPv6 address
+	* domain_name: shows a list of Devices a UDP packet had to traverse to get to the specified domain name
+netstat [-tl, -ul, -tulp, -r, -n, -a, -e]
+	* OPTION-COMBINEABLE command (deprecated)
+	* netstat: displays all network connections and their state on the computer
+	* -n: shows IP addresses instead of hostnames (i.e prevents name resolution)
+	* -a: shows all listening and non-listening sockets
+	* -tl: displays all network connections we are listening for TCP packets with
+	* -ul: displays all network connections we are listening for UDP packets with
+	* -tulp: displays all network connections we are listening for TCP and UDP packets with, as well as shows the PIDs that are associated with each of the listening ports
+	* -r: displays the routing table for this computer
+	* -e: displays additional information (extends the output)
+ss [-tl, -ul, -tulp, -n, -a]
+	* OPTION-COMBINEABLE command (modern)
+	* ss: displays all network connections and their state on the computer
+	* -n: shows IP addresses instead of hostnames (i.e prevents name resolution)
+	* -a: shows all listening and non-listening sockets
+	* -tl: displays all network connections we are listening for TCP packets with
+	* -ul: displays all network connections we are listening for UDP packets with
+	* -tulp: displays all network connections we are listening for TCP and UDP packets with, as well as shows the PIDs that are associated with each of the listening ports
+host [domain_name_here] [###.###.###.###]
+	* domain_name_here: resolves the given domain name to IPv4 and IPv6 addresses
+		* EX: $ host localhost
+		* EX: $ host google.com
+	* domain_name_here ###.###.###.###: resolves the given domain name to IPv4 and IPv6 addresses using the specified IP as the DNS server
+dig @[dns_IP_address] [-t] [DNS_record_type, any] [domain_name_here]f
+	* domain_name_here: queries the DNS server in the /etc/resolv.conf file on port 53 by default for particular types of DNS records for the specified domain
+	* @dns_IP_address domain_name_here: queries the specified DNS server for particular types of DNS records for the specified domain
+	* -t DNS_record_type domain_name_here: queries the DNS server in the /etc/resolv.conf file on port 53 by default for the specified type of DNS records for the specified domain
+		* EX: $ dig -t MX google.com: looks for MX records at google.com
+	* @dns_IP_address -t DNS_record_type domain_name_here: uses the specified DNS server to query for the specified DNS record types at the specified domain
+	* -t any domain_name_here: looks for any type of DNS record at the specified domain using the DNS server in the /etc/resolv.conf file on port 53 by default
+	* output:
+		* ANSWER SECTION:
+			* column 1: [domain_name]. : the "." means it's a top-level domain
+			* column 2 and 3: the type of DNS record
+			* column 4: the IP address that the DNS record resolves to
+getent [group, hosts, shadow, passwd] [group_ID, user_name, group_name]
+	* getent: directly queries the /etc/nsswitch.conf file
+	* hosts: directly queries the /etc/hosts file for all hosts
+	* shadow user_name: queries the /etc/shadow file for the specified User
+	* passwd user_name: queries the /etc/passwd file for the specified User
+	* group group_ID: queries the /etc/group database file for the specified Group ID
+		* EX: $ getent group 100
+	* group group_name: queries the /etc/group database file for all members of the given Group
+	* prerequisite: must be logged in as the Root User
+who
+	* who: displays all Users currently logged in to the computer, the shell they're using, and at what time they logged in
+	* references the /var/run/utmp file
+w
+	* w: displays all Users currently logged in to the computer, shell they're using, what time they logged in, how long they've been idle, how much CPU time they're using, ...
+		* ...and what commands they're running
+	* references the /var/run/utmp file
+last [-f] [/var/log/btmp]
+	* last: displays every User that has logged into the computer and have since logged out, as well as the datetimes they logged in and logged out
+	* -f /var/log/btmp: displays Users who had failed login attempts (a.k.a the contents of the /var/log/btmp file)
+lsof [-u, -i]@[IPv4_address] :[port_number] [user_name] [directory]
+	* lsof: lists out all files currently open on the computer
+	* -u user_name: lists out all files currently open on the computer by the specified User
+	* directory: lists out all files currently open at the specified directory
+	* -i: lists out all listening ports that are currently open on this computer
+		* output:
+			* column 9: name of the port
+				* (LISTEN): port is currently listening and waiting for packets
+				* (ESTABLISHED): port is active and currently running
+				* (CLOSED_WAIT): other end of the connection with the port has closed, and we're now waiting for the port to close as well
+				* *: port is listening to incoming connections from anywhere
+				* localhost: port is listening for only local connections
+			* column 8: the protocol that the port is using
+			* column 5: type of IP address
+			* column 3: the User that has that port opened
+			* column 2: the PID assigned to the port 
+	* output:
+		* column 1: command
+		* column 2: PID
+		* column 4: User
+		* column 5: file extension
+		* column 6: type (a.k.a file or directory)
+		* column 9: node name
+	* -i :port_number: lists out all listening connections on the specified port
+	* -i@IPv4_address: lists out all listening connections with the specified IP address
+ulimit [-a, -m, -Sa, -Ha, -b, -f, -v, -u] [number]
+	* OPTION-COMBINABLE COMMAND
+	* -a: displays all the resource limits on this computer
+	* -Sa: displays all the Soft Limits on this computer
+	* -Ha: displays all the Hard Limits on this computer
+	* -m number: limits RAM for each User to "number" kilobytes (temporary)
+		* to make the change perminent, edit the /etc/security/limits.conf file
+	* -b number: limits the max buffer size for sockets
+	* -f number: limits the max file size written in shells
+	* -v number: limits the max amount of virtual memory
+	* -u number: limits the max # of Processes available to a single User
+visudo
+	* visudo: opens up an editor that allows you to edit the /etc/sudoers file
+fuser [-v, -n] [directory_here] [protocol] [port_number] [port_number]/[protocol]
+	* OPTION-COMBINABLE COMMAND
+	* -v directory_here: lists out in verbose output what Users are accessing which files in the current directory
+	* port_number/protocol: lists all PIDs that are assigned to the specific port and protocol
+		* EX: $ fuser 22/tcp: all PIDs that are using SSH
+	* -n protocol port_number: lists all PIDs that are assigned to the specific port and protocol
+		* EX: $ fuser -n tcp 22: all PIDs that are using SSH
+nc [domain_name, ###.###.###.###, -u] [-e] [executable_here] [-l] [port_number]
+	* domain_here port_number: sets up a connection with the specified domain on the specified port
+	* ###.###.###.### port_number: sets up a connection with the specified IP address on the specified port
+	* -l port_number: sets up a listener on the specified port
+	* -u -e executable_here -l port_number: sets up a UDP listener on the specified port and sends all info it receives to stdin of the specified executable
+		* EX: $ nc -u -e /bin/bash -l 1234: feeds all info to stdin of Bash
+nmap [-p] [port_number] [domain_name]
+	* domain_name: scans the domain for open ports and Services
+		* EX: $ nmap localhost: scans this computer for open ports and Services
+	* -p port_number domain_name: scans the given domain name for open connections made with the specified port
+chkconfig [--list] [--type] [service_name]
+	* --list --type service_name: lists out all the Services related to the given Service name
+gpg [--keyserver] [server_name] [--send-keys] [-a] [--gen-key, --list-keys, -o, --import, -r] [revoke.asc] [--gen-revoke] [file_name] [--export] [private_key_ID] [public_key_file_name] [public_key_ID] [user_name] [-e] [file_to_encrypt] [file_name].gpg
+	* --gen-key: generates a private key for the current User
+		* puts you into a prompt for creating the private key
+		* it will first ask you for the type of private key
+		* then it will ask for the size in bits you want the private key to be
+		* then it will ask for an expiration date ("0" means no expiration date)
+		* then it will ask you what you want to name the private key
+		* then an email address
+		* then an optional comment
+		* then it will let you review your selections
+		* then you enter a passphrase for the private key
+		* then it will output success (make note of the private key's 8 character ID; EX: 16FECFF5)
+		* prerequisite: must be logged in as the User you're creating the private key for
+	* --list-keys: lists the GPG keys on the current User's Keyring
+		* also contains info on public key ID's
+	* -o file_name --export private_key_ID: generates a public key for the current User based off of the User's given private key
+		* EX: $ gpg -o jonathanpubkey --export 16FECFF5
+		* prerequisite: must be in the User's /home/.gnupg directory
+	* --import public_key_file_name: imports another User's public key into the current User's Keyring, meaning the current User can now unencrypt encrypted files sent from the other User
+	* -r user_name -e file_to_encrypt: encrypts the given file with the specified recipient User's public key
+		* that way once the current User sends this encrypted file to its intended recipient, they can decrypt it using their private key
+		* generates a .gpg file
+	* file_name.gpg: decrypts the given file sent from a different User
+		* prerequisite: must have the other User's public key in your Keyring
+	* -a -o revoke.asc --gen-revoke public_key_ID: generates a revocation certificate for the given public key
+		* you would run this command in the event that you or someone else's public key was compromised
+		* once you've run this command, you must also add the revocation certificate to your Keyring with: $ gpg --import revoke.asc
+			* this way anything new generated with the lost public key won't be trusted
+		* you must additionally send this revocation certificate to any other User that has your public key and they must add it to their Keyring as well
+	* --keyserver server_name --send-keys public_key_ID: generates a revocation certificate for a given public key that was compromised to a key server, which automatically sends out the...
+		* ...revocation certificate to any User that also uses the key server
+ssh-keygen
+	* ssh-keygen: generates an RSA 2048 key pair
+		* puts you into a prompt:
+			* asks you for the location to store the key pair
+			* asks you for a passphrase
+ssh-copy-id [User]@[IPv4_address]
+	* User@IPv4_address: copies the current User's public key in their /home/.ssh directory over to the specified remote computer's /home/.ssh/authorized_keys file
+	* after running the $ ssh-copy-id, command you would proceed with connecting to the remote computer as normal using: $ ssh [User]@[IPv4_address]
+ssh-agent [bash]
+	* bash: generates a new Bash shell with the SSH agent as a wrapper
+		* $ ssh-add
+			* ssh-add: SSH agent wrapper command that adds the current User's public key in their /home/.ssh directory to the SSH agent wrapper
+			* puts you into a prompt:
+				* asks you for the passphrase to the current User's public key
+			* after running the $ ssh-add, command you would proceed with connecting to the remote computer as normal using: $ ssh [User]@[IPv4_address]
+			* you would run this command if you don't want to have to constantly authenticate with your passphrase when you ssh connect to a remote computer using the $ ssh-copy-id, command method
+			* prerequisite: must have ran: $ ssh-agent bash
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---DIDN'T KNOW---
+chsh [-s] [path_to_shell] [user_name]
+	* -s path_to_shell user_name: switches the shell of the specified User to the one specified 
+sudo [-l]
+	* -l: lists out the commands that have been made permissable by a sysadmin that the current User can run
+su
+	* the password that is required when switching the User is the password of the User you are switching to
+	* when you add the "-" argument, you tell the $ su, command to use the Environment Variables of the User you're switching to
+tzconfig
+	* tzconfig: lets you to set both the /etc/localtime and /etc/timezone files to the locale that is used by the computer
+batch
+	* batch: prompts you for command(s) to be ran automatically when system load is low
+	* when you are finished writing your commands, press: [Ctrl] + [D]
+whois [domain_name]
+	* domain_name: queries the whois database and provides info on the specified domain
+nmtui
+	* the $ nmtui, command is a NetworkManager command that can handle managing Curse-based Interfaces
 
 

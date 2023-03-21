@@ -443,16 +443,16 @@ Hard Links: a.k.a Physical Links; essentially a shortcut to a resource; it will 
 		* because of this, it also shares the same exact permissions as the file it's linking to
 	* the size of the Hard Link is equal to the file size of the file it's linking to
 Pseudo Filesystem: unlike a normal filesystem where files and folders are on a physical disk, Pseudo Filesystems only exist in RAM
-Extended Regular Expressions vs basic regular expressions: basic regular expressions need a preceeding: '\' to treat these characters: ?, +, {, }, (, ), |, as special meta-characters instead of literal characters
+Extended Regular Expressions vs basic regular expressions: basic regular expressions need a preceeding: '\' to treat these characters: ?, +, {, }, (, ), |, [, ] as special meta-characters instead of literal characters
 	* so for this reason it's best to always used Extended Regular Expressions
-	* inversly, Extended Regular Expressions need a preceeding: '\' to treat these characters: ?, +, {, }, (, ), |, as literal characters instead of special meta-characters
+	* inversly, Extended Regular Expressions need a preceeding: '\' to treat these characters: ?, +, {, }, (, ), |, [, ] as literal characters instead of special meta-characters
 alternative editors besides vi:
 	* Vim
 	* Emacs
 	* Nano
 important Environment Variables:
 	* $PATH: contains all the Absolute Paths for which you are allowed to run an application from, each seperated by a colon (:)
-	* $HISTFILE: contains the Absolute Path to the User's .bash_history file
+	* $HISTFILE: contains the Absolute Path to the User's /home/.bash_history file
 	* $HISTFILESIZE: the Environment Variable that dictates the amount of entries in the .bash_history file
 	* $LD_LIBRARY_PATH: Environment Variable that points to a path where Shared Objects can be read from
 	* $PWD: is how $ pwd knows where the current working directory is at all times
