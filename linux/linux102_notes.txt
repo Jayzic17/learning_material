@@ -2,22 +2,25 @@
 
 
 2 main types of shell environments:
-	* Interactive Login Shell: created when you physically sit down and log into a Bash terminal, or when you connect to a Bash terminal remotely via SSH
+	* Interactive Login Shell
 		* how it works:
-			* type in your password and login
 			* /etc/profile config file gets read and calls the /etc/profile.d directory to pull-in any extra config info
-			* /etc/profile then calls the /home/.bash_profile file, which then calls the /home/.bashrc file, which then calls the /etc/bashrc file to pull-in system config info
+			* /etc/profile then calls the /home/.bash_profile file...
+				* if /home/.bash_profile doesn't exist, /home/.bash_login is ran instead as part of login...
+				* if neither /home/.bash_profile or /home/.bash_login exist, /home/.profile is ran...
+			* ...which then calls the /home/.bashrc file, which then calls the /etc/bashrc file to pull-in system config info
 			* Interactive Login Shell is now created
-	* Interactive Non-Login Shell: created whenever you start-up a terminal application
+	* Interactive Non-Login Shell
 		* how it works:
-			* User is logged in to the Bash Terminal
-			* User starts up a terminal application
 			* /home/.bashrc file calls /etc/bashrc file to pull-in system config info
 			* Non_Login Shell is created
+		* examples of Non-Login Shells:
+			* /bin/false
+			* /sbin/nologin
 	* Interactive vs. Non-Interactive in this case refers to whether the User provides input to the terminal via keyboard or not
-	* Login vs. Non-Login in this case refers to whether the User needs to provide credentials or not
+	* Login vs. Non-Login in this case refers to whether the User is logging into a different User or not
 socket: the combination of a host's port number, protocol, and IP address
-	* this means a connection is the combination of 2 sockets
+	* this means a connection can be described as the combination of 2 sockets
 daemons are the same thing as a Service: a program that runs in the background w/o the User interacting with it
 when I say "hosts" it's the same as saying: "computer"; "host" just refers to a computer that can be connected over a network
 there are 3 types of accounts on a Linux computer: User, Service, and System accounts. When I say "User", just know that it also applies to the other 2 account types; I just use "User" for convenience-sake
@@ -25,7 +28,10 @@ in Linux and Unix, file extensions don't matter at all when running/opening some
 Primary Group: the primary Group that a User is a member of on the computer
 Supplementary Group: an additional Group that a User is a member of on the computer
 Display Manager: handles a User's session in authentication, starts-up the Display Server, and loads-up the computer after login
-	* EX: GNOME Display Manager(GDM)
+	* EX:
+		* GDM: GNOME Display Manager
+		* KDM: the standard KDE Display Manager
+		* XDM: the standard X.Org Display Manager
 	* never login to an X Server session as the Root User
 	* started by init or systemd
 Display Server: handle's the protocol to be used for how we have graphics displayed
@@ -39,10 +45,11 @@ X11: a protocol that determins how we have graphics displayed on Unix-like OS's 
 			* libDRM: Direct Rendering Manager; a library that sits btwn the Kernel and the X.org Server
 			* the X Server itself
 			* either Xlib or XCB: libraries that send drawing requests to the X.org Server
-				* XCB: typically used by the KDE desktop
+				* XCB: typically used by the KDE Desktop Environment
 			* Display Manager: sends instructions to Xlib or XCB
 			* the application itself, meaning the application that you see on your screen
 		* the graphical renderings on an X11 display are clients of the X Server
+		* XDMCP: X Display Manager Control Protocol; native X Server remote access protocol that controls connections between X Servers and its clients
 	* provides extra functionality via extensions such as:
 		* RandR: provides dynamic resizing of the root window, refresh rates, mirroring displays, etc.
 		* GLX: provides rendering of 3D OpenGL content within X11 windows
@@ -52,45 +59,62 @@ Wayland: replacement for the X Window System
 	* constantly updating and improving to bring it up to feature parity with X11
 	* provides XWayland: a library that enables X Window clients to render with Wayland (backwards compatibility)
 Window Manager: is what provides the look and feel of the desktop on a computer like icons, colors, tabs, etc.
-	* EX: Tab Window Manager(TWM): one of the simplest desktop set-ups you can have in Linux
+	* EX: TWM: Tab Window Manager; one of the simplest desktop set-ups you can have in Linux
 Desktop Environment: contains a Window Manager, terminal, and other utilities used to configure your desktop
-	* EX: GNOME, KDE, XFCE
+	* EX: 
+		* GNOME
+		* KDE
+		* XFCE: lighter with less memory and CPU consumption than KDE and GNOME
+	* 3 components of a Desktop Environment:
+		* Display Manager
+		* Window Manager
+		* GUI
 	* lets you use Activities: the equivalent of doing the "3 fingers-up" keystroke on a Mac
 	* you can select the Desktop Environment you want to be in by selecting the gear icon before you sign in to your computer
 	* on all Desktop Environments, press: [ALT] + [F2] to perform a search
 	* includes Assistive Technologies: software that helps people that have poor eyesight, bad hearing, etc; located under: Settings > Universal Access
 		* high contrast: turns everything black and white
 		* large text
+		* screen magnifier
+		* braille display
 		* cursor size
 		* zoom
+		* 3 open source solutions for speech recognition:
+			* Simon
+			* Julius
+			* CMUSphinx
 		* screen reader: enables Orca, which is a text-to-speech software that reads-out everything your cursor hovers over
 		* sound keys: plays a sound everytime the num lock or caps lock keys are pressed
 		* visual alerts: screen flashes whenever your computer gets an alert
-		* screen keyboard: gives your screen a keyboard in the event that you keyboard doesn't work but your mouse does
+		* screen keyboard (GOK): gives your screen a keyboard in the event that you keyboard doesn't work but your mouse does
 		* repeat keys: whether or not to have keys repeat when you hold down the key
 		* cursor blinking
-		* sticky keys
+		* sticky keys: means if you want to do something like: CTRL + C, and you don't want to have to hold down both keys
+			* instead you can just press CTRL, followed by C
 		* slow keys: prevents keystrokes from registering until a key has been held down for a certain amount of time
 		* bounce keys: whether or not to ignore rapid repeated keystrokes of the same key
 		* mouse keys: lets you use you number pad as a mouse
 		* click assist: lets you enable hover clicks, and lets you trigger a secondary click when you hold-down on the mouse
 		* double-click delay
-	* 2 types:
-		* GTK+ (a.k.a GIMP)-based desktops: a C language library; desktops that use this library include GNOME and XFCE
+	* 2 types of libraries for Desktop Environments:
+		* GTK+ (a.k.a GIMP-based) Desktop Environments: a C language library; Desktop Environments that use this library include GNOME and XFCE
 			* is extremely customizable and light on resources
 			* on GNOME, use: [CTRL] + [ALT] + [UP, DOWN] to switch Activities
 			* on XFCE, use the Activity switcher at the top right of the upper taskbar to switch Activities
-		* Qt-based desktops: a C++ language library; desktops that use this library include KDE
+		* Qt-based Desktop Environments: a C++ language library; Desktop Environments that use this library include KDE
 			* is extremely customizeable and contains a lot of widgets
 			* on KDE, create a new Activity by clicking the bottom-left of the lower taskbar, or the upper right of the upper taskbar
-Virtual Network Computing(VNC): tool that gives you the ability to view and control an entire computer remotely
+VNC: Virtual Network Computing; an application that is used to connect to computers remotely using RDP or RFB
+	* RDP: Remote Desktop Protocol; protocol that is used for Remote Desktop connections
+	* RFB: Remote FrameBuffer; another protocol that is used for Remote Desktop connections
 SPICE: Simple Protocol for Independent Computing Environments; protocol that also allows for controlling a remote desktop, but is usually used for VM's
 	* already encrypted using TLS, unlike VNC which is unencrypted by default, but this DOES come at a performance cost
 	* also lets you transport 2-way audio over a SPICE connection
 	* also lets you use USB re-direction over two computers using a SPICE connection
+VDI: Virtual Desktop Infrastructure; a virtual Desktop Environment that you can access using VNC or SPICE
 Timer Unit: a timer controlled by systemd
 	* each .timer Unit file has a matching .service Unit file
-		* so the .timer Unit is the actual Timer, while the .service Unit picks-up the .timer Unit once time is up
+		* so the .timer Unit is the actual Timer, while the .service Unit is what runs a list of commands once time is up
 	* 2 types of Timer Units in systemd:
 		* Monotonic: runs after a certain amount of time has passed based on a starting point
 			* defined by: OnBootSec, or OnActiveSec
@@ -99,22 +123,23 @@ Timer Unit: a timer controlled by systemd
 		* Realtime: runs based off of a specific calendar date
 			* defined by: OnCalendar
 	* Transient Timer Unit: set up by the $ systemd-run, command; does NOT require a .service Unit file
-		* it's essentially a temporary Timer Unit
+		* it's essentially a pseudo Timer Unit
 	* output (.timer file):
 		* [Unit] section: contains a descripton and references to documentation regarding the Timer Unit
 		* [Timer] section:
-			* OnBootSec=,OnActiveSec= |or| OnCalendar=[year]-[month]-[day] [##]:[##]:[##]: tells you whether or not it is a Monotonic or Realtime Timer respectively
+			* OnBootSec=,OnActiveSec= |or| OnCalendar=[weekday]..[weekday] [year]-[month]-[day] [##]:[##]:[##]: tells you whether or not it is a Monotonic or Realtime Timer respectively
 			* Unit=: tells you what .service Unit file this Timer is responsible for
 			* Persistant=true: means that if the last-scheduled run did not occur, then execute the .service Unit immediately
 		* [Install] section:
 			* WantedBy=[target_here].target: the Target Unit associated with this Timer
 				* some Timers are enabled with the timers.target Target Unit, but most of the time it's just the .target file associated with the Timer's .service file
 	* output (.service file):
-		* [Unit] section: contains a descripton and references to documentation regarding the Timer Unit
+		* [Unit] section: contains a descripton and references to documentation regarding the Unit
 		* [Service] section: specifies what type of Service is being run, and what commands it will run
 			* if Type=oneshot, then it's Monotonic
 			* if Type=simple, then it's Realtime
-UTF-8: most popular 8-bit character encoding format; is part of the Unicode Standard; contains ASCII
+UTF-8: most popular 8-bit character encoding format; is part of the Unicode Standard; contains the ASCII character encoding format
+	* is the default character encoding format on Linux computers
 ISO-8859: most popular character encoding format used in Europe; contains 88592-1 through 88592-15; lets you set specific character encodings based on a User's need, depending on their country
 if you ever see square-looking characters in an output, it means those are placeholder characters for letters that can't be read, due to us using a different character encoding format than that of the output
 Real-time Clock (a.k.a Hardware Clock): the time on your motherboard
@@ -132,9 +157,6 @@ Network Time Protocol (NTP): a protocol in which your computer gets its current 
 		* chronyd: the modern NTP daemon used on systemd computers
 			* run it by using: $ service chronyd start
 		* NTP uses the UDP port number 123
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 rsyslog: modern logging Service daemon to the syslog logging daemon
 	* the old syslog daemon was unencrypted, and would only use UDP, meaning packet arrival wasn't always guaranteed 
 	* the rsyslog daemon manages:
@@ -143,25 +165,18 @@ rsyslog: modern logging Service daemon to the syslog logging daemon
 		* /var/log/secure
 		* /var/log/maillog
 	* run it by using: $ service rsyslog start
+syslog-ng: another modern logging daemon
 logrotate: daemon that is responsible for managing the storage and rotation of old log files
 	* run it by using: $ service logrotate start
-Logging Priority Levels:
-	* 0: emerge: means that your computer is in an unusable state; if this type of log is generated, a message gets sent out to all Users on the computer
-	* 1: alert: means that you must take immediate action before your computer becomes unusable
-	* 2: crit: means that hardware is in critical condition
-	* 3: err: a.k.a stderr; comes from either a Service or some daemon
-	* 4: warn: refers to something that should be investigated, but does not necessarly break any functionality
-	* 5: notice: not as bad as warnings, but still require some investigation before the issue could become a problem later on
-	* 6: info: just refers to info about a Service or application; is no cause for concern
-	* 7: debug: useful to programmers needing to debug something
 Facility (a.k.a Item): the thing that is generating a particular log message (the main one being the Kernel)
 systemd Journal: a binary file that records everything on the computer
+	* by default, it's located in: /run/log/journal
+	* systemd-journald: daemon that works with the systemd Journal file
 	* contains:
 		* Kernel log messages
 		* syslog messages
 		* any system Services that send output to stdout and/or stderr
 		* audit records for SELinux messages (Red Hat-based)
-	* by default, it's located in: /run/log/journal
 	* gets recreated on reboot, cause it's a lot of data
 		* but if you want to retain that data from previous reboots, run:
 			* $ mkdir -p /var/log/journal
@@ -174,41 +189,47 @@ systemd Journal: a binary file that records everything on the computer
 Message Transfer Agent (MTA): daemon that routes email to wherever it's supposed to go
 	* MTA will send the email to a Message Delivery Agent (MDA) on TCP port 25
 	* then the MDA will send the email to the Message User Agent (MUA), which is essentially an email client
+	* Relay: used to transfer mail between MTA's
+		* do NOT set an SMTP server to open Relay, b/c it allows unrestricted mail to be accepted and sent by anyone
 	* sendmail: legacy MTA system; was default on many Linux distros; very difficult to configure
 	* postfix: modern MTA system found on many Linux distros; easier to configure; great security
 	* exim: MTA system; used to be default for Debian-based distros; great security; also easier to configure than sendmail
-	* Sendmail Emulation Layer: lets you use sendmail commands on other MTA's like postfix and exim
+	* Sendmail Emulation Layer: lets you use sendmail commands on modern MTA's like postfix and exim
 Common UNIX Printing System (CUPS): the system that lets you use a printer on your Linux computer
+	* CUPS was made to replace the Line Print Daemon(LPD), which was the legacy printer system 
 	* run it by using: $ service cupsd start
 	* http://localhost:631: web interface for printing; default url for the locally installed CUPS server; requires Root User to add and remove printers here
 	* IPP: Internet Printing Protocol (unencrypted)
 	* IPPS: Internet Printing Protocol Secure (encrypted)
-	* comes packaged with the Line Print Daemon(LPD)
-		* some commands include:
-			* $ lpstat, $ lpinfo, $ lpadmin, $ lpc, $ lpr, $ lpq, $ lprm
+	* comes packaged with some legacy LPD commands as well:
+		* $ lpstat, $ lpinfo, $ lpadmin, $ lpc, $ lpr, $ lpq, $ lprm
 	* HP printers use port 9100
-	* PPD file: Postscript Printer Description file
+	* PPD file: Postscript Printer Description file; configuration files used for printers
 Internet Protocol (IP): a network address that is assigned to a machine, so that other machines can communicate with each other
 	* 2 versions:
-		* IPv4: four octets containing numbers 0 to 255; each octet is 8 bits for a total of 32 bits
+		* IPv4: 32bit decimal number, divided into 4 octets containing numbers 0 to 255; each octet is 8 bits
 			* EX: 192.168.0.30
+			* a "0" in IPv4 means it can be any number
+			* IP Class ranges:
+				* RFC 1918: describes the 5 ranges that determines how many computers that are available within each Class
+				* the 1st octet in an IPv4 address tells you which Class it is:
+					* Class A: range: 1 - 127; number of computers: 16,777,214
+					* Class B: range: 128 - 191; number of computers: 65,534
+					* Class C: range: 192 - 223; number of computers: 254
+					* Class D: range: 224 - 239; number of computers: *reserved for multicast
+					* Class E: range: 240 - 254; number of computers: *reserved for future use/research/development needs
 		* IPv6: 128bit hexadecimal number, divided into 8 groups of 16 bits
 			* EX: 2DAP:FF40:0928:CD01:4433:00DD:0988:FFFF
+			* when a group is: "0000", it gets omitted
+				* EX: FE80::408:5FCA:FDE3:103C (this implies that the 2nd, 3rd, and 4th groups are all: "0000")
 			* 3 types:
-				* Unicast: identifies 1 Interface; the 1st 64 bits identify the network, and the 2nd half identifies the Interface
+				* Unicast: identifies 1 Interface by its Subnet Prefix and Interface ID
+					* Subnet Prefix: the 1st half (64 bits) of an IPv6 address; defines the network
+					* Interface ID: the 2nd half (64 bits) of an IPv6 address; defines the host 
 				* Multicast: identifies multiple Interfaces; a packet sent to a Multicast address will be sent to all Interfaces in the group
 				* Anycast: identifies multiple Interfaces; a packet sent to an Anycast address will be sent to a single Interface of the group
 			* IPv6 does not have a Broadcast Address as it exists in IPv4
-			* not compatible with IPv4, but you CAN have both of each exist on the same network
-	* a "0" in ay network address means it can be any number from 0 to 255
-	* IP Class ranges:
-		* RFC 1918: describes the 5 ranges that determines how many computers that are available within each Class
-		* the 1st octet in an IPv4 address tells you which Class it is:
-			* Class A: range: 1 - 127; number of computers: 16,777,214
-			* Class B: range: 128 - 191; number of computers: 65,534
-			* Class C: range: 192 - 223; number of computers: 254
-			* Class D: range: 224 - 239; number of computers: *reserved for multicast
-			* Class E: range: 240 - 254; number of computers: *reserved for future use/research/development needs
+			* not backwards-compatible with IPv4, but you CAN have both IPv4 and IPv6 addresses exist on the same network
 Classless Inter Domain Routing (CIDR): network address that replaces the original Class-based design by not wasting so many IPv4 addresses
 	* Network Prefix (a.k.a IP Prefix): the number after the "/"
 		* maximum possible for IPv4 is 32, and IPv6 is 128
@@ -239,7 +260,7 @@ Classless Inter Domain Routing (CIDR): network address that replaces the origina
 		* Broadcast Address: 192.168.255.255
 		* Hosts: 192.168.0.1 - 192.168.255.254
 	* EX: How many IP addresses are available with: 192.168.10.128/28?
-		* 11111111.11111111.11111111.11110000, so 16 available addresses - the Network ID and the Broadcast Address = 14
+		* 11111111.11111111.11111111.11110000, so 16 available addresses, minus the Network ID and the Broadcast Address = 14
 	* EX: Which of the following Net Masks is described as /26 in the CIDR format?
 		* 11111111.11111111.11111111.11000000, so a standard Net Mask of: 255.255.255.0, plus 2 more bits: 128 + 64 = 192, which gives you: 255.255.255.192
 Private IPs: addresses that are used for internal networks; prevents the need for every computer to have an IP address assigned to it from a Central Authority
@@ -255,7 +276,9 @@ Transmission Control Protocol (TCP): method in which all transactions btwn IP ad
 	* relies on the Send and Acknowledgement System: meaning the sender will send a data packet and wait for an acknowledgement from the receiver
 	* each data packet contains a number indicating to the receiver how the data should be reassembled in a particular order
 User Datagram Protocol (UDP): stateless connection btwn 2 IP addresses
-	* data packets are sent to the receiver w/o any acknowledgement, but the upside is that it means less network overhead
+	* data packets are sent to the receiver w/o any acknowledgement
+		* this means that applications that use UDP need to do the acknowledgement part, since UDP can't
+		* but the upside is that it means less network overhead
 	* EX: network gaming, DNS, non-critical data
 Internet Control Message Protocol (ICMP): intended for networking devices such as routers, switches, and firewalls to send error messages btwn themselves
 	* often used to query a network device to check its availability
@@ -277,7 +300,7 @@ system.socket: a Unit File that is used in-place of xinetd
 	* monitors network connections addressed to particular Services instead of xinetd
 	* specifies the IP address and port number to be listened on, and if there is a connection, to start the corresponding Service Unit to respond to that request
 	* output:
-		* [Unit] section: contains a descripton and references to documentation regarding the Timer Unit
+		* [Unit] section: contains a descripton and references to documentation regarding the Unit
 		* [Socket] section: 
 			* ListenStream=[###.###.###.###]:[port_number] |or| ListenStream=[port_number]: defines the IP and/or port that the socket will listen
 		* [Install]
@@ -294,11 +317,10 @@ hostname: the name of a computer on a network
 	* so in that vain, a hostname IS a domain name, assuming it's formated correctly
 GNU Privacy Guard applicaiton(GPG): used to encrypt files and exchange them with other Users on the computer
 	* each User needs to have a key pair for it to work
+	* gpg-agent: agent that stores GPG private keys in memory, thus avoiding the need for the User to specify them in every request
 Secure Shell(SSH): allows a User on a computer to make secure encrypted connections to remote computers
 	* the SSH daemon is what facilitates the connection
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	* OpenSSH is prefered when making SSH connections
 important Environment Variables:
 	* $HISTFILESIZE: see: linux101_notes for details
 	* $HISTFILE: see: linux101_notes for details
@@ -321,14 +343,14 @@ important Environment Variables:
 		* ignorespace: commands starting with a space will not be saved
 		* ignoredups: duplicate commands will not be saved
 		* ignoreboth: commands starting with a space and duplicate commands will not be saved
-	* $HISTSIZE: sets the max number of commands to be stored in memory while the current bash shell session is going
+	* $HISTSIZE: sets the max number of commands to be stored in memory while the current bash shell session is going (the thing in the bash shell when you hit [UP] and [DOWN])
 	* $HOSTNAME: stores the hostname of the computer 
 	* $HOSTTYPE: stores the architecture of the current host computer's processor
 	* $MAIL: stores the file that Bash uses to search for email
 	* $MAILCHECK: stores a number which indicates in seconds the frequency with which Bash checks for new mail
 	* $PS1: stores the value of the bash shell prompt (#: for the Root User, and $: for regular Users)
 	* $PS2: stores the value of the bash shell multi-line prompt: >
-	* $PS3: stores the value of the $ select, command prompt
+	* $PS3: stores the value of the $ select, command prompt: >
 	* $PS4: stores the value of the bash shell debugging prompt: +
 	* $SHELL: stores the Absolute Path of the current User's shell
 	* $USER: stores the current User's username
@@ -338,6 +360,8 @@ important Environment Variables:
 	* $LC_PAPER: sets the standard paper size
 	* $LC_ALL: overrides all other locale variables including $LANG
 	* $TZ: sets the computer's timezone
+	* $SSH_AGENT_PID: stores the PID of the ssh-agent
+	* $SSH_AGENT_SOCK: stores the ssh socket file that will be used by the ssh-agent
 important files:
 	* /
 		* /etc
@@ -390,14 +414,8 @@ important files:
 					* column 4: minimum # of days btwn password changes allowed for this User
 					* column 5: maximum # of days before the User is required to change their password
 					* column 6: # of days before the User's current password expires (they will have been notified of this ahead of time)
-					* column 7: Inactive Column: # of days after a User's password has expired before the computer deletes the User from the computer entirely
+					* column 7: Inactive Column: # of days after a User's password has expired before the computer locks the User
 					* column 8: the date when a User's account will expire (# of days since Unix Epoch)
-			* /etc/gshadow: same as the /etc/shadow file, but for Groups
-				* output:
-					* column 1: Group name
-					* column 2: encrypted password of the Group
-					* column 3: the Group's admins; they can change the password of the Group and can add and remove members
-					* colun 4: the Group's members
 			* /etc/group: database file that contains info on all Groups
 				* output:
 					* colon ":" delimiated lines
@@ -405,11 +423,17 @@ important files:
 					* column 2: password (Groups typically don't have passwords; typically an "X" to show that it is encrypted)
 					* column 3: Group ID
 					* column 4: all Users in the Group
+			* /etc/gshadow: same as the /etc/shadow file, but for Groups
+				* output:
+					* column 1: Group name
+					* column 2: encrypted password of the Group
+					* column 3: the Group's admins; they can change the password of the Group and can add and remove members
+					* column 4: the Group's members
 			* /etc/default/useradd: file that is referenced by the $ useradd, command when a new User is created
 				* output:
 					* GROUP: indicates the Group that the new User should be added to on creation
 					* HOME: where the User's /home directory will reside
-					* INACTIVE: -1 = User is not disabled as soon as their password expires, 0 = User IS disabled as soon as their password expires
+					* INACTIVE: -1 = User is not locked as soon as their password expires, 0 = User IS locked as soon as their password expires
 					* EXPIRE: the date that the User will expire
 					* SHELL: the default shell for the User
 					* SKEL: the default files that the User's /home directory will receive
@@ -418,7 +442,7 @@ important files:
 				* so if you want to modify any default behavior when creating a new User, use this file, not /etc/default/useradd
 				* output:
 					* UID_MIN, UID_MAX: range of User IDs that can be assigned to new regular Users
-					* GID_MIN, GID_MAX: range of Group IDs that can be assigned to new regular Gropus
+					* GID_MIN, GID_MAX: range of Group IDs that can be assigned to new regular Groups
 					* CREATE_HOME: whether or not a /home directory should be created by default for new Users
 					* PASS_MAX_DAYS: max # of days that a password can be used
 					* PASS_MIN_DAYS: min # of days between password changes
@@ -428,10 +452,17 @@ important files:
 				* these are regular script files, and are NOT in the format of a crontab file
 			* /etc/cron.d: the cronjob directory for the whole computer
 				* these ARE crontab files for the whole computer
+			* /etc/crontab: the crontab file for the whole computer
 			* /etc/cron.deny: Users listed in this file will be prevented from using crontab files
-			* /etc/cron.allow: Users listed in this file will be permitted to use crontab files; one's who aren't don't get to
+				* if /etc/cron.deny is empty, all Users can use the $ cron, command
+			* /etc/cron.allow: Users listed in this file will be permitted to use crontab files
+				* if the /etc/cron.allow file is empty, then only the Root User can use the $ cron, command
+				* if the /etc/cron.allow file and the /etc/cron.deny do not exist, then only the Root User can use the $ cron, command
 			* /etc/at.deny: Users listed in this file will be prevented from using the $ at, command
-			* /etc/at.allow: Users listed in this file will be permitted to use $ at, commands; one's who aren't don't get to
+				* if /etc/at.deny is empty, all Users can use the $ at, command
+			* /etc/at.allow: Users listed in this file will be permitted to use $ at, commands
+				* if the /etc/at.allow file is empty, then only the Root User can use the $ at, command
+				* if the /etc/at.allow file and the /etc/at.deny do not exist, then only the Root User can use the $ at, command
 			* /etc/localtime: a Symbolic Link to the /usr/share/zoneinfo/[timezone] file, which keeps track of the computer's timezone (Red Hat-based)
 			* /etc/timezone: file that keeps track of the computer's timezone (Debian-based)
 			* /etc/ntp.conf: config file that is used by the ntpd NTP daemon, so that it knows which NTP servers to call
@@ -446,33 +477,42 @@ important files:
 				* output:
 					* RULES: dictates where the log messages end up
 						* column 1: the type of log
-							* follows the format: [Facility].[Logging Priority Level];[Facility2].[Logging Priority Level2];...
+							* follows the format: [Facility].[Priority Level];[Facility2].[Priority Level2];...
 							* you can use "*" for the Facility and/or Logging Priority_Level fields
-							* you can use "none" in the Priority_Level field(s), so that no logs of the specified Facility will end up in the later-specified destination log file
+							* you can use "none" for the Priority Level(s), so that no logs of the specified Facility will end up in the later-specified destination log file
 								* you WANT to explicitly exclude certain log messages because they'll be sent to /var/log/messages by default if they go unmentioned
+							* Linux Logging Facilities:
+								* 0: kern: Kernel messages
+								* 1: user: messages that are being generated by a User directly or indirectly when they're using some application
+								* 2: mail: deals with email Services that are already installed on the computer
+								* 3: daemon: messages that are generated by system Services
+								* 4: auth: deals with anything relating to security of authentification
+								* 5: syslog: anying generated by the logging daemon itself
+								* 6: lpr: deals with printing jobs
+								* 7: news: deals with the news Service using the NNTP protocol (usually you'll only see these if you're working with an ISP)
+								* 8: uucp: UUCP (Unix-to-Unix Copy Protocol)
+								* 9: cron: cron daemon
+								* 10: auth: deals with anything relating to security of authentification
+								* 11: ftp: FTP (File Transfer Protocol)
+								* 12: ntp: NTP (Network Time Protocol)
+								* 13: security: audit log
+								* 14: console: alert log
+								* 15: cron: cron daemon
+								* 16-23: local0-local7: (reserved for local use by a sysadmin)
+							* Linux Logging Priority Levels:
+								* 0: emerge: means that your computer is in an unusable state; if this type of log is generated, a message gets sent out to all Users on the computer
+								* 1: alert: means that you must take immediate action before your computer becomes unusable
+								* 2: crit: means that hardware is in critical condition
+								* 3: err: a.k.a stderr; comes from either a Service or some daemon
+								* 4: warn: refers to something that should be investigated, but does not necessarly break any functionality
+								* 5: notice: not as bad as warnings, but still require some investigation before the issue could become a problem later on
+								* 6: info: just refers to info about a Service or application; is no cause for concern
+								* 7: debug: useful to programmers needing to debug something
 						* column 2: the destination log file where the logs end up
 							* a preceeding "-" means that the log file does not need to be synced to the hard drive everytime a message is written to it
 								* this helps with performance
 							* a "~" means instead of writing something to a log file, just delete the log message instead
 							* a "*" means the log message gets sent to /var/log/messages AND the terminal
-						* Linux Logging Facilities:
-							* 0: kern: Kernel messages
-							* 1: user: messages that are being generated by a User directly or indirectly when they're using some application
-							* 2: mail: deals with email Services that are already installed on the computer
-							* 3: daemon: messages that are generated by system Services
-							* 4: auth: deals with anything relating to security of authentification
-							* 5: syslog: anying generated by the logging daemon itself
-							* 6: lpr: deals with printing jobs (like with a literal printer)
-							* 7: news: deals with the news Service using the NNTP protocol (usually you'll only see these if you're working with an ISP)
-							* 8: uucp: UUCP (Unix-to-Unix Copy Protocol)
-							* 9: cron: cron daemon
-							* 10: auth: deals with anything relating to security of authentification
-							* 11: ftp: FTP (File Transfer Protocol)
-							* 12: ntp: NTP (Network Time Protocol)
-							* 13: security: audit log
-							* 14: console: alert log
-							* 15: cron: cron daemon
-							* 16-23: local0-local7: (reserved for local use by the sysadmin)
 			* /etc/rsyslog.d: directory that contains additional configurations for the rsyslog daemon
 			* /etc/logrotate.conf: configuration file for the logrotate daemon
 				* commands:
@@ -491,9 +531,6 @@ important files:
 							...
 						     }
 			* /etc/logrotate.d: additional configurations for the logrotate daemon
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 			* /etc/systemd/journald.conf: configuration file for the systemd Journal
 				* output: 
 					* [Journal] section
@@ -526,19 +563,19 @@ important files:
 				* any aliases included here that contains a User that does not exist on the computer will have any emails to them rejected
 			* /etc/aliases.db: database file that the MTA uses for mail delivery
 			* /etc/cups: directory that contains the config files for the CUPS print daemon and printer settings
-				* /etc/cups/cupsd.conf: config file for the CUPS server
-					* it's preferred to use the web interface at: http://localhost:631
-					* contains logging info, hosted ports, turn on or off the ability to see network-connected printers, turn the web interface on or off,...
-						* ...the authentification method used when performing admin tasks with the CUPS server, etc.
-				* /etc/cups/printers.conf: config file for the printers that are on the computer's network
-					* it's preferred to use the web interface at: http://localhost:631
-					* should not modify this file when the cupsd Service is running
-					* each printer is seperated by: <Printer...> ... </Printer> stanza's
+			* /etc/cups/cupsd.conf: config file for the CUPS server
+				* it's preferred to use the web interface at: http://localhost:631
+				* contains logging info, hosted ports, turn on or off the ability to see network-connected printers, turn the web interface on or off,...
+					* ...the authentification method used when performing admin tasks with the CUPS server, etc.
+			* /etc/cups/printers.conf: config file for the printers that are on the computer's network
+				* it's preferred to use the web interface at: http://localhost:631
+				* should not modify this file when the cupsd Service is running
+				* each printer is seperated by: <Printer...> ... </Printer> stanza's
 			* /etc/services: file that contains a listing of all network Services and their assigned port numbers
 			* /etc/hosts: text file that maps other hostnames to IP addresses; also contains the localhost entry mapped to the IPv4 and IPv6 Loopback Addresses
 				* Loopback Address: an IP that allows the computer to send and receive data packets from itself
 				* EX:
-					* 127.0.0.1	localhost linux
+					* 127.0.0.1		localhost linux
 					* 192.168.8.50	web-server
 					* 192.168.8.1	roteador
 			* /etc/hostname: file that contains the computer's hostname
@@ -546,6 +583,7 @@ important files:
 			* /etc/resolv.conf: config file that contains the IP addresses of DNS servers that the computer will use for name resolution
 				* output:
 					* search [example.com] [example.net] [...] (this is a DNS search list)
+					* domain [.com, .net, ...] (this is the default domain to append to the end of domain names that don't have one)
 					* nameserver [###.###.###.###] (this contains a DNS server)
 			* /etc/nsswitch.conf: file that is used by the GNU C library to determine the order in which hostname resolution occurs
 				* typically goes: 1. /etc/hosts, 2. /etc/hostname, 3. /etc/resolv.conf
@@ -583,14 +621,14 @@ important files:
 						* ALL: can run all commands on all known hosts
 					* column 3: what other Users can this User run commands for?
 						* NOPASSWD: User doesn't have to enter a password for the User they will be running commands for
-						* ALL: can run commands for all Users
+						* ALL: can run all commands for all Users
 			* /etc/nologin: file that, if created, exempts all Users from logging in except for the Root User
 				* contains the message that gets outputed to the terminal when any User besides the Root User tries to login
 				* when this file does not exist, login preceeds as normal 
 			* /etc/xinetd.conf: config file for the xinetd daemon
 				* contains the logging settings for each Service that xinetd covers, meaning each Service that it covers will get its own log file
 				* contains access restriction for some of the Services
-					* ouput:
+					* output:
 						* cps: connections per second; restricts the # of connections per second a Service can have before it's disabled
 							* EX: cps = 50 10: if a cps of 50 is reached for a Service, the xinetd daemon will disable the Service for 10 seconds
 						* instances: # of instances of the Service allowed
@@ -613,28 +651,34 @@ important files:
 					* column 1: name of the Service
 					* column 2: ":"
 					* column 3: network IP address |or| hostname
+				* first checks this file, THEN the /etc/hosts.deny file
+					* if there is not an entry for a Service, network, or hostname in either file, it gets added to this file by default
 			* /etc/hosts.deny: file that contains a list of Services, networks, and hostnames that are NOT allowed
 				* output:
 					* column 1: name of the Service
 					* column 2: ":"
 					* column 3: network IP address |or| hostname
+				* first checks the /etc/hosts.allow file, THEN this file
+					* if there is not an entry for a Service, network, or hostname in either file, it gets added to the /etc/hosts.allow file by default
+						* you can change this behavior by going into this file and typing: "ALL : ALL", which denies all network Services from all networks
 			* /etc/ssh/sshd_config: config file for the SSH daemon
 				* output:
 					* HostKey: host key files that determine what type of connections will be able to connect to our computer
 					* PermitRootLogin [yes, no]: determines if the Root User can connect via SSH or not
 					* X11Forwarding [yes, no]: determines if we can open up X Window applications from a remote computer on our computer
 			* /etc/ssh/ssh_host_[rsa_key, dsa_key, ecdsa_key, ed25519_key]: host key files that determine what type of connections will be able to connect to our computer
-				* the private key permissions are: -rw-r-----, and the public keys permissions are: -rw-r--r--
-			* /etc/cups/ppd: directory that holds PPD fiels for the printers that use them
+			* /etc/cups/ppd: directory that holds PPD files for the printers that use them
 			* /etc/printcap: legacy file that was used by the LPD daemon
+			* /etc/NetworkManager/system-connections: directory that stores connections that have already been made with other networks at some point by this computer using NetworkManager
+				* stores info about SSIDs, passwords, MACs, etc.
 		* /home
-			* /home/.bash_profile: read as part of User login; sets-up your $PATH; calls the /home/.bashrc file
-				* is also called: /home/.profile on some other Distros
-			* /home/.bashrc: read as part of User login; calls the /etc/bashrc file to pull-in any additional functionality or aliases that have been defined for all User's on the... 
-				* ...computer, as well as any that have been defined for the specific User, which are defined in this file itself
+			* /home/.bash_profile: the User's /etc/profile; read as part of User login; sets-up your $PATH and Environment Variables; calls the /home/.bashrc file
+			* /home/.bash_login: if /home/.bash_profile doesn't exist, this file is ran instead as part of login; sets-up your $PATH and Environment Variables; calls the /home/.bashrc file
+			* /home/.profile: if neither /home/.bash_profile or /home/.bash_login exist, this file is ran; sets-up your $PATH and Environment Variables; calls the /home/.bashrc file 
+			* /home/.bashrc: the User's /etc/.bashrc file; read as part of User login; calls the /etc/bashrc file to pull-in any additional functions or aliases
+			* /home/.inputrc: lets you set shortcut keys to be used in a bash shell
 			* /home/.bash_logout: file that gets called on User logout and can be used to shutdown applications, display a logout message, or perform other environment cleanup tasks
-			* /home/.bash_login: legacy file that's now been replaced by the /home/.bash_profile and /home/.bashrc files (does the same thing); read as part of User login
-			* /home/.xsession-errors: hidden log file that captures stdout and stderr messages from your X Server Display Manager for debugging graphical applications
+			* /home/.xsession-errors: log file that captures stdout and stderr messages from your X Server Display Manager for debugging graphical applications 
 			* /home/.forward: config file that lets a User make their own email forwarding rules (as opposed to the /etc/aliases file, which requires root access)
 				* output:
 					* column 1: User that will be forwarded all emails from the User who's /home directory this .forward file contains
@@ -642,8 +686,13 @@ important files:
 						* if you want to forward emails to an email address AND a local User, type a preceeding "\" in-front of the local User (EX: \kenny)
 			* /home/.gnupg: directory that contains the GPG Keyrings and config files for GPG key pairs
 				* Keyring: a collection of key pairs
+			* /home/.gnupg/pubring.gpg: the User's GPG public key
 			* /home/.ssh: directory that contains User configuration files for SSH
 				* permissions are: drwx------
+			* /home/.ssh/id_rsa.pub: the User's SSH public key
+				* the public keys permissions are: -rw-r--r--
+			* /home/.ssh/id_rsa: the User's SSH private key
+				* the private key permissions are: -rw-r-----
 			* /home/.ssh/known_hosts: list of known hosts for SSH (i.e remote computers this User has connected to via SSH)
 				* output:
 					* column 1: IP address or hostname of the remote computer
@@ -657,78 +706,46 @@ important files:
 				* permissions are: -rw-------
 		* /usr
 			* /usr/share/X11/xorg.conf.d: some default config files that come with X Server
-			* /usr/share/zoneinfo: directory from which the $ tzselect, command and the: $ timedatectl list-timezones, pull their info
+			* /usr/share/zoneinfo: directory from which the $ tzselect, command and the: $ timedatectl list-timezones, command pull their info
 				* contains all available timezones for the computer, especially the one that keeps track of the computer's current timezone (Red Hat-based)
 			* /usr/lib/systemd/system/sshd.socket: socket Unit File for the SSH server
 		* /var
-			* /var/spool/cron/[user_name]: the crontab file for the specified User (Red Hat)
+			* /var/mail: directory that stores mail received by Users 
+			* /var/spool/cron: directory that contains all scheduled cron Jobs made by all Users (Red Hat-based)
+			* /var/spool/cron/[user_name]: the crontab file for the specified User (Red Hat-based)
 				* must be Root User to access this file
+			* /var/spool/cron/crontab: directory that contains all scheduled cron Jobs made by all Users (Debian-based)
+			* /var/spool/mail: directory where sendmail mail is stored
+			* /var/spool/mqueue: the mail queue for sendmail
+			* /var/spool/cups: directory that contains all files waiting to be printed from the CUPS print queue
 			* /var/log: directory that contains a bunch of log files
 				* any log files with a date appended to the end are old log files that were rotated out, while new log files were created by the logrotate daemon simultaneously
-			* /var/log/dmesg: log file that gets recreated everytime the computer boots; contains messages from the Kernel itself, and the Kernel Ring Buffer
 			* /var/log/messages: log file where if a Service doesn't have its own log file, those logs get sent here; core log file for a Linux computer
 				* column 1: datetime this log was logged
 				* column 2: hostname of the computer that generated the log
 				* column 3: the Item that generated the log (sometimes this could be the PID of the actual application or Service)
 				* column 4: the log message
+			* /var/log/dmesg: log file that gets recreated everytime the computer boots; contains messages from the Kernel itself (a.k.a the Kernel Ring Buffer)
+			* /var/log/syslog: log file of the old syslog logging daemon
 			* /var/log/secure: log file that contains session info, and info on successfull and unsuccessfull login attempts
 			* /var/log/maillog: log file for emails going to and from your computer
 			* /var/log/btmp: log file that contains a list of Users who have had failed login attempts
 			* /var/log/wtmp: log file that contains successful login attempts
 			* /var/log/utmp: log file that contains successful login attempts
+			* /var/log/faillog: log file that contains events of failed authentication attempts
+			* /var/run/utmp: file that tracks all CURRENTLY logged-in Users
 				* is read by the $ w, and $ who, commands
-			* /var/log/faillog: log file that contains failed authentication attempts
+			* /var/log/journal: directory that contains persistent logs for the systemd Journal
 		* /run
-			* /run/log/journal: the location of the systemd Journal
+			* /run/log/journal: the default location of the systemd Journal; contains volatile logs for the systemd Journal
 
 
 
 ---DIDN'T KNOW---
 systemd-networkd: daemon that manages network settings on systemd computers
-syslog-ng: another modern logging daemon
-systemd-journald: daemon that works with output generated from Unit files
-OpenSSH is prefered when making SSH connections
-port numbers go from 0 to 65535
-	* Well Known ports: ports from 0 to 1023 that are used by the main Linux Services
-		* must be Root User to access
-Virtual Netowrk Computing (VNC): an application that is used to connect to computers remotely using the RDP
-Remote Desktop Protocol (RDP): protocol that is used for Remote Desktops
-set a User's shell to be either: /bin/false or /sbin/nologin, which are Non-Login Shells, thus disabling their ability to login to the computer
 systemd-resolved: daemon that manages name resolution on systemd computers
-Virtual Desktop Infrastructure (VDI): a virtual desktop environment that you can access using VNC and SPICE
-Relay: used to transfer mail between MTA's
-	* do NOT set an SMTP server to open Relay, b/c it allows unrestricted mail to be accepted and sent by anyone
-only Root User permissions are allowed for the /etc/shadow file
-if the /etc/at.allow file and the /etc/at.deny do not exist, then only the Root User can use the $ at, command
-if the /etc/cron.allow file and the /etc/cron.deny do not exist, then only the Root User can use the $ at, command
-You will not be able delete a Group if there is a User to whom this is their Primary Group
-/home/.gnupg/pubring.gpg: file that contains the GPG public key owned by the User
-Subnet Prefix: the 1st half (64 bits) of an IPv6 address
-Interface ID: the 2nd half (64 bits) of an IPv6 address
-XFCE is lighter with less memory and CPU consumption than KDE and GNOME
-KDM: the standard KDE Display Manager
-XDM: the standard X.Org Display Manager
-Curse-based: Interfaces which have UI that uses text
-	* EX: -----------
-	     |          |
-	     |  hello!  |   
-	     |__________| 
-CUPS was made to replace LPD
-X Display Manager Control Protocol(XDMCP): native X server remote access protocol that controls connections between X Servers and its clients 
-/var/spool/mail: directory where sendmail mail is stored
-/var/spool/mqueue/: the mail queue for sendmail
-/etc/NetworkManager/system-connections: directory that stores connections that have already been made with other networks at some point by this computer
-	* stores info about SSIDs, passwords, MACs, etc.
-3 components of a Desktop Environment:
-	* Display Manager
-	* Window Manager
-	* GUI
-3 open source solutions for speech recognition:
-	* Simon
-	* Julius
-	* CMUSphinx
-/var/spool/cron: directory that contains all scheduled cron Jobs made by all Users
-/var/spool/cron/crontab: directory that contains all scheduled cron Jobs made by all Users (Debian)
-gpg-agent: stores GPG private keys in memory, thus avoiding the need for the User to specify them in every request
-/var/log/syslog: log file of the old syslog logging daemon
-/var/run/utmp: file that tracks all CURRENTLY logged-in Users
+port numbers go from 0 to 65535
+Well Known ports: ports from 0 to 1023 that are used by the main Linux Services
+	* must be Root User to access
+
+

@@ -44,6 +44,10 @@ git config --global http.sslVerify true
 	* enables SSL
 git pull origin [remote_branch_name] --allow-unrelated-histories
 	* if you get an "unrelated histories" issue when pushing to remote, use this flag when pulling from the remote for resolution
+git stash
+	* you would use this to stash unstaged changes you made, so that they don't get overriden by a: $ git pull
+git stash pop
+	* you would run this after running $ git stash, followed by: $ git pull, to reintroduce your stashed code
 
 
 ---AWS---

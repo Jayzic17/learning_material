@@ -7,14 +7,17 @@
 ~ = home directory
 / = root directory
 - = previous working directory
-"" = anything in-between Weak Quotes is expected to have a variable with an assigned value
-	* provides the same output as having ommitted the double quotes to begin with
+$ = anything preceeding with a "$" is expected to be a variable
+"" = anything in-between Weak Quotes is expected to be a Globbing Character with special functionality, or a variable with an assigned value
+	* provides the same output as having ommitted the double quotes to begin with, but it's REALLY handy if your string contains spaces
 	* EX: $ echo $PATH: output: /usr/local/...
 	      $ echo "$PATH": output: /usr/local/...
 	* EX: $ echo "here is your path variable: $PATH": output: here is your path variable: /usr/local/...
-'' = anything enclosed in Strong Quotes is just interpreted as whatever's in there literally
+'' = anything enclosed in Strong Quotes (variables, functions, Globbing Characters) is just interpreted literally
 	* EX: $ echo '$PATH': output: $PATH
 	* EX: $ echo 'here is your path variable: $PATH': output: here is your path variable: $PATH
+	* in the case of Regex Characters, they retain their special functionality within Strong Quotes
+		* so if you want to treat Regex Characters in Strong Quotes literally, you would use the escape character: \ 
 `` = anything enclosed in ticks is expected to be a command
 	* EX: $ echo "We are now in `pwd`"
 	* executes the enclosed command in-place w/o needing to use a sub-shell
@@ -36,11 +39,16 @@ $ = represents the end of a line
 [abc] = matches exactly 1 of any of the characters in the given list (so in this example a, b, or c)
 [^abc] = matches exactly 1 of any character EXCEPT for the ones specified in the given list (so in this example any character except a, b, or c)
 * = matches 0 or more occurences of what preceeds it (EX: [abc]*, [0-9]*)
-? = matches 0 or 1 occurence of what preceeds it (EX: [abc]?)
-+ = matches 1 or more occurences of what preceeds it (EX: [abc]+)
-{i} = matches whatever preceeds it "i" times (EX: [abc]{1})
-{i,} = matches whatever preceeds it at least "i" times (EX: [abc]{1,})
-{i,j} = matches whatever preceeds it last "i" times and at most "j" times (EX: [abc]{1,3})
+
+
+
+---REGEX CHARACTERS (EGREP-ONLY)---
+? = matches 0 or 1 occurence of the character that preceeds it (EX: [abc]?)
++ = matches 1 or more occurences of the character that preceeds it (EX: [abc]+)
+{i} = matches the character that preceeds it "i" times (EX: [abc]{1})
+{i,} = matches the character that preceeds it at least "i" times (EX: [abc]{1,})
+{i,j} = matches the character that preceeds it last "i" times and at most "j" times (EX: [abc]{1,3})
+() = used for logical grouping
 regex_here|regex_here_2 = | is a logical OR operator (so a line will match if it contains either regex_here OR regex_here_2)
  
 
@@ -103,10 +111,13 @@ to run multi-line functions, you would make a function call within a shell scrip
 	* output:
 		* hello world
 		* this is Jonathan
-funciton [function_name] () { [command_here]; }
+funciton [function_name] () { [command_here];[command_2_here];[...] }
 	* function_name () { command_here; }: creates a single-line function in the current Bash shell named: function_name, which runs the command: command_here
-[function_name] () { [command_here]; }
+	* you can put in multiple commands using the ";"
+[function_name] () { [command_here];[command_2_here];[...] }
 	* function_name () { command_here; }: creates a single-line function in the current Bash shell named: function_name, which runs the command: command_here
+	* you can put in multiple commands using the ";"
+
 
 
 ---OPTION SYNTAX---
@@ -529,7 +540,7 @@ echo $[variable_name] [string_here]
 		* anything enclosed in Strong Quotes ('') just interprets whatever's in there literally
 			* EX: $ echo 'here is your path variable: $PATH': output: here is your path variable: $PATH
 set [-x, +x, -o, +o] [noclobber]
-	* set: displays Environment Variables and configurations for the current Bash session, as well as the source code for the $ set, command itself
+	* set: displays Environment Variables, functions, and configurations for the current Bash session
 		* EX: $ set | head -83: lists out the first 83 lines, which contains just the current configurations and Environment Variables
 	* -x: turns on debugging
 	* +x: turns off debugging
@@ -1173,7 +1184,8 @@ chgrp [group_name] [file_name, directory_name]
 groups
 	* groups: lists out all the Groups that the current User belongs to
 exit
-	* exit: logs you out of the User that you are currently signed in as and quits you out of the current Bash shell
+	* exit: quits you out of the current Bash shell
+		* if this is the only remaining Bash shell, it logs you out of the User that you are currently signed in as and quits you out of Bash entirely
 umask [u=][r,w,x],[g=][r,w,x],[o=][r,w,x]
 	* OPTION-COMBINEABLE command
 	* umask: shows the current default umask value for the current User that gets subtracted from a file or directory's default permissions
