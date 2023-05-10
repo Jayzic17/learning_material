@@ -1,5 +1,6 @@
 
 
+
 terraform: an IaC tool that is Declarative, immutable, and Cloud Agnostic
 	* lets you automate creating, updating, or destroying cloud infrastructure
 	* configuration files are written in HashiCorp Configuration Language (HCL)
@@ -157,10 +158,7 @@ Terraform Cloud: a place to store and manage IaC in the cloud or with teams
 		* Free($0 up to 5 Users): terraform, remote states, VCS Connection, workspace management, secure variable storage, remote runs, Private Module Registry, 1 run at a time, Terraform Cloud, Community Support 
 		* Teams and Governance($20/User/month): Free(2 runs at a time, Bronze Support) + Team Management, Sentinel Policy as Code Management, Cost Estimation 
 		* Business(contact sales): Teams and Governance(unlimited runs at a time, Silver and Gold Support) + SSO, audit logging, self-hosted agents, Configuration Designer, ServiceNow
-		* Self-Hosted(Enterprise)(contact sales): Business(minus self-hosted agents, Private) 
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+		* Self-Hosted(Enterprise)(contact sales): Business(minus self-hosted agents, Private)
 Terraform Platform: the underlying software for Terraform Cloud and Terraform Enterprise
 Terraform Enterprise: a self-hosted distribution of Terraform Platform
 	* it's a private instance of the Terraform Platform application 
@@ -296,9 +294,6 @@ Resource Addressing: string that identifies 0 or more resource instances
 			* instance_index: when there are multiple instances (1-base index)
 backends that support locking:
 	* S3, AzureRM, Google Cloud Storage, Alibaba(TableStore), Swift, Tencent, Manta, Consul, etcdv3, postgres, kubernetes, http protocol
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 If terraform ever crashes, it will save a log file containing the Go runtime Panic message and backtrace to the crash.log log file, which is meant to be passed along to developers via a GitHub issue
 you can look for Modules by navigating to Terraform Registry, clicking 'Modules', and entering into the Search bar 
 Anyone can publish and share Modules on the Terraform Registry
@@ -394,7 +389,7 @@ terraform's backends are divided into 2 parts:
 State Locking: this ensures that only 1 person is writing to a state file at a time
 	* State Locking happens automatically on all operations that could write to the state file. You won't see any message that it is happening if State Locking fails
 	* you can disable State Locking with the -lock flag for most commands, but it is not recommended
-	* terraform does not output when a lock is complete, but if acquiring the lock takes a long-ass time, terraform will output a status message
+	* terraform does not output when a lock is complete, but if acquiring the lock takes a long time, terraform will output a status message
 Complex Types: a type that groups multiple values into a single value
 	* 2 categories:
 		* Collection Types: List, Map, Set
@@ -472,29 +467,6 @@ special filenames, keywords, and commands (also reference: bash_commands.txt and
 	outputs.tf
 	TF_VAR_
 	.terraformignore
+
+
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

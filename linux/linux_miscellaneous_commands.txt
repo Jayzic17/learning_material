@@ -1,0 +1,16 @@
+curl [--silent, --progress-bar, -o, -v] [file_name] [protocol_here]://[url_here]
+    * OPTION-COMBINEABLE COMMAND
+    * curl protocol_here://url_here: downloads content from the Internet using the specified link and protocol
+        * supports pretty much all Protocols
+        * EX: $ curl ftp://www.example.com/file.zip: downloads the given zip file from example.com using the FTP Protocol
+    * --silent protocol_here://url_here: downloads content, while disabling progress meter of the download (silent mode)
+    * --progress-bar protocol_here://url_here: downloads content, while using a progress bar instead of a progress meter as part of the download
+    * -o [file_name] protocol_here://url_here: downloads content, and saves it as the specified file name
+        * IMPORTANT: this is used when downloading files only
+    * -v protocol_here://url_here: downloads content, while providing verbose output
+wget [protocol_here]://[url_here]
+    * wget protocol_here://url_here: ALSO downloads content from the Internet using the specified link and protocol
+    * different from the $ curl command in that it only supports HTTPS and FTP Protocols
+    * so in most instances you would use $ curl, because it supports more Protocols and features
+
+

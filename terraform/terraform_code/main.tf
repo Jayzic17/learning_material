@@ -156,7 +156,7 @@ locals {
   a_number       = 6.34324 # Note: the 'number' type includes whole numbers and fractions (there is no explicit 'float' type in terraform; that's handled by the 'number' type)
   the_null_value = null    # In terraform, 'null' means the default value; not "nothing"
   list_of_stuff  = ["hi", "how are ya?"]
-  map_of_stuff   = { me = "based", you = "beta" }
+  map_of_stuff   = { me = "cool", you = "beta" }
   example_object = {a = 1, b = "hey"}
   example_tuple = ["hello", 22, false]
 
