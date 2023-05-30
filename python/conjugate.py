@@ -1,12 +1,13 @@
-import sys, fileinput, os, re
+import sys, fileinput, os, re, linecache, random
 
 # INSTRUCTIONS:
 #   1. Flip all Cards to the Kanji_Back+Front and Back-Front Note types
-#   2. Export the Japanese::Export::1 deck to: Users/Jonathan/Git/learning_material/python
-#   3. Export the Japanese::Export::2 deck to: Users/Jonathan/Git/learning_material/python
-#   4. cd to the Users/Jonathan/Git/learning_material/python directory
-#   5. Run: python3 conjugate.py
-#   6. Open: conjugated.txt
+#   2. Export the Japanese::Export::1 deck and Japanese::Export::2 deck to: Users/Jonathan/Git/learning_material/python
+#   3. cd to the Users/Jonathan/Git/learning_material/python directory
+#   4. Run: python3 conjugate.py [number]
+#       number = the number of conjugated words to select at random
+
+number_of_lines = 0
 
 # Read from Japanese__Export__1.txt file
 j_exp_file = open('Japanese__Export__1.txt', 'r')
@@ -911,7 +912,8 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'せる' + '\n')
                 file.write(word[:-1] + 'せます' + '\n')
             else:
-                file.write("Error: word is not a verb or adjective" + '\n')      
+                file.write("Error: word is not a verb or adjective" + '\n')
+        number_of_lines += 1
 
 # Read from Japanese__Export__2.txt file
 j_exp_file = open('Japanese__Export__2.txt', 'r')
@@ -985,3 +987,8 @@ with open('conjugated.txt', 'a') as file:
             file.write(word + 'な' + '\n')
             file.write(word[:-1] + 'ろ' + '\n')
             file.write(word[:-1] + 'なさい' + '\n')
+        number_of_lines += 1
+
+# Choose words at random and print them to the console
+for i in range(1, int(sys.argv[1])):
+    print(linecache.getline("conjugated.txt", random.randint(1, number_of_lines))) 
