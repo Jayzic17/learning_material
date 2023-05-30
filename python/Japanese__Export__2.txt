@@ -1,0 +1,88 @@
+湿る	to become wet
+見る	To see
+食べる	To eat
+走る	to run
+答える	to answer
+知る	To know
+始める	To start
+寝る	to sleep
+教える	To teach
+切る	To cut
+見せる	To show
+見る	To look
+見つける	To find
+夢見る	To dream
+入る	to enter
+借りる	To borrow
+落ちる	to fall (object from up high)
+感じる	TO feel (sensational)
+止める	To stop (someone)
+着る	To wear (above waist)
+変える	To change
+閉じる	to close
+負ける	to lose (to someone)
+与える	To grant
+分ける	To share
+開ける	To open (2D)
+出来る	to be able to
+頂ける	to be able to receive
+助ける	To help
+帰る	to return home
+出る	to leave
+入れる	To put in
+くれる	To give (me/good friend of mine)
+あげる	To give (you/someone else)
+生きる	to live
+使える	TO be useable
+出来る	to be ready
+いる	to need (an object)
+訪ねる	To visit
+投げる	To throw
+逃げる	to run away
+閉める	To close
+浴びる	To shower
+消える	to dissapear
+揺れる	to shake (body)
+信じる	To believe
+売れる	to sell well
+受ける	To get
+見える	to be in sight
+育てる	To raise (nurture someone)
+締める	To tighten
+上げる	To raise (elevate)
+覚える	To memorize
+慣れる	to get used to
+曲げる	To bend
+忘れる	To forget
+諦める	To give up
+起きる	to wake up
+できる	to be completed
+生まれる	to be born
+考える	To think over
+過ぎる	to exceed
+決める	To decide
+掛ける	To hang up (object)
+降りる	to descend
+付ける	To attach
+責める	To blame
+似る	to look like
+迎える	To greet
+入る	to arrive
+倒れる	to collapse
+任せる	To entrust (to someone)
+認める	To acknowledge
+疲れる	to become exhausted
+抱える	"To hold (in one's arms)"
+命じる	To command
+ふざける	to joke
+過ぎる	to pass by (time)
+調べる	To investigate
+燃える	to burn
+解ける	to be solved
+解く	To solve
+帰る	to go home
+埋める	To bury
+裏切る	To betray
+辞める	To quit (a job)
+辞める	To retire
+ついてる	TO be lucky

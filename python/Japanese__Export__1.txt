@@ -1,0 +1,387 @@
+静か[な]	Quiet
+大好き[な]	Love
+好き[な]	Like
+嫌い[な]	Hate
+有名[な]	Famous
+綺麗[な]	Pretty
+青い	Blue
+高い	Expensive
+強い	Strong
+速い	Fast (speed)
+遅い	Late
+不味い	Unappetizing
+凄い	Amazing
+忙しい	Busy
+嬉しい	Happy
+辛い	Spicy
+素晴らしい	Wonderful
+新しい	New
+楽しい	Fun
+高い	Tall
+黒い	Black
+可愛い	Cute
+暗い	Dark (light)
+怖い	Scary
+白い	White
+暑い	Hot (weather)
+安い	Cheap
+黄色い	Yellow
+難しい	Difficult
+甘い	Sweet
+美味しい	Delicious
+赤い	Red
+面白い	Funny
+悪い	Bad
+奇麗[な]	Tidy
+小さい	Small (object)
+悲しい	Sad
+厚い	Thick
+高い	High
+寒い	Cold (weather)
+暖かい	Warm (weather)
+薄い	Thin (object)
+易しい	Easy
+若い	Young
+長い	Long (width)
+明るい	Bright
+つまらない	Boring
+遅い	Slow
+弱い	Weak
+大きい	Large
+空っぽ[な]	Empty
+涼しい	Cool (weather)
+最悪[な]	Worst
+良い	Good
+苛々[する]	To get irritated
+醜い	Ugly
+低い	Low (value)
+古い	Old (object)
+広い	Wide
+汚い	Dirty
+軽い	Light (not heavy)
+遠い	Far (distance)
+単純[な]	Simple
+重い	Heavy
+うるさい	Noisy
+複雑[な]	Complicated
+滑らか[な]	Smooth
+粗い	Rough (coarse)
+近い	Close (distance)
+来る	To come
+する	To do
+行く	to go
+遊ぶ	to play
+勝つ	to win
+言う	TO say
+働く	to work
+買う	To buy
+飛ぶ	to fly
+押す	To push
+会う	to meet
+書く	To write
+置く	To put
+嗅ぐ	To smell (sniff)
+話す	To speak
+履く	To wear (shoes)
+穿く	To wear (pants)
+泣く	TO cry
+貸す	To lend
+話す	To talk
+置く	To place
+支払う	To pay (formal)
+読む	To read
+持つ	To have (holding)
+飲む	To drink
+保つ	To keep
+取る	To take
+死ぬ	to die
+選ぶ	To choose
+引く	To pull
+待つ	TO wait
+歩く	to walk
+乗る	to get in (transportation)
+聞く	To listen
+運ぶ	To carry
+入浴[する]	To bathe
+学ぶ	TO learn
+聞く	To ask (a question)
+味わう	To taste
+料理[する]	To cook
+被る	To wear (hat)
+使う	To use
+運転[する]	To drive
+作る	To make
+終わる	to finish (come to an end)
+落とす	To drop
+座る	to sit
+立つ	to stand
+思う	To think
+思い出す	To remember
+触る	TO touch
+止まる	to stop (an object)
+笑う	to laugh
+拾う	To pick up
+柔らかい	Soft
+硬い	Hard (to the touch)
+踊る	to dance
+持って来る	To bring (an object)
+優しい	Kind
+真面目[な]	Serious
+変わる	to change (oneself)
+酸っぱい	Sour
+聞く	To hear
+かっこいい	Cool
+空く	to become empty (hunger)
+売る	To sell
+清潔[な]	Sanitary
+隣の	Next to
+貰う	To receive (a gift)
+反対[する]	To disagree
+現在	Current (time)
+飛ぶ	to jump
+やる	To do (casual)
+落下[する]	To fall (person from up high)
+殺す	To kill
+狙う	To aim at
+購入[する]	To purchase
+入力[する]	To input
+進む	to proceed
+連れて来る	To bring someone along
+頼む	To ask a favor
+大変[な]	Terrible
+賢い	Smart
+わかる	to understand
+欲しい	Wanting (an object)
+必要[な]	Necessary
+怒る	to get angry
+ついてくる	To follow someone
+買い物[する]	To shop
+役立つ	to be useful
+危ない	Dangerous
+洗う	To wash
+勉強[する]	To study (formal)
+違う	to differ
+元気[な]	Energetic
+苦い	Bitter
+電話[する]	To call (phone)
+始まる	to start
+返す	To return (an object)
+旅行[する]	To travel
+洗濯[する]	To do laundry
+大切[な]	Important
+細い	Slender
+太い	Fat
+短い	Short (length)
+多い	Numerous
+少ない	Fewer than normal
+冷たい	Cold (to the touch)
+上がる	to rise
+深い	Profound
+恥ずかしい	Embarrasing
+祈る	To wish
+約束[する]	To promise
+止む	to stop (weather)
+寄る	to stop by
+予定[する]	To plan
+十分[な]	Sufficient
+いっぱい[な]	Full
+美しい	Beautiful
+残念[な]	Unfortunate
+寂しい	Lonely
+正しい	Correct
+眠い	Sleepy
+ひどい	Harsh
+自由[な]	Freely
+予約[する]	To reserve (a time/place)
+祈る	To pray
+準備[する]	To prepare
+浅い	Superficial
+厳しい	Strict
+発明[する]	To invent
+招待[する]	To invite
+証明[する]	To prove
+有利[な]	Advantageous
+新鮮[な]	Fresh
+転ぶ	to fall over
+同一[な]	Identical
+出会う	to meet (by chance)
+同意[する]	To consent
+経験する	To experience
+当たる	to strike
+成功する	To succeed
+平和[な]	Peacefull
+継続[する]	To continue on
+原因[する]	To cause
+ペコペコ[な]	Starving
+最高[な]	Best
+明らか[な]	Obvious
+起床[する]	To get out of bed
+急激[な]	Sudden
+新しい	Recent
+独特[な]	Unique
+特別[な]	Special
+偉大[な]	Great
+浅い	Shallow
+深い	Deep
+結婚[する]	To marry
+散歩[する]	To stroll
+掃除[する]	To clean
+きれい[な]	Clean
+会話[する]	To converse
+成る	to become
+だめ[な]	Not good
+試験する	To test
+習う	To learn (from a teacher)
+泳ぐ	to swim
+完全[な]	Complete
+恐ろしい	Terrifying
+祝う	To celebrate
+吸う	To smoke
+吸う	To breath in
+許す	To allow
+冒険[する]	To adventure
+呼ぶ	To call out to
+動く	to move
+頼む	To beg
+歌う	TO sing
+心配[する]	To worry
+直す	To fix
+おかしい	Strange
+破壊[する]	To destroy
+幸運[な]	Fortunate
+準備[する]	To get ready
+めんどくさい	Bothersome
+守る	To protect
+強大[な]	Mighty
+強力[な]	Powerful
+報告[する]	To report
+急ぐ	TO hurry
+戦う	to fight
+惜しい	Dissapointing
+安心[する]	To be assured
+気づく	to realize
+なくす	To get rid of
+失う	To lose (something)
+仕方ない	Unavoidable
+話し合う	To discuss
+うんこ[する]	To poop
+無駄[な]	Futile
+完全[な]	Perfect
+変[な]	Weird
+勝利[する]	To be victorious
+長い	Long (time)
+失敗[する]	To fail
+済む	to finish (get through to the end)
+楽しむ	To enjoy
+正直[な]	Honest
+翻訳[する]	To translate (formal)
+発音[する]	To pronounce
+賛成[する]	To agree (formal)
+寄付[する]	To donate
+出す	To take out
+健康[な]	Healthy
+出す	To put out
+気持ち悪い	Gross
+送る	To send
+通る	To pass by
+故障[する]	To be out of order (e.g: machine)
+喧嘩[する]	To brawl
+上る	to climb
+練習[する]	To practice
+足す	To add
+吹く	To blow (your breath)
+折る	To fold
+構う	TO mind
+打つ	To hit
+探す	To search for
+早い	Fast (time)
+渡る	to cross over (e.g river)
+登山[する]	To ascend (e.g mountain)
+追う	To chase
+痛い	Painful
+努力[する]	To make an effort
+盗む	To steal
+等しい	Equal
+至る	to arrive at (e.g decision)
+得点[する]	To score (e.g in a game)
+急[な]	Urgent
+突く	To poke
+熱い	Hot (to the touch)
+抜く	To pull out
+判断[する]	To judge
+予約[する]	To make an appointment
+かわいそう[な]	Poor (pitiful)
+かかる	to take (of a resource/in time)
+貧しい	Poor (money)
+放送[する]	To broadcast
+亡くなる	to pass away
+望む	To hope for
+戻る	to go back
+戻す	To restore
+並ぶ	to line up
+上手[な]	Good at
+脱ぐ	To take off clothes
+活用[する]	To use (practically)
+正解[する]	To answer correctly
+違う	to be wrong
+磨く	To polish
+開く	to open (2D)
+開く	to open (3D)
+広い	Spacious
+続く	to continue
+続ける	To continue
+ひどい	Awful
+残酷[な]	Cruel
+成長[する]	To grow (as a person)
+合格[する]	To pass a test
+臭い	Smelly (negative)
+本当[な]	Right (correct)
+注文[する]	To order (an object)
+気まずい	Awkward
+呼吸[する]	To breath
+久しぶり[な]	A long time (since last time)
+危ない	Close (call)
+隠す	To hide
+繰り返す	TO repeat
+面白い	Interesting
+倒す	To defeat
+意味[する]	To mean (significance)
+質問[する]	To question
+見学[する]	To observe
+ある	to have (possessing)
+決定[する]	To determine
+そう[な]	Looks...
+取り返す	To get back (an object)
+描く	To draw
+ボロボロ[な]	Worn-out
+消す	To erase
+消す	To delete
+試す	To try out
+確か[な]	Certain
+苦手[な]	Not very good at/with/in
+上手い	Skilled at
+素敵[な]	Lovely
+ささやく	to whisper
+実験[する]	To experiment
+完璧[な]	Perfect (flawless)
+懐かしい	Nostalgic
+説明[する]	To explain
+撃つ	To fire (gun)
+付く	to turn on (a device)
+でかい	Huge
+匂う	to smell (bad/good)
+すけべ[な]	Lewd
+握手[する]	to shake hands
+踏む	To step on
+叫ぶ	to scream
+訳す	To translate (casual)
+学習[する]	To study (casual)
+一致[する]	To agree (casual)
+放す	To release
+放す	To let go (of someone)
+最低[な]	Least
+最低[な]	Lowest (amount)
+またぐ	To step over
+払う	To pay (casual)
+わかる	to be known
+安全[な]	Safe
