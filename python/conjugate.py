@@ -1007,4 +1007,4 @@ with open('conjugated.txt', 'a') as file:
 # Choose words at random and print them to the console
 for i in range(0, int(sys.argv[1])):
     rnd_num = random.randint(1, number_of_lines)
-    print(linecache.getline("conjugated.txt", rnd_num))
+    print(linecache.getline("conjugated.txt", rnd_num)[0:-1])
