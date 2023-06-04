@@ -828,7 +828,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'がないだろう' + '\n')
                 file.write(word[:-1] + 'がないでしょう' + '\n')
                 file.write(word[:-1] + 'いだろう' + '\n')
-                file.write(word[:-1] + 'いたでしょう' + '\n')
+                file.write(word[:-1] + 'いだでしょう' + '\n')
                 file.write(word[:-1] + 'がなかっただろう' + '\n')
                 file.write(word[:-1] + 'がなかったでしょう' + '\n')
                 file.write(word[:-1] + 'いでください' + '\n')
