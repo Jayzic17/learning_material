@@ -612,6 +612,7 @@
 苛々できません
 苛々できる
 苛々できます
+苛々
 醜くて
 醜い
 醜いです
@@ -3157,6 +3158,7 @@
 入浴できません
 入浴できる
 入浴できます
+入浴
 学んで
 学んでなきゃ
 学んでも
@@ -3423,6 +3425,7 @@
 料理できません
 料理できる
 料理できます
+料理
 被って
 被ってなきゃ
 被っても
@@ -3622,6 +3625,7 @@
 運転できません
 運転できる
 運転できます
+運転
 作って
 作ってなきゃ
 作っても
@@ -4966,6 +4970,7 @@ Error: word is not a verb or adjective
 反対できません
 反対できる
 反対できます
+反対
 Error: word is not a verb or adjective
 飛んで
 飛んでなきゃ
@@ -5166,6 +5171,7 @@ Error: word is not a verb or adjective
 落下できません
 落下できる
 落下できます
+落下
 殺して
 殺してなきゃ
 殺しても
@@ -5365,6 +5371,7 @@ Error: word is not a verb or adjective
 購入できません
 購入できる
 購入できます
+購入
 入力して
 入力してなきゃ
 入力しても
@@ -5430,6 +5437,7 @@ Error: word is not a verb or adjective
 入力できません
 入力できる
 入力できます
+入力
 進んで
 進んでなきゃ
 進んでも
@@ -5939,6 +5947,7 @@ Error: word is not a verb or adjective
 買い物できません
 買い物できる
 買い物できます
+買い物
 役立って
 役立ってなきゃ
 役立っても
@@ -6148,6 +6157,7 @@ Error: word is not a verb or adjective
 勉強できません
 勉強できる
 勉強できます
+勉強
 違って
 違ってなきゃ
 違っても
@@ -6301,6 +6311,7 @@ Error: word is not a verb or adjective
 電話できません
 電話できる
 電話できます
+電話
 始まって
 始まってなきゃ
 始まっても
@@ -6500,6 +6511,7 @@ Error: word is not a verb or adjective
 旅行できません
 旅行できる
 旅行できます
+旅行
 洗濯して
 洗濯してなきゃ
 洗濯しても
@@ -6565,6 +6577,7 @@ Error: word is not a verb or adjective
 洗濯できません
 洗濯できる
 洗濯できます
+洗濯
 大切で
 大切だ
 大切です
@@ -6855,6 +6868,7 @@ Error: word is not a verb or adjective
 約束できません
 約束できる
 約束できます
+約束
 止んで
 止んでなきゃ
 止んでも
@@ -7054,6 +7068,7 @@ Error: word is not a verb or adjective
 予定できません
 予定できる
 予定できます
+予定
 十分で
 十分だ
 十分です
@@ -7213,6 +7228,7 @@ Error: word is not a verb or adjective
 予約できません
 予約できる
 予約できます
+予約
 祈って
 祈ってなきゃ
 祈っても
@@ -7345,6 +7361,7 @@ Error: word is not a verb or adjective
 準備できません
 準備できる
 準備できます
+準備
 浅くて
 浅い
 浅いです
@@ -7430,6 +7447,7 @@ Error: word is not a verb or adjective
 発明できません
 発明できる
 発明できます
+発明
 招待して
 招待してなきゃ
 招待しても
@@ -7495,6 +7513,7 @@ Error: word is not a verb or adjective
 招待できません
 招待できる
 招待できます
+招待
 証明して
 証明してなきゃ
 証明しても
@@ -7560,6 +7579,7 @@ Error: word is not a verb or adjective
 証明できません
 証明できる
 証明できます
+証明
 有利で
 有利だ
 有利です
@@ -7792,6 +7812,7 @@ Error: word is not a verb or adjective
 同意できません
 同意できる
 同意できます
+同意
 経験すって
 経験すってなきゃ
 経験すっても
@@ -8069,6 +8090,7 @@ Error: word is not a verb or adjective
 継続できません
 継続できる
 継続できます
+継続
 原因して
 原因してなきゃ
 原因しても
@@ -8134,6 +8156,7 @@ Error: word is not a verb or adjective
 原因できません
 原因できる
 原因できます
+原因
 ペコペコで
 ペコペコだ
 ペコペコです
@@ -8232,6 +8255,7 @@ Error: word is not a verb or adjective
 起床できません
 起床できる
 起床できます
+起床
 急激で
 急激だ
 急激です
@@ -8371,6 +8395,7 @@ Error: word is not a verb or adjective
 結婚できません
 結婚できる
 結婚できます
+結婚
 散歩して
 散歩してなきゃ
 散歩しても
@@ -8436,6 +8461,7 @@ Error: word is not a verb or adjective
 散歩できません
 散歩できる
 散歩できます
+散歩
 掃除して
 掃除してなきゃ
 掃除しても
@@ -8501,6 +8527,7 @@ Error: word is not a verb or adjective
 掃除できません
 掃除できる
 掃除できます
+掃除
 きれいで
 きれいだ
 きれいです
@@ -8577,6 +8604,7 @@ Error: word is not a verb or adjective
 会話できません
 会話できる
 会話できます
+会話
 成って
 成ってなきゃ
 成っても
@@ -9210,6 +9238,7 @@ Error: word is not a verb or adjective
 冒険できません
 冒険できる
 冒険できます
+冒険
 呼んで
 呼んでなきゃ
 呼んでも
@@ -9543,6 +9572,7 @@ Error: word is not a verb or adjective
 心配できません
 心配できる
 心配できます
+心配
 直して
 直してなきゃ
 直しても
@@ -9685,6 +9715,7 @@ Error: word is not a verb or adjective
 破壊できません
 破壊できる
 破壊できます
+破壊
 幸運で
 幸運だ
 幸運です
@@ -9761,6 +9792,7 @@ Error: word is not a verb or adjective
 準備できません
 準備できる
 準備できます
+準備
 めんどくさくて
 めんどくさい
 めんどくさいです
@@ -9925,6 +9957,7 @@ Error: word is not a verb or adjective
 報告できません
 報告できる
 報告できます
+報告
 急いで
 急いでなきゃ
 急いでも
@@ -10134,6 +10167,7 @@ Error: word is not a verb or adjective
 安心できません
 安心できる
 安心できます
+安心
 気づいて
 気づいてなきゃ
 気づいても
@@ -10477,6 +10511,7 @@ Error: word is not a verb or adjective
 うんこできません
 うんこできる
 うんこできます
+うんこ
 無駄で
 無駄だ
 無駄です
@@ -10575,6 +10610,7 @@ Error: word is not a verb or adjective
 勝利できません
 勝利できる
 勝利できます
+勝利
 長くて
 長い
 長いです
@@ -10650,6 +10686,7 @@ Error: word is not a verb or adjective
 失敗できません
 失敗できる
 失敗できます
+失敗
 済んで
 済んでなきゃ
 済んでも
@@ -10860,6 +10897,7 @@ Error: word is not a verb or adjective
 翻訳できません
 翻訳できる
 翻訳できます
+翻訳
 発音して
 発音してなきゃ
 発音しても
@@ -10925,6 +10963,7 @@ Error: word is not a verb or adjective
 発音できません
 発音できる
 発音できます
+発音
 賛成して
 賛成してなきゃ
 賛成しても
@@ -10990,6 +11029,7 @@ Error: word is not a verb or adjective
 賛成できません
 賛成できる
 賛成できます
+賛成
 寄付して
 寄付してなきゃ
 寄付しても
@@ -11055,6 +11095,7 @@ Error: word is not a verb or adjective
 寄付できません
 寄付できる
 寄付できます
+寄付
 出して
 出してなきゃ
 出しても
@@ -11409,6 +11450,7 @@ Error: word is not a verb or adjective
 故障できません
 故障できる
 故障できます
+故障
 喧嘩して
 喧嘩してなきゃ
 喧嘩しても
@@ -11474,6 +11516,7 @@ Error: word is not a verb or adjective
 喧嘩できません
 喧嘩できる
 喧嘩できます
+喧嘩
 上って
 上ってなきゃ
 上っても
@@ -11606,6 +11649,7 @@ Error: word is not a verb or adjective
 練習できません
 練習できる
 練習できます
+練習
 足して
 足してなきゃ
 足しても
@@ -12150,6 +12194,7 @@ Error: word is not a verb or adjective
 登山できません
 登山できる
 登山できます
+登山
 追って
 追ってなきゃ
 追っても
@@ -12292,6 +12337,7 @@ Error: word is not a verb or adjective
 努力できません
 努力できる
 努力できます
+努力
 盗んで
 盗んでなきゃ
 盗んでも
@@ -12501,6 +12547,7 @@ Error: word is not a verb or adjective
 得点できません
 得点できる
 得点できます
+得点
 急で
 急だ
 急です
@@ -12721,6 +12768,7 @@ Error: word is not a verb or adjective
 判断できません
 判断できる
 判断できます
+判断
 予約して
 予約してなきゃ
 予約しても
@@ -12786,6 +12834,7 @@ Error: word is not a verb or adjective
 予約できません
 予約できる
 予約できます
+予約
 かわいそうで
 かわいそうだ
 かわいそうです
@@ -12939,6 +12988,7 @@ Error: word is not a verb or adjective
 放送できません
 放送できる
 放送できます
+放送
 亡くなって
 亡くなってなきゃ
 亡くなっても
@@ -13417,6 +13467,7 @@ Error: word is not a verb or adjective
 活用できません
 活用できる
 活用できます
+活用
 正解して
 正解してなきゃ
 正解しても
@@ -13482,6 +13533,7 @@ Error: word is not a verb or adjective
 正解できません
 正解できる
 正解できます
+正解
 違って
 違ってなきゃ
 違っても
@@ -13980,6 +14032,7 @@ Error: word is not a verb or adjective
 成長できません
 成長できる
 成長できます
+成長
 合格して
 合格してなきゃ
 合格しても
@@ -14045,6 +14098,7 @@ Error: word is not a verb or adjective
 合格できません
 合格できる
 合格できます
+合格
 臭くて
 臭い
 臭いです
@@ -14131,6 +14185,7 @@ Error: word is not a verb or adjective
 注文できません
 注文できる
 注文できます
+注文
 気まずくて
 気まずい
 気まずいです
@@ -14206,6 +14261,7 @@ Error: word is not a verb or adjective
 呼吸できません
 呼吸できる
 呼吸できます
+呼吸
 久しぶりで
 久しぶりだ
 久しぶりです
@@ -14503,6 +14559,7 @@ Error: word is not a verb or adjective
 意味できません
 意味できる
 意味できます
+意味
 質問して
 質問してなきゃ
 質問しても
@@ -14568,6 +14625,7 @@ Error: word is not a verb or adjective
 質問できません
 質問できる
 質問できます
+質問
 見学して
 見学してなきゃ
 見学しても
@@ -14633,6 +14691,7 @@ Error: word is not a verb or adjective
 見学できません
 見学できる
 見学できます
+見学
 あって
 あってなきゃ
 あっても
@@ -14765,6 +14824,7 @@ Error: word is not a verb or adjective
 決定できません
 決定できる
 決定できます
+決定
 そうで
 そうだ
 そうです
@@ -15297,6 +15357,7 @@ Error: word is not a verb or adjective
 実験できません
 実験できる
 実験できます
+実験
 完璧で
 完璧だ
 完璧です
@@ -15383,6 +15444,7 @@ Error: word is not a verb or adjective
 説明できません
 説明できる
 説明できます
+説明
 撃って
 撃ってなきゃ
 撃っても
@@ -15670,6 +15732,7 @@ Error: word is not a verb or adjective
 握手できません
 握手できる
 握手できます
+握手
 踏んで
 踏んでなきゃ
 踏んでも
@@ -15936,6 +15999,7 @@ Error: word is not a verb or adjective
 学習できません
 学習できる
 学習できます
+学習
 一致して
 一致してなきゃ
 一致しても
@@ -16001,6 +16065,7 @@ Error: word is not a verb or adjective
 一致できません
 一致できる
 一致できます
+一致
 放して
 放してなきゃ
 放しても
