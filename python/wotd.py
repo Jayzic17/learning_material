@@ -37,7 +37,7 @@ for line in lines:
             na_adjectives.append(word)
         elif word[-4:] == '[する]' or word == 'する':
             suru_verbs.append(word)
-        elif word[-4:] == '[くる]' or word == '来る':
+        elif word[-4:] == '[くる]' or word == '来る' or word[-4:] == '[来る]':
             kuru_verbs.append(word)
         elif word[-1] == 'う':
             u_verbs.append(word)
