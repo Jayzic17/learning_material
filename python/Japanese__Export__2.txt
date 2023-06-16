@@ -26,9 +26,9 @@
 開ける	To open (2D)
 出来る	to be able to
 頂ける	to be able to receive
-助ける	To help
+助ける	To help (rescue)
 帰る	to return home
-出る	to leave
+出る	to leave (exit)
 入れる	To put in
 くれる	To give (me/good friend of mine)
 あげる	To give (you/someone else)
@@ -86,3 +86,8 @@
 辞める	To quit (a job)
 辞める	To retire
 ついてる	TO be lucky
+調べる	To look up (something)
+出かける	to go out
+降りる	to get off (transportation)
+点ける	To turn on (a device)
+知る	To get to know (someone)

@@ -1,5 +1,5 @@
 静か[な]	Quiet
-大好き[な]	Love
+大好き[な]	Love (someone/something)
 好き[な]	Like
 嫌い[な]	Hate
 有名[な]	Famous
@@ -40,7 +40,7 @@
 寒い	Cold (weather)
 暖かい	Warm (weather)
 薄い	Thin (object)
-易しい	Easy
+易しい	Easy (simple)
 若い	Young
 長い	Long (width)
 明るい	Bright
@@ -99,7 +99,7 @@
 引く	To pull
 待つ	TO wait
 歩く	to walk
-乗る	to get in (transportation)
+乗る	to board (transportation)
 聞く	To listen
 運ぶ	To carry
 入浴[する]	To bathe
@@ -124,7 +124,7 @@
 柔らかい	Soft
 硬い	Hard (to the touch)
 踊る	to dance
-持って来る	To bring (an object)
+持って[来る]	To bring along (object)
 優しい	Kind
 真面目[な]	Serious
 変わる	to change (oneself)
@@ -146,17 +146,17 @@
 購入[する]	To purchase
 入力[する]	To input
 進む	to proceed
-連れて来る	To bring someone along
+連れて[来る]	To bring (person)
 頼む	To ask a favor
-大変[な]	Terrible
+大変[な]	Terrible (situation)
 賢い	Smart
 わかる	to understand
 欲しい	Wanting (an object)
 必要[な]	Necessary
 怒る	to get angry
-ついてくる	To follow someone
+ついて[くる]	To follow (person)
 買い物[する]	To shop
-役立つ	to be useful
+役に立つ	to be useful (formal)
 危ない	Dangerous
 洗う	To wash
 勉強[する]	To study (formal)
@@ -168,7 +168,7 @@
 返す	To return (an object)
 旅行[する]	To travel
 洗濯[する]	To do laundry
-大切[な]	Important
+大切[な]	Important (formal)
 細い	Slender
 太い	Fat
 短い	Short (length)
@@ -206,9 +206,9 @@
 同一[な]	Identical
 出会う	to meet (by chance)
 同意[する]	To consent
-経験する	To experience
+経験[する]	To experience
 当たる	to strike
-成功する	To succeed
+成功[する]	To succeed
 平和[な]	Peacefull
 継続[する]	To continue on
 原因[する]	To cause
@@ -230,7 +230,7 @@
 会話[する]	To converse
 成る	to become
 だめ[な]	Not good
-試験する	To test
+試験[する]	To test
 習う	To learn (from a teacher)
 泳ぐ	to swim
 完全[な]	Complete
@@ -256,7 +256,7 @@
 強力[な]	Powerful
 報告[する]	To report
 急ぐ	TO hurry
-戦う	to fight
+戦う	to fight (against)
 惜しい	Dissapointing
 安心[する]	To be assured
 気づく	to realize
@@ -284,7 +284,7 @@
 気持ち悪い	Gross
 送る	To send
 通る	To pass by
-故障[する]	To be out of order (e.g: machine)
+故障[する]	to be out of order (e.g: machine)
 喧嘩[する]	To brawl
 上る	to climb
 練習[する]	To practice
@@ -295,7 +295,7 @@
 打つ	To hit
 探す	To search for
 早い	Fast (time)
-渡る	to cross over (e.g river)
+渡る	to cross over (e.g river, street)
 登山[する]	To ascend (e.g mountain)
 追う	To chase
 痛い	Painful
@@ -334,7 +334,7 @@
 残酷[な]	Cruel
 成長[する]	To grow (as a person)
 合格[する]	To pass a test
-臭い	Smelly (negative)
+臭い	Smelly (bad)
 本当[な]	Right (correct)
 注文[する]	To order (an object)
 気まずい	Awkward
@@ -350,7 +350,6 @@
 見学[する]	To observe
 ある	to have (possessing)
 決定[する]	To determine
-そう[な]	Looks...
 取り返す	To get back (an object)
 描く	To draw
 ボロボロ[な]	Worn-out
@@ -358,7 +357,7 @@
 消す	To delete
 試す	To try out
 確か[な]	Certain
-苦手[な]	Not very good at/with/in
+苦手[な]	Not good (uncomfortable) at/with/in
 上手い	Skilled at
 素敵[な]	Lovely
 ささやく	to whisper
@@ -384,4 +383,36 @@
 またぐ	To step over
 払う	To pay (casual)
 わかる	to be known
-安全[な]	Safe
+安全[な]	Safe (feeling)
+愛[する]	To love (someone)
+みたい[な]	Like...
+役に立つ	to be helpful (formal)
+役立つ	to be useful (casual)
+役立つ	to be helpful (casual)
+乗る	to ride
+ある	to happen
+酔っ払う	to get drunk
+大嫌い[な]	Hate (a lot)
+構う	TO care (about)
+無事[な]	Safe (secure)
+撮る	To take a picture
+去る	to leave (go away)
+語る	To talk about
+豊か[な]	Rich (wealthy)
+狂う	to go crazy
+無理[する]	to work too hard
+復習[する]	To get revenge
+値[する]	to deserve
+消す	To turn off (a device)
+休む	to rest
+手伝う	To help (assist)
+低い	Short (height)
+曲がる	to turn
+いやらしい	Obscene
+起こる	to occur
+逆[な]	Opposite
+大事[な]	Important (casual)
+つなぐ	To connect
+親切[な]	Friendly
+便利[な]	Convenient
+住む	to live (reside)

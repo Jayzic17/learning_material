@@ -55,7 +55,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-3] + '過ぎる' + '\n')
                 file.write(word[:-3] + 'そう' + '\n')
                 file.write(word[:-3] + 'ならば' + '\n')
-                file.write(word[:-3] + 'くなる' + '\n')
+                file.write(word[:-3] + 'になる' + '\n')
                 number_of_lines += 15
             elif word[-4:] == '[する]':
                 file.write(word[:-4] + 'して' + '\n')
