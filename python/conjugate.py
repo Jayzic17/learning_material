@@ -7,6 +7,18 @@ import sys, fileinput, os, re, linecache, random
 #   4. Run: python3 conjugate.py [number]
 #       number = the number of conjugated words to select at random
 
+# Validating aruments
+if len(sys.argv) == 0:
+    sys.exit("Missing argument: [number]: python3 conjugate.py [number]")
+elif len(sys.argv) >= 3:
+    sys.exit("Too many arguments: python3 conjugate.py [number]")
+try:
+    int(sys.argv[1])
+except:
+    sys.exit("Argument is not a number: python3 conjugate.py [number]")     
+if int(sys.argv[1]) <= 0:
+    sys.exit("Number must be <= 0: python3 conjugate.py [number]")
+
 number_of_lines = 0
 
 # Read from Japanese__Export__1.txt file
