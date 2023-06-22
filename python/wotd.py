@@ -10,6 +10,7 @@ i_adjectives = []
 na_adjectives = []
 suru_verbs = []
 kuru_verbs = []
+iku_verbs = []
 u_verbs = []
 tsu_verbs = []
 ru_verbs = []
@@ -39,6 +40,8 @@ for line in lines:
             suru_verbs.append(word)
         elif word[-4:] == '[くる]' or word == '来る' or word[-4:] == '[来る]':
             kuru_verbs.append(word)
+        elif word[-4:] == '[いく]' or word == '行く' or word[-4:] == '[行く]':
+            iku_verbs.append(word)
         elif word[-1] == 'う':
             u_verbs.append(word)
         elif word[-1] == 'つ':
@@ -72,7 +75,7 @@ for line in lines:
 
 # Print out the words of the day based on today's date
 today = datetime.datetime.now()
-if today.strftime("%d")[-1] == '0' or today.strftime("%d")[-1] == '1':
+if today.strftime("%d")[-1] == '0':
     rnd_num = random.randint(0, len(kuru_verbs) - 1)
     print(kuru_verbs[rnd_num])
     rnd_num = random.randint(0, len(i_adjectives) - 1)
@@ -81,6 +84,15 @@ if today.strftime("%d")[-1] == '0' or today.strftime("%d")[-1] == '1':
     print(na_adjectives[rnd_num])
     rnd_num = random.randint(0, len(u_verbs) - 1)
     print(u_verbs[rnd_num])
+elif today.strftime("%d")[-1] == '1':
+    rnd_num = random.randint(0, len(kuru_verbs) - 1)
+    print(kuru_verbs[rnd_num])
+    rnd_num = random.randint(0, len(i_adjectives) - 1)
+    print(i_adjectives[rnd_num])
+    rnd_num = random.randint(0, len(na_adjectives) - 1)
+    print(na_adjectives[rnd_num])
+    rnd_num = random.randint(0, len(iku_verbs) - 1)
+    print(iku_verbs[rnd_num])
 elif today.strftime("%d")[-1] == '2':
     rnd_num = random.randint(0, len(suru_verbs) - 1)
     print(suru_verbs[rnd_num])
