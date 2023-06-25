@@ -1013,7 +1013,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'きましたら' + '\n')
                 file.write(word[:-1] + 'かなかったら' + '\n')
                 file.write(word[:-1] + 'きませんでしたら' + '\n')
-                file.write(word[:-1] + 'けば' + '\n')
+                file.write(word[:-1] + 'ければ' + '\n')
                 file.write(word[:-1] + 'かなければ' + '\n')
                 file.write(word[:-1] + 'かせられる' + '\n')
                 file.write(word[:-1] + 'かせられた' + '\n')
