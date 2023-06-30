@@ -32,7 +32,7 @@
 赤い	Red
 面白い	Funny
 悪い	Bad
-奇麗[な]	Tidy
+きれい[な]	Tidy
 小さい	Small (object)
 悲しい	Sad
 厚い	Thick
@@ -40,7 +40,7 @@
 寒い	Cold (weather)
 暖かい	Warm (weather)
 薄い	Thin (object)
-易しい	Easy (simple)
+易しい	Easy (to understand)
 若い	Young
 長い	Long (width)
 明るい	Bright
@@ -51,6 +51,7 @@
 空っぽ[な]	Empty
 涼しい	Cool (weather)
 最悪[な]	Worst
+湿る	to become wet
 良い	Good
 苛々[する]	To get irritated
 醜い	Ugly
@@ -60,14 +61,18 @@
 汚い	Dirty
 軽い	Light (not heavy)
 遠い	Far (distance)
-単純[な]	Simple
+単純[な]	Simple (minded)
 重い	Heavy
 うるさい	Noisy
 複雑[な]	Complicated
 滑らか[な]	Smooth
 粗い	Rough (coarse)
 近い	Close (distance)
+走る	to run
+知る	To know
 来る	To come
+切る	To cut
+入る	to enter
 する	To do
 行く	to go
 遊ぶ	to play
@@ -127,6 +132,7 @@
 持って[来る]	To bring along (object)
 優しい	Kind
 真面目[な]	Serious
+帰る	to return home
 変わる	to change (oneself)
 酸っぱい	Sour
 聞く	To hear
@@ -146,12 +152,13 @@
 購入[する]	To purchase
 入力[する]	To input
 進む	to proceed
-連れて[来る]	To bring (person)
+連れて[来る]	To bring along (person)
 頼む	To ask a favor
 大変[な]	Terrible (situation)
 賢い	Smart
 わかる	to understand
 欲しい	Wanting (an object)
+いる	to need (an object)
 必要[な]	Necessary
 怒る	to get angry
 ついて[くる]	To follow (person)
@@ -205,9 +212,9 @@
 転ぶ	to fall over
 同一[な]	Identical
 出会う	to meet (by chance)
-同意[する]	To consent
+同意[する]	to agree (with someone)
 経験[する]	To experience
-当たる	to strike
+当たる	to strike (receiving the strike)
 成功[する]	To succeed
 平和[な]	Peacefull
 継続[する]	To continue on
@@ -276,7 +283,7 @@
 正直[な]	Honest
 翻訳[する]	To translate (formal)
 発音[する]	To pronounce
-賛成[する]	To agree (formal)
+賛成[する]	to agree (to something)
 寄付[する]	To donate
 出す	To take out
 健康[な]	Healthy
@@ -284,17 +291,18 @@
 気持ち悪い	Gross
 送る	To send
 通る	To pass by
-故障[する]	to be out of order (e.g: machine)
+故障[する]	to be out of order (machine)
 喧嘩[する]	To brawl
 上る	to climb
 練習[する]	To practice
 足す	To add
-吹く	To blow (your breath)
+吹く	To blow (breath)
 折る	To fold
 構う	TO mind
-打つ	To hit
+打つ	To strike (initiating the strike)
 探す	To search for
 早い	Fast (time)
+入る	to arrive
 渡る	to cross over (e.g river, street)
 登山[する]	To ascend (e.g mountain)
 追う	To chase
@@ -302,7 +310,7 @@
 努力[する]	To make an effort
 盗む	To steal
 等しい	Equal
-至る	to arrive at (e.g decision)
+至る	to arrive at (decision)
 得点[する]	To score (e.g in a game)
 急[な]	Urgent
 突く	To poke
@@ -349,7 +357,7 @@
 質問[する]	To question
 見学[する]	To observe
 ある	to have (possessing)
-決定[する]	To determine
+決定[する]	TO determine
 取り返す	To get back (an object)
 描く	To draw
 ボロボロ[な]	Worn-out
@@ -358,7 +366,9 @@
 試す	To try out
 確か[な]	Certain
 苦手[な]	Not good (uncomfortable) at/with/in
+解く	To solve
 上手い	Skilled at
+帰る	to go home
 素敵[な]	Lovely
 ささやく	to whisper
 実験[する]	To experiment
@@ -369,13 +379,13 @@
 付く	to turn on (a device)
 でかい	Huge
 匂う	to smell (bad/good)
-すけべ[な]	Lewd
+すけべ[な]	Lewd (casual)
 握手[する]	to shake hands
 踏む	To step on
 叫ぶ	to scream
 訳す	To translate (casual)
 学習[する]	To study (casual)
-一致[する]	To agree (casual)
+一致[する]	to be in agreement (accord)
 放す	To release
 放す	To let go (of someone)
 最低[な]	Least
@@ -393,6 +403,7 @@
 ある	to happen
 酔っ払う	to get drunk
 大嫌い[な]	Hate (a lot)
+勝負[する]	to fight (bout)
 構う	TO care (about)
 無事[な]	Safe (secure)
 撮る	To take a picture
@@ -408,7 +419,7 @@
 手伝う	To help (assist)
 低い	Short (height)
 曲がる	to turn
-いやらしい	Obscene
+いやらしい	Lewd (formal)
 起こる	to occur
 逆[な]	Opposite
 大事[な]	Important (casual)
@@ -416,3 +427,34 @@
 親切[な]	Friendly
 便利[な]	Convenient
 住む	to live (reside)
+知る	To get to know (someone)
+捕まる	to be arrested
+逃亡[する]	to escape
+下手[な]	Unskillful
+持って[いく]	To take along (object)
+捨てる	To throw away
+易い	Easy (likely to)
+意地悪[な]	Mean
+運動[する]	to exercise (workout)
+生活[する]	to live (day-to-day)
+簡単[な]	Simple (not complex)
+泊まる	to stay at (place)
+釣る	To fish
+紹介[する]	To introduce
+遅刻[する]	to be late (class/work)
+ドライブ[する]	to go for a drive
+逮捕[する]	To be under arrest
+きれい[な]	Clear (pure)
+奇妙[な]	Peculiar
+自首[する]	to surrender (to authorities)
+降参[する]	to surrender (to opponent)
+間違いない	No doubt (no mistake)
+感心[する]	to be impressed
+属[する]	to belong to
+反省[する]	To regret
+攻撃[する]	To attack
+早い	Too soon
+謝る	TO apologize
+案内[する]	TO guide
+連れて[行く]	To take along (someone)
+関係[する]	to involve

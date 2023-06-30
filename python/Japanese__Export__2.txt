@@ -1,18 +1,13 @@
-湿る	to become wet
 見る	To see
 食べる	To eat
-走る	to run
 答える	to answer
-知る	To know
 始める	To start
 寝る	to sleep
 教える	To teach
-切る	To cut
 見せる	To show
 見る	To look
 見つける	To find
 夢見る	To dream
-入る	to enter
 借りる	To borrow
 落ちる	to fall (object from up high)
 感じる	TO feel (sensational)
@@ -27,15 +22,13 @@
 出来る	to be able to
 頂ける	to be able to receive
 助ける	To help (rescue)
-帰る	to return home
 出る	to leave (exit)
 入れる	To put in
-くれる	To give (me/good friend of mine)
+くれる	To give (you/good friend of yours)
 あげる	To give (you/someone else)
 生きる	to live
 使える	TO be useable
 出来る	to be ready
-いる	to need (an object)
 訪ねる	To visit
 投げる	To throw
 逃げる	to run away
@@ -67,7 +60,6 @@
 責める	To blame
 似る	to look like
 迎える	To greet
-入る	to arrive
 倒れる	to collapse
 任せる	To entrust (to someone)
 認める	To acknowledge
@@ -79,8 +71,6 @@
 調べる	To investigate
 燃える	to burn
 解ける	to be solved
-解く	To solve
-帰る	to go home
 埋める	To bury
 裏切る	To betray
 辞める	To quit (a job)
@@ -90,4 +80,10 @@
 出かける	to go out
 降りる	to get off (transportation)
 点ける	To turn on (a device)
-知る	To get to know (someone)
+飽きる	to become bored with
+出る	to appear (show up)
+勧める	To recommend
+進める	To proceed with
+壊れる	to be broken
+迎える	To go out to meet
+震える	to tremble
