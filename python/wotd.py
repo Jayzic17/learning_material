@@ -4,7 +4,21 @@ import sys, fileinput, os, re, random, datetime
 #   1. Flip all Cards to the Kanji_Back+Front and Back-Front Note types
 #   2. Export the Japanese::Export::1 deck and Japanese::Export::2 deck to: Users/Jonathan/Git/learning_material/python
 #   3. cd to the Users/Jonathan/Git/learning_material/python directory
-#   4. Run: python3 wotd.py
+#   4. Run: python3 wotd.py [single, each]
+#       * [single] randomly returns one of the 15 different types of words
+#       * [each] randomly returns one of each adjective and one of each verb
+
+# Validating aruments
+if len(sys.argv) == 1:
+    sys.exit("Missing argument: python3 wotd.py [single, each]")
+elif len(sys.argv) >= 3:
+    sys.exit("Too many arguments: python3 wotd.py [single, each]")
+try:
+    str(sys.argv[1])
+except:
+    sys.exit("Argument is not a string: python3 wotd.py [single, each]")     
+if not (str(sys.argv[1]) == 'single' or str(sys.argv[1]) == 'each'):
+    sys.exit("Invalid argument: python3 wotd.py [single, each]")
 
 i_adjectives = []
 na_adjectives = []
@@ -73,95 +87,145 @@ for line in lines:
         word = re.findall("^.+\t", line)[0][0:-1]
         RU_verbs.append(word)
 
+today = datetime.datetime.now()        
+
 # Print out the words of the day based on today's date
-today = datetime.datetime.now()
-if today.strftime("%d")[-1] == '0':
-    rnd_num = random.randint(0, len(kuru_verbs) - 1)
-    print(kuru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(u_verbs) - 1)
-    print(u_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '1':
-    rnd_num = random.randint(0, len(kuru_verbs) - 1)
-    print(kuru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(iku_verbs) - 1)
-    print(iku_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '2':
-    rnd_num = random.randint(0, len(suru_verbs) - 1)
-    print(suru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(tsu_verbs) - 1)
-    print(tsu_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '3':
-    rnd_num = random.randint(0, len(RU_verbs) - 1)
-    print(RU_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(ru_verbs) - 1)
-    print(ru_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '4':
-    rnd_num = random.randint(0, len(kuru_verbs) - 1)
-    print(kuru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(mu_verbs) - 1)
-    print(mu_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '5':
-    rnd_num = random.randint(0, len(suru_verbs) - 1)
-    print(suru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(bu_verbs) - 1)
-    print(bu_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '6':
-    rnd_num = random.randint(0, len(RU_verbs) - 1)
-    print(RU_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(nu_verbs) - 1)
-    print(nu_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '7':
-    rnd_num = random.randint(0, len(kuru_verbs) - 1)
-    print(kuru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(ku_verbs) - 1)
-    print(ku_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '8':
-    rnd_num = random.randint(0, len(suru_verbs) - 1)
-    print(suru_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(gu_verbs) - 1)
-    print(gu_verbs[rnd_num])
-elif today.strftime("%d")[-1] == '9':
-    rnd_num = random.randint(0, len(RU_verbs) - 1)
-    print(RU_verbs[rnd_num])
-    rnd_num = random.randint(0, len(i_adjectives) - 1)
-    print(i_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(na_adjectives) - 1)
-    print(na_adjectives[rnd_num])
-    rnd_num = random.randint(0, len(su_verbs) - 1)
-    print(su_verbs[rnd_num])
+if str(sys.argv[1]) == 'single':
+    if today.strftime("%d")[-1] == '0':
+        rnd_num = random.randint(0, len(kuru_verbs) - 1)
+        print(kuru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(u_verbs) - 1)
+        print(u_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '1':
+        rnd_num = random.randint(0, len(kuru_verbs) - 1)
+        print(kuru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(iku_verbs) - 1)
+        print(iku_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '2':
+        rnd_num = random.randint(0, len(suru_verbs) - 1)
+        print(suru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(tsu_verbs) - 1)
+        print(tsu_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '3':
+        rnd_num = random.randint(0, len(RU_verbs) - 1)
+        print(RU_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(ru_verbs) - 1)
+        print(ru_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '4':
+        rnd_num = random.randint(0, len(kuru_verbs) - 1)
+        print(kuru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(mu_verbs) - 1)
+        print(mu_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '5':
+        rnd_num = random.randint(0, len(suru_verbs) - 1)
+        print(suru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(bu_verbs) - 1)
+        print(bu_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '6':
+        rnd_num = random.randint(0, len(RU_verbs) - 1)
+        print(RU_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(nu_verbs) - 1)
+        print(nu_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '7':
+        rnd_num = random.randint(0, len(kuru_verbs) - 1)
+        print(kuru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(ku_verbs) - 1)
+        print(ku_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '8':
+        rnd_num = random.randint(0, len(suru_verbs) - 1)
+        print(suru_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(gu_verbs) - 1)
+        print(gu_verbs[rnd_num])
+    elif today.strftime("%d")[-1] == '9':
+        rnd_num = random.randint(0, len(RU_verbs) - 1)
+        print(RU_verbs[rnd_num])
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(su_verbs) - 1)
+        print(su_verbs[rnd_num])
+elif str(sys.argv[1]) == 'each':
+    if today.strftime("%d") == '00' or today.strftime("%d") == '16':
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+    elif today.strftime("%d") == '01' or today.strftime("%d") == '17':
+        rnd_num = random.randint(0, len(na_adjectives) - 1)
+        print(na_adjectives[rnd_num])
+    elif today.strftime("%d") == '02' or today.strftime("%d") == '18':
+        rnd_num = random.randint(0, len(suru_verbs) - 1)
+        print(suru_verbs[rnd_num])
+    elif today.strftime("%d") == '03' or today.strftime("%d") == '19':
+        rnd_num = random.randint(0, len(kuru_verbs) - 1)
+        print(kuru_verbs[rnd_num])
+    elif today.strftime("%d") == '04' or today.strftime("%d") == '20':
+        rnd_num = random.randint(0, len(iku_verbs) - 1)
+        print(iku_verbs[rnd_num])
+    elif today.strftime("%d") == '05' or today.strftime("%d") == '21':
+        rnd_num = random.randint(0, len(u_verbs) - 1)
+        print(u_verbs[rnd_num])
+    elif today.strftime("%d") == '06' or today.strftime("%d") == '22':
+        rnd_num = random.randint(0, len(tsu_verbs) - 1)
+        print(tsu_verbs[rnd_num])
+    elif today.strftime("%d") == '07' or today.strftime("%d") == '23':
+        rnd_num = random.randint(0, len(ru_verbs) - 1)
+        print(ru_verbs[rnd_num])
+    elif today.strftime("%d") == '08' or today.strftime("%d") == '24':
+        rnd_num = random.randint(0, len(RU_verbs) - 1)
+        print(RU_verbs[rnd_num])
+    elif today.strftime("%d") == '09' or today.strftime("%d") == '25':
+        rnd_num = random.randint(0, len(mu_verbs) - 1)
+        print(mu_verbs[rnd_num])
+    elif today.strftime("%d") == '10' or today.strftime("%d") == '26':
+        rnd_num = random.randint(0, len(bu_verbs) - 1)
+        print(bu_verbs[rnd_num])
+    elif today.strftime("%d") == '11' or today.strftime("%d") == '27':
+        rnd_num = random.randint(0, len(nu_verbs) - 1)
+        print(nu_verbs[rnd_num])
+    elif today.strftime("%d") == '12' or today.strftime("%d") == '28':
+        rnd_num = random.randint(0, len(ku_verbs) - 1)
+        print(ku_verbs[rnd_num])
+    elif today.strftime("%d") == '13' or today.strftime("%d") == '29':
+        rnd_num = random.randint(0, len(gu_verbs) - 1)
+        print(gu_verbs[rnd_num])
+    elif today.strftime("%d") == '14' or today.strftime("%d") == '30':
+        rnd_num = random.randint(0, len(su_verbs) - 1)
+        print(su_verbs[rnd_num])
+    elif today.strftime("%d") == '15' or today.strftime("%d") == '31':
+        print('良い')

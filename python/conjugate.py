@@ -8,7 +8,7 @@ import sys, fileinput, os, re, linecache, random
 #       number = the number of conjugated words to select at random
 
 # Validating aruments
-if len(sys.argv) == 0:
+if len(sys.argv) == 1:
     sys.exit("Missing argument: [number]: python3 conjugate.py [number]")
 elif len(sys.argv) >= 3:
     sys.exit("Too many arguments: python3 conjugate.py [number]")
