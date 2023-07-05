@@ -93,8 +93,7 @@ if str(sys.argv[1]) == 'each':
     if today.strftime("%d")[-1] == '0':
         rnd_num = random.randint(0, len(kuru_verbs) - 1)
         print(kuru_verbs[rnd_num])
-        rnd_num = random.randint(0, len(i_adjectives) - 1)
-        print(i_adjectives[rnd_num])
+        print('良い')
         rnd_num = random.randint(0, len(na_adjectives) - 1)
         print(na_adjectives[rnd_num])
         rnd_num = random.randint(0, len(u_verbs) - 1)
