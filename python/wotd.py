@@ -89,8 +89,7 @@ for line in lines:
 
 today = datetime.datetime.now()        
 
-# Print out the words of the day based on today's date
-if str(sys.argv[1]) == 'single':
+if str(sys.argv[1]) == 'each':
     if today.strftime("%d")[-1] == '0':
         rnd_num = random.randint(0, len(kuru_verbs) - 1)
         print(kuru_verbs[rnd_num])
@@ -181,7 +180,8 @@ if str(sys.argv[1]) == 'single':
         print(na_adjectives[rnd_num])
         rnd_num = random.randint(0, len(su_verbs) - 1)
         print(su_verbs[rnd_num])
-elif str(sys.argv[1]) == 'each':
+
+elif str(sys.argv[1]) == 'single':
     if today.strftime("%d") == '00' or today.strftime("%d") == '16':
         rnd_num = random.randint(0, len(i_adjectives) - 1)
         print(i_adjectives[rnd_num])
