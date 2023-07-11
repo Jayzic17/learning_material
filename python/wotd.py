@@ -21,6 +21,7 @@ if not (str(sys.argv[1]) == 'single' or str(sys.argv[1]) == 'each'):
     sys.exit("Invalid argument: python3 wotd.py [single, each]")
 
 i_adjectives = []
+yoi_adjectives = []
 na_adjectives = []
 suru_verbs = []
 kuru_verbs = []
@@ -48,6 +49,8 @@ for line in lines:
         word = re.findall("^.+\t", line)[0][0:-1]
         if word[-1] == 'い':
             i_adjectives.append(word)
+        elif word[-4:] == '[いい]' or word == '良い' or word[-4:] == '[良い]':
+            yoi_adjectives.append(word)
         elif word[-3:] == '[な]':
             na_adjectives.append(word)
         elif word[-4:] == '[する]' or word == 'する':
@@ -93,7 +96,8 @@ if str(sys.argv[1]) == 'each':
     if today.strftime("%d")[-1] == '0':
         rnd_num = random.randint(0, len(kuru_verbs) - 1)
         print(kuru_verbs[rnd_num])
-        print('良い')
+        rnd_num = random.randint(0, len(yoi_adjectives) - 1)
+        print(yoi_adjectives[rnd_num])
         rnd_num = random.randint(0, len(na_adjectives) - 1)
         print(na_adjectives[rnd_num])
         rnd_num = random.randint(0, len(u_verbs) - 1)
@@ -227,4 +231,5 @@ elif str(sys.argv[1]) == 'single':
         rnd_num = random.randint(0, len(su_verbs) - 1)
         print(su_verbs[rnd_num])
     elif today.strftime("%d") == '15' or today.strftime("%d") == '31':
-        print('良い')
+        rnd_num = random.randint(0, len(yoi_adjectives) - 1)
+        print(yoi_adjectives[rnd_num])
