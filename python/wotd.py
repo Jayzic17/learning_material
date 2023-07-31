@@ -47,10 +47,10 @@ j_exp_file.close()
 for line in lines:
     if re.search("^.+\t", line):
         word = re.findall("^.+\t", line)[0][0:-1]
-        if word[-1] == 'い':
-            i_adjectives.append(word)
-        elif word[-4:] == '[いい]' or word == '良い' or word[-4:] == '[良い]':
+        if word[-4:] == '[いい]' or word == '良い' or word[-4:] == '[良い]':
             yoi_adjectives.append(word)
+        elif word[-1] == 'い':
+            i_adjectives.append(word)
         elif word[-3:] == '[な]':
             na_adjectives.append(word)
         elif word[-4:] == '[する]' or word == 'する':

@@ -24,16 +24,16 @@
 助ける	To help (rescue)
 出る	to leave (exit)
 入れる	To put in
-くれる	To give (you/good friend of yours)
-あげる	To give (you/someone else)
+くれる	To give (you recipient (POV) <- they sender OR you(POV) they recipient <- they sender)
+あげる	To give (you sender(POV) -> they recipient)
 生きる	to live
 使える	TO be useable
 出来る	to be ready
-訪ねる	To visit
+訪ねる	To visit (casual)
 投げる	To throw
 逃げる	to run away
 閉める	To close
-浴びる	To shower
+浴びる	To take (shower)
 消える	to dissapear
 揺れる	to shake (body)
 信じる	To believe
@@ -87,3 +87,20 @@
 壊れる	to be broken
 迎える	To go out to meet
 震える	to tremble
+切れる	to run out of (resource)
+濡れる	to get wet
+上げる	To show someone into a room
+壊れる	to be destroyed
+かける	To make (a phone call)
+足りる	to be enough
+換える	To replace
+換える	To exchange
+集める	To collect
+乗り換える	To transfer (trains)
+覚える	To remember
+止める	To park
+もらえる	TO be able to receive (a gift)
+かける	To cause (someone to worry)
+立てる	To stand (up; something)
+かける	To lock
+照れる	to be shy

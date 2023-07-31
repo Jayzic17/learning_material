@@ -12,7 +12,7 @@
 不味い	Unappetizing
 凄い	Amazing
 忙しい	Busy
-嬉しい	Happy
+嬉しい	Happy (short-term)
 辛い	Spicy
 素晴らしい	Wonderful
 新しい	New
@@ -51,7 +51,7 @@
 空っぽ[な]	Empty
 涼しい	Cool (weather)
 最悪[な]	Worst
-湿る	to become wet
+湿る	to become damp
 良い	Good
 苛々[する]	To get irritated
 醜い	Ugly
@@ -121,7 +121,7 @@
 座る	to sit
 立つ	to stand
 思う	To think
-思い出す	To remember
+思い出す	To recall
 触る	TO touch
 止まる	to stop (an object)
 笑う	to laugh
@@ -131,17 +131,17 @@
 踊る	to dance
 持って[来る]	To bring along (object)
 優しい	Kind
-真面目[な]	Serious
+真面目[な]	Serious (person)
 帰る	to return home
-変わる	to change (oneself)
+変わる	to change
 酸っぱい	Sour
 聞く	To hear
-かっこいい	Cool
+かっこ[いい]	Cool
 空く	to become empty (hunger)
 売る	To sell
 清潔[な]	Sanitary
 隣の	Next to
-貰う	To receive (a gift)
+もらう	To receive (you recipient (POV); went out of your way to receive it)
 反対[する]	To disagree
 現在	Current (time)
 飛ぶ	to jump
@@ -230,7 +230,7 @@
 偉大[な]	Great
 浅い	Shallow
 深い	Deep
-結婚[する]	To marry
+結婚[する]	to get married
 散歩[する]	To stroll
 掃除[する]	To clean
 きれい[な]	Clean
@@ -248,7 +248,7 @@
 許す	To allow
 冒険[する]	To adventure
 呼ぶ	To call out to
-動く	to move
+動く	to move (by itself)
 頼む	To beg
 歌う	TO sing
 心配[する]	To worry
@@ -268,7 +268,7 @@
 安心[する]	To be assured
 気づく	to realize
 なくす	To get rid of
-失う	To lose (something)
+失う	To lose (something serious; not by accident)
 仕方ない	Unavoidable
 話し合う	To discuss
 うんこ[する]	To poop
@@ -285,6 +285,7 @@
 発音[する]	To pronounce
 賛成[する]	to agree (to something)
 寄付[する]	To donate
+食事[する]	to have a meal
 出す	To take out
 健康[な]	Healthy
 出す	To put out
@@ -302,8 +303,8 @@
 打つ	To strike (initiating the strike)
 探す	To search for
 早い	Fast (time)
-入る	to arrive
-渡る	to cross over (e.g river, street)
+入る	to arrive (enter)
+渡る	to cross (e.g river, street)
 登山[する]	To ascend (e.g mountain)
 追う	To chase
 痛い	Painful
@@ -418,14 +419,14 @@
 休む	to rest
 手伝う	To help (assist)
 低い	Short (height)
-曲がる	to turn
+曲がる	to bend
 いやらしい	Lewd (formal)
 起こる	to occur
 逆[な]	Opposite
 大事[な]	Important (casual)
 つなぐ	To connect
 親切[な]	Friendly
-便利[な]	Convenient
+便利[な]	Convenient (object)
 住む	to live (reside)
 知る	To get to know (someone)
 捕まる	to be arrested
@@ -456,5 +457,85 @@
 早い	Too soon
 謝る	TO apologize
 案内[する]	TO guide
-連れて[行く]	To take along (someone)
+連れて[行く]	To take along (person)
 関係[する]	to involve
+驚かす	To surprise
+上手い	Clever
+狭い	Cramped (small)
+引く	To catch (a cold)
+渇く	to be thirsty
+二日酔い[する]	TO be hung over
+気持ち悪い	Creapy
+降る	to fall (rain/snow)
+珍しい	Unusual
+平気[な]	All right (fine)
+誤魔化す	To lie about
+警告[する]	To warn
+忠告[する]	To advise
+望む	To desire
+驚く	to be surprised (formal)
+相談[する]	To ask for advice
+ずるい	Unfair
+借金[する]	To borrow money (a loan)
+緊張[する]	to be nervous
+たがる	TO seem
+びっくり[する]	to be surprised (casual)
+幸せ[な]	Happy (long-term; casual)
+幸福[な]	Happy (long-term; formal)
+無茶[な]	Reckless
+磨く	To brush (teeth)
+別々[な]	Separate
+弾く	To play (string/key instrument)
+終わる	to end
+細かい	Small (finely detailed)
+下ろす	To lower
+推薦[する]	To endorse
+確認[する]	To confirm
+出す	To send (a letter)
+する	To play (sports/games)
+指定[する]	To designate
+往復[する]	to make a round trip
+小便[する]	TO pee
+蹴る	To kick
+珍しい	Rare
+怪我[する]	TO get injured
+扱う	To deal with (person/problem)
+慎重[な]	Careful
+着く	to arrive (at)
+不便[な]	Inconvenient (object)
+まっすぐ[な]	Straight (towards/ahead)
+信号[する]	to signal
+羨ましい	Jealous
+かゆい	Itchy
+ワクワク[する]	TO be excited
+ネバネバ[する]	TO be sticky/gooey
+治る	to be healed
+愚か[な]	Foolish
+引っ越し[する]	to move (residence)
+転勤[する]	to transfer (jobs)
+賑やか[な]	Bustling
+回す	To rotate
+地味[な]	Plain
+落ち込む	to be depressed
+修理[する]	To repair
+深刻[な]	Serious (situation)
+アルバイト[する]	to work part-time (job)
+いただく	To receive (humble)
+しかる	To scold
+飼う	To own (an animal)
+移る	to move (houses)
+暖房[する]	TO heat (indoors)
+表現[する]	To represent
+訪問[する]	To visit (formal)
+コピー[する]	To photocopy
+送信[する]	To send (electronically)
+ちゅう[する]	to kiss
+発表[する]	To announce
+あり[な]	Acceptable
+厳しい	Hard (to do)
+研究[する]	To research
+お祈り[する]	TO pray (holy)
+喧嘩[する]	to argue
+なかなか[な]	Quite
+動かす	To move (something)
+なくす	To lose (an object; by accident)
