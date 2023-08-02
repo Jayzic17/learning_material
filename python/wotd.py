@@ -186,50 +186,50 @@ if str(sys.argv[1]) == 'each':
 
 elif str(sys.argv[1]) == 'single':
     if today.strftime("%d") == '00' or today.strftime("%d") == '16':
-        rnd_num = random.randint(0, len(i_adjectives) - 1)
-        print(i_adjectives[rnd_num])
+        rnd_num = random.randint(0, len(u_verbs) - 1)
+        print(u_verbs[rnd_num])
     elif today.strftime("%d") == '01' or today.strftime("%d") == '17':
         rnd_num = random.randint(0, len(na_adjectives) - 1)
         print(na_adjectives[rnd_num])
     elif today.strftime("%d") == '02' or today.strftime("%d") == '18':
-        rnd_num = random.randint(0, len(suru_verbs) - 1)
-        print(suru_verbs[rnd_num])
-    elif today.strftime("%d") == '03' or today.strftime("%d") == '19':
-        rnd_num = random.randint(0, len(kuru_verbs) - 1)
-        print(kuru_verbs[rnd_num])
-    elif today.strftime("%d") == '04' or today.strftime("%d") == '20':
-        rnd_num = random.randint(0, len(iku_verbs) - 1)
-        print(iku_verbs[rnd_num])
-    elif today.strftime("%d") == '05' or today.strftime("%d") == '21':
-        rnd_num = random.randint(0, len(u_verbs) - 1)
-        print(u_verbs[rnd_num])
-    elif today.strftime("%d") == '06' or today.strftime("%d") == '22':
         rnd_num = random.randint(0, len(tsu_verbs) - 1)
         print(tsu_verbs[rnd_num])
-    elif today.strftime("%d") == '07' or today.strftime("%d") == '23':
+    elif today.strftime("%d") == '03' or today.strftime("%d") == '19':
+        rnd_num = random.randint(0, len(suru_verbs) - 1)
+        print(suru_verbs[rnd_num])
+    elif today.strftime("%d") == '04' or today.strftime("%d") == '20':
         rnd_num = random.randint(0, len(ru_verbs) - 1)
         print(ru_verbs[rnd_num])
-    elif today.strftime("%d") == '08' or today.strftime("%d") == '24':
-        rnd_num = random.randint(0, len(RU_verbs) - 1)
-        print(RU_verbs[rnd_num])
-    elif today.strftime("%d") == '09' or today.strftime("%d") == '25':
+    elif today.strftime("%d") == '05' or today.strftime("%d") == '21':
         rnd_num = random.randint(0, len(mu_verbs) - 1)
         print(mu_verbs[rnd_num])
-    elif today.strftime("%d") == '10' or today.strftime("%d") == '26':
+    elif today.strftime("%d") == '06' or today.strftime("%d") == '22':
+        rnd_num = random.randint(0, len(i_adjectives) - 1)
+        print(i_adjectives[rnd_num])
+    elif today.strftime("%d") == '07' or today.strftime("%d") == '23':
         rnd_num = random.randint(0, len(bu_verbs) - 1)
         print(bu_verbs[rnd_num])
-    elif today.strftime("%d") == '11' or today.strftime("%d") == '27':
+    elif today.strftime("%d") == '08' or today.strftime("%d") == '24':
+        rnd_num = random.randint(0, len(kuru_verbs) - 1)
+        print(kuru_verbs[rnd_num])
+    elif today.strftime("%d") == '09' or today.strftime("%d") == '25':
         rnd_num = random.randint(0, len(nu_verbs) - 1)
         print(nu_verbs[rnd_num])
-    elif today.strftime("%d") == '12' or today.strftime("%d") == '28':
+    elif today.strftime("%d") == '10' or today.strftime("%d") == '26':
         rnd_num = random.randint(0, len(ku_verbs) - 1)
         print(ku_verbs[rnd_num])
-    elif today.strftime("%d") == '13' or today.strftime("%d") == '29':
+    elif today.strftime("%d") == '11' or today.strftime("%d") == '27':
+        rnd_num = random.randint(0, len(RU_verbs) - 1)
+        print(RU_verbs[rnd_num])
+    elif today.strftime("%d") == '12' or today.strftime("%d") == '28':
         rnd_num = random.randint(0, len(gu_verbs) - 1)
         print(gu_verbs[rnd_num])
-    elif today.strftime("%d") == '14' or today.strftime("%d") == '30':
-        rnd_num = random.randint(0, len(su_verbs) - 1)
-        print(su_verbs[rnd_num])
-    elif today.strftime("%d") == '15' or today.strftime("%d") == '31':
+    elif today.strftime("%d") == '13' or today.strftime("%d") == '29':
         rnd_num = random.randint(0, len(yoi_adjectives) - 1)
         print(yoi_adjectives[rnd_num])
+    elif today.strftime("%d") == '14' or today.strftime("%d") == '30':
+        rnd_num = random.randint(0, len(iku_verbs) - 1)
+        print(iku_verbs[rnd_num])
+    elif today.strftime("%d") == '15' or today.strftime("%d") == '31':
+        rnd_num = random.randint(0, len(su_verbs) - 1)
+        print(su_verbs[rnd_num])
