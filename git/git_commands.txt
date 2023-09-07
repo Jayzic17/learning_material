@@ -21,6 +21,9 @@ git branch [new_branch_name]
 	* creates a new branch from the branch you're currently in
 
 git checkout [some_other_branch]
+git branch -a
+	* lists out all local and remote branches
+
 git branch -d [branch_to_delete]
 	* deletes the local branch: "branch_to_delete"
 
@@ -35,20 +38,38 @@ git restore --staged path_to_file
 
 git restore path_to_file
 	* undo all the changes to a modified file that isn't staged
+
 rm -rf .git
 	* uninitializes the git repo
+
 git config --global http.sslVerify false
 	* disables SSL
 	* DO NOT DO THIS UNLESS ABSOLUTELY NECESSARY
+
 git config --global http.sslVerify true
 	* enables SSL
+
 git pull origin [remote_branch_name] --allow-unrelated-histories
 	* if you get an "unrelated histories" issue when pushing to remote, use this flag when pulling from the remote for resolution
+
 git stash
 	* you would use this to stash unstaged changes you made, so that they don't get overriden by a: $ git pull
+
 git stash pop
 	* you would run this after running $ git stash, followed by: $ git pull, to reintroduce your stashed code
 
+git checkout [local_feature_branch]
+git merge origin/[master_branch]
+	* this pulls in and merges the latest remote master to your local feature branch
+
+git checkout [feature_branch]
+git checkout [branch_that_contains_the_file_you_want] -- [file_name]
+	* this pulls a file from another branch into your feature branch
+
+git checkout [local_branch]
+git reset --hard origin/[remote_branch]
+	* if stuff got recently pushed to remote that you are completely alright with using to overwrighting your local with, run these commands
+	* just be aware that this would diverge your local branch from the remote one
 
 ---AWS---
 
