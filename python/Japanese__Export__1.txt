@@ -30,10 +30,10 @@
 甘い	Sweet
 美味しい	Delicious
 赤い	Red
-面白い	Funny
+面白い	Funny (interesting)
 悪い	Bad
 きれい[な]	Tidy
-小さい	Small (object)
+小さい	Tiny (object)
 悲しい	Sad
 厚い	Thick
 高い	High
@@ -42,7 +42,7 @@
 薄い	Thin (object)
 易しい	Easy (to understand)
 若い	Young
-長い	Long (width)
+長い	Long (length)
 明るい	Bright
 つまらない	Boring
 遅い	Slow
@@ -50,18 +50,18 @@
 大きい	Large
 空っぽ[な]	Empty
 涼しい	Cool (weather)
-最悪[な]	Worst
+最悪[な]	Worst (in rank/status)
 湿る	to become damp
 良い	Good
 苛々[する]	To get irritated
 醜い	Ugly
 低い	Low (value)
 古い	Old (object)
-広い	Wide
+広い	Wide (spacious)
 汚い	Dirty
 軽い	Light (not heavy)
 遠い	Far (distance)
-単純[な]	Simple (minded)
+単純[な]	Simple (minded/straightforward)
 重い	Heavy
 うるさい	Noisy
 複雑[な]	Complicated
@@ -117,19 +117,19 @@
 運転[する]	To drive
 作る	To make
 終わる	to finish (come to an end)
-落とす	To drop
+落とす	To drop (object)
 座る	to sit
 立つ	to stand
 思う	To think
 思い出す	To recall
-触る	TO touch
+触る	TO touch (strongly)
 止まる	to stop (an object)
 笑う	to laugh
 拾う	To pick up
 柔らかい	Soft
 硬い	Hard (to the touch)
 踊る	to dance
-持って[来る]	To bring along (object)
+持って[来る]	To bring along (an object)
 優しい	Kind
 真面目[な]	Serious (person)
 帰る	to return home
@@ -140,7 +140,6 @@
 空く	to become empty (hunger)
 売る	To sell
 清潔[な]	Sanitary
-隣の	Next to
 もらう	To receive (you recipient (POV); went out of your way to receive it)
 反対[する]	To disagree
 現在	Current (time)
@@ -152,7 +151,7 @@
 購入[する]	To purchase
 入力[する]	To input
 進む	to proceed
-連れて[来る]	To bring along (person)
+連れて[来る]	To bring along (someone)
 頼む	To ask a favor
 大変[な]	Terrible (situation)
 賢い	Smart
@@ -164,7 +163,7 @@
 ついて[くる]	To follow (person)
 買い物[する]	To shop
 役に立つ	to be useful (formal)
-危ない	Dangerous
+危ない	Dangerous (casual)
 洗う	To wash
 勉強[する]	To study (formal)
 違う	to differ
@@ -181,7 +180,7 @@
 短い	Short (length)
 多い	Numerous
 少ない	Fewer than normal
-冷たい	Cold (to the touch)
+冷たい	Cold (to the touch / emotionally)
 上がる	to rise
 深い	Profound
 恥ずかしい	Embarrasing
@@ -189,7 +188,7 @@
 約束[する]	To promise
 止む	to stop (weather)
 寄る	to stop by
-予定[する]	To plan
+予定[する]	To plan (schedule)
 十分[な]	Sufficient
 いっぱい[な]	Full
 美しい	Beautiful
@@ -199,6 +198,7 @@
 眠い	Sleepy
 ひどい	Harsh
 自由[な]	Freely
+プレゼント[する]	To give a present
 予約[する]	To reserve (a time/place)
 祈る	To pray
 準備[する]	To prepare
@@ -231,7 +231,7 @@
 浅い	Shallow
 深い	Deep
 結婚[する]	to get married
-散歩[する]	To stroll
+散歩[する]	To stroll (go for a walk)
 掃除[する]	To clean
 きれい[な]	Clean
 会話[する]	To converse
@@ -248,7 +248,7 @@
 許す	To allow
 冒険[する]	To adventure
 呼ぶ	To call out to
-動く	to move (by itself)
+動く	to move
 頼む	To beg
 歌う	TO sing
 心配[する]	To worry
@@ -265,11 +265,11 @@
 急ぐ	TO hurry
 戦う	to fight (against)
 惜しい	Dissapointing
-安心[する]	To be assured
+安心[する]	to be assured
 気づく	to realize
 なくす	To get rid of
 失う	To lose (something serious; not by accident)
-仕方ない	Unavoidable
+仕方ない	"There's no way (unavoidable)"
 話し合う	To discuss
 うんこ[する]	To poop
 無駄[な]	Futile
@@ -285,11 +285,12 @@
 発音[する]	To pronounce
 賛成[する]	to agree (to something)
 寄付[する]	To donate
+計画[する]	To plan (in steps)
 食事[する]	to have a meal
 出す	To take out
 健康[な]	Healthy
 出す	To put out
-気持ち悪い	Gross
+気持ち悪い	Gross (formal)
 送る	To send
 通る	To pass by
 故障[する]	to be out of order (machine)
@@ -297,7 +298,7 @@
 上る	to climb
 練習[する]	To practice
 足す	To add
-吹く	To blow (breath)
+吹く	To blow (breath/wind)
 折る	To fold
 構う	TO mind
 打つ	To strike (initiating the strike)
@@ -320,8 +321,8 @@
 判断[する]	To judge
 予約[する]	To make an appointment
 かわいそう[な]	Poor (pitiful)
-かかる	to take (of a resource/in time)
-貧しい	Poor (money)
+かかる	to take (of a resource / in time)
+貧しい	Poor (money; formal)
 放送[する]	To broadcast
 亡くなる	to pass away
 望む	To hope for
@@ -395,14 +396,14 @@
 払う	To pay (casual)
 わかる	to be known
 安全[な]	Safe (feeling)
-愛[する]	To love (someone)
+愛[する]	To love
 みたい[な]	Like...
 役に立つ	to be helpful (formal)
 役立つ	to be useful (casual)
 役立つ	to be helpful (casual)
 乗る	to ride
 ある	to happen
-酔っ払う	to get drunk
+酔っ払う	to get drunk (black-out)
 大嫌い[な]	Hate (a lot)
 勝負[する]	to fight (bout)
 構う	TO care (about)
@@ -413,7 +414,7 @@
 豊か[な]	Rich (wealthy)
 狂う	to go crazy
 無理[する]	to work too hard
-復習[する]	To get revenge
+復讐[する]	to get revenge
 値[する]	to deserve
 消す	To turn off (a device)
 休む	to rest
@@ -437,14 +438,14 @@
 易い	Easy (likely to)
 意地悪[な]	Mean
 運動[する]	to exercise (workout)
-生活[する]	to live (day-to-day)
+生活[する]	to live (livelihood)
 簡単[な]	Simple (not complex)
 泊まる	to stay at (place)
 釣る	To fish
 紹介[する]	To introduce
 遅刻[する]	to be late (class/work)
 ドライブ[する]	to go for a drive
-逮捕[する]	To be under arrest
+逮捕[する]	To arrest
 きれい[な]	Clear (pure)
 奇妙[な]	Peculiar
 自首[する]	to surrender (to authorities)
@@ -474,7 +475,7 @@
 忠告[する]	To advise
 望む	To desire
 驚く	to be surprised (formal)
-相談[する]	To ask for advice
+相談[する]	To ask for advice (consultation)
 ずるい	Unfair
 借金[する]	To borrow money (a loan)
 緊張[する]	to be nervous
@@ -519,11 +520,11 @@
 落ち込む	to be depressed
 修理[する]	To repair
 深刻[な]	Serious (situation)
-アルバイト[する]	to work part-time (job)
+アルバイト[する]	to work part-time (job; formal)
 いただく	To receive (humble)
 しかる	To scold
 飼う	To own (an animal)
-移る	to move (houses)
+移る	to move (from house to house)
 暖房[する]	TO heat (indoors)
 表現[する]	To represent
 訪問[する]	To visit (formal)
@@ -533,9 +534,139 @@
 発表[する]	To announce
 あり[な]	Acceptable
 厳しい	Hard (to do)
+悪い	Thanks, sorry...
+禁煙[する]	to be not smoking (no smoking)
 研究[する]	To research
 お祈り[する]	TO pray (holy)
-喧嘩[する]	to argue
+喧嘩[する]	to have an argument
 なかなか[な]	Quite
-動かす	To move (something)
+動かす	To move
 なくす	To lose (an object; by accident)
+寝坊[する]	to sleep in late
+鳴る	to ring (clock/phone)
+片付く	to be cleaned up
+整理[する]	To organize
+飾る	To decorate
+貼る	To post (online)
+冷房[する]	To cool (indoors)
+起こす	To wake up
+早起き[する]	to wake up early
+頼もしい	Reliable
+乾かす	To dry (clothes)
+酔う	to get drunk (buzzed)
+殴る	To punch
+乾く	to get dry
+世話[する]	To look after (someone)
+世話になる	TO be indebted (to someone)
+留守[する]	TO be absent (from home)
+届く	to be delivered
+分析[する]	To analyze (reverse-engineer)
+全快[する]	to fully recover (health)
+眠る	to sleep
+暮らす	to live (day-to-day)
+騙す	To trick
+卒業[する]	to graduate
+教育[する]	To educate
+通う	to commute
+設備[する]	To use equipment (machines)
+欠席[する]	to be absent (work/school)
+復習[する]	To review (learned material)
+貯金[する]	TO save money (savings)
+大変[な]	Challenging
+悔しい	Frustrating
+かっこ悪い	Lame
+怪しい	Suspicious
+気に入る	TO like (favoritism)
+だめ[な]	Useless
+沈黙[する]	to be silent (surroundings)
+蒸し暑い	Humid
+占領[する]	To occupy (an area to oneself)
+貧乏[な]	Poor (money; casual)
+押す	To stamp
+豪華[な]	Fancy
+判決[する]	To sentence (judicial judgement)
+余分[な]	Extra
+バイト[する]	to work part-time (job; casual)
+許可[する]	To get permission
+通訳[する]	To interprate (an interpreter)
+うまくいく[する]	TO go smoothly
+完成[する]	TO complete
+申し込む	To apply for (w/ an application form)
+支度[する]	To make arrangements (for going out / a meal)
+両替[する]	To exchange (diff. currencies)
+過ごす	To spend time (at/with)
+見物[する]	TO sightsee
+ごちそう[する]	To treat (someone to a meal)
+噛む	To bite
+エロい	Sexy (casual)
+残す	To leave behind (object)
+残る	"to be left over (what's left)"
+計る	To measure
+焼く	To bake/fry/grill
+用意[する]	To make preparations
+気になる	TO be curious about (POV: you)
+気になる	TO be concerned about (POV: you)
+気になる	TO be bothered by (POV: you)
+気に[する]	TO worry about (POV: he/she/they)
+沸かす	To boil
+励ます	To cheer up (someone)
+冷やす	To cool down
+上がる	to increase
+計算[する]	To calculate
+サイン[する]	TO sign (signature)
+包む	To wrap
+不明[な]	Unknown
+みたい[な]	Looked like...
+許す	To forgive
+位置[する]	to be positioned (at)
+断る	To refuse
+下ろす	To withdraw (money)
+キモい	Gross (casual)
+不要[な]	Unnecessary
+光る	to shine
+咲く	to bloom
+利用[する]	To use (for net benefit)
+込む	to be crowded
+閉まる	to close
+向かう	to head towards
+操作[する]	To operate (device)
+ぶつかる	to bump into (person/object)
+滑る	to slip (and fall / hand slipped)
+危険[な]	Dangerous (formal)
+注意[する]	to be cautious
+不思議[な]	Marvelous (mysterious)
+詳しい	Detailed
+おかしい	Funny (strange)
+招く	To gesture (someone) over/to/in
+向かう	to face (forward)
+返事[する]	to reply
+知り合う	to get acquainted
+採点[する]	To grade (a test)
+贈る	To give (as a gift)
+めちゃくちゃ[な]	Crazy
+平凡[な]	Mediocre
+最低[な]	Worst (hate)
+起きる	to occur {dramatic}
+取り戻す	To recover (take back; object)
+不思議[な]	Mysterious
+渡す	To hand over (something to someone)
+喜ぶ	TO be happy
+感謝[する]	TO thank (someone)
+遠慮[する]	TO hesitate
+気がつく	TO notice
+多い	A lot (large amount)
+私用[する]	TO personally use (personal-use)
+私用[する]	TO privately use (private-use)
+想像[する]	To imagine
+取る	To get (obtain)
+移す	To move (from house to house)
+入る	to be inside (e.g a box)
+邪魔[する]	TO interfere
+命令[する]	To order (give orders)
+解析[する]	To analyze (theory-testing)
+万全[な]	Flawless
+ありえない	Ridiculous (no way)
+心細い	Helpless
+育つ	to be raised (at/in)
+付き合う	to go out (with someone; dating)
+誓う	To swear (vow)

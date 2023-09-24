@@ -2,7 +2,7 @@
 食べる	To eat
 答える	to answer
 始める	To start
-寝る	to sleep
+寝る	to lie down (usu. bed)
 教える	To teach
 見せる	To show
 見る	To look
@@ -11,10 +11,10 @@
 借りる	To borrow
 落ちる	to fall (object from up high)
 感じる	TO feel (sensational)
-止める	To stop (someone)
+止める	To stop (person)
 着る	To wear (above waist)
 変える	To change
-閉じる	to close
+閉じる	TO close
 負ける	to lose (to someone)
 与える	To grant
 分ける	To share
@@ -38,7 +38,7 @@
 揺れる	to shake (body)
 信じる	To believe
 売れる	to sell well
-受ける	To get
+受ける	To get (receive)
 見える	to be in sight
 育てる	To raise (nurture someone)
 締める	To tighten
@@ -60,6 +60,7 @@
 責める	To blame
 似る	to look like
 迎える	To greet
+気をつける	TO be careful
 倒れる	to collapse
 任せる	To entrust (to someone)
 認める	To acknowledge
@@ -76,7 +77,7 @@
 辞める	To quit (a job)
 辞める	To retire
 ついてる	TO be lucky
-調べる	To look up (something)
+調べる	To look up (information)
 出かける	to go out
 降りる	to get off (transportation)
 点ける	To turn on (a device)
@@ -89,18 +90,54 @@
 震える	to tremble
 切れる	to run out of (resource)
 濡れる	to get wet
-上げる	To show someone into a room
+上げる	To show into a room (person)
 壊れる	to be destroyed
 かける	To make (a phone call)
 足りる	to be enough
 換える	To replace
 換える	To exchange
 集める	To collect
-乗り換える	To transfer (trains)
+乗り換える	To transfer (vehicles)
 覚える	To remember
 止める	To park
-もらえる	TO be able to receive (a gift)
+もらえる	TO be able to receive
 かける	To cause (someone to worry)
-立てる	To stand (up; something)
+立てる	To stand (up; object)
 かける	To lock
 照れる	to be shy
+片付ける	To clean up
+上げる	To increase
+消える	to turn off (a device)
+届ける	To deliver
+間違える	To make a mistake
+まとめる	To summarize
+確かめる	To make sure
+務める	To be employed (at)
+認める	To admit
+舐める	To lick
+煮る	To stew
+駆ける	to run (poetically)
+避ける	To avoid (physical contact with)
+混ぜる	To stir (mix ingredients)
+並べる	To line up (person/object)
+焼ける	to be baked/fried/grilled
+温める	To heat up (something)
+入れる	To make (tea/coffee)
+腐る	to rot (food)
+数える	To count
+取り替える	To swap
+尋ねる	To ask (for directions)
+晴れる	to clear up (weather)
+冷える	to grow cold
+比べる	To compare
+折れる	to snap (fracture)
+植える	To plant (a plant)
+触れる	to touch (lightly)
+慰める	To comfort
+振られる	to get dumped (by girl/boy- friend)
+あわてる	to panic
+教える	To tell (say)
+組み立てる	To assemble (put objects together)
+聞こえる	to be heard
+合わせる	To meet
+振られる	to get rejected (by girl/boy- friend)
