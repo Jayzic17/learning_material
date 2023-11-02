@@ -61,7 +61,7 @@
 汚い	Dirty
 軽い	Light (not heavy)
 遠い	Far (distance)
-単純[な]	Simple (minded/straightforward)
+単純[な]	Simple (straightforward)
 重い	Heavy
 うるさい	Noisy
 複雑[な]	Complicated
@@ -106,7 +106,7 @@
 歩く	to walk
 乗る	to board (transportation)
 聞く	To listen
-運ぶ	To carry
+運ぶ	To carry (object)
 入浴[する]	To bathe
 学ぶ	TO learn
 聞く	To ask (a question)
@@ -174,7 +174,7 @@
 返す	To return (an object)
 旅行[する]	To travel
 洗濯[する]	To do laundry
-大切[な]	Important (formal)
+大切[な]	Important (logistically)
 細い	Slender
 太い	Fat
 短い	Short (length)
@@ -197,7 +197,7 @@
 正しい	Correct
 眠い	Sleepy
 ひどい	Harsh
-自由[な]	Freely
+自由[な]	Free (freedom)
 プレゼント[する]	To give a present
 予約[する]	To reserve (a time/place)
 祈る	To pray
@@ -248,7 +248,7 @@
 許す	To allow
 冒険[する]	To adventure
 呼ぶ	To call out to
-動く	to move
+動く	to move (person)
 頼む	To beg
 歌う	TO sing
 心配[する]	To worry
@@ -294,7 +294,7 @@
 送る	To send
 通る	To pass by
 故障[する]	to be out of order (machine)
-喧嘩[する]	To brawl
+喧嘩[する]	To fight (brawl)
 上る	to climb
 練習[する]	To practice
 足す	To add
@@ -369,7 +369,7 @@
 確か[な]	Certain
 苦手[な]	Not good (uncomfortable) at/with/in
 解く	To solve
-上手い	Skilled at
+上手い	Skilled (at)
 帰る	to go home
 素敵[な]	Lovely
 ささやく	to whisper
@@ -410,8 +410,8 @@
 無事[な]	Safe (secure)
 撮る	To take a picture
 去る	to leave (go away)
-語る	To talk about
-豊か[な]	Rich (wealthy)
+語る	To talk about (have a word)
+豊か[な]	Rich (wealthy/plentiful/taste)
 狂う	to go crazy
 無理[する]	to work too hard
 復讐[する]	to get revenge
@@ -424,7 +424,7 @@
 いやらしい	Lewd (formal)
 起こる	to occur
 逆[な]	Opposite
-大事[な]	Important (casual)
+大事[な]	Important (emotionally)
 つなぐ	To connect
 親切[な]	Friendly
 便利[な]	Convenient (object)
@@ -489,7 +489,7 @@
 弾く	To play (string/key instrument)
 終わる	to end
 細かい	Small (finely detailed)
-下ろす	To lower
+下ろす	To lower (object)
 推薦[する]	To endorse
 確認[する]	To confirm
 出す	To send (a letter)
@@ -540,7 +540,7 @@
 お祈り[する]	TO pray (holy)
 喧嘩[する]	to have an argument
 なかなか[な]	Quite
-動かす	To move
+動かす	To move (person)
 なくす	To lose (an object; by accident)
 寝坊[する]	to sleep in late
 鳴る	to ring (clock/phone)
@@ -617,12 +617,12 @@
 包む	To wrap
 不明[な]	Unknown
 みたい[な]	Looked like...
-許す	To forgive
+許す	To forgive (someone else)
 位置[する]	to be positioned (at)
 断る	To refuse
 下ろす	To withdraw (money)
 キモい	Gross (casual)
-不要[な]	Unnecessary
+不要[な] / 不必要[な]	Unnecessary
 光る	to shine
 咲く	to bloom
 利用[する]	To use (for net benefit)
@@ -646,7 +646,7 @@
 めちゃくちゃ[な]	Crazy
 平凡[な]	Mediocre
 最低[な]	Worst (hate)
-起きる	to occur {dramatic}
+起きる	to occur (dramatic)
 取り戻す	To recover (take back; object)
 不思議[な]	Mysterious
 渡す	To hand over (something to someone)
@@ -654,7 +654,7 @@
 感謝[する]	TO thank (someone)
 遠慮[する]	TO hesitate
 気がつく	TO notice
-多い	A lot (large amount)
+多い	A lot (of)
 私用[する]	TO personally use (personal-use)
 私用[する]	TO privately use (private-use)
 想像[する]	To imagine
@@ -662,7 +662,7 @@
 移す	To move (from house to house)
 入る	to be inside (e.g a box)
 邪魔[する]	TO interfere
-命令[する]	To order (give orders)
+命令[する]	To give orders
 解析[する]	To analyze (theory-testing)
 万全[な]	Flawless
 ありえない	Ridiculous (no way)
@@ -670,3 +670,81 @@
 育つ	to be raised (at/in)
 付き合う	to go out (with someone; dating)
 誓う	To swear (vow)
+黙る	to be silent (person)
+自殺[する]	to commit suicide
+不満[な]	Dissatisfying
+助言[する]	TO suggest
+本気[な]	Serious (for real)
+めちゃくちゃ[な]	Chaotic
+退く	to step aside
+退く	to step back
+エッチ[な]	Dirty (sexy)
+エッチ[する]	to have sex (dirty)
+嫉妬[する]	TO be jealous
+騒ぐ	to make noise
+ドキドキ[する]	"to beat fast (one's heart)"
+確信[する]	To be confident
+気がつく	TO realize
+気づく	to notice
+平凡[な]	Ordinary (formal)
+イカす[する]	to be cool
+ジメジメ[する]	TO be humid
+留守番[する]	TO house-sit
+行き渡る	to become widespread
+吐く	To throw up (vomit)
+爆発[する]	to explode
+どうでもいい	Whichever (indifferent)
+取引[する]	To trade
+暑い	Passionate
+奇遇[な]	Unexpected meeting
+中止[する]	To cancel (an event)
+カンニング[する]	to cheat (on a test)
+解雇[する]	To fire (an employee)
+同感[する]	to feel the same way
+痛い	Cringe
+巨大[な]	Gigantic
+突然[な]	Abrupt
+改造[する]	To alter (alteration)
+改造[する]	To mod (a video game)
+迷う	to be lost (person)
+編集[する]	To edit
+不安[な]	Anxious
+悲しむ	To be sad (for)
+惨め[な]	Miserable
+墜落[する]	to crash (plane)
+拍手[する]	to applaud
+一般[な]	Average
+揃う	to be all present
+ギリギリ[な]	Just barely
+ギリギリ[な]	At the very limit
+ギリギリ[な]	At the last moment
+溶かす	To melt
+落ち着く	to calm down
+配達[する]	To deliver (formal)
+替わる	to replace (in-place of newer thing)
+目撃[する]	To witness (an event)
+検索[する]	To search (on the Internet)
+無視[する]	To ignore
+ちょろい	Easy (to trick/do)
+受信[する]	To receive (a transmission)
+死亡[する]	"to die (someone you're not familiar with)"
+回復[する]	TO recover (from illness)
+どうでもいい	Not worth worrying about
+引き返す	to turn back (not nec. home)
+透明[な]	Clear (transparent)
+ネクラ[な]	Gloomy
+迷惑[な]	Annoying
+余計[な]	Too much (bad)
+入る	to join (e.g club)
+適度[な]	Proper amount (of)
+排除[する]	To eliminate
+当たる	to be successful (when hitting a target)
+キモい	Creepy (casual)
+遊ぶ	to hang out
+没収[する]	TO confiscate
+休講[する]	to cancel (a class)
+頭悪い	Dumb
+悪戯[する]	To prank
+悪戯[な]	Naughty (mischievous)
+不可能[な]	Impossible
+完成[する]	To perfect (something)

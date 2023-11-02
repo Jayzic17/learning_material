@@ -82,7 +82,7 @@
 降りる	to get off (transportation)
 点ける	To turn on (a device)
 飽きる	to become bored with
-出る	to appear (show up)
+出る	to come forth (emerge)
 勧める	To recommend
 進める	To proceed with
 壊れる	to be broken
@@ -108,7 +108,7 @@
 片付ける	To clean up
 上げる	To increase
 消える	to turn off (a device)
-届ける	To deliver
+届ける	To deliver (casual)
 間違える	To make a mistake
 まとめる	To summarize
 確かめる	To make sure
@@ -140,4 +140,15 @@
 組み立てる	To assemble (put objects together)
 聞こえる	to be heard
 合わせる	To meet
-振られる	to get rejected (by girl/boy- friend)
+振られる	to get rejected (by girl/boy friend)
+捉える	To capture (someone)
+代える	To substitute (something in-place of different thing)
+替える	To replace (something in-place of newer thing)
+外れる	to be disconnected
+外れる	to miss (the mark)
+溶ける	to melt
+詫びる	To apologize
+売り切れる	to be sold out
+現れる	to appear (come into view)
+あふれる	to overflow
+褒める	To praise
