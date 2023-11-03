@@ -51,7 +51,7 @@
 [sentence]つもりです	Describe what you intend to do
 かも / かも知れない / かも知りません	Might...
 から	The reason is because... (casual)
-{na-adjective/noun present positive}: [situation {casual}]なので[explanation] else: [situation {casual}]ので[explanation]	The reason is because... (formal)
+なので / ので	The reason is because... (formal)
 [question]でしょうか	Asks a question that listener might not have the answer to
 [thing]が欲しい	Saying that you want something
 [verb1 {positive casual}]り[verb2 {positive casual}]り...する	Provide a subset of examples of things to do in no particular order

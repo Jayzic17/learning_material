@@ -18,10 +18,11 @@ try:
     str(sys.argv[1])
 except:
     sys.exit("Argument 1 is not a string: python3 wotd.py [single, each, grammar] [number]")
-try:
-    int(sys.argv[2])
-except:
-    sys.exit("Argument 2 is not a number: python3 wotd.py [single, each, grammar] [number]")   
+if len(sys.argv) == 3: 
+    try:
+        int(sys.argv[2])
+    except:
+        sys.exit("Argument 2 is not a number: python3 wotd.py [single, each, grammar] [number]")   
 if len(sys.argv) == 1:
     sys.exit("Missing argument: python3 wotd.py [single, each, grammar] [number]")
 elif len(sys.argv) >= 4:
