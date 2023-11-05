@@ -30,47 +30,47 @@
 けど	"When disagreeing with someone, but you don't want to come off as confrontational Expresses uncertainty ...However"
 [て verb_1][て verb_2]...[verb_n] [て verb_1][verb_2]	[verb] and [verb] [verb] so [verb]
 [て adjective_1][て adjective_2]...[adjective_n] [て adjective1][adjective2]	[adjective] and [adjective] [adjective] so [adjective]
-[sentence]何ですか	"Asks a: ""what is this"" question"
+何ですか	"Asks a: ""what is this"" question"
 じゃねえか / じゃないか / じゃないですか	"Isn't it?/doesn't it?/aren't you? (seeking positive confirmation)"
 だけ	Just / only (ordinary/amount)
 なら	If...
-[from place]から[to place]まで	From here to there
+...から...まで	From here to there
 [na-adjective]な[noun]	な adjective describing noun
 [i-adjective][noun]	い adjective describing noun
 [adverb][adjective]	Adverb describing adjective
 [adverb][verb]	Adverb describing verb
 [adverb][adverb]	Adverb describing adverb
-[person]の[大]好きな[thing] [person]の[大]嫌いな[thing]	"Describing someone's favorite thing Describing someone's least favorite thing"
-[object]と[object]の間	In between 2 objects
-[person]は[sentence {present positive}]と思い出す	To say how a person thinks about something
-[person]は[sentence {present negative}]と思い出す	"To say how a person doesn't think about something"
-[person to quote]は[the quote]と言っていました	To quote what someone said
-[person]は[sentence {past positive}]と思い出す	To say what a person thinks happened
-[A]のほうが[B]より[verb/adjective]	Comparison (2 things)
-[A]と[B]と...の中で[question/choice]一番[verb/adjective]	Comparison (+3 things)
-[sentence]つもりです	Describe what you intend to do
+...の[大]好きな... ...の[大]嫌いな...	"Describing someone's favorite thing Describing someone's least favorite thing"
+...と...の間	In between 2 objects
+...は...と思い出す	To say how a person thinks about something
+...は...と思い出す	"To say how a person doesn't think about something"
+...は...と言っていました	To quote what someone said
+...は...と思い出す	To say what a person thinks happened
+...のほうが..より...	Comparison (2 things)
+...と...と...の中で...一番...	Comparison (+3 things)
+つもりです	Describe what you intend to do
 かも / かも知れない / かも知りません	Might...
 から	The reason is because... (casual)
 なので / ので	The reason is because... (formal)
-[question]でしょうか	Asks a question that listener might not have the answer to
-[thing]が欲しい	Saying that you want something
-[verb1 {positive casual}]り[verb2 {positive casual}]り...する	Provide a subset of examples of things to do in no particular order
-[thing]はいかがですか	How about this?... (asking if you want a thing)
-ちょっと[place]まで	"When you're just going to ONLY one place"
-もし[condition {たら form}][reaction]	If this, then this
+でしょうか	Asks a question that listener might not have the answer to
+...が欲しい	Saying that you want something
+...り...り...する	Provide a subset of examples of things to do in no particular order
+...はいかがですか	How about this?... (asking if you want a thing)
+ちょっと...まで	"When you're just going to ONLY one place"
+もし...	If this, then this
 そうです	It seems...
 んだけど / んですけど	Prefacing the situation before the main point of the sentence Politely requesting someone (anyone) to do something about the situation
 けど	Prefacing the topic of the sentence Prefacing something before the topic of the sentence
-もしもし[your name]だけど / ですけど	Introducing yourself to someone {who knows you; over the phone}
+もしもし...[だけど / ですけど]	Introducing yourself to someone {who knows you; over the phone}
 こと / 事 / のこと / の事 / ことだ / 事だ / ことか / 事か	"Describes the noun as a concept (i.e everything about the noun) Describes a string of words as a concept (e.g ""public speaking"") Putting emphasis on when giving advice/suggestion not to do something Asking a rhetorical question Abstract thing(s) regarding the preceeding word"
 について	When talking ABOUT something
-ばかり	Nothing but... Always...
-[verb {negative}] 誰にも	"Don't [verb] to anyone"
-[thing]が 気に入った / 気に入りました	"You've used something for the 1st time, you like it, and you plan to use it in the future"
-[person/place/thing]が 気に入らない / 気に入りません	"Implying a particular thing you don't like about something"
+ばかり / ばっかり	Nothing but... Always...
+誰にも	"Don't [verb] to anyone"
+気に入った / 気に入りました	"You've used something for the 1st time, you like it, and you plan to use it in the future"
+...が [気に入らない / 気に入りません]	"Implying a particular thing you don't like about something"
 ヶ	Indicates possession typically with names of places
 の / んですか	Asks a question (expecting an explanation)
-[noun]と比べると、	Compared to __ , ...
+と比べると , ...	Compared to __ , ...
 に行く途中で	On my way to...
 ような / ように	"Similar to... Just like... As if as though... Indicates the sentence is a wish, hope, or prayer {""wishing"" verbs} In order to do __, I/he/she/they will __ (emphasis on action to take)"
 ために / ため	I/he/she/they do __ for the sake of... __ (empahsis on outcome)
@@ -78,10 +78,10 @@
 なら / ならば	On the topic of __, ... Regarding __, ... For __, ...
 のとき / とき	When [describing a time when], ...
 のときから	Since [describing a time since], ...
-[from]のときから[to]のときまで、...	From [this] time to [this] time, ...
+...のときから...のときまで、...	From [this] time to [this] time, ...
 なのに / のに	Indicates surprise at something that is happening or has happened IMPLIES surprise at something unexpected
-[thing]でも[verb {negative}]か	Would you like to __ some __, or something?
-[something]を[noun]にする	To turn something into the noun described
-[noun]違って、...	Unlike __, ...
-[noun]でもいい[です]よ	"I don't mind having/if it's __ (something)"
-[noun]でもいい[ですか]	"Do you mind having/if it's __? (something)"
+...でも...か	Would you like to __ some __, or something?
+...を...にする	To turn something into the noun described
+違って、...	Unlike __, ...
+...でもいい[です]よ	"I don't mind having/if it's __ (something)"
+...でもいい[ですか]	"Do you mind having/if it's __? (something)"
