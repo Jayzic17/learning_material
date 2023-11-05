@@ -30,7 +30,7 @@ elif len(sys.argv) >= 4:
 elif not (str(sys.argv[1]) == 'single' or str(sys.argv[1]) == 'each' or str(sys.argv[1]) == 'grammar'):
     sys.exit("Argument 1 is invalid: python3 wotd.py [single, each, grammar] [number]")
 elif str(sys.argv[1]) == 'grammar' and len(sys.argv) != 3:
-    sys.exit("Invalid arguments for 'grammar': python3 wotd.py [single, each, grammar] [number]")
+    sys.exit("Missing argument for 'grammar': python3 wotd.py [single, each, grammar] [number]")
 
 
 
