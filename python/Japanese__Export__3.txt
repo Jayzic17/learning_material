@@ -22,7 +22,7 @@
 ぞ / ぜ	! (masculine)
 かしら / でしょう	I wonder...
 かい	Asks a yes/no question
-かな	"asking yourself: ""should I?"" ""I wonder..."""
+かな	"""should I?"" ""I wonder..."""
 たって / ても	Even if... Even though...
 なんだ / なのだ / なんです / なのです / んだ / のだ / んです / のです	"Saying something the listener doesn’t know When clarifying a situation When providing an explanation When realizing something by yourself When you’re confessing something ""btw..."""
 など	Etc.
@@ -43,15 +43,13 @@
 ...の[大]好きな... ...の[大]嫌いな...	"Describing someone's favorite thing Describing someone's least favorite thing"
 ...と...の間	In between 2 objects
 ...は...と思い出す	To say how a person thinks about something
-...は...と思い出す	"To say how a person doesn't think about something"
 ...は...と言っていました	To quote what someone said
-...は...と思い出す	To say what a person thinks happened
 ...のほうが..より...	Comparison (2 things)
 ...と...と...の中で...一番...	Comparison (+3 things)
 つもりです	Describe what you intend to do
 かも / かも知れない / かも知りません	Might...
 から	The reason is because... (casual)
-なので / ので	The reason is because... (formal)
+[な]ので / ので	The reason is because... (formal)
 でしょうか	Asks a question that listener might not have the answer to
 ...が欲しい	Saying that you want something
 ...り...り...する	Provide a subset of examples of things to do in no particular order
@@ -62,7 +60,7 @@
 んだけど / んですけど	Prefacing the situation before the main point of the sentence Politely requesting someone (anyone) to do something about the situation
 けど	Prefacing the topic of the sentence Prefacing something before the topic of the sentence
 もしもし...[だけど / ですけど]	Introducing yourself to someone {who knows you; over the phone}
-こと / 事 / のこと / の事 / ことだ / 事だ / ことか / 事か	"Describes the noun as a concept (i.e everything about the noun) Describes a string of words as a concept (e.g ""public speaking"") Putting emphasis on when giving advice/suggestion not to do something Asking a rhetorical question Abstract thing(s) regarding the preceeding word"
+のこと / の事 / こと / 事	"Describes the noun as a concept (i.e everything about the noun) Describes a string of words as a concept (e.g ""public speaking"")"
 について	When talking ABOUT something
 ばかり / ばっかり	Nothing but... Always...
 誰にも	"Don't [verb] to anyone"
@@ -79,7 +77,7 @@
 のとき / とき	When [describing a time when], ...
 のときから	Since [describing a time since], ...
 ...のときから...のときまで、...	From [this] time to [this] time, ...
-なのに / のに	Indicates surprise at something that is happening or has happened IMPLIES surprise at something unexpected
+[な]のに / のに	Indicates surprise at something that is happening or has happened IMPLIES surprise at something unexpected
 ...でも...か	Would you like to __ some __, or something?
 ...を...にする	To turn something into the noun described
 違って、...	Unlike __, ...

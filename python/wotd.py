@@ -55,7 +55,8 @@ if str(sys.argv[1]) == 'grammar' and len(sys.argv) == 3:
     for i in range(0, int(sys.argv[2])):
         rnd_num = random.randint(0, len(grammar_points) - 1)
         print(grammar_points[rnd_num])
-
+        grammar_points.pop(rnd_num)
+        
 else:
     
     i_adjectives = []
