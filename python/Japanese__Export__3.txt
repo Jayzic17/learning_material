@@ -20,11 +20,11 @@
 や / とか	Joins together an inexhaustive list of things
 わ	"Used to affirm one's conclusion/decision/opinion"
 ぞ / ぜ	! (masculine)
-かしら / でしょう	I wonder...
+かしら / でしょう[か]	I wonder...
 かい	Asks a yes/no question
 かな	"""should I?"" ""I wonder..."""
 たって / ても	Even if... Even though...
-なんだ / なのだ / なんです / なのです / んだ / のだ / んです / のです	"Saying something the listener doesn’t know When clarifying a situation When providing an explanation When realizing something by yourself When you’re confessing something ""btw..."""
+[な]んだ / [な]のだ / [な]んです / [な]のです	"Saying something the listener doesn’t know / clarifying a situation / providing an explanation / confessing something When realizing something by yourself ""btw..."""
 など	Etc.
 より	Than
 けど	"When disagreeing with someone, but you don't want to come off as confrontational Expresses uncertainty ...However"
@@ -42,8 +42,8 @@
 [adverb][adverb]	Adverb describing adverb
 ...の[大]好きな... ...の[大]嫌いな...	"Describing someone's favorite thing Describing someone's least favorite thing"
 ...と...の間	In between 2 objects
-...は...と思い出す	To say how a person thinks about something
-...は...と言っていました	To quote what someone said
+...は...と思い出す	To say how you / someone else remembers something
+...は...と言っていました	To quote what you / someone else said
 ...のほうが..より...	Comparison (2 things)
 ...と...と...の中で...一番...	Comparison (+3 things)
 つもりです	Describe what you intend to do
@@ -65,7 +65,7 @@
 ばかり / ばっかり	Nothing but... Always...
 誰にも	"Don't [verb] to anyone"
 気に入った / 気に入りました	"You've used something for the 1st time, you like it, and you plan to use it in the future"
-...が [気に入らない / 気に入りません]	"Implying a particular thing you don't like about something"
+...[気に入らない / 気に入りません]	"Implying a particular thing you don't like about something"
 ヶ	Indicates possession typically with names of places
 の / んですか	Asks a question (expecting an explanation)
 と比べると , ...	Compared to __ , ...
@@ -74,7 +74,7 @@
 ために / ため	I/he/she/they do __ for the sake of... __ (empahsis on outcome)
 のような	This thing is similar to / just like this thing
 なら / ならば	On the topic of __, ... Regarding __, ... For __, ...
-のとき / とき	When [describing a time when], ...
+[の]とき	When [describing a time when], ...
 のときから	Since [describing a time since], ...
 ...のときから...のときまで、...	From [this] time to [this] time, ...
 [な]のに / のに	Indicates surprise at something that is happening or has happened IMPLIES surprise at something unexpected
@@ -83,3 +83,4 @@
 違って、...	Unlike __, ...
 ...でもいい[です]よ	"I don't mind having/if it's __ (something)"
 ...でもいい[ですか]	"Do you mind having/if it's __? (something)"
+...は...と思います	To say how you / someone else thinks about something
