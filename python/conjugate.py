@@ -104,7 +104,9 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-4] + '良くないはずだ' + '\n')
                 file.write(word[:-4] + '良いはずだった' + '\n')
                 file.write(word[:-4] + '良いはずだ' + '\n')
-                number_of_lines += 30
+                file.write(word[:-4] + '良いことがある' + '\n')
+                file.write(word[:-4] + '良いらしい' + '\n')
+                number_of_lines += 32
             elif word == '良い':
                 file.write('良くて' + '\n')
                 file.write('良くてもいい' + '\n')
