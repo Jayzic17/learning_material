@@ -59,7 +59,6 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'さ' + '\n')
                 file.write(word[:-1] + 'がる' + '\n')
                 file.write(word[:-1] + 'がっている' + '\n')
-                file.write(word[:-1] + 'がっていた' + '\n')
                 file.write(word[:-1] + 'いはずがない' + '\n')
                 file.write(word[:-1] + 'くないはずがない' + '\n')
                 file.write(word[:-1] + 'いはずでわなかった' + '\n')
@@ -68,7 +67,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'いはずだ' + '\n')
                 file.write(word[:-1] + 'いらしい' + '\n')
                 file.write(word[:-1] + 'いことがある' + '\n')
-                number_of_lines += 33
+                number_of_lines += 32
             elif word[-4:] == '[いい]' or word[-4:] == '[良い]':
                 if word[-4:] == '[いい]':
                     file.write(word[:-4] + 'いい' + '\n')
@@ -97,7 +96,6 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-4] + '良さ' + '\n')
                 file.write(word[:-4] + '良がる' + '\n')
                 file.write(word[:-4] + '良がっている' + '\n')
-                file.write(word[:-4] + '良がっていた' + '\n')
                 file.write(word[:-4] + '良いはずがない' + '\n')
                 file.write(word[:-4] + '良くないはずがない' + '\n')
                 file.write(word[:-4] + '良いはずでわなかった' + '\n')
@@ -106,7 +104,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-4] + '良いはずだ' + '\n')
                 file.write(word[:-4] + '良いことがある' + '\n')
                 file.write(word[:-4] + '良いらしい' + '\n')
-                number_of_lines += 32
+                number_of_lines += 31
             elif word == '良い':
                 file.write('良くて' + '\n')
                 file.write('良くてもいい' + '\n')
@@ -131,14 +129,13 @@ with open('conjugated.txt', 'w') as file:
                 file.write('良さ' + '\n')
                 file.write('良がる' + '\n')
                 file.write('良がっている' + '\n')
-                file.write('良がっていた' + '\n')
                 file.write('良いはずがない' + '\n')
                 file.write('良くないはずがない' + '\n')
                 file.write('良いはずでわなかった' + '\n')
                 file.write('良くないはずだ' + '\n')
                 file.write('良いはずだった' + '\n')
                 file.write('良いはずだ' + '\n')
-                number_of_lines += 30
+                number_of_lines += 29
             elif word[-3:] == '[な]':
                 file.write(word[:-3] + 'で' + '\n')
                 file.write(word[:-3] + 'でもいい' + '\n')
