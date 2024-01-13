@@ -176,6 +176,7 @@ with open('conjugated.txt', 'w') as file:
                 number_of_lines += 36
             elif word[-4:] == '[する]':
                 file.write(word[:-4] + 'して' + '\n')
+                file.write(word[:-4] + 'してみそ' + '\n')
                 file.write(word[:-4] + 'しそう' + '\n')
                 file.write(word[:-4] + '法' + '\n')
                 file.write(word[:-4] + '方法' + '\n')
@@ -303,9 +304,10 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-4] + 'することはない' + '\n')
                 file.write(word[:-4] + 'することになった' + '\n')
                 file.write(word[:-4] + 'することになりました' + '\n')
-                number_of_lines += 128
+                number_of_lines += 129
             elif word[-4:] == '[くる]' or word[-4:] == '[来る]':
                 file.write(word[:-4] + '来て' + '\n')
+                file.write(word[:-4] + '来てみそ' + '\n')
                 file.write(word[:-4] + '来そう' + '\n')
                 file.write(word[:-4] + '来かた' + '\n')
                 file.write(word[:-4] + '来なきゃ' + '\n')
@@ -428,9 +430,10 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-4] + '来ることはない' + '\n')
                 file.write(word[:-4] + '来ることになった' + '\n')
                 file.write(word[:-4] + '来ることになりました' + '\n')
-                number_of_lines += 123
+                number_of_lines += 124
             elif word[-4:] == '[いく]' or word[-4:] == '[行く]':
                 file.write(word[:-4] + '行って' + '\n')
+                file.write(word[:-4] + '行ってみそ' + '\n')
                 file.write(word[:-4] + '行きそう' + '\n')
                 file.write(word[:-4] + 'い方' + '\n')
                 file.write(word[:-4] + '行かなきゃ' + '\n')
@@ -559,9 +562,10 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-4] + '行くことはない' + '\n')
                 file.write(word[:-4] + '行くことになった' + '\n')
                 file.write(word[:-4] + '行くことになりました' + '\n')
-                number_of_lines += 129
+                number_of_lines += 130
             elif word == 'する':
                 file.write('して' + '\n')
+                file.write('してみそ' + '\n')
                 file.write('しそう' + '\n')
                 file.write('しかた' + '\n')
                 file.write('しなきゃ' + '\n')
@@ -684,9 +688,10 @@ with open('conjugated.txt', 'w') as file:
                 file.write('することはない' + '\n')
                 file.write('することになった' + '\n')
                 file.write('することになりました' + '\n')
-                number_of_lines += 124
+                number_of_lines += 125
             elif word == '来る':
                 file.write('来て' + '\n')
+                file.write('来てみそ' + '\n')
                 file.write('来そう' + '\n')
                 file.write('来かた' + '\n')
                 file.write('来なきゃ' + '\n')
@@ -809,9 +814,10 @@ with open('conjugated.txt', 'w') as file:
                 file.write('来るはずだったことはない' + '\n')
                 file.write('来ることになった' + '\n')
                 file.write('来ることになりました' + '\n')
-                number_of_lines += 123
+                number_of_lines += 124
             elif word == '行く':
                 file.write('行って' + '\n')
+                file.write('行ってみそ' + '\n')
                 file.write('行きそう' + '\n')
                 file.write('行かなきゃ' + '\n')
                 file.write('行かなきゃいけない' + '\n')
@@ -940,7 +946,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write('行くことはない' + '\n')
                 file.write('行くことになった' + '\n')
                 file.write('行くことになりました' + '\n')
-                number_of_lines += 130
+                number_of_lines += 131
             elif word[-1] == 'う':
                 file.write(word[:-1] + 'うらしい' + '\n')
                 file.write(word[:-1] + 'うべき' + '\n')
@@ -949,6 +955,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'うことができない' + '\n')
                 file.write(word[:-1] + 'うことができません' + '\n')
                 file.write(word[:-1] + 'って' + '\n')
+                file.write(word[:-1] + 'ってみそ' + '\n')
                 file.write(word[:-1] + 'わなきゃ' + '\n')
                 file.write(word[:-1] + 'わなきゃいけない' + '\n')
                 file.write(word[:-1] + 'わなきゃいけません' + '\n')
@@ -1071,7 +1078,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'うことはない' + '\n')
                 file.write(word[:-1] + 'うことになった' + '\n')
                 file.write(word[:-1] + 'うことになりました' + '\n')
-                number_of_lines += 130
+                number_of_lines += 131
             elif word[-1] == 'つ':
                 file.write(word[:-1] + 'つらしい' + '\n')
                 file.write(word[:-1] + 'つべき' + '\n')
@@ -1080,6 +1087,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'つことができない' + '\n')
                 file.write(word[:-1] + 'つことができません' + '\n')
                 file.write(word[:-1] + 'って' + '\n')
+                file.write(word[:-1] + 'ってみそ' + '\n')
                 file.write(word[:-1] + 'たなきゃ' + '\n')
                 file.write(word[:-1] + 'たなきゃいけない' + '\n')
                 file.write(word[:-1] + 'たなきゃいけません' + '\n')
@@ -1202,7 +1210,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'つことはない' + '\n')
                 file.write(word[:-1] + 'つことになった' + '\n')
                 file.write(word[:-1] + 'つことになりました' + '\n')
-                number_of_lines += 130
+                number_of_lines += 131
             elif word[-1] == 'る':
                 file.write(word[:-1] + 'るらしい' + '\n')
                 file.write(word[:-1] + 'るべき' + '\n')
@@ -1211,6 +1219,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ることができない' + '\n')
                 file.write(word[:-1] + 'ることができません' + '\n')
                 file.write(word[:-1] + 'って' + '\n')
+                file.write(word[:-1] + 'ってみそ' + '\n')
                 file.write(word[:-1] + 'らなきゃ' + '\n')
                 file.write(word[:-1] + 'らなきゃいけない' + '\n')
                 file.write(word[:-1] + 'らなきゃいけません' + '\n')
@@ -1333,7 +1342,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ることはない' + '\n')
                 file.write(word[:-1] + 'ることになった' + '\n')
                 file.write(word[:-1] + 'ることになりました' + '\n')
-                number_of_lines += 130
+                number_of_lines += 131
             elif word[-1] == 'む':
                 file.write(word[:-1] + 'むらしい' + '\n')
                 file.write(word[:-1] + 'むべき' + '\n')
@@ -1342,6 +1351,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'むことができない' + '\n')
                 file.write(word[:-1] + 'むことができません' + '\n')
                 file.write(word[:-1] + 'んで' + '\n')
+                file.write(word[:-1] + 'んでみそ' + '\n')
                 file.write(word[:-1] + 'まなきゃ' + '\n')
                 file.write(word[:-1] + 'まなきゃいけない' + '\n')
                 file.write(word[:-1] + 'まなきゃいけません' + '\n')
@@ -1463,7 +1473,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'むことはない' + '\n')
                 file.write(word[:-1] + 'むことになった' + '\n')
                 file.write(word[:-1] + 'むことになりました' + '\n')
-                number_of_lines += 129
+                number_of_lines += 130
             elif word[-1] == 'ぶ':
                 file.write(word[:-1] + 'ぶらしい' + '\n')
                 file.write(word[:-1] + 'ぶべき' + '\n')
@@ -1472,6 +1482,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ぶことができない' + '\n')
                 file.write(word[:-1] + 'ぶことができません' + '\n')
                 file.write(word[:-1] + 'んで' + '\n')
+                file.write(word[:-1] + 'んでみそ' + '\n')
                 file.write(word[:-1] + 'ばなきゃ' + '\n')
                 file.write(word[:-1] + 'ばなきゃいけない' + '\n')
                 file.write(word[:-1] + 'ばなきゃいけません' + '\n')
@@ -1594,7 +1605,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ぶことはない' + '\n')
                 file.write(word[:-1] + 'ぶことになった' + '\n')
                 file.write(word[:-1] + 'ぶことになりました' + '\n')
-                number_of_lines += 129
+                number_of_lines += 130
             elif word[-1] == 'ぬ':
                 file.write(word[:-1] + 'ぬらしい' + '\n')
                 file.write(word[:-1] + 'ぬべき' + '\n')
@@ -1603,6 +1614,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ぬことができない' + '\n')
                 file.write(word[:-1] + 'ぬことができません' + '\n')
                 file.write(word[:-1] + 'んで' + '\n')
+                file.write(word[:-1] + 'んでみそ' + '\n')
                 file.write(word[:-1] + 'ななきゃ' + '\n')
                 file.write(word[:-1] + 'ななきゃいけない' + '\n')
                 file.write(word[:-1] + 'ななきゃいけません' + '\n')
@@ -1725,7 +1737,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ぬことはない' + '\n')
                 file.write(word[:-1] + 'ぬことになった' + '\n')
                 file.write(word[:-1] + 'ぬことになりました' + '\n')
-                number_of_lines += 129
+                number_of_lines += 130
             elif word[-1] == 'く':
                 file.write(word[:-1] + 'くらしい' + '\n')
                 file.write(word[:-1] + 'くべき' + '\n')
@@ -1734,6 +1746,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'くことができない' + '\n')
                 file.write(word[:-1] + 'くことができません' + '\n')
                 file.write(word[:-1] + 'いて' + '\n')
+                file.write(word[:-1] + 'いてみそ' + '\n')
                 file.write(word[:-1] + 'かなきゃ' + '\n')
                 file.write(word[:-1] + 'かなきゃいけない' + '\n')
                 file.write(word[:-1] + 'かなきゃいけません' + '\n')
@@ -1856,7 +1869,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'くことはない' + '\n')
                 file.write(word[:-1] + 'くことになった' + '\n')
                 file.write(word[:-1] + 'くことになりました' + '\n')
-                number_of_lines += 129
+                number_of_lines += 130
             elif word[-1] == 'ぐ':
                 file.write(word[:-1] + 'ぐらしい' + '\n')
                 file.write(word[:-1] + 'ぐべき' + '\n')
@@ -1865,6 +1878,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ぐことができない' + '\n')
                 file.write(word[:-1] + 'ぐことができません' + '\n')
                 file.write(word[:-1] + 'いで' + '\n')
+                file.write(word[:-1] + 'いでみそ' + '\n')
                 file.write(word[:-1] + 'がなきゃ' + '\n')
                 file.write(word[:-1] + 'がなきゃいけない' + '\n')
                 file.write(word[:-1] + 'がなきゃいけません' + '\n')
@@ -1987,7 +2001,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'ぐことはない' + '\n')
                 file.write(word[:-1] + 'ぐことになった' + '\n')
                 file.write(word[:-1] + 'ぐことになりました' + '\n')
-                number_of_lines += 129
+                number_of_lines += 130
             elif word[-1] == 'す':
                 file.write(word[:-1] + 'すらしい' + '\n')
                 file.write(word[:-1] + 'すべき' + '\n')
@@ -1996,6 +2010,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'すことができない' + '\n')
                 file.write(word[:-1] + 'すことができません' + '\n')
                 file.write(word[:-1] + 'して' + '\n')
+                file.write(word[:-1] + 'してみそ' + '\n')
                 file.write(word[:-1] + 'さなきゃ' + '\n')
                 file.write(word[:-1] + 'さなきゃいけない' + '\n')
                 file.write(word[:-1] + 'さなきゃいけません' + '\n')
@@ -2118,7 +2133,7 @@ with open('conjugated.txt', 'w') as file:
                 file.write(word[:-1] + 'すことはない' + '\n')
                 file.write(word[:-1] + 'すことになった' + '\n')
                 file.write(word[:-1] + 'すことになりました' + '\n')
-                number_of_lines += 128
+                number_of_lines += 129
             else:
                 file.write("Error: word is not a verb or adjective" + '\n')
                 number_of_lines += 1
@@ -2141,6 +2156,7 @@ with open('conjugated.txt', 'a') as file:
             file.write(word[:-1] + 'ることができない' + '\n')
             file.write(word[:-1] + 'ることができません' + '\n')
             file.write(word[:-1] + 'て' + '\n')
+            file.write(word[:-1] + 'てみそ' + '\n')
             file.write(word[:-1] + 'なきゃ' + '\n')
             file.write(word[:-1] + 'なきゃいけない' + '\n')
             file.write(word[:-1] + 'なきゃいけません' + '\n')
@@ -2257,7 +2273,7 @@ with open('conjugated.txt', 'a') as file:
             file.write(word[:-1] + 'ることはない' + '\n')
             file.write(word[:-1] + 'ることになった' + '\n')
             file.write(word[:-1] + 'ることになりました' + '\n')
-        number_of_lines += 114
+        number_of_lines += 115
 
 # Choose words at random and print them to the console
 for i in range(0, int(sys.argv[1])):
