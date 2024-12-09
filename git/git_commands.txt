@@ -86,6 +86,9 @@ git reset --hard origin/[remote_branch]
 git commit --amend -m "New commit message"
 	* lets you edit the commit message of the most recent unpushed commit
 
+git remote -v
+	* lists out the push and pull url's that the repo uses
+
 ---AWS---
 
 git remote -v
