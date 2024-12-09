@@ -28,6 +28,10 @@ git checkout [branch_name]
 git branch [new_branch_name]
 	* creates a new branch from the branch you're currently in
 
+git checkout [branch_name]
+git checkout tags/[tag_name]
+	* checkout the tag at the specified branch
+
 git checkout [some_other_branch]
 git branch -a
 	* lists out all local and remote branches
