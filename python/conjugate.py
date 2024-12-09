@@ -9,14 +9,6 @@ import sys, fileinput, os, re, linecache, random
 #   4. Run: python3 conjugate.py [number]
 #       number = the number of conjugated words to select at random
 
-# CONJUGATIONS TO ADD:
-#   1. なければならない conjugation
-#   2. ~ておきましょう conjugation
-#   3. ほうがましだ conjugation
-#   4. させて conjugation
-#   5. ~て見える conjugation
-#   6. いめな conjugation
-
 # Validating aruments
 if len(sys.argv) == 1:
     sys.exit("Missing argument: [number]: python3 conjugate.py [number]")
