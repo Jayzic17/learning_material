@@ -1,5 +1,10 @@
 	
-
+git add .
+	* adds all files you've edited to staging for the branch and repo you're currently in
+git log
+	* shows you the commit history of the repo you're currently in
+git status
+	* shows you what's currently unstaged/staged
 git checkout feature_branch
 git merge master_branch
 	* merges master INTO feature_branch
@@ -22,6 +27,10 @@ git push -u origin [branch_name]
 git checkout [branch_name]
 git branch [new_branch_name]
 	* creates a new branch from the branch you're currently in
+
+git checkout [branch_name]
+git checkout tags/[tag_name]
+	* checkout the tag at the specified branch
 
 git checkout [some_other_branch]
 git branch -a
@@ -76,6 +85,12 @@ git checkout [local_branch]
 git reset --hard origin/[remote_branch]
 	* if stuff got recently pushed to remote that you are completely alright with using to overwrighting your local with, run these commands
 	* just be aware that this would diverge your local branch from the remote one
+
+git commit --amend -m "New commit message"
+	* lets you edit the commit message of the most recent unpushed commit
+
+git remote -v
+	* lists out the push and pull url's that the repo uses
 
 ---AWS---
 
