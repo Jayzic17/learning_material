@@ -61,6 +61,15 @@ git config --global http.sslVerify false
 git config --global http.sslVerify true
 	* enables SSL
 
+git config --get remote.origin.url
+	* gets the url for which this git repo is pointing to
+
+git remote set-url origin [https_git_repo_link]
+	* lets you set the git repo link to be whatever
+
+git remote -v
+	* shows the fetch and push urls that this repo is pushing and pulling from
+
 git pull origin [remote_branch_name] --allow-unrelated-histories
 	* if you get an "unrelated histories" issue when pushing to remote, use this flag when pulling from the remote for resolution
 
