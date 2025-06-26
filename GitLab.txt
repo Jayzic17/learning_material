@@ -1,0 +1,45 @@
+
+most shared gitlab runners use a Bash shell
+shared gitlab runners' current working directory is the /builds directory
+  * from there it clones the directory structure of the project it's working on, startingwith the group name, followed by the project name, so: /builds/group/project/etc.
+everytime a stage is finished, the Runner starts a new container from scratch to run the next stage, meaning all work done in the previous stage is lost
+
+
+ 
+---------gitlab-ci.yml---------
+script: # Lets you define a script (shared runners mostly use a Bash shell)
+  - bash command 1
+  - bash command 2
+  - etc.
+
+before_script: # Lets you do some stuff before the sript block
+  - bash command 1
+  - bash command 2
+  - etc.
+
+image: # Overrides the image used to run a runner (by default it's Ruby)
+       # Go to docker.hub to look up the specific docker image you need
+
+stages: # Sets which stages to run in what order
+  - stage1
+  - stage2
+  - etc.
+...
+test:
+  stage: stage1
+build:
+  stage: stage2
+
+artifacts: # Everytime a stage is finished, the Runner starts a new container from scratch to run the next stage, meaning all work done in the previous stage is lost
+  paths:   # So to prevent that, you specify a path in the current working directory to artifact so that anything in the path doesn't get deleted
+    - builds/etc.
+
+
+
+
+
+
+
+
+
+

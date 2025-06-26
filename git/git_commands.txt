@@ -88,6 +88,8 @@ git commit --amend -m "New commit message"
 
 git remote -v
 	* lists out the push and pull url's that the repo uses
+git remote set-url origin [new_url_here]
+	* changes the push/fetch remote url's for the repo
 
 ---AWS---
 
