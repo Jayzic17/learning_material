@@ -529,6 +529,8 @@ VPC:
 		* you can achieve high availability by using Autoscaling Groups, multiple subnets in different AZs, and automate failover
 		* NAT Instances are always behind a Security Group
 	* NAT Gateway: (new) is a managed service which launches redundant NAT instances within the selected AZ
+		* Private NAT Gateway: instances in private subnets can connect to stuff outside their current VPC, but stuff outside the VPC can't connect to it
+		* Public NAT Gateway: instances in private subnets can connect to the Internet, but stuff from the Internet can't connect to it
 		* they can survive failure of EC2 instances unlike NAT instances
 		* you can only have 1 NAT Gateway per AZ
 		* no requirements for patching NAT Gateways unlike instances

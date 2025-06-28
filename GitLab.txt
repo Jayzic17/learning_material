@@ -3,11 +3,13 @@ most shared gitlab runners use a Bash shell
 shared gitlab runners' current working directory is the /builds directory
   * from there it clones the directory structure of the project it's working on, startingwith the group name, followed by the project name, so: /builds/group/project/etc.
 everytime a stage is finished, the Runner starts a new container from scratch to run the next stage, meaning all work done in the previous stage is lost
-
+you can store environment variables under: Settings > CI/CD > Variables
+  * you want to name it in all uppercase: VARIABLE_NAME
 
  
 ---------gitlab-ci.yml---------
 script: # Lets you define a script (shared runners mostly use a Bash shell)
+        # Everytime this is declared, a new shell is created in a new container (meaning it's a container within a container)
   - bash command 1
   - bash command 2
   - etc.
@@ -34,10 +36,29 @@ artifacts: # Everytime a stage is finished, the Runner starts a new container fr
   paths:   # So to prevent that, you specify a path in the current working directory to artifact so that anything in the path doesn't get deleted
     - builds/etc.
 
+$VARIABLE_NAME # This is how you would call an environment variable like you would in Bash
 
+variables: # Lets you define variables in one place
+  VARIABLE_1: value
+  VARIABLE_2: value
 
+services: # Lets you create an additional container during build time at the same time as the current container running the current stage
+  - service_1
+  - service_2
+  - etc.
 
+include: # Lets you import other external yml files as part of the current gitlab-ci.yml file 
+  - project: # Lets you import a whole other repo from Gitlab
+  - ref: # Lets you specify a specific branch, tag, or commit of the repo
+  - file: # Lets you specify a specific file of the repo
+  - local: # Lets you import a file from the current repo
 
+rules: # Lets you add conditions to when certain stages can be ran
+  - if:
+  - changes: # A list of file paths; the rule matches if any of the listed files changed.
+  - exists: # A list of files; the rule matches if all the listed files exist.
+  - when: [on_success, manual, never, etc.]
+  - allow_failure: 
 
 
 
