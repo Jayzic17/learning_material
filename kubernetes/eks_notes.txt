@@ -1,0 +1,34 @@
+
+
+EKS: AWS manages Kubernetes for you
+  * that means it handles the Master Node / Control Plane and all its services
+  * that also means it manages scaling and balancing for you
+  * the only thing you have to manage after that are just the Worker Nodes
+  * it also manages any hardening related to security with the Master Node
+EKS also has tight integrations with IAM, Secrets Manager, and EC2 Load Balancer
+Since EKS doesn't manage the Worker Nodes (it only cares about the Master Node), there are a few ways you can manage your Worker Nodes:
+  * Self-managed Nodes: you have to manually provision and manage all EC2's you want to use as Worker Nodes
+    * that also means installing Kubelet, kube-proxy, and the Container runtime on each of them
+    * and it also means you're responsible for all security patches and updates on the Worker Nodes
+    * and it also means you have to register each Worker Node with the Control Plane
+  * Managed Node Group: AWS automates provisioning Nodes for you by having each Node run a special EKS-optimized image
+    * this special image allows for creating, updating, and deleting Nodes using EKS API calls to make managing your Nodes easier
+    * also each Node is part of an Auto Scaling Group that's managed for you by EKS
+  * ECS Fargate: entirely serverless like Lambda where worker Nodes get created on-demand whenever you deploy your config
+    * Fargate will also automatically select the optimal EC2 type you need per Node by looking at the requirements needed for each of your Containers
+    * You only pay for the runtime just like Lambda
+At a minimum, you need the following for creating an EKS Cluster:
+  * Cluster name
+  * kubernetes version
+  * IAM Roles
+  * VPC
+  * 2 public and 2 private subnets in different AZ's
+  * Define a Security Group for the cluster
+At a minimum, you need the following for creating your Worker Nodes:
+  * Create a Node Group
+  * Select an instance type
+  * Define min/max number of Nodes
+  * Specify the EKS Cluster to connect to
+In Terraform there's some starter example modules in the Terraform documentation on Github to get you started
+  * For provisioning EKS with Terraform, you would first get all your necessary terraform files and terraform apply the infrastructure
+  * once the Cluster is in AWS, you would create your deployment.yml kubernetes files and kubectl apply -f [deployment_file].yml

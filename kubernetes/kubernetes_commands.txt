@@ -1,0 +1,11 @@
+kubectl
+	version
+	--help
+	get [nodes, pods, replicaset, deployments, all]
+	delete replicaset [replicaset_name]
+	run [pod_name] --image=[image_name]
+	[create, apply, replace] -f [pod-definition].yml
+		* create creates the resource, apply applies the changes to an existing resource (or creates a new resource if it doesn't already exist), replace is the same as apply
+		* if you create a resource with create, use replace to update it. If you use apply to create a resource, use apply to update it
+	describe pod [pod_name]
+		* returns info about the Pod

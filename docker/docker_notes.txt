@@ -1,0 +1,5 @@
+
+
+
+hub.docker.com: Docker Hub contains free docker images you can use
+by default, docker images are stored under /var/lib/ on the Node

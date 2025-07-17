@@ -1,0 +1,30 @@
+Task: An operation that the Container runs; scaling the desired number of Tasks for a Container up/down is how you manage traffic (how many operations can be performed at-a-time) for the Container
+Container: a specific service that is built using a Docker Image
+Pod: smallest possible kubernetes deployment; contains multiple Docker Containers
+Node: a physical machine
+Cluster: a group of Nodes
+Control Plane: the Master Node that manages the Cluster
+	* has the following services installed for managing the Cluster:
+		* kube-apiserver: an API server that handles all internal/external API calls for interacting with / managing the Cluster
+		* ETCD: key/value DB that contains info used to manage the Cluster
+			* cotains the current state of any and all resources defined in the cluster
+		* controller-manager: the controllers used to run the Cluster
+		* kube-scheduler: scheduler used for distributing work/Containers across multiple Nodes
+Worker Node: the rest of the Nodes that aren't the Master Node / Control Plane
+	* has the following services installed for managing the Node:
+		* Kublet: agent run on each Node used to communicate back to the Cluster
+		* Kube-proxy: networking component used to allow communication btwn other Worker Nodes and their Containers
+		* Container runtime: used to run Containers
+Replicaset: a set of Pods
+Deployment: a set of Pods, except it gives you higher-level control and options on actual rollout and deployment strategy
+Service: is what allows for Pods to talk to each other and for users to talk to Pods
+	* ClusterIP: allows Pods to talk privatly with each other within the Cluster and NOT outside to users
+	* NodePort: allows users to talk with a Pod within the Cluster
+	* LoadBalancer
+Namespace: lets you organize different resources in the same cluster based on their Namespace
+	* general usecases:
+		* seperate resources based on teams
+		* using Namespaces as environments
+		* using it for blue/green deployments
+		* you can limit usage quotas (cpu/mem/etc.) per Namespace
+	* the other option would just have multiple clusters which is fine if you have multiple cloud accounts

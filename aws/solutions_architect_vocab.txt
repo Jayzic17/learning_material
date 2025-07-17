@@ -1455,7 +1455,16 @@ Elastic IP's (EIPs) don't incur charges as long as:
 	* the EIP is associated with an EC2
 	* the EC2 associated with the EIP is running
 	* the EC2 has only 1 EIP
-
+ELB algorithms:
+	* Static: doesn't look at the state of the EC2's; fixed rules
+		* Round-robin: basically each request is assigned to the next EC2 in the list of servers, then repeats
+		* Weighted Round-robin
+		* IP Hash: Each client request's IP gets hashed and assigned to individual EC2's
+	* Dynamic: reacts to the current state of the EC2's
+		* Least Connection: sends requests to the EC2 with the least amount of open connections btwn client and host
+		* Weighted Least Connection
+		* Least Response Time: avoid EC2's with long response times
+		* Resouce-based: agent is installed on each EC2 that checks its resource usage (CPU, MEM, etc.)
 
 
 

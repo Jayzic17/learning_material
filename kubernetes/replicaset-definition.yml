@@ -1,0 +1,32 @@
+# REQUIRED
+apiVersion: apps/v1 # for defining Pods: v1, Services: v1, ReplicaSets: apps/v1, Deployments: apps/v1
+
+# REQUIRED  
+kind: ReplicaSet # [Pod, Service, ReplicaSet, Deployment]
+
+# REQUIRED
+metadata: 
+  name: myapp-replicaset
+  labels:
+    app: myapp
+
+# REQUIRED
+# Anything defined in the spec must be maintained at all times by the Control Plane
+spec:
+
+  # The template option defines the configuration for a Pod
+  template:
+    metadata: 
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end # selector.matchLabels.type must match template.metadata.labels.type

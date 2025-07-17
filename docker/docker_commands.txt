@@ -1,0 +1,32 @@
+
+
+
+docker run [-i, -it, -p] [node_port:container_port] [image_name]:[tag]
+	* image_name: runs the given docker image
+	* first Docker will check image_name locally
+	* image_name:tag: runs the given docker image and tag
+	* -i image_name: runs the given docker image in interactive mode (lets you make inputs)
+	* -it image_name: runs the given docker image in interactive mode (lets you make inputs) along with its terminal
+	* -p node_port:container_port image_name: runs the given docker image while maping the given node_port to the given container_port
+docker version
+docker ps [-a]
+	* lists all currently running containers on the current node
+	* -a: lists all containers on the current node regardless of status
+docker stop [container_id / container_name]
+	* container_name |or| container_id: stops the container based on the container id
+	* container_name: stops the container based on the container name
+docker rm [container_name]
+	* container_name: deletes a stopped or exited container
+docker images
+	* lists all available images on the current node
+docker rmi [image_name]
+	* image_name: deletes the given image
+		* prerequisite: all containers on the current node using that image must no longer be running
+docker pull [image_name]
+	* image_name: pulls the given image from (by default) Docker Hub
+docker exec [image_name] [bash_command]
+	* image_name bash_command: runs the given image by executing the given command
+docker inspect [container_name / container_id]
+	* container_name |or| container_id: returns a json file containing details about the container
+docker logs [container_name / container_id]
+	* container_name |or| container_id: prints the logs of the given container
