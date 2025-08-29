@@ -10,8 +10,8 @@ metadata:
   labels:
     app: myapp
 
-# REQUIRED
 # Anything defined in the spec must be maintained at all times by the Control Plane
+# REQUIRED
 spec:
   type: ClusterIP
   ports:
@@ -19,4 +19,4 @@ spec:
       port: 6379
   selector:
     app: myapp
-    type: front-end 
+    type: front-end

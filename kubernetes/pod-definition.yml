@@ -11,8 +11,8 @@ metadata:
     app: myapp
     type: front-end
 
-# REQUIRED
 # Anything defined in the spec must be maintained at all times by the Control Plane
+# REQUIRED
 spec:
   containers:
     - name: nginx-container

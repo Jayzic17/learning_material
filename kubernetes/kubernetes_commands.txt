@@ -1,7 +1,10 @@
 kubectl
 	version
 	--help
-	get [nodes, pods, replicaset, deployments, all]
+	get [nodes, pods, replicaset, deployments, namespace, all]
+	get pods -o wide
+		* gets all pods and shows their IP addresses
+		* IP addresses are ephermeral for pods
 	delete replicaset [replicaset_name]
 	run [pod_name] --image=[image_name]
 	[create, apply, replace] -f [pod-definition].yml

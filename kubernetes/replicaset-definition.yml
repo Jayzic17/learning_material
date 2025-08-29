@@ -10,8 +10,8 @@ metadata:
   labels:
     app: myapp
 
-# REQUIRED
 # Anything defined in the spec must be maintained at all times by the Control Plane
+# REQUIRED
 spec:
 
   # The template option defines the configuration for a Pod
