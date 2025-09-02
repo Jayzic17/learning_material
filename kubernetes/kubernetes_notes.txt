@@ -1,4 +1,6 @@
+resource/object: refers to any of the k8 resources (EX: Pods, Nodes, Namespaces, Deployments, Services, etc.)
 Task: An operation that the Container runs; scaling the desired number of Tasks for a Container up/down is how you manage traffic (how many operations can be performed at-a-time) for the Container
+Job: creates one or more Pods and will continue to retry execution of the Pods until a specified number of them successfully terminate
 Container: a specific service that is built using a Docker Image
 Pod: smallest possible kubernetes deployment; contains multiple Docker Containers
 Node: a physical machine
@@ -13,6 +15,8 @@ Control Plane: the Master Node that manages the Cluster
 Worker Node: the rest of the Nodes that aren't the Master Node / Control Plane
 	* has the following services installed for managing the Node:
 		* Kublet: agent run on each Node used to communicate back to the Cluster
+			* configures the Container Runtime to: pull images, create namespaces, and run Containers
+			* uses PodSpec files to determine what images to pull and Containers to run
 		* Kube-proxy: networking component used to allow communication btwn other Worker Nodes and their Containers
 		* Container runtime: used to run Containers
 Replicaset: a set of Pods; used for having replicas available for redundancy
@@ -36,6 +40,7 @@ Namespace: lets you organize different resources in the same cluster based on th
 		* Cluster-Wide Objects: Volumes, Nodes
 Ingress: is what takes HTTP/S rules in a request and translates them to point to Services
 kubectl: the CLI for kubernetes
+	* looks in: ~/.kube as it's profile when opening a new shell
 Cloud Controller Manager: lets you link Cloud Providers to your kubernetes
 Network Policy: acts as a virtual firewall at the namespace or Pod level
 ConfigMap: lets you decouple environment variables from your Container images into key-value pairs
@@ -43,5 +48,13 @@ Secret: exact same as ConfigMap, but with encryption
 Horizontal Pod Autoscaler (HPA): used to autoscale a Replicaset
 In-Tree: Plugins provided by default and/or exist in the main repo
 Out-of-Tree: Plugins that must be installed manually and extends/replaces default behavior
-
-
+Endpoints: a Pool of IP addresses; Is what tracks the IP addresses of Pods assigned to a Service
+	* Endpoint Slices: Endpoint pool broken up into smaller manageable segments
+Selectors:
+	* 3 types:
+		* Label Selector: select k8 objects based on the Label
+		* Field Selector: select k8 objects based on data, metadata, status, etc.
+		* Node Selector: select specific Nods for where you want to put your Pods
+Annotations: Similar to Labels in that it's used to identify things, but it's specific use-case is to attach metadata on to objects to allow for things like controllers, clients, tools, and libraries to work
+gRPC (remote procedure call): the networking protocol that k8 uses to work
+	* if you see any files with the .proto extension that's what it is

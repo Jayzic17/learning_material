@@ -1,14 +1,28 @@
+good documentation resource: kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
+
+kubectl [COMMAND] [TYPE] [NAME] [FLAGS]
+	* TYPE: nodes, pods, replicaset, deployments, namespace, etc.
+	* NAME: node_name, pod_name, replicaset_name, deployment_name, namespace_name, etc.
+
 kubectl
 	version
 	--help
-	get [nodes, pods, replicaset, deployments, namespace, all]
-	get pods -o wide
-		* gets all pods and shows their IP addresses
-		* IP addresses are ephermeral for pods
-	delete replicaset [replicaset_name]
+	get [TYPE]
+		pods -o wide
+			* gets all pods and shows their IP addresses
+			* IP addresses are ephermeral for Pods
+		pods --show-labels
+		pods [--selector, -l] [label_name]=[label_value]
+			* selects all Pods with the specified label
+		pod [pod_name]
+	delete [TYPE] [NAME]
 	run [pod_name] --image=[image_name]
 	[create, apply, replace] -f [pod-definition].yml
 		* create creates the resource, apply applies the changes to an existing resource (or creates a new resource if it doesn't already exist), replace is the same as apply
 		* if you create a resource with create, use replace to update it. If you use apply to create a resource, use apply to update it
-	describe pod [pod_name]
-		* returns info about the Pod
+	create [TYPE] [NAME] [FLAGS]
+		create job [job_name] [--image=image_name] [--schedule="* * * * *"] [-- script_name]
+		create cronjob [cronjob_name] [--image=image_name] [--schedule="* * * * *"] [-- script_name]
+	describe [TYPE] [NAME]
+		* returns info about the resource
+	
