@@ -58,3 +58,22 @@ Selectors:
 Annotations: Similar to Labels in that it's used to identify things, but it's specific use-case is to attach metadata on to objects to allow for things like controllers, clients, tools, and libraries to work
 gRPC (remote procedure call): the networking protocol that k8 uses to work
 	* if you see any files with the .proto extension that's what it is
+Minikube: sets up a local single-Node k8 cluster for learning purposes
+	* running off a VM
+	* intended just for development purposes
+k3s: a lightweight tool used to run prod-level kubernetes workloads for testing in a VM
+k3d: lightweight wrapper that runs k3s in a docker Container instead of a VM
+Kind: same idea as Minikube but it instead runs off Docker Containers as Nodes instead of VM's
+MicroK8s: another lightweight k8 distribution like Minikube and Kind; also good for testing prod-level workloads
+Managed Kubernetes providers:
+	* Google Kubernetes Engine (GKE)
+	* Amazon Elastic Kubernetes (EKS)
+	* Azure Kubernetes (AKS)
+Container Runtime Interface: is what allows you to run a variety of different Container Runtimes (EX: ContainerD)
+	* ContainerD: makes it easier for projects like kubernetes to access the low-level Docker elements they need instead of actually using Docker
+		* Images you build with Docker aren't really Docker images, cause Docker now uses the ContainerD runtime
+Container Runtime: is what runs Containers (EX: runC)
+	* 2 types:
+		* Native Runtimes: uses CGroups for isolation
+		* Sandboxed / Virtualized Runtimes: provides securtiy benefits through virtual isolation; uses VM's for isolation
+	
