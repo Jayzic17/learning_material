@@ -1,0 +1,27 @@
+# A Persistent Volume Claim (PVC) is used to decouple Persistent Volumes from Pods
+# A PVC asks for a type of storage, and if a PV that meets the criteria is matched, the PV is claimed
+
+# REQUIRED
+apiVersion: v1
+
+# REQUIRED  
+kind: PersistentVolumeClaim
+
+# REQUIRED
+metadata: 
+  name: myclaim
+
+# REQUIRED
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: slow
+  selector:
+    matchLabels:
+      release: "stable"
+    matchExpressions:
+      - {key: environment, operator: In, values: [dev]}

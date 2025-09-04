@@ -1,8 +1,8 @@
-# This is how you can define a Namespace
+# This is how you can define a ConfigMap
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mydb-configmap
   namespace: my-namespace
-data:
+data: # This is where you would define your key/value pairs
   db_url: mysql-service.database

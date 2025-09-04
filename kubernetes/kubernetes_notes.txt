@@ -9,7 +9,7 @@ Control Plane: the Master Node that manages the Cluster
 	* has the following services installed for managing the Cluster:
 		* kube-apiserver: an API server that handles all internal/external API calls for interacting with / managing the Cluster using kubectl or by sending HTTP requests
 		* ETCD: key/value DB that contains info used to manage the Cluster
-			* cotains the current state of any and all resources defined in the cluster
+			* contains the current state of any and all resources defined in the cluster
 		* controller-manager: the controllers used to run the Cluster
 		* kube-scheduler: scheduler used for distributing work/Containers across multiple Nodes
 Worker Node: the rest of the Nodes that aren't the Master Node / Control Plane
@@ -23,9 +23,15 @@ Replicaset: a set of Pods; used for having replicas available for redundancy
 Deployment: a set of Pods, except it gives you higher-level control and options on actual rollout and deployment strategy
 	* by default it doesn't have any sort of Git Ops, so you can replace it w/ a 3rd party-one like Argo CD, Flux, Jenkin X, etc.
 Service: is what allows for Pods to talk to each other and for users to talk to Pods using IP addresses and DNS names
-	* ClusterIP: allows Pods to talk privatly with each other within the Cluster and NOT outside to users
+	* ClusterIP: default; allows Pods to talk privatly with each other within the Cluster and NOT outside to user
+		* randomly forwards traffic to any Pod set with the target port
+	* Headless: sends traffic to a very specific Pod for when you have stateful Pods (EX: a database)
 	* NodePort: allows users to talk with a Pod within the Cluster
 	* LoadBalancer
+	* ExternalName: a special Service that does not have selectors and instead uses DNS names
+		* you would use this if you only have a DNS to point to (EX: database)
+	* A Pod without a Service will have a dynamic IP address, whereas Pods with a Service get a static IP address
+		* so when a Pod without a Service dies so does the IP address
 Namespace: lets you organize different resources in the same cluster based on their Namespace
 	* general usecases:
 		* seperate resources based on teams
@@ -43,7 +49,7 @@ kubectl: the CLI for kubernetes
 	* looks in: ~/.kube as it's profile when opening a new shell
 Cloud Controller Manager: lets you link Cloud Providers to your kubernetes
 Network Policy: acts as a virtual firewall at the namespace or Pod level
-ConfigMap: lets you decouple environment variables from your Container images into key-value pairs
+ConfigMap: lets you decouple environment variables from your Container images and Pods into key-value pairs
 Secret: exact same as ConfigMap, but with encryption
 Horizontal Pod Autoscaler (HPA): used to autoscale a Replicaset
 In-Tree: Plugins provided by default and/or exist in the main repo
@@ -76,4 +82,20 @@ Container Runtime: is what runs Containers (EX: runC)
 	* 2 types:
 		* Native Runtimes: uses CGroups for isolation
 		* Sandboxed / Virtualized Runtimes: provides securtiy benefits through virtual isolation; uses VM's for isolation
-	
+CGroups (control groups): lets you group processes(by processes I just mean running Linux programs) together to apply certain kinds of limits:
+	* EX: setting resource limits, assigning priority per CGroup, accounting for billing, control processes based on CGroup
+Container Storage Interface (CSI): standardizes how Container Orchestration tools like Kubernetes connect to storage providers for block storage (EX: AWS EBS)
+MinIO: Kubernetes' version of object storage, which is also compatible with AWS S3
+types of volumes that Kubernetes supports:
+	* Persistent Volumes: attached to a Pod; data will persist even if Pod is terminated
+		* mounting a Persistent Volume directly on a Pod is not allowed
+	* Ephermeral Volumes: attached to a Pod; data only exists as long as the Pod isn't terminated
+	* Projected Volumes: maps several existing volumes into a same directory
+	* Volume Snapshot: a snapshot of a volume for rollbacks or backup
+Traffic Policies: lets you determine how ingress traffic is routed
+	* 2 types:
+		* External Traffic Policy: how traffic from external sources is routed and has 2 values:
+			* Cluster: route external traffic to all ready Endpoints
+			* Local: only route to ready Node-local Endpoints
+		* Internal Traffic Policy: how traffic from internal sources is routed (same 2 values as External Traffic Policy)
+		

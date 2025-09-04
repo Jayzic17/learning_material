@@ -1,0 +1,24 @@
+# A Storage Class is a way of defining a class of storage that is backed by a provisioner (in this example AWS EBS)
+# This is what allows Kubernetes storage types to connect to a storage provider
+
+# provisioner: who is the storage? (EX: AWS EBS)
+# parameters: what type of storage of AWS EBS to use?
+# reclaimPolicy: if the Pod is gone, does the volume remain?
+
+# REQUIRED
+apiVersion: storage.k8s.io/v1
+
+# REQUIRED  
+kind: StorageClass
+
+# REQUIRED
+metadata: 
+  name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
