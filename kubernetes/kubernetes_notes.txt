@@ -28,6 +28,7 @@ Service: is what allows for Pods to talk to each other and for users to talk to 
 	* Headless: sends traffic to a very specific Pod for when you have stateful Pods (EX: a database)
 	* NodePort: allows users to talk with a Pod within the Cluster
 	* LoadBalancer
+		* Generally it's recommended to use Kubernetes Ingress instead for load balancing
 	* ExternalName: a special Service that does not have selectors and instead uses DNS names
 		* you would use this if you only have a DNS to point to (EX: database)
 	* A Pod without a Service will have a dynamic IP address, whereas Pods with a Service get a static IP address
