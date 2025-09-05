@@ -153,6 +153,4 @@ kubernetes cluster networking:
 		* Pod -> Pod
 		* Pod -> Service
 		* External -> Service
-
-
 Each Pod has a resolve.conf file to help with DNS resolving in ~/etc/
