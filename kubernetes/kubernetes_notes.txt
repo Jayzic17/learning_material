@@ -137,9 +137,22 @@ Service Mesh: manages service-to-service communication for microservices (servic
 		* Istio (the most popular), which uses Envoy as its proxy
 		* Kuma, which also uses Envoy as the proxy
 		* Linkerd, which uses Linkerd2-proxy
-		
-
-
+Network Interface Card (NIC): the physical port you plug your ethernet cable into
+	* Cloud Providers have virtual NICs for your VMs to connect to a virtual network
+	* eth0: the 1st ethernet interface attached to your VM
+Network Namespace: an abstraction on top of the ethernet interface to provide a logical networking stack with it's own routes, firewall rules, and network devices
+	* Linux by default has one Network Namespace called the Root Network Namespace
+kubernetes cluster networking:
+	* all Pods can communicate with all other Pods w/o using NAT 
+	* all Nodes can communicate with all Pods w/o using NAT 
+	* the IP that a Pod sees itself as, is the same IP that others see it as 
+	* 4 types of network communication for clusters:
+		* Container -> Container
+			* Containers in the same Pod have the same IP address and port space
+			* Containers can communicate with each other via localhost via different ports 
+		* Pod -> Pod
+		* Pod -> Service
+		* External -> Service
 
 
 Each Pod has a resolve.conf file to help with DNS resolving in ~/etc/

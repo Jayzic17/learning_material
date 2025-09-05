@@ -36,6 +36,7 @@ kubectl
 		* opens an interactive shell terminal into the specified Pod 
 
 
+---LINUX COMMANDS---
 
 nslookup [NAME]
 	* returns DNS information about the Service with CoreDNS as the default DNS server for kubernetes

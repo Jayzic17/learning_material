@@ -26,6 +26,8 @@ spec:
       containers:
         - name: nginx-container
           image: nginx
+          ports:
+            - containerPort: 80 # containerPort: used to define the local port for a Container
   replicas: 3
   selector:
     matchLabels:
