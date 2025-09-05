@@ -1,0 +1,21 @@
+# REQUIRED
+apiVersion: v1
+
+# REQUIRED  
+kind: Service
+
+# REQUIRED
+metadata: 
+  name: myapp
+  labels:
+    app: myapp
+
+# Anything defined in the spec must be maintained at all times by the Control Plane
+# REQUIRED
+spec:
+  selector:
+    app: myapp
+  clusterIP: None
+  ports:
+    - name: web
+      port: 80  # The port you are exposing for this Service

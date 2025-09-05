@@ -1,0 +1,15 @@
+# REQUIRED
+apiVersion: v1
+
+# REQUIRED  
+kind: Service
+
+# REQUIRED
+metadata: 
+  name: myapp
+
+# Anything defined in the spec must be maintained at all times by the Control Plane
+# REQUIRED
+spec:
+  type: NodePort
+  externalName: my.database.example.com

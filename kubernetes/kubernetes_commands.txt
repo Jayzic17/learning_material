@@ -25,4 +25,19 @@ kubectl
 		create cronjob [cronjob_name] [--image=image_name] [--schedule="* * * * *"] [-- script_name]
 	describe [TYPE] [NAME]
 		* returns info about the resource
-	
+	expose deployment [app_name] --type=[NodePort] --name=[nodeport_name] --port=[##] --targetport=[####] --nodeport=[####]
+		* the expose command is an alternative way of creating Services using kubectl instead of the deployment.yml files
+		* in this example we're creating a new NodePort Service for an existing Deployment
+	kubectl run -it --rm --restart=Never busybox --image=gcr.io/google-containers/busybox sh
+		* BusyBox: 300 of the most common UNIX commands bundled into a single command
+		* in this example we're using 'rm'
+		* BusyBox does not have 'curl'
+	exec -it [pod_name] -- sh
+		* opens an interactive shell terminal into the specified Pod 
+
+
+
+nslookup [NAME]
+	* returns DNS information about the Service with CoreDNS as the default DNS server for kubernetes
+iptables -L
+	* returns the IP Table used by Kube-Proxy (IP Tables are used by Kube-Proxy by default now, but will be replaced by IPVS)

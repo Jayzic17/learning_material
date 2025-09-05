@@ -18,6 +18,7 @@ Worker Node: the rest of the Nodes that aren't the Master Node / Control Plane
 			* configures the Container Runtime to: pull images, create namespaces, and run Containers
 			* uses PodSpec files to determine what images to pull and Containers to run
 		* Kube-proxy: networking component used to allow communication btwn other Worker Nodes and their Containers
+			* designed to load balance traffic to Pods
 		* Container runtime: used to run Containers
 Replicaset: a set of Pods; used for having replicas available for redundancy
 Deployment: a set of Pods, except it gives you higher-level control and options on actual rollout and deployment strategy
@@ -25,12 +26,16 @@ Deployment: a set of Pods, except it gives you higher-level control and options 
 Service: is what allows for Pods to talk to each other and for users to talk to Pods using IP addresses and DNS names
 	* ClusterIP: default; allows Pods to talk privatly with each other within the Cluster and NOT outside to user
 		* randomly forwards traffic to any Pod set with the target port
-	* Headless: sends traffic to a very specific Pod for when you have stateful Pods (EX: a database)
+	* Headless: sends traffic to a very specific Pod for when you have stateful Pods(reads and writes) and you need writes to go to a specific Pod (EX: a database)
+		* it's a Service with no ClusterIP address
+		* it does not provide load balancing or proxying
+		* it's needed to manage network identity of the stateful Pods by assigning a DNS record to each Pod so you can route traffic to a DNS hostname
 	* NodePort: allows users to talk with a Pod within the Cluster
 	* LoadBalancer
 		* Generally it's recommended to use Kubernetes Ingress instead for load balancing
 	* ExternalName: a special Service that does not have selectors and instead uses DNS names
 		* you would use this if you only have a DNS to point to (EX: database)
+		* it's the same as a ClusterIP, but instead of returing a static IP address it returns a CNAME record
 	* A Pod without a Service will have a dynamic IP address, whereas Pods with a Service get a static IP address
 		* so when a Pod without a Service dies so does the IP address
 Namespace: lets you organize different resources in the same cluster based on their Namespace
@@ -45,7 +50,12 @@ Namespace: lets you organize different resources in the same cluster based on th
 		* Single-Namespace Objects: ConfigMaps, Secrets
 		* Multi-Namespace Objects: Services, Pods
 		* Cluster-Wide Objects: Volumes, Nodes
-Ingress: is what takes HTTP/S rules in a request and translates them to point to Services
+Kubernetes Ingress: is what takes HTTP/S rules in a request and translates them to point to Services
+	* exposes HTTP/S routes from outside the cluster to Services within the cluster
+	* traffic routing is controlled by rules defined on the Kubernetes Ingress resource
+	* the reason we use Kubernetes Ingress is so we can translate a custom domain on SSL to a Service running within our cluster
+	* in order for Kubernetes Ingress to work you need to use an Ingress controller (EX: AWS, GCE, Nginx)
+	* Kubernetes Ingress enables you to consolidate the traffic-routing rules into a single resource and runs as part of a Kubernetes cluster
 kubectl: the CLI for kubernetes
 	* looks in: ~/.kube as it's profile when opening a new shell
 Cloud Controller Manager: lets you link Cloud Providers to your kubernetes
@@ -99,4 +109,37 @@ Traffic Policies: lets you determine how ingress traffic is routed
 			* Cluster: route external traffic to all ready Endpoints
 			* Local: only route to ready Node-local Endpoints
 		* Internal Traffic Policy: how traffic from internal sources is routed (same 2 values as External Traffic Policy)
+CoreDNS: the default DNS server for Kubernetes
+4 levels of load balancing in kubernetes:
+	* External load balancer: 3rd party load balancer (EX: AWS ELB/ALB)
+	* Kubernetes Ingress: lets you control the load balancing algorithm and assign weights
+	* Services: lets you persist Pods and set dynamic weights
+	* internal load balancing (IP Tables/IPVS) at the Container/Pod level (randomly distributed) used by Kube-proxy
+		* is handled in 1 of 4 ways:
+			* IP Tables (default): generic table of IP addresses; very generic firewall
+				* has trouble scaling since it's capped out at 5000 Nodes per cluster, in which case you would switch to IPVS
+			* NFT Tables: successor to IP Tables; more flexible and scalable
+			* IPVS (will become the default soon): specifically designed for load balancing; uses hash tables; unlimited scaling
+			* Userspaces: legacy (don't use it)
+Probes: used to detect the state of a Container
+	* 3 types:
+		* Liveness Probe: used by Kubelet to know when to restart a Container
+		* Readiness Probe: used by Kubelet to know when a Container is ready to start accepting traffic
+		* Startup Proble: used by Kubelet to know when a Container has started
+Forward Proxy: bunch of servers egressing traffic, but it has to pass through a single proxy first
+Reverse Proxy: Ingress traffic has to pass through a single proxy first before it reaches a bunch of servers (EX: a load balancer)
+Container Networking Interface (CNI): specification standard for writing plugins for Containers
+	* so if you want to use a plugin for a Container, the flow would look like: plugin -> CNI -> Container Runtime -> Container
+Service Mesh: manages service-to-service communication for microservices (service here meaning an application, not refering to the k8 resource)
+	* it also provides traffic management, load balancing, observability, and certs
+	* for use in a kubernetes cluster, a Service Mesh Control Plane is created, along with a proxy Container installed in each Pod as a sidecar
+	* popular Service Meshes for use with Kubernetes:
+		* Istio (the most popular), which uses Envoy as its proxy
+		* Kuma, which also uses Envoy as the proxy
+		* Linkerd, which uses Linkerd2-proxy
 		
+
+
+
+
+Each Pod has a resolve.conf file to help with DNS resolving in ~/etc/
