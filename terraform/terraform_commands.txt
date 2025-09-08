@@ -101,8 +101,9 @@ terraform state [list, mv source_name destination_name, pull, push, replace-prov
     * rm: remove instances of 'resource_address' from the current state 
     * show: show a resource in the current state
 
-terraform get
+terraform get [-update=true]
     * download and update JUST modules in the root module
+    * -update=true: tells terraform to update the modules, even if they are already downloaded
 
 terraform taint [resource_name]
     * resource_name: used to mark a resource for replacement the next time you run 'terraform apply'
