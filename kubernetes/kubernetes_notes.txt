@@ -151,6 +151,17 @@ kubernetes cluster networking:
 			* Containers in the same Pod have the same IP address and port space
 			* Containers can communicate with each other via localhost via different ports 
 		* Pod -> Pod
+			* depends whether or not the Pods are on the same Node
+				* on the same Node, a veth is used to communicate from the Pod Network Namespace to the Root Network Namespace
+					* in the Root Network Namespace a Bridge (Bridging) is used to allow all Pod Network Namespaces to talk to other Pods
+						* Routing: allows multiple networks to communicate independently and yet remain separate using a router
+						* Bridging: connects 2 separate networks as if they were a single network using a Bridge
+					* Pods can see all other Pods, and communicate using their IP addresses
+				* accross different Pods, it's network-specific based on the situation
+					* in the case of AWS they have their own implementation of the Container Networking Interface (CNI) using the Amazon VPC Container Network Interface plugin for Kubernetes
 		* Pod -> Service
+			* when a Pod dies its IP address changes, so a Service creates a static IP and then uses IP Tables that are installed on the Node to perform NAT and load balancing to other Pods
 		* External -> Service
+			* 
+Virtual Ethernet Devices (veths): virtual ethernet devices; act as tunnels btwn Network Namespaces
 Each Pod has a resolve.conf file to help with DNS resolving in ~/etc/
