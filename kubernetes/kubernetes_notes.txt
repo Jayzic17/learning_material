@@ -62,7 +62,10 @@ Cloud Controller Manager: lets you link Cloud Providers to your kubernetes
 Network Policy: acts as a virtual firewall at the namespace or Pod level
 ConfigMap: lets you decouple environment variables from your Container images and Pods into key-value pairs
 Secret: exact same as ConfigMap, but with encryption
-Horizontal Pod Autoscaler (HPA): used to autoscale a Replicaset
+	* by default they're unencrypted in etcd
+Horizontal Pod Autoscaler (HPA): Adds more Pods to meet the demand
+Vertical Pod Autoscaler (VPA): right-sizes Pods for optimal CPU and memory
+Cluster Autoscaler: Adds more Nodes to meet the demand
 In-Tree: Plugins provided by default and/or exist in the main repo
 Out-of-Tree: Plugins that must be installed manually and extends/replaces default behavior
 Endpoints: a Pool of IP addresses; Is what tracks the IP addresses of Pods assigned to a Service
@@ -162,6 +165,19 @@ kubernetes cluster networking:
 		* Pod -> Service
 			* when a Pod dies its IP address changes, so a Service creates a static IP and then uses IP Tables that are installed on the Node to perform NAT and load balancing to other Pods
 		* External -> Service
-			* 
 Virtual Ethernet Devices (veths): virtual ethernet devices; act as tunnels btwn Network Namespaces
 Each Pod has a resolve.conf file to help with DNS resolving in ~/etc/
+RBAC stands for role-based access controls
+	* with RBAC there are only allow rules; everything is deny by default
+kubernetes access controls and permissions:
+	* Role: permissions for a particular Namespace
+	* ClusterRole: permissions accross all Namespaces
+	* Role Binding and Cluster Role Binding: is what links a set of permissions to a particular user, group, or service(machine user)
+	* Network Policy: virtual firewalls for Pod communication
+		* you would have to download a network plugin that supports Network Policies in order to create one (EX: Calico) 
+		* has 3 scopes:
+			* pod-to-pod
+			* namespaces
+			* specific IPs
+		* you would use Selectors to match the resources you want for the Networking Policy to be applied to
+Kubernetes Event-Driven Autoscaling (KEDA): lets you autoscale based on event data (EX: from AWS like: CloudWatch or SQS Queue)

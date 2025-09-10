@@ -1,0 +1,16 @@
+# This is how you would define a Role or ClusterRole
+
+# REQUIRED
+apiVersion: rbac.authorization.k8s.io/v1
+
+# REQUIRED  
+kind: Role #ClusterRole
+
+# REQUIRED
+metadata: 
+  namespace: default # If defining a ClusterRole, remove metadata.namespace
+  name: pod-reader
+rules:
+  - apiGroups: [""] # When set to "", it refers to the core API group
+    resources: ["pods"]
+    verbs: ["get", "watch", "list", "pactch", "delete", "create", "update"]

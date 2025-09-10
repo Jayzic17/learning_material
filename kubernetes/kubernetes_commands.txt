@@ -34,7 +34,10 @@ kubectl
 		* BusyBox does not have 'curl'
 	exec -it [pod_name] -- sh
 		* opens an interactive shell terminal into the specified Pod 
-
+	scale --replicas=[#] [deployment_name]
+		* update # of replicas for a Deployment and performs a new deployment
+	autoscale deployment [NAME] --min=[#] --max=[#] --cpu-percent=[##]
+		* creates a Horizontal Pod Autoscaler
 
 ---LINUX COMMANDS---
 
