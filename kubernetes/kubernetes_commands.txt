@@ -38,10 +38,27 @@ kubectl
 		* update # of replicas for a Deployment and performs a new deployment
 	autoscale deployment [NAME] --min=[#] --max=[#] --cpu-percent=[##]
 		* creates a Horizontal Pod Autoscaler
+	logs [pod_name] --all-containers==trouble
+		* returns logs for all Containers in the specified Pod
 
----LINUX COMMANDS---
+
+helm
+	package --sign [./mychart] --key [mykey] --keyring ~/.gnupg/secring.gpg
+		* packages a Chart directory into a versioned Chart archive
+		* versioned Chart archives are used by Helm package Repositories
+	repo
+		add [name] https://[link_here]
+			* adds a Repository to Helm with the specified name
+		update
+			* updates local cache with the latest info from your added Repository
+	install [release_name] [chart_name]
+			* installs the specified Chart by name and Release
+
+
+---KUBERNETES-RELEVANT LINUX COMMANDS---
 
 nslookup [NAME]
 	* returns DNS information about the Service with CoreDNS as the default DNS server for kubernetes
 iptables -L
 	* returns the IP Table used by Kube-Proxy (IP Tables are used by Kube-Proxy by default now, but will be replaced by IPVS)
+

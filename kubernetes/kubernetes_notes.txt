@@ -181,3 +181,25 @@ kubernetes access controls and permissions:
 			* specific IPs
 		* you would use Selectors to match the resources you want for the Networking Policy to be applied to
 Kubernetes Event-Driven Autoscaling (KEDA): lets you autoscale based on event data (EX: from AWS like: CloudWatch or SQS Queue)
+OpenTelemetry: standardizes the way observability data is collected
+	* uses Wire protocol: the protocol that gets the data from point A to point B (EX: SOAP)
+Trace: the data execution path taken through a system at each point
+Span: how the workload is distributed through each point in the Trace
+System Logs: logs about the Cluster
+Klog: the kubernetes logging library
+	* generateds log messages for the kuberentes system components
+TestKube: kuberetes testing framework
+Helm: package manager for Kubernetes
+	* broadly composed of 3 main concepts:
+		* Chart: contains all the resource definitions necessary to run the application inside the Cluster
+			* Chart.yaml: file containing info about the Chart
+			* LICENSE: (optional); plain text file containing the license for the Chart
+			* values.yaml: the default conifguration values for the Chart
+			* values.schema.json: (optional); a json schema for imposing a structure on the values.yaml file
+			* charts/: a directory containing any Charts upon which this Chart depends on
+			* crds/: custom resource definitions
+			* templates/: a directory of templates that, when combined with values (values.yaml), will generate valid Kubernetes .yaml files
+		* Repository: the place where Charts can be collected and shared
+		* Release: an instance of a Chart running in a Kubernetes Cluster
+	* Artifact Hub: where you can find published Helm Charts
+Kustomize: allows you to Overlay(override) and to "patch" kubernetes .yaml files; is an alternative to Helm
