@@ -195,6 +195,7 @@ Helm: package manager for Kubernetes
 			* Chart.yaml: file containing info about the Chart
 			* LICENSE: (optional); plain text file containing the license for the Chart
 			* values.yaml: the default conifguration values for the Chart
+				* values-[env].yaml: environment overrides for the Chart
 			* values.schema.json: (optional); a json schema for imposing a structure on the values.yaml file
 			* charts/: a directory containing any Charts upon which this Chart depends on
 			* crds/: custom resource definitions
@@ -202,4 +203,41 @@ Helm: package manager for Kubernetes
 		* Repository: the place where Charts can be collected and shared
 		* Release: an instance of a Chart running in a Kubernetes Cluster
 	* Artifact Hub: where you can find published Helm Charts
-Kustomize: allows you to Overlay(override) and to "patch" kubernetes .yaml files; is an alternative to Helm
+Kustomize: allows you to Overlay(override) and to Patch(patch) kubernetes .yaml files; is an alternative to Helm
+	* Common Values: help keep labels, annotations, and names consistent
+	* Generators: help create and map ConfigMaps and Secrets to your Pods
+	* Base: the folder that contains all the OG kubernetes .yml files, plus an additional kustomization.yml file
+	* Overlays: the folder that contains a folder for each environment you want to Patch changes to
+	* Patch: the actual changes in the kustomization.yml files
+	* kustomization.yml options:
+		* resources: the kubernetes .yml files that Kustomize should import (contained in your Base folder)
+		* commonLabels, commonAnnotations, namePrefix, and nameSuffix: sets the naming for the resources you're importing
+			* this removes the need for labels, annotations, etc. from the files in your Base folder, as well as the selectors
+		* configMapGenerator and secretsGenerator:
+			* so instead of creating secret-definition.ymls and configmap-definition.ymls, you create a Generator in the kusomization.yml file, and the secret-definition.ymls and configmap-definition.ymls...
+			* ...just become a config.properties file w/ a bunch of key/value pairs
+	* Kustomize commands in kubectl:
+		* kubectl kustomize [path_to_kustomization.yml]: basically the equivalent to a terraform plan
+		* kubectl apply -k [path_to_kustomization.yml]: basically the equivalent to a terraform apply
+kubernetes CD solutions: Flux and Argo:
+	* Argo: native kubernetes CD; supports both Helm and Kustomize
+		* monitors the live state of your Clusters against the kubernetes .yml files in your Git Repos and can automatically/manually sync them to your Cluster
+	* argo CLI commands:
+		* argocd app list: lists out all Argo deployments and their status
+		* argocd app create [argocd_deployment_name] \
+							--repo [link_to_repo_w_kubernetes_.yml_files] \
+							--path [path_to_folder_containing_kustomization.yml_or_values.yml] \
+							--dest-service [link_to_kubernetes_cluster] \
+							--dest-namespace [namespace]
+		* argocd app sync [argocd_deployment_name]
+kubernetes deployment types:
+	* Recreate: tear down and recreate all Pods
+	* RollingUpdate: updates Pods a few at-a-time
+	* Canary:
+		* create a new group of Pods w/ the new version, alongside the existing Pods in the cluster
+		* redirect a subset of users to the new group
+		* if it's all good, then delete all old Pods and create all new one's w/ the new version
+	* A to B Testing: uses a Canary or Blue/Green method of deployment, but instead of redirecting the subset of users for a short amount of time like w/ Canary or Blue/Green, it happens for a long period of time
+	* Dark Launch: instead of deploying new features as its own new image, have it so that it's a feature flag you can toggle on and off whenever you want
+	
+	

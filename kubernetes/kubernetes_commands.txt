@@ -40,6 +40,13 @@ kubectl
 		* creates a Horizontal Pod Autoscaler
 	logs [pod_name] --all-containers==trouble
 		* returns logs for all Containers in the specified Pod
+	rollout 
+		history deploy [NAME]
+			* returns the history of previous deployments
+		status deployment [NAME]
+			* returns the rollout status of your deployment
+		undo deployment [NAME]
+			* rollback to the previous deployment shown in the 'rollout histroy' command
 
 
 helm
