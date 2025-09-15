@@ -29,6 +29,8 @@ spec:
           ports:
             - containerPort: 80 # containerPort: used to define the local port for a Container
   replicas: 3
+  strategy:
+    type: Recreate #RollingUpdate # This is where you can specify the Deployment type (full options not listed here. Ref. to official documentation for the rest of the setup)
   selector:
     matchLabels:
       type: front-end # selector.matchLabels.type must match template.metadata.labels.type
