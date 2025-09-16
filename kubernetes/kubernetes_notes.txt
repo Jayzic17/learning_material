@@ -196,10 +196,13 @@ Helm: package manager for Kubernetes
 			* LICENSE: (optional); plain text file containing the license for the Chart
 			* values.yaml: the default conifguration values for the Chart
 				* values-[env].yaml: environment overrides for the Chart
+				* this allows you to define names/annotations/tags in one place like with Kustomize
 			* values.schema.json: (optional); a json schema for imposing a structure on the values.yaml file
 			* charts/: a directory containing any Charts upon which this Chart depends on
 			* crds/: custom resource definitions
 			* templates/: a directory of templates that, when combined with values (values.yaml), will generate valid Kubernetes .yaml files
+				* this will contain your base kubernetes.yml files, except with parameterized values that get overriden by the values.yaml file
+			* templates/NOTES.txt: file that contains stuff that you want to output to the user whenever they use your Helm Chart
 		* Repository: the place where Charts can be collected and shared
 		* Release: an instance of a Chart running in a Kubernetes Cluster
 	* Artifact Hub: where you can find published Helm Charts

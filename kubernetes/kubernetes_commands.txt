@@ -48,7 +48,6 @@ kubectl
 		undo deployment [NAME]
 			* rollback to the previous deployment shown in the 'rollout histroy' command
 
-
 helm
 	package --sign [./mychart] --key [mykey] --keyring ~/.gnupg/secring.gpg
 		* packages a Chart directory into a versioned Chart archive
@@ -58,9 +57,15 @@ helm
 			* adds a Repository to Helm with the specified name
 		update
 			* updates local cache with the latest info from your added Repository
-	install [release_name] [chart_name]
-			* installs the specified Chart by name and Release
-
+	install [release_name] [path_to_chart]
+		* installs the specified Chart on the Cluster while also giving it a Release name
+	create [name]
+		* creates a folder, which itself is a Helm Chart with the specified name
+		* contains all the default Helm files and folders needed to run the Helm Chart
+	upgrade [release_name] [path_to_chart] --values [path_to_values.yml_file]
+		* upgrades an existing Cluster with the specified Chart while also giving it a Release name
+	ls
+		* lists out all deployed Helm Releases in the Cluster
 
 ---KUBERNETES-RELEVANT LINUX COMMANDS---
 
