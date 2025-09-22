@@ -242,5 +242,6 @@ kubernetes deployment types:
 		* if it's all good, then delete all old Pods and create all new one's w/ the new version
 	* A to B Testing: uses a Canary or Blue/Green method of deployment, but instead of redirecting the subset of users for a short amount of time like w/ Canary or Blue/Green, it happens for a long period of time
 	* Dark Launch: instead of deploying new features as its own new image, have it so that it's a feature flag you can toggle on and off whenever you want
-	
+kubebuilder: an SDK for creating kubernetes APIs in Golang
+
 	
