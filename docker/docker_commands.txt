@@ -6,7 +6,7 @@ docker run [-i, -it, -p] [node_port:container_port] [image_name]:[tag]
 	* first Docker will check image_name locally
 	* image_name:tag: runs the given docker image and tag
 	* -i image_name: runs the given docker image in interactive mode (lets you make inputs)
-	* -it image_name: runs the given docker image in interactive mode (lets you make inputs) along with its terminal
+	* -it image_name: runs the given docker image in interactive mode (interactive terminal; lets you make inputs) with its terminal
 	* -p node_port:container_port image_name: runs the given docker image while maping the given node_port to the given container_port
 docker version
 docker ps [-a]

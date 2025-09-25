@@ -1,0 +1,5 @@
+
+go mod init [project_name]
+    * initializes the current working directory as a Go application (Module)
+        * ideally the folder name should be the same as the project name
+    * generates a go.mod file: defines the Go application (Module), any dependencies, and the version of Go being used

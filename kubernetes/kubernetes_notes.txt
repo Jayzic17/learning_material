@@ -243,5 +243,5 @@ kubernetes deployment types:
 	* A to B Testing: uses a Canary or Blue/Green method of deployment, but instead of redirecting the subset of users for a short amount of time like w/ Canary or Blue/Green, it happens for a long period of time
 	* Dark Launch: instead of deploying new features as its own new image, have it so that it's a feature flag you can toggle on and off whenever you want
 kubebuilder: an SDK for creating kubernetes APIs in Golang
-
+~/.kube/config file: describes the current kubernetes context you're operating in when running kubectl commands
 	

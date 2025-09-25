@@ -2,7 +2,7 @@ good documentation resource: kubernetes.io/docs/reference/generated/kubectl/kube
 
 kubectl [COMMAND] [TYPE] [NAME] [FLAGS]
 	* TYPE: nodes, pods, replicaset, deployments, namespace, etc.
-	* NAME: node_name, pod_name, replicaset_name, deployment_name, namespace_name, etc.
+	* NAME: node_name, pod_name, replicaset_name, deployment_name, namespace_name, cronjob_name etc.
 
 kubectl
 	version
@@ -11,29 +11,44 @@ kubectl
 		pods -o wide
 			* gets all pods and shows their IP addresses
 			* IP addresses are ephermeral for Pods
+		pods [NAME] -o jsonpath='{.spec.containers[*].name}'
+			* returns a list of all Containers in the specified Pod
+		pods --all-namespaces
+			* returns all Pods in all Namespaces
+			* 1st column is the Namespace, 2nd column is the Pod name
 		pods --show-labels
 		pods [--selector, -l] [label_name]=[label_value]
 			* selects all Pods with the specified label
-		pod [pod_name]
+		pod [NAME]
+		pods -n [namespace_name]
+			* returns all Pods in the specified Namespace
+		cronjob [NAME] -o jsonpath='{.status.lastScheduleTime}'
+			* returns the last time the given cronjob was run
 	delete [TYPE] [NAME]
+		job [job_name]
+			* when deleting a Job, you delete the actual Job not just the Pod, cause if you delete its Pod it'll just spin back up again
 	run [pod_name] --image=[image_name]
 	[create, apply, replace] -f [pod-definition].yml
 		* create creates the resource, apply applies the changes to an existing resource (or creates a new resource if it doesn't already exist), replace is the same as apply
 		* if you create a resource with create, use replace to update it. If you use apply to create a resource, use apply to update it
 	create [TYPE] [NAME] [FLAGS]
 		create job [job_name] [--image=image_name] [--schedule="* * * * *"] [-- script_name]
+			* when you create a Job, kubernetes creates a Pod with the name you specify
 		create cronjob [cronjob_name] [--image=image_name] [--schedule="* * * * *"] [-- script_name]
 	describe [TYPE] [NAME]
 		* returns info about the resource
 	expose deployment [app_name] --type=[NodePort] --name=[nodeport_name] --port=[##] --targetport=[####] --nodeport=[####]
 		* the expose command is an alternative way of creating Services using kubectl instead of the deployment.yml files
 		* in this example we're creating a new NodePort Service for an existing Deployment
-	kubectl run -it --rm --restart=Never busybox --image=gcr.io/google-containers/busybox sh
+	run -it --rm --restart=Never busybox --image=gcr.io/google-containers/busybox sh
 		* BusyBox: 300 of the most common UNIX commands bundled into a single command
 		* in this example we're using 'rm'
 		* BusyBox does not have 'curl'
+	exec -it [pod_name] -c [container_name] -- sh
+		* lets you open a new interactive shell terminal (in this case sh) in the specified Container in the specified Pod
+		* 'sh' in linux/Bash just means open a new sh shell; you could just replace it with any command as well
 	exec -it [pod_name] -- sh
-		* opens an interactive shell terminal into the specified Pod 
+		* lets you open a new interactive shell terminal (in this case sh) in the specified Pod
 	scale --replicas=[#] [deployment_name]
 		* update # of replicas for a Deployment and performs a new deployment
 	autoscale deployment [NAME] --min=[#] --max=[#] --cpu-percent=[##]
@@ -47,6 +62,8 @@ kubectl
 			* returns the rollout status of your deployment
 		undo deployment [NAME]
 			* rollback to the previous deployment shown in the 'rollout histroy' command
+	config set-context --current --namespace=[namespace_name]
+		* changes the Namespace you're currently in by updating your ~/.kube/config file
 
 helm
 	package --sign [./mychart] --key [mykey] --keyring ~/.gnupg/secring.gpg

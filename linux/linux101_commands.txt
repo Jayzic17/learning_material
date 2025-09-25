@@ -998,10 +998,11 @@ renice [-n] [nice_level] [PID_here]
 		* only Root Users can raise the priority by lowering the Nice Level up to -20
 	* prerequisite: previously ran:
 		* $ nice -n [nice_level] [command_here]
-grep [-i, -v] '[regex_here]' [file_name]
+grep [-i, -v] '[regex_here]' [file_name] "[string_here]"
 	* 'regex_here' file_name: prints out all lines in the given file that match the given regular expression
 	* -i 'regex_here' file_name: prints out all lines in the given file that match the given regular expression (case-insensitive), so it will match capitals and lower-case
 	* -v 'regex_here': prints out all lines in the given file that do NOT match the given regular expression
+	* "string_here": return all lines that contain the given string
 egrep [-c, -v] '[regex_here]' [file_name]
 	* egrep stands for: extended grep, meaning it is grep, except it will always use Extended Regular Expressions (a.k.a: will always imply the -E option)
 	* 'regex_here' file_name: prints out all lines that match the given Extended Regular Expression from the given file
