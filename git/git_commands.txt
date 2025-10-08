@@ -1,10 +1,16 @@
 	
 git add .
 	* adds all files you've edited to staging for the branch and repo you're currently in
+
 git log
 	* shows you the commit history of the repo you're currently in
+
 git status
 	* shows you what's currently unstaged/staged
+
+git checkout -- .
+	* removes all unstaged changes
+
 git checkout feature_branch
 git merge master_branch
 	* merges master INTO feature_branch
@@ -99,6 +105,14 @@ git remote -v
 	* lists out the push and pull url's that the repo uses
 git remote set-url origin [new_url_here]
 	* changes the push/fetch remote url's for the repo
+
+git tag -a "[tag_name]" -m "[message]"
+	* creates an Annotated Tag "-a" in the current branch
+	* Annotated Tag: it's a tag with the added ability to include a message
+
+git push --follow-tags
+	* pushes only annotated tags
+
 
 ---AWS---
 

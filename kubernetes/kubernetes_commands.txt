@@ -24,6 +24,8 @@ kubectl
 			* returns all Pods in the specified Namespace
 		cronjob [NAME] -o jsonpath='{.status.lastScheduleTime}'
 			* returns the last time the given cronjob was run
+		componentRelease -A
+			* returns all componentReleases. This is especially helpful for debugging what went wrong w/ a Deployment
 	delete [TYPE] [NAME]
 		job [job_name]
 			* when deleting a Job, you delete the actual Job not just the Pod, cause if you delete its Pod it'll just spin back up again
@@ -83,6 +85,8 @@ helm
 		* upgrades an existing Cluster with the specified Chart while also giving it a Release name
 	ls
 		* lists out all deployed Helm Releases in the Cluster
+	template [release_name] [path_to_chart] -f [path_to_helm_values.yml]
+		* lints your helm chart to make sure syntax is correct
 
 ---KUBERNETES-RELEVANT LINUX COMMANDS---
 
