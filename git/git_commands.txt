@@ -121,4 +121,9 @@ git remote -v
 git remote rm [remote_branch_nickname]
 	* removes the remote CodeCommit branch by nickname
 
+aws cloudformation validate-template --template-body file://[path_to_template][.json, .yaml]
+	* validates the syntax of a cloudformation file
+
+cfn-lint [template][.json, .yaml]
+	* also validates the syntax of a cloudformation file, but w/o the need for aws config
 

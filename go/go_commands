@@ -3,3 +3,13 @@ go mod init [project_name]
     * initializes the current working directory as a Go application (Module)
         * ideally the folder name should be the same as the project name
     * generates a go.mod file: defines the Go application (Module), any dependencies, and the version of Go being used
+go mod tidy
+    * cleans up the go.mod and go.sum files by adding missing dependencies, removes unused ones, and updates the go.sum file, which is just a checksum
+go mod vendor
+    * generates (if it doesn't already exist) the vendor directory, which contains a local copy of all the third-party package source code your project depends on, as specified in your go.mod file
+go run main.go
+    * runs your main.go
+go run .
+    * runs the whole directory - you would run this if you have multiple entry points (i.e multiple main() functions)
+go clean
+    * cleans up disk space by removing cache and build artifacts in your Go application (Module) and reformates your files like '$ terraform fmt'
