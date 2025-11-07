@@ -57,6 +57,8 @@ kubectl
 		* creates a Horizontal Pod Autoscaler
 	logs [pod_name] --all-containers==trouble
 		* returns logs for all Containers in the specified Pod
+	logs [pod_name] --previous
+		* this is good for if you're trying to get the logs of a Pod that's in a CrashLoop state, where you get the previous instance that already crashed
 	rollout 
 		history deploy [NAME]
 			* returns the history of previous deployments
