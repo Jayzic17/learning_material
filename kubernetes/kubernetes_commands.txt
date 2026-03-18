@@ -19,6 +19,9 @@ kubectl
 		pods --show-labels
 		pods [--selector, -l] [label_name]=[label_value]
 			* selects all Pods with the specified label
+		pods [--field-selector=status.phase=Failed]
+			* selects all Pods with the specified field
+			* in this example it looks for Pods where the status.phase field equals "Failed"
 		pod [NAME]
 		pods -n [namespace_name]
 			* returns all Pods in the specified Namespace
@@ -33,6 +36,8 @@ kubectl
 	[create, apply, replace] -f [pod-definition].yml
 		* create creates the resource, apply applies the changes to an existing resource (or creates a new resource if it doesn't already exist), replace is the same as apply
 		* if you create a resource with create, use replace to update it. If you use apply to create a resource, use apply to update it
+	apply -f [file_name].yaml
+		* applies the configuration file to the cluster that's in your current context
 	create [TYPE] [NAME] [FLAGS]
 		create job [job_name] [--image=image_name] [--schedule="* * * * *"] [-- script_name]
 			* when you create a Job, kubernetes creates a Pod with the name you specify
