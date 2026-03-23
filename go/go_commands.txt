@@ -20,3 +20,6 @@ go clean -modcache
 grep -R "[dependency_name]" $(go env GOMODCACHE)
     * recursivly checks the cache of your Go application (a.k.a the GOMODCACHE environment variable) for the given dependency
     * good for if you're looking for indirect dependencies that get used as part of the main dependencies you specify in your go.mod file
+
+--ENVIRONMENT VARIABLES---
+GOPRIVATE: comma-deliniated list of modules you make sure Go knows are private, meaning these modules aren't accessible from the public internet
