@@ -64,6 +64,10 @@ kubectl
 		* returns logs for all Containers in the specified Pod
 	logs [pod_name] --previous
 		* this is good for if you're trying to get the logs of a Pod that's in a CrashLoop state, where you get the previous instance that already crashed
+	logs -f [pod_name]
+		* follows the logs of the pod live
+	logs --tail=[n] [pod_name]
+		* return the most recent n logs from the pod
 	rollout 
 		history deploy [NAME]
 			* returns the history of previous deployments

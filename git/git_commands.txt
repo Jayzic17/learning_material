@@ -127,3 +127,4 @@ aws cloudformation validate-template --template-body file://[path_to_template][.
 cfn-lint [template][.json, .yaml]
 	* also validates the syntax of a cloudformation file, but w/o the need for aws config
 
+AWS_PROFILE: environment variable that tells AWS CLI and SDK which [profile] to use from your ~/.aws/config file

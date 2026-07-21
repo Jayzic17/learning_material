@@ -3,6 +3,7 @@
 
 terraform init [-upgrade, -get-plugins-false, -plugin-dir=path_name, -lockfile=mode_name, -backend-config=backend.hcl, -reconfigure]
     * initializes the project by pulling all dependencies needed to run the main.tf file
+    * by itself, it just installs the providers
     * creates:
         * .terraform: binary file about our cloud provider
         * .terraform.lock.hcl: dependency lock file
@@ -11,7 +12,7 @@ terraform init [-upgrade, -get-plugins-false, -plugin-dir=path_name, -lockfile=m
         * .terraform/providers: directory for storing plugins for providers
         * .terraform/modules: where terraform caches modules
     * run 'terraform init' everytime dependencies change
-    * -upgrade: upgrade all plugins to latest version given your configuration constraints
+    * -upgrade: redownload and upgrade all plugins and modules to the latest version, ignoring the configuration constraints dictated by the lock file
     * -get-plugins-false: skip plugin installation
     * -plugin-dir: force plugin installation to read plugins only from target directory 
     * -lockfile: set a dependency lockfile mode
@@ -103,7 +104,7 @@ terraform state [list, mv source_name destination_name, pull, push, replace-prov
 
 terraform get [-update=true]
     * download and update JUST modules in the root module
-    * -update=true: tells terraform to update the modules, even if they are already downloaded
+    * -update=true: tells terraform to redownload and update JUST the modules, even if they are already downloaded, ignoring the configuration constraints dictated by the lock file
 
 terraform taint [resource_name]
     * resource_name: used to mark a resource for replacement the next time you run 'terraform apply'
