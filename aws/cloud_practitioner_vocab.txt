@@ -1,5 +1,6 @@
 
 
+
 cloud computing: using remote servers to host, manage, run, and process all your data
 SaaS: software that is run and managed by a company for customers 
 PaaS: infrastructure that is run and managed by a company for developers
@@ -84,13 +85,15 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		* bucket policies
 		* IAM Policies
 	* storage classes in S3:
-		most expensive	* S3 standard: data stored redundantly in multiple locations
+		most expensive
+			  |	* S3 standard: data stored redundantly in multiple locations
 			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access; cheaper than S3, but you're charged a retrieval fee
 			  | 	* S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing
 			  |	* S3 Intelligent tiering: uses machine learning to move data through the above 3 access tiers ^ to optimize cost and performance
-			  v 	* S3 Glacier: low cost storage class for archiving data; retrieval time from minutes to hours; 90 days minimum storage duration
-					* for archiving and long-term backup; lower cost than S3 Buckets, but takes a while to get data from there and you're charged every time you request info from those buckets
-		least expensive	* S3 Glacier Deep Archive: same as S3 Glacier, but with even longer retrieval times (12 hours or more); 180 days minimum storage duration
+			  | * S3 Glacier: low cost storage class for archiving data; retrieval time from minutes to hours; 90 days minimum storage duration
+			  |		* for archiving and long-term backup; lower cost than S3 Buckets, but takes a while to get data from there and you're charged every time you request info from those buckets
+			  v * S3 Glacier Deep Archive: same as S3 Glacier, but with even longer retrieval times (12 hours or more); 180 days minimum storage duration
+		least expensive
 	* you can use S3 to make a static website, S3 scales automatically with respect to high incoming traffic, stores all versions of an object, good at backup, and versioning cannot be disabled
 	* S3 integrates with life cycling rules and can use MFA with S3
 	* use S3 when you got large files to store; ex: audio, video, and images
@@ -144,7 +147,7 @@ support plans:
 	* business support plan: $100/month, yes 3rd party, all trusted advisor checks, tech support via email, tech support via chat and phone 24/7, General Guidance, System Impaired help...
 		* ...Production System Impaired(< 4 hrs) Production System Down(<1hr), and AWS Infrastructure Event Management w/ an additional fee 
 	* enterprise support plan: $15,000/month, yes 3rd party, (business support plan)^ + Business-Critical System Down support(< 15 min), a personal concierge, a technical account manager,...
-		*... and AWS Infrastructure Event Management is free
+		* ... and AWS Infrastructure Event Management is free
 		* the personal concierge is primarily used for billing and account questions and the TAM is your technical expert on all things AWS
 AWS trusted advisor: a service that advises you on saving money, security, performance, service limits, and fault-tolerance; essentially it coaches you on AWS best practices
 	* 5 categories of AWS trusted advisor:
@@ -177,7 +180,7 @@ consolidated billing: is where you can combine all billing and payment methods a
 	* paying/root account pays the bills of all the linked accounts; paying account is independent from linked accounts, and linked accounts are independent; limit of 20 linked accounts
 		* the paying/root account is the email address you use to set up your AWS account; has full admin access; don't let anyone have this!
 	* Consolidated Billing has the advantage of having volume pricing discount, since one account pays for everything, and all other accounts are just linked to that one
-		* ex: netflix family plan, verizon family phone plan, etc.
+		* Ex: netflix family plan, verizon family phone plan, etc.
 Billing and Cost Management Console: this is where you can see your account's past billing information
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -187,16 +190,16 @@ AWS landing zone: helps enterprises getting started with SETTING UP a basic mult
 ControlTower: allows you to PROVISION multiple AWS accounts in minutes, which comply with the companies existing policies; used by enterprises that already have multiple AWS accounts (automated w/ predefined layouts)
 	* allows admins to automate the process of AWS landing zone
 AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS. These IT services can include everything from virtual machine images, servers, software, etc
+AWS CloudFormation template: the template you use to configure resources into your company's cloud
+	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
+	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does
+	* CloudFormation is Infrastructure as code
 AWS quickStarts: pre-built templates by AWS Partners that help you deploy popular stacks: a collection of resources that you can manage. All the resources in the stack are defined by the stack's AWS CloudFormation template
 	* you can use it to deploy environments quickly using CloudFormation templates made by AWS Solutions Architects who are experts in their respective technologies
 	* 3 parts to AWS quickStarts:
 		* a reference architecture for the deployment
 		* AWS CloudFormation templates for automating and configuring the deployment
 		* following the deployment guide 
-AWS CloudFormation template: the template you use to configure resources into your company's cloud
-	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
-	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does
-	* CloudFormation is Infrastructure as code
 AWS Organizations: allows you to manage billing, control access, security, compliance, and share resources across all AWS accounts in your org's AWS main account
 	* is where you manage all AWS accounts in your organization
 	* 2 feature sets of AWS Organizations: 
