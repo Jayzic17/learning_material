@@ -146,7 +146,7 @@ support plans:
 	* developer support plan: $20/month, no 3rd party support, 7 trusted advisor checks, tech support via email(~24 hrs), General Guidance(< 24 hrs) and System Impaired(< 12 hrs) support
 	* business support plan: $100/month, yes 3rd party, all trusted advisor checks, tech support via email, tech support via chat and phone 24/7, General Guidance, System Impaired help...
 		* ...Production System Impaired(< 4 hrs) Production System Down(<1hr), and AWS Infrastructure Event Management w/ an additional fee 
-	* enterprise support plan: $15,000/month, yes 3rd party, (business support plan)^ + Business-Critical System Down support(< 15 min), a personal concierge, a technical account manager,...
+	* enterprise support plan: $15,000/month, (business support plan)^ + Business-Critical System Down support(< 15 min), a personal concierge, a technical account manager,...
 		* ... and AWS Infrastructure Event Management is free
 		* the personal concierge is primarily used for billing and account questions and the TAM is your technical expert on all things AWS
 AWS trusted advisor: a service that advises you on saving money, security, performance, service limits, and fault-tolerance; essentially it coaches you on AWS best practices
@@ -172,6 +172,9 @@ TCO calculator: total cost of ownership; provides reports and presentations that
 	* you're mostly considering the physical maintenance and labor of your on-premise compared with how much you will save if you switch to AWS
 AWS cost and usage report: generates a spreadsheet that gives you the most granular data about your AWS costs and usage
 	* you can put the spreadsheet you get from AWS Cost and Usage Report into Athena and query your database with it, use QuickSight to turn it into graphs, or put it into an S3 bucket
+Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all server less and you pay per query you make
+	* you can use Athena to generate reports based on data stored in S3 and analyze cost and usage reports by querying them
+QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
 AWS Simple Monthly Calculator: "how much will [this] cost me on a monthly basis?"
 AWS pricing calculator: is used to create an estimated cost for your new solution to be deployed on AWS
 consolidated billing: is where you can combine all billing and payment methods across multiple AWS accounts into one bill, where the master account pays the charges for all the member accounts
@@ -261,13 +264,12 @@ Snowball: physically transferring lots of data using a computer suitcase; defaul
 
 Amazon Connect: Call center app
 WorkSpaces: Virtual Remote Desktop app; lets you access your work computer remotely
-IoT Greengrass: connects your devices up to the AWS cloud
+IoT Greengrass: connects your devics up to the AWS cloud
 WorkDocs: essentially the AWS version of Drive
 Chime: essentially the AWS version of Microsoft Teams
 WorkMail: essentially the Outlook of AWS
 Pinpoint: Marketing campaign management system for sending targeted emails, SMS, notifications, and voice messages
 SES: Simple Email Service; same as Pinpoint, but it's more for when you send out messages as part of your application, like "purchase confirmation" and "one-time code" msg's; good for marketers
-QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
 Direct Connect: Dedicated network connection from your on-premise to the AWS network; it's like having a direct fibre optic cable straight to AWS, so really lowers the latency
 Site-to-Site VPN: securely connecting your on-premise to your AWS network  
 Client VPN: securely connecting your clients to your AWS network
@@ -301,6 +303,8 @@ AWS certificate manager: used for issuing verified certificates for SSL/HTTPS on
 AWS Shield: managed DDoS protection service for apps on AWS; protects you from Layer 3,4, and 7 attacks; when you route traffic through Route53 or CloudFront, you're using AWS Shield Standard
 	* protects you from DDoS attacks; everyone has a shield by default
 AWS Shield Advanced: protection against larger DDoS'; $3000/yr; visibility into attacks, 24/7 access to DDoS experts, available on: Route53, CloudFront, ELB, Elastic IP, and AWS Global Accelerator
+AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
+	* this prevents packet loss, latency, and improves the user's performance by 60%
 PenTesting: penetration testing; simulated cyber attack on a computer system to evaluate if the system is secure
 	* You can PenTest on AWS, but only on the following services:
 		* EC2 servers, NAT Gateways, and ELB
@@ -318,6 +322,8 @@ PenTesting: penetration testing; simulated cyber attack on a computer system to 
 		* Protocol flooding
 		* Request flooding
 	* if you wanted to PenTest against something that isn't one of the pre-approved services, you'll need to submit a request to AWS, takes 7 days to reply
+Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web applications and websites for small developers who don't need complex functionality from their servers
+	* you use it to launch VPS's (Virtual Private Servers)
 Amazon Guard Duty: an IDS/IPS that uses machine learning to analyze your CloudTrail, VPC, and DNS logs; will alert you of findings and you can automate incident responses to those findings
 	* uses machine-learning that auto detects anomalies and 3rd-party data to protect your account and alerts you; free 30-day trial
 	* GuardDuty gets its data from CloudTrail event logs, VPC Flow Logs, and DNS logs
@@ -332,8 +338,8 @@ Amazon Macie: fully managed machine learning service that monitors your S3 bucke
 PII: Personally Identifiable Information; personal data used to ID someone
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Elastic Transcoder: (old) transcodes videos to streaming formats 
+ 
+Elastic Transcoder: (old) transcodes videos to streaming formats
 MediaConvert: (new) Elastic Transcoder + overlays images, insert video clips, extracts caption data, more robust UI
 AWS Kinesis: fully managed and scalable platform for streaming live data to your applications 
 AWS Partner Network: Global Partner Program that utilizes Technology and Consulting partners to build solutions for customers
@@ -416,17 +422,13 @@ AWS Config: monitors the configuration of your AWS resources
 	* lets you assess, audit, and evaluate the configurations of your AWS resources; unlike opsWorks which sets up those configurations as opposed to auditing them
 Parameter Store: server-less storage for passwords and connection strings; can store them using KMS or as plaintext; can also set Time To Live to expire those; free; limit of 10,000 params per account
 Secrets Manager: similar to Parameter Store, but costs money; auto rotate passwords for you, can generate random passwords for you, and applies the new password in RDS for you; no storage limit
-Security Hub: a central location where you can view all security alerts and finding in your company across all AWS security services, across all AWS accounts in your company (god view)
-Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all server less and you pay per query you make
-	* you can use Athena to generate reports based on data stored in S3 and analyze cost and usage reports by querying them
+Security Hub: a central location where you can view all security alerts and findings in your company across all AWS security services, across all AWS accounts in your company (god view)
 Lex: what you use for making an Alexa (chat bot)
 Polly: converts text to a life-like voice
 Transcribe: converts speech into text
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web applications and websites for small developers who don't need complex functionality from their servers
-	* you use it to launch VPS's (Virtual Private Servers)
 Serverless Application Repository: allows you to deploy pre-made server less applications
 AWS Outposts: a way of extending AWS compute services to your own on-premise data centers
 EC2 Image Builder: lets you build custom EC2 images for Linux and Windows
@@ -436,8 +438,6 @@ Route53: how you get and manage domains, domain names, and domain traffic; Route
 	* DNS is how you use domain names to look up IP addresses 
 Amazon Neptune: a Graph Database
 AWS systems manager: the HQ of where you control your entire AWS infrastructure as well as manage operational and automative tasks across all your AWS resources (databases + servers)
-AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
-	* this prevents packet loss, latency, and improves the user's performance by 60%
 DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relational database system
 	* DynamoDB is also scalable, can be used in multiple AZ's, but you wouldn't use DynamoDB if you got complex queries like JOINs
 	* automatically scales to increases in throughput capacity and offers extremely low latency
