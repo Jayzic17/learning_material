@@ -189,7 +189,8 @@ AWS landing zone: helps enterprises getting started with SETTING UP a basic mult
 	* helps customers quickly setup a secure, multi-account AWS organization environment using AWS best practices; different than ControlTower
 ControlTower: allows you to PROVISION multiple AWS accounts in minutes, which comply with the companies existing policies; used by enterprises that already have multiple AWS accounts (automated w/ predefined layouts)
 	* allows admins to automate the process of AWS landing zone
-AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS. These IT services can include everything from virtual machine images, servers, software, etc
+AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS
+	* these IT services can include everything from virtual machine images, servers, software, etc
 AWS CloudFormation template: the template you use to configure resources into your company's cloud
 	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
 	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does
@@ -229,7 +230,6 @@ Elastic Beanstalk: allows you to deploy and scale web applications by setting up
 CodeDeploy: allows you to deploy code to your on-premise architecture and/or EC2 instances
 	* fully managed deployment service that automates software deployments to compute services
 OpsWorks: allows you to programmatically configure how servers are configured, managed, and deployed; uses managed instances of Chef and Puppet (configuration management tools)
-	* CodeDeploy, but automated
 configuration management tools: DevOps tools that automate the process of making code changes, deploying them, and tracking them
 codePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
 codeCommit: fully managed source control service that hosts secure Git-based repos
@@ -237,7 +237,7 @@ codeBuild: fully managed build server: it compiles your source code, runs tests,
 AWS cloud9: IDE accessed via the web browser
 AWS CodeStar: development service that lets you quickly develop, build, and deploy applications on AWS; helps you manage you project development activities with unified UI and dashboards
 Storage Gateway: hybrid btwn cloud storage and local caching; acts as an extension of on-premise storage into the cloud; enables your on-premise apps to use AWS cloud storage
-	* either physical or virtual device that works like Snowball in that it's storage, but it stays on premise; you use it to cache files from your on-premise directly into S3
+	* you use it to cache files from your on-premise directly into S3
 EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, HHD, etc.)
 	* allows you to create storage volumes and attach them to EC2 instances, essentially cloud storage for servers
 	* 2 types of EBS:
@@ -336,7 +336,8 @@ PII: Personally Identifiable Information; personal data used to ID someone
 Elastic Transcoder: (old) transcodes videos to streaming formats 
 MediaConvert: (new) Elastic Transcoder + overlays images, insert video clips, extracts caption data, more robust UI
 AWS Kinesis: fully managed and scalable platform for streaming live data to your applications 
-AWS Partner Network: Global Partner Program that utilizes Technology and Consulting partners to build solutions for customers; helps build, market, and sell their AWS offerings but providing business, technical, and marketing support
+AWS Partner Network: Global Partner Program that utilizes Technology and Consulting partners to build solutions for customers
+	* helps build, market, and sell their AWS offerings by providing business, technical, and marketing support
 	* AWS Partner Network contains:
 		* Consulting Partners: design, architect, build, migrate, and manage your workloads and apps on AWS
 		* Technology Partners: they provide hardware, software, and network solutions
@@ -389,7 +390,7 @@ Data Warehousing: useful when you want to query your production database without
 Redshift: Amazon's Data Warehousing solution; Column-based database, can handle petabytes worth of data
 	* Redshift is scalable, can be used in multiple AZ's, but it's not meant for online transaction processing (OLTP)
 ElastiCache: essentially improves the performance of web applications by caching the most common queries
-	* 2 engines that are supported by ElastiCache:h
+	* 2 engines that are supported by ElastiCache:
 		* Memcached
 		* Redis
 	* you use ElastiCache for things like application caching and you use CloudFront for things like edge caching

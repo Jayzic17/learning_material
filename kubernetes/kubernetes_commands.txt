@@ -29,6 +29,8 @@ kubectl
 			* returns the last time the given cronjob was run
 		componentRelease -A
 			* returns all componentReleases. This is especially helpful for debugging what went wrong w/ a Deployment
+		namespace -o yaml
+			* returns info about the selected namespace
 	delete [TYPE] [NAME]
 		job [job_name]
 			* when deleting a Job, you delete the actual Job not just the Pod, cause if you delete its Pod it'll just spin back up again
