@@ -16,7 +16,7 @@ IAM: manage Users and their level of access to the AWS console
 		* you only get to view these keys once after you create them, if you loose them you have to regenerate them
 	* Roles are global, meaning you can use them in any Region
 	* Roles can be assigned to an EC2 instance after it's created by using either the aws console or CLI
-	* AWS Directory Service(AD): a family of managed services that connects you on-prem Microsoft Active Directory with AWS resources
+	* AWS Directory Service(AD): a family of managed services that connects your on-prem Microsoft Active Directory with AWS resources
 		* it's essentially a standalone directory in the cloud
 		* you're even able to still use existing corporate credentials
 		* enables Single Sign On to any domain-joined EC2
@@ -137,7 +137,7 @@ S3: secure, durable, highly scalable object storage
 	* S3 storage classes:
 		* Standard
 		* Standard IA: Additional retrieval fee is applied (this is also the same for the rest below)
-		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3. Availability is 99.5%
+		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3). Availability is 99.5%
 		* Glacier
 		* Glacier Deep Archive
 	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in transit as it goes to S3; all S3 Managed keys are handled by Amazon
@@ -1222,6 +1222,9 @@ when you launch an ECS, you have the option to pass user data to the instance
 	* logs:CreateLogGroup
 	* logs:CreateLogStream
 	* logs:PutLogEvents
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 you can expand an existing VPC's range by adding a secondary CIDR block to your current VPC, so long as they don't overlap
 CloudWatch Execution Logging: API logging that lets you capture user requests and response payloads as well as error traces
 	* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
@@ -1327,6 +1330,9 @@ Step Functions vs. SWF:
 	* step functions are good for short workflows, SWF is for long workflows
 	* step functions are used for synchronous tasks, SWF is for asynchronous tasks
 	* step functions are new and less complex, SWF is legacy and more complex
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Throughput specs for EBS volume types: Cold HDD: 250MB/s, General Purpose SSD: 250MB/s, Throughput Optimized HDD: 500MB/s, Provisioned IOPS SSD: 1,000MB/s
 IOPS specs for EBS volume types: Cold HDD: 250, Throughput Optimized HDD: 500, General Purpose SSD: 16,000, Provisioned IOPS SSD: 64,000
 RDS Encryption: feature that provides encryption of your RDS DB data at rest using AES-256
@@ -1413,6 +1419,9 @@ poll-based event sources for Lambda:
 	* SQS
 	* Kinesis
 	* DynamoDB
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ARN's for Lambda functions look like this: 
 	* arn:aws:lambda:aws-region:acct-id:function:hellowworld
 	* arn:aws:lambda:aws-region:acct-id:function:hellowworld:$LATEST
