@@ -67,6 +67,7 @@ IAM: manage Users and their level of access to the AWS console
 	* IAM Managed Policies: policies managed by AWS that you cannot edit
 	* IAM Customer Managed Policies: policies created by you that you can edit
 	* IAM Inline Policies: A policy that is directly attached to an IAM User
+	* IAM Access Analyzer: analyzes any aws resource policy (EX: S3 buckets) to help identify and mitigate potential security risks
 	* IAM policy contents:
 		* Version: policy language version
 		* Statement: container for the policy element; you can have multiple Statements; a Statement contains the Effect, Principal, Action, Resource, and Condition
@@ -137,16 +138,28 @@ S3: secure, durable, highly scalable object storage
 	* S3 storage classes:
 		* Standard
 		* Standard IA: Additional retrieval fee is applied (this is also the same for the rest below)
-		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3. Availability is 99.5%
+		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3). Availability is 99.5%
 		* Glacier
-		* Glacier Deep Archive
-	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in transit as it goes to S3; all S3 Managed keys are handled by Amazon
-		* encryption in transit between your local host and S3 is achieved via SSL/TLS
-		* Server Side Encryption (SSE) 3 types:
-			* SSE-AES: S3 handles the key, uses the AES-256 algorithm
+			* S3 Glacier Vault (a.k.a S3 Glacier): uses vaults(legacy) under-the-hood. All Glacier storage classes have u using buckets, but under-the-hood aws is still storing them as vaults in aws
+		* Glacier Deep Archive: uses vaults over buckets; Glacier Flexible also uses vaults, but Glacier Instant still uses buckets
+			* Standard(default): no size limit; 12-48 hour retrieval time
+			* Bulk: no size limit; 12-48 hour retrieval time; good for petabyte retrievals
+		* Glacier Instant: 68% lower than Standard IA; good for data that is accessed once per quarter or rarely accessed data that once needed needs to be retrieved instantly (EX: file-sharing, health records, etc.)
+			* minimum storage duration of 90 days
+		* Glacier Flexible: faster than just vault-based storage
+			* Expediated: 1-5 min retrieval time; size limit of 250MB
+			* Standard(default): 3-5 hours; no size limit
+			* Bulk: 5-12 hours; no size limit; good for petabyte retrievals
+	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in aws; all S3 Managed keys are handled by Amazon
+		* Server Side Encryption (SSE) 4 types:
+			* SSE-S3 (a.k.a SSE-AES): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
+				* by default, SSE-S3 is turned on for all newly-created S3 objects
 			* SSE-KMS: you manage the keys, uses KMS' envelope encryption
+				* KMS keys must be in the same region as the S3 bucket
 			* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
+			* DDSE-KMS: it's SSE-KMS, plus an additional client-side encryption layer
 	* Client-Side Encryption: You encrypting your own files locally (at rest) before uploading them to S3
+	* In-Transit Encryption: * encryption in transit between your local host and S3 is achieved via SSL/TLS
 	* MFA Delete: ensures users can't delete an object in your S3 bucket w/o an MFA code; Can only be enabled iff: AWS CLI is used to turn it on and the S3 bucket has versioning turned on
 		* makes it so that only the bucket owner logged in as the Root User can delete objects from the bucket
 
@@ -552,9 +565,10 @@ VPC:
 	* Bastions(aka: jump boxes): security-hardened EC2 instances that help you gain access to your EC2 instances in private subnets using SSH or RDP
 		* NAT Gateways are only intended to help EC2 instances get outbound access to the Internet, don't use them as Bastions!
 		* System Manager's Simple Sessions Manager(SSM) replaces the need for Bastions however...
-	* PrivateLink: if you have an app in a VPC and you want to share that with multiple VPC's, you would use PrivateLink
-		* so instead of either opening the app up to the public internet (security risk) or making VPC Peering connections with each VPC you want to share it with (complex)
-		* requires a NLB on the VPC providing the service and an ENI on the customer VPC
+	* PrivateLink: if you have an app or aws resource or aws service in a VPC and you want to share that with multiple VPC's, you would use PrivateLink; not free however
+		* so instead of either opening the app or aws resource or aws service up to the public internet (security risk) or making VPC Peering connections with each VPC you want to share it with (complex)
+		* requires a NLB on the VPC providing the service and an ENI on the app/resource/service u want to share
+		* can go cross-account
 	* VPC Endpoints: lets you privately connect to your VPC to support VPC services (using PrivateLink) w/o having to use an Internet Gateway, NAT device, VPN connection, or Direct Connect
 		* this means traffic btwn your VPC and other AWS services never leave the Amazon Network (i.e never go to the public internet)
 		* VPC Endpoints are virtual devices; they are redundant, horizontally scaled, and highly available; allows communication btwn instances and services in your VPC
@@ -563,6 +577,7 @@ VPC:
 			* Interface Endpoints: an elastic network interface(ENI) with a private IP that acts as an entry point for traffic destined to go to a supported aws service; powered by AWS PrivateLink
 				* supports many AWS services
 			* Gateway Endpoints: essentially a NAT Gateway supported for only S3 and DynamoDB; free; it's a gateway that is a target for a specific route in your route table
+				* can't go cross-account
 		* pricing per VPC endpoint per AZ per hour: $0.01, and pricing per GB data processed: $0.01
 	* Transit Gateway: lets you have transitive peering btwn 1000's of VPC's, VPN's, and on-prem data centers; works on a hub-and-spoke model; works regionally but you can change it to be multi-region
 		* you can also use it across multiple AWS accounts using Resource Access Manager (RAM)
@@ -834,7 +849,7 @@ KMS: Regional secure key management, encryption, and decryption
 				* is used to sign messages and verify signatures
 	* good for S3 objects, database passwords, and API keys that are stored in Parameter Store
 	* can encrypt and decrypt data up to 4KB in size
-	* you pay per API call
+	* you pay per API call and per CMK key
 	* you can run audit logs to S3 using CloudTrail with KMS
 	* uses FIPS140-2 Level 2
 CloudHSM: dedicated hardware security module for your keys

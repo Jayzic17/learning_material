@@ -14,6 +14,9 @@ go mod graph
     * returns the dependency tree of your Go application
 go mod why -m [dependency_name]
     * shows you the dependency graph for the specified dependency in the current Go project
+go mod graph | grep [dependency_name]
+    * also shows you the dependency graph for the specified dependency in the current Go project
+    * shows version numbers as well
 go run main.go
     * runs your main.go
 go run .

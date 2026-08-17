@@ -77,8 +77,10 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		* lifecycle management; you can set up lifecycle policies that can move files to different storage classes based on how frequently they're accessed; ex: from standard to Glacier
 		* versioning
 		* encryption
-		* access control list: a list used in S3 that you create that has a list that says who can access which files in S3
-		* bucket policies: same thing as access control, but it's for entire Buckets instead of individual files; list that says who gets access to which buckets; you can use it to make buckets public
+		* access control list(legacy): a list used in S3 that you create that has a list that says which aws Accounts can access which objects in S3 buckets
+		* bucket policies: same thing as access control, but it's for entire Buckets instead of individual objects; list that says which Principals (accounts, users, roles) gets access to which buckets; you can use it to make buckets public
+		* Block Public Access: offers settings to easily block public access to your S3 buckets
+		* Access Grants: lets u map Identities(users, groups, roles) in some directory service (EX: Active Directory, IAM, Okta, etc.) to data in S3
 	* S3 buckets are always private by default
 	* 3 ways of restricting bucket access in S3:
 		* access control list
