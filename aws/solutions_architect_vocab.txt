@@ -1,7 +1,7 @@
 
 
 
-IAM: manage Users and their level of access to the AWS console 
+ IAM: manage Users and their level of access to the AWS console
 	* AWS credentials: When you enable programmatic access for AWS Users, you'll be able to create an Access Key ID and a Secret Access Key, which represent your AWS Credentials
 		* you'll want to store your credentials in your User's home, so something like: ~/.aws/credentials
 		* the credentials files allow you to manage multiple credentials (called profiles)
@@ -12,7 +12,7 @@ IAM: manage Users and their level of access to the AWS console
 		* Identity Federation: security by going through a 3rd party, EX: Facebook
 		* integrates with many AWS services
 		* supports PCI DSS Compliance (for if you're storing credit card details)
-	* new Users have no permissions when first created, and are assigned an Access Key ID and Secret Access Keys when first created
+	* new Users have no permissions when first created, and are assigned an Access Key ID and Secret Access Keys when granted programmatic access
 		* you only get to view these keys once after you create them, if you loose them you have to regenerate them
 	* Roles are global, meaning you can use them in any Region
 	* Roles can be assigned to an EC2 instance after it's created by using either the aws console or CLI
@@ -66,8 +66,8 @@ IAM: manage Users and their level of access to the AWS console
 	* new IAM accounts have no permissions by default until granted
 	* IAM Managed Policies: policies managed by AWS that you cannot edit
 	* IAM Customer Managed Policies: policies created by you that you can edit
-	* IAM Inline Policies: A policy that is directly attached to an IAM User
 	* IAM Access Analyzer: analyzes any aws resource policy (EX: S3 buckets) to help identify and mitigate potential security risks
+	* IAM Inline Policies: A policy that is directly attached to an IAM User
 	* IAM policy contents:
 		* Version: policy language version
 		* Statement: container for the policy element; you can have multiple Statements; a Statement contains the Effect, Principal, Action, Resource, and Condition
@@ -83,6 +83,29 @@ IAM: manage Users and their level of access to the AWS console
 S3: secure, durable, highly scalable object storage
 	* S3 Presigned URL's: generate a temporary url using the AWS CLI or SDK to give download or upload access to a private object
 	* when you upload a file to S3, you will get a HTTP 200 code back if the upload was successful
+	* GET, PUT, LIST, and DELETEs to buckets are designed for high availability, however CREATEs and DELETEs should be ran less often
+	* the IPv4 endpoint for S3 is: https://s3.[region].amazonaws.com, and the one for IPv4 and IPv6 is: https://s3.dualstack.[region].amazonaws.com
+	2 types of S3 buckets:
+		* General Purpose buckets: the OG
+			* by default you can create up to 10,000 of these per AWS Account
+			* flat hierarchy, so no directories/folders
+				* the "folders" u do see in these buckets are TECHNICALLY 0-byte S3 objects that, once objects are added to, just have their names prefix'd w/ the "folder" name...
+					* ...which mimics the idea of directories. This is what is referred to as: Object Prefixes
+			* can't be used w/ S3 Express One Zone
+		* Directory buckets:
+			* by default you can create up to 100 of these per Region
+			* has directory/folder hierarchy
+			* can only be used for S3 Express One Zone
+			* recommended when u need single-digit millisecond performance on PUTs and GETs 
+	* S3 bucket naming rules:
+		* must be between 3-63 characters
+		* lowercase, numbers, dots, and hyphens only
+		* must begin and end with a letter or number
+		* can't have 2 or more dots next to each other
+		* can't start with: xn--, sthree-, or sthree-configurator, or end with: -s3alias, or --ol-s3
+		* can't have an IP address-looking name
+		* buckets that use S3 Transfer Acceleration can't have dots
+	* S3 URI format: s3://[bucket name]/[file name]
 	* how you are billed for S3:
 		* how much storage you use
 		* the number of requests you make to objects in S3
@@ -98,6 +121,7 @@ S3: secure, durable, highly scalable object storage
 	* S3 Object Lock: makes it so that you can only write once to that object, but you can read it many times (WORM model); good for meeting WORM regulatory requirements; added security to Objects
 		* also prevents accidental deletion
 		* can apply to individual objects or applied across entire buckets
+		* can only be turned on at the creation of a bucket
 		* different modes:
 			* Governance Mode: users can't overwrite or delete an object version or alter the lock settings unless they have special permissions
 			* Compliance Mode: users can't overwrite or delete the object, even the root account user; ensures object can't be fucked with for the duration of its retention period
@@ -105,7 +129,8 @@ S3: secure, durable, highly scalable object storage
 	* Legal Hold: prevents an object version from being overwritten or deleted; it remains in effect until removed; can be freely placed and removed
 		* only users who have PutObjectLegalHold permissions can place and remove Legal Holds
 	* Glacier Vault Lock: same as S3 Object Lock, but with Glacier; lets you enforce compliance controls for S3 Glacier Vaults; can specify a WORM model and lock the policy from future edits
-	* S3 prefixes: the middle portion of an object's location address; EX: mybucketname/folder1/subfolder1/myfile.jpg -> folder1/subfolder1
+	* S3 Object Prefixes: the middle portion of an object's location address (not including the bucket name); EX: mybucketname/folder1/subfolder1/myfile.jpg -> folder1/subfolder1
+		* this is effectively the path to the file
 		* can take advantage of this to optimize performance in S3 by spreading your reads across multiple different prefixes for faster requests
 	* speed limits with KMS:
 		* uploading/downloading objects counts towards the KMS quota, which is hard-caped based on the region: (EX: 5,500, 10,000, 30,000 requests/sec), and you can't increase this quota limit
@@ -133,24 +158,35 @@ S3: secure, durable, highly scalable object storage
 		* Value: contains the data itself
 		* Version ID: what version of the object is it? (used when versioning is enabled)
 		* Metadata
+			* 2 types:
+				* System Defined metadata: only aws can control with 1 exception: Content-Type: .jpeg, .png, etc.
+				* User Defined metadata:
+					* when u name it, it must start with: x-amz-meta-
 		* Access Control Lists
+		* checksums (can use SHA1, SHA256, CRC32, or CRC32C)
+		* Etag (entity tag): a response header that is used as a way to detect when an object has been edited w/o having to downloading the object itself
+			* the value is usually represented as an MD5 hash of the object's contents
+			* Etags are part of the HTTP protocol; used as revalidation for caching systems
+			* reflects changes only to the contents of an object; not its metadata
+			* good for programmatically detecting if an object has been edited
 		* Torrents: decentralized file sharing system utilizing the BitTorrent Protocol that's peer-to-peer, meaning the more people join the Torrent, the faster the download speed of the file you're trying to download
 	* S3 storage classes:
 		* Standard
-		* Standard IA: Additional retrieval fee is applied (this is also the same for the rest below)
-		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3). Availability is 99.5%
-		* Glacier
-			* S3 Glacier Vault (a.k.a S3 Glacier): uses vaults(legacy) under-the-hood. All Glacier storage classes have u using buckets, but under-the-hood aws is still storing them as vaults in aws
-		* Glacier Deep Archive: uses vaults over buckets; Glacier Flexible also uses vaults, but Glacier Instant still uses buckets
-			* Standard(default): no size limit; 12-48 hour retrieval time
-			* Bulk: no size limit; 12-48 hour retrieval time; good for petabyte retrievals
+		* S3 Express One-Zone: single-digit millisecond performance using Directory Buckets, data access is 10x faster than Standard, single AZ, 50% less than Standard
+			* Additional retrieval fee is applied (this is also the same for the rest below). For Express One-Zone, you're charged per GET request over 512kb
+		* Standard IA: 50% less than Standard iff u don't access buckets more than once a month
+		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3), availability is 99.5%
 		* Glacier Instant: 68% lower than Standard IA; good for data that is accessed once per quarter or rarely accessed data that once needed needs to be retrieved instantly (EX: file-sharing, health records, etc.)
 			* minimum storage duration of 90 days
-		* Glacier Flexible: faster than just vault-based storage
-			* Expediated: 1-5 min retrieval time; size limit of 250MB
+		* Glacier Flexible Retrieval: 
+			* Expedited Retrievals: 1-5 min retrieval time; size limit of 250MB
+				* Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed. Assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
+				* buy this when you require highly reliable and predictable access to your archival data and need it in minutes
 			* Standard(default): 3-5 hours; no size limit
 			* Bulk: 5-12 hours; no size limit; good for petabyte retrievals
+		* Glacier Deep Archive
 	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in aws; all S3 Managed keys are handled by Amazon
+		* encryption in transit between your local host and S3 is achieved via SSL/TLS
 		* Server Side Encryption (SSE) 4 types:
 			* SSE-S3 (a.k.a SSE-AES): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
 				* by default, SSE-S3 is turned on for all newly-created S3 objects
@@ -159,7 +195,7 @@ S3: secure, durable, highly scalable object storage
 			* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
 			* DDSE-KMS: it's SSE-KMS, plus an additional client-side encryption layer
 	* Client-Side Encryption: You encrypting your own files locally (at rest) before uploading them to S3
-	* In-Transit Encryption: * encryption in transit between your local host and S3 is achieved via SSL/TLS
+	* In-Transit Encryption: encryption in transit between your local host and S3 is achieved via SSL/TLS
 	* MFA Delete: ensures users can't delete an object in your S3 bucket w/o an MFA code; Can only be enabled iff: AWS CLI is used to turn it on and the S3 bucket has versioning turned on
 		* makes it so that only the bucket owner logged in as the Root User can delete objects from the bucket
 
@@ -195,8 +231,9 @@ EC2:
 		* if the Spot price goes over your maximum, you have 2 minutes to decide whether to stop or terminate the instance; can prevent this using Spot Blocks
 			* Spot Blocks: allows you to request Spot Instances for 1 to 6 hours at a time to avoid your Spot Instances from being interrupted during their jobs
 		* Spot requests include: max price, launch specification, # of instances, request type, the date ranges for which the request is valid
-			* request type: one-time: meaning once the Spot price exceeds maximum price it is terminated; persistent: once Spot price exceeds maximum price, instances are stopped,...
-				* ...and then the instances are re-launched once the Spot price goes below the maximum
+			* request types:
+				* one-time: meaning once the Spot price exceeds maximum price it is terminated
+				* persistent: once Spot price exceeds maximum price, instances are stopped, and then the instances are re-launched once the Spot price goes below the maximum
 		* Spot Fleets: a collection of Spot instances and optionally On-Demand instances
 			* you put in a request that attempts to get you the # of Spot and On-Demand instances needed to meet your target capacity at the Spot price you want
 			* if your Spot instances are interrupted the Spot Fleet will try to maintain your target capacity by launching more Spot instances given your price constraints
@@ -816,7 +853,7 @@ Snowball:
 		* 3 options for device configurations:
 			* storage optimize (24 CPU's)
 			* compute optimized (54 CPU's)
-			* GPU optimized (54 CPU's)
+			* GPU optimized (54 GPU's)
 		* comes in 2 sizes: 100TB and 100TB Clustered(use when you have multiple Snowballs)
 	* Snowmobile has security features like GPS tracking, Alarm monitoring, 24/7 video surveillance, and an optional security vehicle escort
 
@@ -852,7 +889,7 @@ KMS: Regional secure key management, encryption, and decryption
 	* you pay per API call and per CMK key
 	* you can run audit logs to S3 using CloudTrail with KMS
 	* uses FIPS140-2 Level 2
-CloudHSM: dedicated hardware security module for your keys
+CloudHSM: dedicated hardware security module for your keys; the name for AWS's HSM offering
 	* uses FIPS 140-2 Level 3
 	* you manage your own keys with CloudHSM as opposed to KMS
 	* you don't have access to the hardware itself: aws takes care of that
@@ -1026,7 +1063,8 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 		* Redis lets you do way more operations on data; good for leaderboards and for keeping track of unread notification data
 		* they both offer sub-millisecond latency, easy to use, support data partitioning, can scale horizontally, and support a lot of programming languages
 		* MemCached supports multithreaded architectures, while Redis does not
-		* Redis supports advanced data structures, Snapshots, Replication, Transactions, Pub/Sub, Lua scripting, backup and restore, ranking and sorting datasets, persistence, and geospatial support, while MemCached does not
+		* Redis supports advanced data structures, Snapshots, Replication, Transactions, Pub/Sub, Lua scripting, backup and restore, ranking and sorting datasets, ...
+			* ...persistence, and geospatial support, while MemCached does not
 		* Redis is multi-AZ while Memcached is not
 Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure
 	* powered by a CloudFormation template that sets up: 
@@ -1080,7 +1118,7 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 		* Kinesis Data Firehose: same as Kinesis Data Streams except you can choose only 1 consumer and data immediately disappears from the stream once consumed
 			* you can convert incoming data to other file formats; you can also compress the data; you can also secure the data
 			* you pay only for data that is consumed
-		* Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Recognition(Machine Learning)
+		* Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Rekognition(Machine Learning)
 		* Kinesis Data Analytics: input and output are either Kinesis Firehose or Kinesis Data Streams with the intermediary being Data Analytics
 			* data that passes through Data Analytics is run through custom SQL you write, which then outputs to the output stream
 			* really good for real-time analytics
@@ -1165,7 +1203,7 @@ Nitro-based EC2 Instances: built on the AWS Nitro System platform that pumps out
 	* good for HPC workloads in I/O, compute, memory, storage, and networking
 IAM policies are restrictive; Security Group rules are permissive
 cooldown period: a configurable setting in ASG; a time delay that ensures instances aren't terminated or launched before the previous scaling activity has time to finish; default time is 300 seconds
-the prerequisites when routing traffic through Route53 to an S3-hosted website;
+the prerequisites when routing traffic through Route53 to an S3-hosted website:
 	* the S3 bucket name must be the same as the domain name
 	* you must have a valid registered domain name
 	* Route53 must be the DNS service for the domain name
@@ -1187,9 +1225,7 @@ Data Lifecycle Manager (DLM): A feature of EBS that lets you automate the creati
 Active-active failover: use this routing policy when you want a majority of your resources to be active a majority of the time; all records with the same name, type, and routing policy are active till Route53 determines it unhealthy.
 Active-passive failover: use this routing policy when you want to use a primary group of resources a majority of the time while having a secondary group of resources on standby for when the primary goes down
 	* once all the primary resources are unhealthy, then Route53 starts to only use the healthy secondary resources
-Expedited Retrievals: lets you quickly access archival data in 1-5 minutes(unless the size is over 250MB) when there's a sudden request to access it.
-	Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed. Assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
-		* buy this when you require highly reliable and predictable access to your archival data and need it in minutes
+
 S3 Select takes the associated bucket name and object key of the object you want to query with SQL and retrieves that data
 there is a CPU-based On-demand instance limit, which is initially set to 20 instances per region; you can bypass this by submitting a limit increase form to AWS
 Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
@@ -1231,7 +1267,7 @@ S3 Server Access Logging: gives you detailed logs about requests made to S3 buck
 Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
 Remember that in an ASG, instance IP's change all the time when new instances are added and deleted as part of scaling
 when an EC2 is in a hibernated state, pricing is determined only by the Elastic IP's and EBS volumes attached to that instance, NOT the amount of time it's hibernating
-when you launch an ECS, you have the option to pass user data to the instance
+when you launch an ECS, you have the option to pass EC2 User Data to the instance
 	* useful for when you want to run automated tasks and configurations on start-up
 3 required actions for Lambda to write logs to AWS CloudWatch:
 	* logs:CreateLogGroup
@@ -1264,7 +1300,7 @@ you can make a single CloudTrail go cross-Region
 in RDS, you would pick multi-AZ for things like availability/disaster recovery, whereas read replicas are for performance enhancement and offloading database reads
 RDS automated backups creates a snapshot of the DB instance in question within the backup window you specify once a day
 	* it also captures transactional logs every 5 minutes and sends them to S3
-the OAI is a CloudFront user that is associated with your distribution that gets all the S3 objects your users request through CloudFront for them
+the Original Access Identity (OAI) is a CloudFront user that is associated with your distribution that gets all the S3 objects your users request through CloudFront for them
 	* this makes it so that users can't access S3 or S3's URLs directly
 to move the master account of one organization to another:
 	* remove all member accounts from the old organization
@@ -1289,7 +1325,6 @@ how to decide how many subnets you need:
 the master account of an Organization cannot be removed
 CloudTrail event logs are SSE encrypted by default
 when CORS is enabled, only GET, PUT, POST, DELETE, and HEAD are supported
-Standard Retrievals: lets you retrieve data from Glacier in 3-5 hrs; 12+ hours for Glacier Deep Archive
 SQS Dead-Letter queue: feature of SQS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
 CloudHSM performs backups by backing up users, keys, and policies, periodically to S3 in the same region as your CloudHSM Cluster
 	* Ephemeral Backup Key(EBK): when HSM backups are made, this AEA-256 key is generated to encrypt the backup using a FIPS-approved AES key wrapping method before it leaves HSM
@@ -1308,7 +1343,7 @@ Link Aggregation Group(LAG): a setup you can specify in Direct Connect that uses
 If data is taking a long time to transfer in your VPN's, you can increase the speed by enabling ECMP
 	* ECMP: each VPN Tunnel in AWS has 2 VPN Endpoints. Equal Cost Multi-Path is used to carry traffic to both Endpoints instead of just 1, which increases data transfer speeds for a VPN
 reasons why a compute resource might be stuck in the RUNNABLE state:
-	* awslogs driver isn't configured
+	* awslogs agent isn't configured
 	* insufficient resources
 	* no internet access
 	* EC2 limit has been reached
@@ -1325,7 +1360,7 @@ increasing cache expiration time for Cloudfront improves performance because it 
 		* analogy: small flame lights entire gas furnace to heat up a house
 	* Warm Standby: scaled-down versions of your infrastructure are running warm in multiple Regions in AWS
 	* Multi-site: most expensive; most amount of Regions used; both on-prem and AWS are running in an active-active config
-		* data replication is gonna be determined by your Recovery Time Objective and your Recovery Point Objective
+		* data replication is gonna be determined by your Recovery Time Objective (RTO) and your Recovery Point Objective (RPO)
 BGP: a protocol that manages the routed peering, prefix advertisement, and routing of packets btwn different networks across the Internet using ASN to uniquely identify each network
 	* you would consider this when talking about trying to connect other networks to the one you're trying to host on using VPN connections by referencing your host network's Virtual Private Gateway
 	* make sure the other networks don't have any overlapping IP's, and that BGP ASN is unique at each of these other networks
@@ -1340,7 +1375,7 @@ AWS Glue: serverless data integration service that makes it easier to discover, 
 	* Table: used to define data schema's
 	* Crawler: used to crawl data and updates/creates your Glue dashboard with tables, which can be used to perform ETL (Extract, Transform, Load) operations
 	* Classifier: component of Crawler that generates the schema to use
-Step Functions vs. SWF:
+Step Functions vs. Simple Workflow Service (SWF):
 	* step functions are serverless, SWF isn't
 	* step functions are good for short workflows, SWF is for long workflows
 	* step functions are used for synchronous tasks, SWF is for asynchronous tasks
@@ -1371,7 +1406,7 @@ you can send DeleteMessage requests in batch to save on costs in SQS
 	* Max I/O: use this if you have, tens/hundreds/thousands of EC2's using the same EFS. improves I/O and throughput, but has higher latency. Good for parallelized applications
 	* General Purpose Performance Mode: use this if you want to keep things low-latency
 	* Throughput Mode: use this when you want good data transfers w/o any performance bottlenecks for high throughput workloads
-memory allocated to each function affect Lambda price monthly
+the memory allocated to each Lambda function affects the price you pay for Lambda per month
 ALB does not charge users more based on enabled AZ's
 if the origin for a Cloudfront CDN is in AWS, fetches to origin are free
 you can mount an EFS on instances in only 1 VPC at a time
@@ -1447,8 +1482,8 @@ targets for your Dead Letter Queue can be either SQS or SNS
 if Lambda functions fail, they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
 S3 does not exist in any VPC because it's global
 2 types of URLs for S3 buckets:
-	* https://s3.[Region].amazonaws.com/[Bucket name]
-	* https://[Bucket name].s3.[Region].amazonaws.com
+	* Path-Style (will be discontinued soon): https://s3.[Region].amazonaws.com/[Bucket name]
+	* Virtual Hosted-Style: https://[Bucket name].s3.[Region].amazonaws.com
 FSx Windows File Server offers single and multi-az deployments with SSD and HDD storage options
 FSx Windows File Server allows access to file systems to multiple VPC's, accounts, and Regions through VPC Peering and Transit Gateway
 ALB's and NLB's both support Dynamic Host Port Mapping
@@ -1471,7 +1506,7 @@ Lambda function deployment types:
 		* 2nd increment: the interval in minutes before the remaining traffic is shifted to your updated lambda functions
 	* Linear: traffic is shifted in equal increments with an equal number of minutes in between each increment
 	* All-at-once: all traffic is shifted from the old lambda function to the new lambda function at once
-in Elastic Beanstalk application files are stored in S3 and server log files are optionally stored in S3 or CloudWatch Logs
+in Elastic Beanstalk, application files are stored in S3 and server log files are optionally stored in S3 or CloudWatch Logs
 IAM Access Keys' programmatic access usecase also includes the ability to make API calls for a User
 S3 IA and One Zone IA have a minimum storage duration of 30 days; S3 Standard and Intelligent Tiering have no minimum storage duration
 Cache-Control max-age: parameter in Cloudfront that lets you specify how long objects are cached to edge locations before it fetches the object again from Origin

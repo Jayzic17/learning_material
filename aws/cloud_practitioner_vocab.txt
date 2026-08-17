@@ -66,7 +66,7 @@ elastic load balancer: allows you manage the load traffic across all of your ser
 
 U2F Security Key: a type of MFA device that customers can use to protect their AWS resources
 S3: simple storage service; allows you to manage your buckets: it's where you put your objects
-	* object storage for immutable files; files can be from 0 bytes to 5 TB; unlimited storage; it's key/value storage; 99.9% availability, and 11 x 9's durability
+	* object storage for immutable files; files can be from 0 bytes to 5 TB; unlimited storage; it's key/value storage; 99.99% availability, and 11 x 9's durability
 	* buckets in S3 must be unique globally
 	* objects in S3 consist of:
 		* key: name of the object
@@ -82,21 +82,18 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		* Block Public Access: offers settings to easily block public access to your S3 buckets
 		* Access Grants: lets u map Identities(users, groups, roles) in some directory service (EX: Active Directory, IAM, Okta, etc.) to data in S3
 	* S3 buckets are always private by default
-	* 3 ways of restricting bucket access in S3:
-		* access control list
-		* bucket policies
-		* IAM Policies
 	* storage classes in S3:
 		most expensive
-			  |	* S3 standard: data stored redundantly in multiple locations
-			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access; cheaper than S3, but you're charged a retrieval fee
-			  | 	* S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing
+			  |	* S3 Standard: data stored redundantly in 3 or more AZ's
+			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access; cheaper than S3, but you're charged a retrieval fee, 50% less than Standard, 99.9% availability
+			  | 	* S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing, 20% less than IA
 			  |	* S3 Intelligent tiering: uses machine learning to move data through the above 3 access tiers ^ to optimize cost and performance
-			  | * S3 Glacier: low cost storage class for archiving data; retrieval time from minutes to hours; 90 days minimum storage duration
+			  | * S3 Glacier Instant
+			  | * S3 Glacier Flexible Retrieval: low cost storage class for archiving data; retrieval time from minutes to hours; 90 days minimum storage duration
 			  |		* for archiving and long-term backup; lower cost than S3 Buckets, but takes a while to get data from there and you're charged every time you request info from those buckets
 			  v * S3 Glacier Deep Archive: same as S3 Glacier, but with even longer retrieval times (12 hours or more); 180 days minimum storage duration
 		least expensive
-	* you can use S3 to make a static website, S3 scales automatically with respect to high incoming traffic, stores all versions of an object, good at backup, and versioning cannot be disabled
+	* you can use S3 to make a static website, S3 scales automatically with respect to high incoming traffic, stores all versions of an object, good at backup, and object version cannot be deleted (only disabled/suspended)
 	* S3 integrates with life cycling rules and can use MFA with S3
 	* use S3 when you got large files to store; ex: audio, video, and images
 	* S3 is a regional AWS service that gives global views
@@ -422,7 +419,7 @@ AWS cost allocation tags: tags that lets you organize your resource costs to hel
 Rekognition: converts images into tags/text; kind of like those questions that ask you "which of these pictures have stop signs?"
 resource groups: group of resources that share one or more of the same tag
 AWS Config: monitors the configuration of your AWS resources
-	* lets you assess, audit, and evaluate the configurations of your AWS resources; unlike opsWorks which sets up those configurations as opposed to auditing them
+	* lets you assess, audit, and evaluate the configurations of your AWS resources; unlike OpsWorks which sets up those configurations as opposed to auditing them
 Parameter Store: server-less storage for passwords and connection strings; can store them using KMS or as plaintext; can also set Time To Live to expire those; free; limit of 10,000 params per account
 Secrets Manager: similar to Parameter Store, but costs money; auto rotate passwords for you, can generate random passwords for you, and applies the new password in RDS for you; no storage limit
 Security Hub: a central location where you can view all security alerts and findings in your company across all AWS security services, across all AWS accounts in your company (god view)
@@ -435,7 +432,7 @@ Transcribe: converts speech into text
 Serverless Application Repository: allows you to deploy pre-made server less applications
 AWS Outposts: a way of extending AWS compute services to your own on-premise data centers
 EC2 Image Builder: lets you build custom EC2 images for Linux and Windows
-SNS: used for sending plain text emails that are triggered by AWS services, whereas SES is optimized for just emails; can send html emails, receive emails, email templates, custom domain names, etc.
+SNS: used for sending notifications that are triggered by AWS services, whereas SES is optimized for just emails; can send html emails, receive emails, email templates, custom domain names, etc.
 always design for failure: meaning redundantly duplicate stuff across multiple availability zones
 Route53: how you get and manage domains, domain names, and domain traffic; Route53 is global just like IAM and S3; also use it to reroute network traffic to other IP's
 	* DNS is how you use domain names to look up IP addresses 
@@ -448,7 +445,7 @@ Global Tables: DynamoDB replication service that automatically replicates data a
 	* good for big, global applications
 DAX: (DynamoDB Accelerator): in-memory cache for DynamoDB which delivers 10x performance improvement from milliseconds to microseconds; fully-managed and highly available 
 DocumentDB: NoSQL document database, mongoDB-compatible
-Aurora: relational database; database is fully managed; MySQL 5x faster, and PSQL 3x faster
+Aurora: relational database; database is fully managed; Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
 	* Aurora is scalable, can be used in multiple AZ's, and you would use Aurora if you got complex queries like JOINs 
 Aurora Serverless: same as Aurora, but only runs when you need it
 ECS: Elastic Container Service; servers that come preconfigured with Docker running on it for launching Microservices
