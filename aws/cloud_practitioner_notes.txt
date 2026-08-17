@@ -53,21 +53,21 @@ Storage services:
 	* Snowmobile
 
 Acronyms:
-	* IAM: Identity and Access Management					* ELB: Elastic Load Balancer
-	* S3: Simple Storage Service							* ALB: Application Load Balancer
-	* SWF: Simple Workflow Service							* NLB: Network Load Balancer
-	* SNS: Simple Notification Service						* EC2: Elastic Cloud Compute
+	* IAM: Identity and Access Management				* ELB: Elastic Load Balancer
+	* S3: Simple Storage Service						* ALB: Application Load Balancer
+	* SWF: Simple Workflow Service						* NLB: Network Load Balancer
+	* SNS: Simple Notification Service					* EC2: Elastic Cloud Compute
 	* SQS: Simple Queue Service							* ECS: Elastic Container Service
 	* SES: Simple Email Service							* ECR: Elastic Container Repository
-	* SSM: Simple Sessions Manager							* EBS: Elastic Block Storage
-	* RDS: Relational Database Service						* EFS: Elastic File Storage
-	* VPC: Virtual Private Cloud							* EMR: Elastic MapReduce
-	* VPN: Virtual Private Network							* EB: Elastic Beanstalk
+	* SSM: Simple Sessions Manager						* EBS: Elastic Block Storage
+	* RDS: Relational Database Service					* EFS: Elastic File Storage
+	* VPC: Virtual Private Cloud						* EMR: Elastic MapReduce
+	* VPN: Virtual Private Network						* EB: Elastic Beanstalk
 	* CFN: CloudFormation								* ES: ElasticSearch
-	* WAF: Web Application Firewall							* EKS: Elastic Kubernetes Service
+	* WAF: Web Application Firewall						* EKS: Elastic Kubernetes Service
 	* MQ: Amazon ActiveMQ								* MKS: Managed Kafka Service
 	* ASG: Auto Scaling Groups							* IoT: Internet of Things
-	* TAM: Technical Account Manager						* RI: Reserved Instances
+	* TAM: Technical Account Manager					* RI: Reserved Instances
 
 APN Partner path to success Tiers:
 	* Registered ---> Select ---> Advanced ---> Premier
@@ -174,9 +174,9 @@ all free AWS services: IAM, Amazon VPC, Organizations, Consolidated Billing, AWS
 
 Consulting Partner tier requirements:
 	--------   practitioner certs - associate certs - professional/specialty certs
-	* select:	2			2			2
-	* advanced:     4			4			6
-	* premier: 	10			10			10
+	* select:			2					2						2
+	* advanced:     	4					4						6
+	* premier: 			10					10						10
 
 the 5 pillars of the AWS well architected framework:
 	* operational excellence

@@ -102,7 +102,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 	* S3 is a regional AWS service that gives global views
 	* S3 is used for storing objects; can't install databases or OS's on it
 	* Cross Region Replication in S3: allows you to have duplicative buckets in multiple regions
-	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's network, as opposed to just the regular internet
+	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -145,9 +145,9 @@ Scale Out: adding multiple machines
 
 support plans:
 	* basic support plan: free, no 3rd party support, you get 7 trusted advisor checks, and email support but only for billing and account help
-	* developer support plan: $20/month, no 3rd party support, 7 trusted advisor checks, tech support via email(~24 hrs), General Guidance(< 24 hrs) and System Impaired(< 12 hrs) support
-	* business support plan: $100/month, yes 3rd party, all trusted advisor checks, tech support via email, tech support via chat and phone 24/7, General Guidance, System Impaired help...
-		* ...Production System Impaired(< 4 hrs) Production System Down(<1hr), and AWS Infrastructure Event Management w/ an additional fee 
+	* developer support plan: $20/month, no 3rd party support, 7 trusted advisor checks, tech support via email(~ 24 hrs), General Guidance(< 24 hrs) and System Impaired(< 12 hrs) support
+	* business support plan: $100/month, yes 3rd party, all trusted advisor checks, (developer support plan)^ + Production System Impaired(< 4 hrs) Production System Down(< 1 hr)..
+		* ...and AWS Infrastructure Event Management w/ an additional fee 
 	* enterprise support plan: $15,000/month, (business support plan)^ + Business-Critical System Down support(< 15 min), a personal concierge, a technical account manager,...
 		* ... and AWS Infrastructure Event Management is free
 		* the personal concierge is primarily used for billing and account questions and the TAM is your technical expert on all things AWS
@@ -194,18 +194,19 @@ AWS landing zone: helps enterprises getting started with SETTING UP a basic mult
 	* helps customers quickly setup a secure, multi-account AWS organization environment using AWS best practices; different than ControlTower
 ControlTower: allows you to PROVISION multiple AWS accounts in minutes, which comply with the companies existing policies; used by enterprises that already have multiple AWS accounts (automated w/ predefined layouts)
 	* allows admins to automate the process of AWS landing zone
-AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS
-	* these IT services can include everything from virtual machine images, servers, software, etc
+AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS.
+	* these IT services can include everything from virtual machine images, servers, software, etc.
 AWS CloudFormation template: the template you use to configure resources into your company's cloud
 	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
 	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does
 	* CloudFormation is Infrastructure as code
-AWS quickStarts: pre-built templates by AWS Partners that help you deploy popular stacks: a collection of resources that you can manage. All the resources in the stack are defined by the stack's AWS CloudFormation template
+AWS quickStarts: pre-built CloudFormation templates by AWS Partners that help you deploy popular stacks: a collection of resources that you can manage.
+	* All the resources in the stack are defined by the stack's AWS CloudFormation template
 	* you can use it to deploy environments quickly using CloudFormation templates made by AWS Solutions Architects who are experts in their respective technologies
 	* 3 parts to AWS quickStarts:
 		* a reference architecture for the deployment
 		* AWS CloudFormation templates for automating and configuring the deployment
-		* following the deployment guide 
+		* following the deployment guide
 AWS Organizations: allows you to manage billing, control access, security, compliance, and share resources across all AWS accounts in your org's AWS main account
 	* is where you manage all AWS accounts in your organization
 	* 2 feature sets of AWS Organizations: 
@@ -241,8 +242,7 @@ codeCommit: fully managed source control service that hosts secure Git-based rep
 codeBuild: fully managed build server: it compiles your source code, runs tests, and makes software packages
 AWS cloud9: IDE accessed via the web browser
 AWS CodeStar: development service that lets you quickly develop, build, and deploy applications on AWS; helps you manage you project development activities with unified UI and dashboards
-Storage Gateway: hybrid btwn cloud storage and local caching; acts as an extension of on-premise storage into the cloud; enables your on-premise apps to use AWS cloud storage
-	* you use it to cache files from your on-premise directly into S3
+Storage Gateway: acts as an extension of on-premise storage into the cloud; enables your on-premise apps to use AWS cloud storage
 EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, HHD, etc.)
 	* allows you to create storage volumes and attach them to EC2 instances, essentially cloud storage for servers
 	* 2 types of EBS:
@@ -305,7 +305,8 @@ AWS certificate manager: used for issuing verified certificates for SSL/HTTPS on
 AWS Shield: managed DDoS protection service for apps on AWS; protects you from Layer 3,4, and 7 attacks; when you route traffic through Route53 or CloudFront, you're using AWS Shield Standard
 	* protects you from DDoS attacks; everyone has a shield by default
 AWS Shield Advanced: protection against larger DDoS'; $3000/yr; visibility into attacks, 24/7 access to DDoS experts, available on: Route53, CloudFront, ELB, Elastic IP, and AWS Global Accelerator
-AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
+AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications
+	* done by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
 	* this prevents packet loss, latency, and improves the user's performance by 60%
 PenTesting: penetration testing; simulated cyber attack on a computer system to evaluate if the system is secure
 	* You can PenTest on AWS, but only on the following services:
@@ -361,7 +362,7 @@ IAM: allows you to manage users and their level of access to the AWS console
 		* policy: a JSON file that applies permissions to users, groups, and/or roles; a list of ALLOW and DENY rules to a certain resource
 		* roles: a role contains a collection of policies that can be temporarily assigned to a user; ex: john assumes the DynamoReadWrite Role, giving him access to the DynamoRead policy and the DynamoWrite policy
 		* entities: the objects that are used in IAM for authentication purposes, so users and roles; not groups and policies 
-		* principal: a person/application that is authenticated as a root account/IAM user/role to make requests and actions to AWS; a principal itself is an entity
+		* principal: a person/application that is authenticated as a root account, IAM user, or role used to make requests and actions to AWS; a principal itself is an entity
 		* identities: users, groups, and roles; essentially it's the object's name, or way of identifying the object, so that you can give it permissions 
 		* resources: ex: aurora, dynamoDB, S3, etc.
 	* IAM offers:
