@@ -85,7 +85,7 @@ S3: secure, durable, highly scalable object storage
 	* when you upload a file to S3, you will get a HTTP 200 code back if the upload was successful
 	* GET, PUT, LIST, and DELETEs to buckets are designed for high availability, however CREATEs and DELETEs should be ran less often
 	* the IPv4 endpoint for S3 is: https://s3.[region].amazonaws.com, and the one for IPv4 and IPv6 is: https://s3.dualstack.[region].amazonaws.com
-	2 types of S3 buckets:
+	* 2 types of S3 buckets:
 		* General Purpose buckets: the OG
 			* by default you can create up to 10,000 of these per AWS Account
 			* flat hierarchy, so no directories/folders
@@ -96,7 +96,12 @@ S3: secure, durable, highly scalable object storage
 			* by default you can create up to 100 of these per Region
 			* has directory/folder hierarchy
 			* can only be used for S3 Express One Zone
-			* recommended when u need single-digit millisecond performance on PUTs and GETs 
+			* recommended when u need single-digit millisecond performance on PUTs and GETs
+	* Replication options in S3:
+		* Cross-Region Replication
+		* Same-Region Replication
+		* Bi-Directional Replication: 2 buckets are sole-linked, meaning changes made in either bucket are replicated to the other one
+		* S3 Batch Replication
 	* S3 bucket naming rules:
 		* must be between 3-63 characters
 		* lowercase, numbers, dots, and hyphens only
@@ -115,9 +120,17 @@ S3: secure, durable, highly scalable object storage
 		* you also get charged for using Cross Region Replication
 	* Object Policies: like Bucket Policies, but only applies to individual Objects
 	* S3 Buckets can be configured to create access logs which log all requests made to an S3 bucket; these logs can be sent to other buckets and/or buckets in another account
-	* S3 versioning stores all versions of an object including all writes, as well as all deletions of objects
-	* S3 Lifecycle Management allows you to automate the process of moving Objects btwn the different S3 storage tiers; can be used in conjunction with versioning
+	* S3 versioning stores all versions of an object including all writes, as well as all deletions of objects; is disabled by default
+	* S3 Lifecycle Management: allows you to automate the process of moving Objects btwn the different S3 storage tiers; can be used in conjunction with versioning
 		* S3 lifecycle management can be applied to both old and new versions of objects; you can use it to move objects to a different storage class after a certain timeframe, or delete them after time has passed
+		* different from S3 Intelligent Tiering in that YOU manage it. Isn't managed for you using ML like with Intelligent Tiering
+		* 2 types of actions you can take:
+			* Transition Actions: move current and older versions of objects btwn Storage Classes
+			* Expiring Actions:
+				* expire current versions of objects
+				* delete older versions of objects
+				* delete expired Delete Markers or incomplete Multipart Uploads
+		* Lifecycle Filters: can filter based on Object Prefixes, Tags, and object size
 	* S3 Object Lock: makes it so that you can only write once to that object, but you can read it many times (WORM model); good for meeting WORM regulatory requirements; added security to Objects
 		* also prevents accidental deletion
 		* can apply to individual objects or applied across entire buckets
@@ -126,7 +139,7 @@ S3: secure, durable, highly scalable object storage
 			* Governance Mode: users can't overwrite or delete an object version or alter the lock settings unless they have special permissions
 			* Compliance Mode: users can't overwrite or delete the object, even the root account user; ensures object can't be fucked with for the duration of its retention period
 	* Retention Period: protects an object version for a set amount of time; after the time expires the object can be overwritten and deleted, unless you put a Legal Hold on the object
-	* Legal Hold: prevents an object version from being overwritten or deleted; it remains in effect until removed; can be freely placed and removed
+	* Object Legal Hold: prevents an object version from being overwritten or deleted; it remains in effect until removed; can be freely placed and removed
 		* only users who have PutObjectLegalHold permissions can place and remove Legal Holds
 	* Glacier Vault Lock: same as S3 Object Lock, but with Glacier; lets you enforce compliance controls for S3 Glacier Vaults; can specify a WORM model and lock the policy from future edits
 	* S3 Object Prefixes: the middle portion of an object's location address (not including the bucket name); EX: mybucketname/folder1/subfolder1/myfile.jpg -> folder1/subfolder1
@@ -135,8 +148,10 @@ S3: secure, durable, highly scalable object storage
 	* speed limits with KMS:
 		* uploading/downloading objects counts towards the KMS quota, which is hard-caped based on the region: (EX: 5,500, 10,000, 30,000 requests/sec), and you can't increase this quota limit
 	* Multipart Uploads: recommended for objects over 100MB and required for those over 5GB; object is split into parts and uploaded in parallel
+		* 
 	* S3 Byte-Range Fetches: download objects in parallel by specifying byte ranges; also recommended for big files; good for if you just want a piece of the file if you like
 	* S3 Select: lets your applications pull only a subset of data from S3 objects as opposed to the whole thing; uses SQL to do this; increases performance by as much as 400%; up to 80% cheaper
+		* supported for Storage Classes S3 Glacier Instant Retrieval and above
 	* Glacier Select: same as S3 Select, but for Glacier; data stays in Glacier, you query the data directly from Glacier using simple SQL; data never leaves Glacier
 	* 3 different ways to share S3 buckets across AWS accounts:
 		* using Bucket Policies in conjunction with IAM; only grants programmatic access
@@ -176,22 +191,26 @@ S3: secure, durable, highly scalable object storage
 			* Additional retrieval fee is applied (this is also the same for the rest below). For Express One-Zone, you're charged per GET request over 512kb
 		* Standard IA: 50% less than Standard iff u don't access buckets more than once a month
 		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3), availability is 99.5%
-		* Glacier Instant: 68% lower than Standard IA; good for data that is accessed once per quarter or rarely accessed data that once needed needs to be retrieved instantly (EX: file-sharing, health records, etc.)
+		* S3 Intelligent tiering
+		* Glacier Instant Retrieval: 68% lower than Standard IA; good for data that is accessed once per quarter or rarely accessed data that once needed needs to be retrieved instantly (EX: file-sharing, health records, etc.)
 			* minimum storage duration of 90 days
-		* Glacier Flexible Retrieval: 
+		* Glacier Flexible Retrieval:
 			* Expedited Retrievals: 1-5 min retrieval time; size limit of 250MB
-				* Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed. Assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
+				* Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed
+					* assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
 				* buy this when you require highly reliable and predictable access to your archival data and need it in minutes
 			* Standard(default): 3-5 hours; no size limit
 			* Bulk: 5-12 hours; no size limit; good for petabyte retrievals
+			* minimum storage duration of 90 days
 		* Glacier Deep Archive
 	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in aws; all S3 Managed keys are handled by Amazon
-		* encryption in transit between your local host and S3 is achieved via SSL/TLS
 		* Server Side Encryption (SSE) 4 types:
 			* SSE-S3 (a.k.a SSE-AES): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
-				* by default, SSE-S3 is turned on for all newly-created S3 objects
+				* by default, SSE-S3 is turned on for all newly-created S3 objects, free
 			* SSE-KMS: you manage the keys, uses KMS' envelope encryption
 				* KMS keys must be in the same region as the S3 bucket
+				* S3 Bucket Key: ephermeral bucket-level KMS key
+					* SSE-KMS charges you per request made to objects, so using an S3 Bucket Key for the bucket instead reduces KMS cost
 			* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
 			* DDSE-KMS: it's SSE-KMS, plus an additional client-side encryption layer
 	* Client-Side Encryption: You encrypting your own files locally (at rest) before uploading them to S3
@@ -827,7 +846,7 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 		* also a key-pair is created when you create a signed url/cookie that is account-wide and managed by the root user
 		* can utilize caching features
 		* if your Origin is EC2 then use CloudFront
-	* S3 pre-signed urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first
+	* S3 presigned urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first
 	* Behaviors: you can redirect to HTTPs, restrict HTTP methods, restrict viewer access, set Time To Live (TTLs), etc.
 	* Invalidators: you can manually invalidate cache on specific files; this means forcing the cache to immediately expire and then refresh the cached content
 		* refreshing the cache costs money because of transfer costs to update Edge Locations; it's called invalidating the cache
@@ -1081,6 +1100,7 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 	* can throttle requests to prevent attacks; lets you track and control usage of the API by API key; can connect it to CloudWatch to log all requests for monitoring; auto-scales; highly scalable; cost-effective
 	* you can expose HTTPS endpoints for defining a RESTful API, maintain multiple versions of your API, and send each API endpoint to a different target; can serverless-ly connect to services like Lambda and DynamoDB
 	* when you create an API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can have child resources too EX: /projects/-id-/edit
+	* when creating API, plan them for retries w/ Exponential Backoff (EX: try again after 2 seconds, then 4, then 8, etc.)
 	* when creating an API you also have to define Methods on your Resources
 		* Methods allow you to make API calls to that Resource url using that url's protocol EX: GET, POST, etc.
 		* you can define multiple Methods for the same Resource
@@ -1181,7 +1201,8 @@ the default termination policy when scaling-in services:
 	* If there is more than one unprotected instance closest to the next billing hour, choose one of these instances at random.
 in CIDR blocks, /32 refers to a single IP, whereas /0 refers to the entire network
 messages in a SQS queue will continue to exist even after the EC2 instance has processed it; it's up to you to delete the message after the fact
-AWS Security Token Service: gives out limited-temporary credentials for IAM user or federated users using tokens that last 15 minutes
+AWS Security Token Service (STS): gives out limited-temporary credentials for IAM user or federated users using tokens that last 15 minutes
+	* all STS requests go to a single endpoint at: https://sts.amazonaws.com
 Default available metrics provided by CloudWatch:
 	* hypervisor and EC2 status checks, CPU Utilization, Network Utilization, Disk Reads
 advanced/custom metrics NOT automatically provided by CloudWatch:
@@ -1333,10 +1354,10 @@ Workgroup: a feature of Athena that lets you organize certain SQL queries into g
 	* only certain users you permit can see and/or use the queries in that Workgroup
 	* By default, each aws account has a primary workgroup and the default permissions allow all authenticated users access to this workgroup. The primary workgroup cannot be deleted
 	* You can set up workgroup-wide settings and enforce their usage by all queries that run in a workgroup. The settings include query results, location in Amazon S3, and encryption configuration
-Cloudfront vs S3 transfer acceleration vs S3 Cross-Region replication:
+Cloudfront vs S3 Transfer Acceleration vs S3 Cross-Region replication:
 	* Cloudfront is the cheepest, the other 2 cost money
 	* you use cross-region replication for DR and low latency access locally in S3
-	* you would use transfer acceleration if people from around the world using S3 are uploading to one location, or you regularly send TB's of data across Regions
+	* you would use Transfer Acceleration if people from around the world using S3 are uploading to one location, or you regularly send TB's of data across Regions
 	* you would use cloudfront if people around the world are trying to download things from S3, but they're slow
 Link Aggregation Group(LAG): a setup you can specify in Direct Connect that uses the LACP Protocol to aggregate multiple Direct Connect connections at a single Direct Connect endpoint
 	* all LAGs operate in active/active mode, meaning all of the Direct Connect connections in a LAG are active
@@ -1524,11 +1545,13 @@ ELB algorithms:
 		* Weighted Least Connection
 		* Least Response Time: avoid EC2's with long response times
 		* Resouce-based: agent is installed on each EC2 that checks its resource usage (CPU, MEM, etc.)
-
-
-
-
-
+when u send API requests to aws via the CLI or SDK, they are already signed for you using AWS Signature Version 4
+aws publishes all of its IP address ranges at: https://ip-ranges.amazonaws.com/ip-ranges.json
+	* useful when configuring your organization's network with aws' network
+Service Endpoints: URL entrypoint to an aws service
+	* follow the format: [protocol]://[service_name].[region_name].amazonaws.com
+	* 4 types of Service Endpoints: Global, Regional, FIPS, Dualstack
+		* u can also use all 4 of these in combination
 
 
 question-answering strategies:

@@ -71,16 +71,67 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 	* objects in S3 consist of:
 		* key: name of the object
 		* value: data of the object
-	* PUTS to "new" objects in S3 are consistent, but UPDATES and DELETES to existing objects takes some time to propagate to the newer version, so sometimes you can get the old version back
+	* all READ, WRITE, and DELETE operations are strongly consistent in S3, meaning changes to objects are synced everywhere in under a second
 	* S3 features:
 		* tiered storage
-		* lifecycle management; you can set up lifecycle policies that can move files to different storage classes based on how frequently they're accessed; ex: from standard to Glacier
+		* Lifecycle Management; you can set up lifecycle policies that can move files to different storage classes based on how frequently they're accessed; ex: from standard to Glacier
 		* versioning
 		* encryption
 		* access control list(legacy): a list used in S3 that you create that has a list that says which aws Accounts can access which objects in S3 buckets
 		* bucket policies: same thing as access control, but it's for entire Buckets instead of individual objects; list that says which Principals (accounts, users, roles) gets access to which buckets; you can use it to make buckets public
 		* Block Public Access: offers settings to easily block public access to your S3 buckets
+		* Access Points: named network endpoints that are attached to buckets used to simplify managing s3 bucket access
+			* aims to simplify the management of buckets whose bucket policies are needlessly complex and/or redundant
+			* has it's own distinct permissions via an Access Point policy, it's own Block Public Access, and network controls (e.g have all requests only come from the Internet, a specific VPC, etc.)
+		* Multi-Region Access Points: Access Points, but it's a global network endpoint for routing btwn multiple buckets in multiple regions
+			* it uses Global Accelerator under-the-hood
+		* Object Lambda Access Points: lets you transform the output of a HEAD, GET, or LIST request made to S3 objects (doesn't modify the object itself)
+			* useful for scrubbing PII before returning the output
 		* Access Grants: lets u map Identities(users, groups, roles) in some directory service (EX: Active Directory, IAM, Okta, etc.) to data in S3
+		* Mountpoint: allows you to mount an S3 bucket to your local Linux file system
+			* it's an open source client u install on your local computer and provides high throughput access to objects with basic file system commands
+			* can:
+				* read files up to 5TB in size
+				* list and read existing files
+				* create new files
+			* can't:
+				* modify existing files
+				* delete directories
+				* support symbolic links
+				* support file locking
+			* can be for Storage Classes Glacier Instant Retrieval, and above
+		* Requesters Pay: bucket option that allows the bucket owner to offset the cost to download and request data from the bucket over to the requester
+			* when enabled, all requests must be authenticated (no anonymous or SOAP requests allowed)
+			* requester must include x-amz-request-payer in their API request header when making the request to the bucket
+			* requester assumes an IAM role with the s3:RequestPayer condition attached before making their request
+			* if any of the above ^ conditions aren't true, a 403 is returned
+			* useful for when u want to share data, but not incur any of the transfer fees
+			* the aws Account of the requester is what gets charged
+		* Batch Operations: can perform batch operations on S3 objects; can go up to exabytes of data
+			* types of operations u can perform:
+				* copy
+				* invoke lambda functions
+				* replacing object Tags
+				* replacing access control lists for objects
+				* restoring objects from S3 Glacier
+				* placing Object Locks
+				* placing Object Legal Holds
+			* u need to supply the Batch Operation with a list of objects to perform the operation on, either as a csv or S3 Inventory report
+		* S3 Inventory: takes inventory of objects in an S3 bucket on a repeating schedule, so that you ahve an audit history of object changes
+			* S3 will output the inventory report into another S3 bucket
+			* can perform it daily and get the inventory report within 48 hours, or weekly and get the 1st one within 48 hours, and all other ones every Sunday
+		* S3 Event Notifications: allows your bucket to notify other aws services about stuff that happens in your S3 (very powerful)
+			* notifications are delivered in seconds, but can sometimes take a minute or longer
+		* Storage Class Analysis: Intelligent Tiering, but only btwn Standard and IA
+			* unlike Intelligent Tiering though, YOU manage it, no ML involved (like w/ Lifecycle Management); also cheaper than Intelligent Tiering
+		* Storage Lens: analyzes your S3 bucket storage across your entire AWS Organization
+			* aggregates all the data and displays it in an account snapshot as an interactive dashboard that gets updated daily
+		* Interoperability: Interoperability is the ability of different cloud services to be able to easily exchange and use data seamlessly btwn each other
+			* aws services that dump data into S3:
+				* EC2: for storing snapshots and backups
+				* RDS: for storing backups and data exports
+				* CloudTrail: for storing API call logs
+				* ...etc.
 	* S3 buckets are always private by default
 	* storage classes in S3:
 		most expensive
@@ -88,18 +139,21 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access; cheaper than S3, but you're charged a retrieval fee, 50% less than Standard, 99.9% availability
 			  | 	* S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing, 20% less than IA
 			  |	* S3 Intelligent tiering: uses machine learning to move data through the above 3 access tiers ^ to optimize cost and performance
-			  | * S3 Glacier Instant
-			  | * S3 Glacier Flexible Retrieval: low cost storage class for archiving data; retrieval time from minutes to hours; 90 days minimum storage duration
+			  | * S3 Glacier Instant Retrieval
+			  | * S3 Glacier Flexible Retrieval
 			  |		* for archiving and long-term backup; lower cost than S3 Buckets, but takes a while to get data from there and you're charged every time you request info from those buckets
-			  v * S3 Glacier Deep Archive: same as S3 Glacier, but with even longer retrieval times (12 hours or more); 180 days minimum storage duration
+			  v * S3 Glacier Deep Archive: same as S3 Glacier Instant and Flexibly Retrieval, but with even longer retrieval times (12 hours or more); 180 days minimum storage duration
 		least expensive
 	* you can use S3 to make a static website, S3 scales automatically with respect to high incoming traffic, stores all versions of an object, good at backup, and object version cannot be deleted (only disabled/suspended)
+		* aws won't let u turn on Requester Pays for S3 static websites u make...
 	* S3 integrates with life cycling rules and can use MFA with S3
 	* use S3 when you got large files to store; ex: audio, video, and images
 	* S3 is a regional AWS service that gives global views
 	* S3 is used for storing objects; can't install databases or OS's on it
-	* Cross Region Replication in S3: allows you to have duplicative buckets in multiple regions
+	* Cross-Region Replication: allows you to have duplicative buckets in multiple regions
 	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
+		* it takes 20 minutes before it can begin to take affect once enabled on a bucket
+		* gets transfered using the https://s3-accelerate.amazonaws.com(IPv4) or https://s3-accelerate.dualstack.amazonaws.com(IPv4/IPv6)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -160,7 +214,8 @@ AWS trusted advisor: a service that advises you on saving money, security, perfo
 		* Core Checks and Recommendations: free
 		* Full Trusted Advisor: Business and Enterprise companies only
 	* to unlock Trusted Advisor, you need to upgrade your support plan to Business
-AWS marketplace: place where you can buy and download AWS software already made by other people for AWS
+AWS marketplace: place where you can buy and download AWS stuff already made by other people for AWS
+	* you can even use it to download services as alternatives/replacements to similar services already offered in aws
 cost explorer: allows you to visually see the billing of each member associated with your account
 	* allows you to visualize and understand your AWS costs and usage over time; you use it to explore costs AFTER they've been incurred
 	* gives highly accurate cost forecasts for up to 12 months ahead
