@@ -3,10 +3,26 @@
 
  IAM: manage Users and their level of access to the AWS console
 	* AWS credentials: When you enable programmatic access for AWS Users, you'll be able to create an Access Key ID and a Secret Access Key, which represent your AWS Credentials
-		* you'll want to store your credentials in your User's home, so something like: ~/.aws/credentials
-		* the credentials files allow you to manage multiple credentials (called profiles)
+		* you'll want to store your credentials in your User's home, so something like: ~/.aws/credentials or ~/.aws/config
+			* they both do exactly the same thing, so doesn't matter which u use. The only caviate is that ~/.aws/credentials takes precidence when evaluating access
+			* some common config parameters include: aws_access_key_id, aws_secret_access_key, output, and region
+			* you can fill either file with a bunch of Named Profiles:
+				* [profile wcpprod]
+				  role_arn              = ...
+				  aws_access_key_id     = ...
+				  aws_secret_access_key = ...
+			      region                = us-east-1
+				  output                = json
+				* you can specify which Named Profile to use with --profile flag whenever making a call w/ the AWS CLI or SDK, or by exporting the AWS_PROFILE env variable
+				* the aws configure command on the whole is essentially just the same as editing the actual files themselves, which I find easier
+		* the credentials files allow you to manage multiple credentials (called Named Profiles)
 		* programmatic access must be enabled per User via IAM console in order for those Users to use the CLI and SDK
 		* credentials are stored in a plain text file, but try to use IAM Roles instead of AWS credentials whenever possible
+		* AWS credentials priority:
+			* AWS CLI parameters
+			* environment variables
+			* ~/.aws/credentials
+			* ~/.aws/config
 	* some features:
 		* can grant granular permissions
 		* Identity Federation: security by going through a 3rd party, EX: Facebook
@@ -495,7 +511,7 @@ DynamoDB: fully-managed key-value and document store DB; NoSQL; guarantees consi
 		* replication latency is under one second
 	* Database Migration Service(DMS) doesn't support DynamoDB as a source database as part of the migration, but it DOES support it as a target DB as part of the migration
 	* all data in DynamoDB is encrypted at rest using KMS
-	* you can secure access to DynamoDB using Site-to-site VPN's, Direct Connect, and IAM Policies and Roles
+	* you can secure access to DynamoDB using AWS site-to-site VPN's, Direct Connect, and IAM Policies and Roles
 		* you can also utilize more fine-grained access, like having IAM policy access to only certain attributes of table items, or by using VPC endpoints so that you can connect EC2's to...
 			* ...DynamoDB within your VPC without it being accessible from the public Internet
 	* is fully-managed, multi-AZ, durable, has in-memory caching, and can use backups and restores
@@ -533,7 +549,8 @@ Route53: more synergies with AWS services when you register your domain through 
 	* you can buy domain names directly with AWS; can take up to 3 days to register;
 	* you use it to create and manage domains, create records, implement complex traffic flows, monitor records using health checks, and resolve VPC's outside of AWS
 	* you can use it to route Internet traffic apps backed by ELB, to an EC2 instance to tweak your AMI, to API Gateway to power your API, to CloudFront for serving you S3 static-hosted websites, etc.
-	* Elastic IP (EIP): a static IP that doesn't change, but the EC2 to which it's mapped to is something you can constantly change whenever you need to
+	* Elastic IP (EIP): a static IP that doesn't change, but the EC2/ENI to which it's mapped to is something you can constantly change whenever you need to
+		* they are region-specific and u incur $1 charge everytime they're not mapped to an EC2/ENI, so make sure to use them
 	* Traffic Flow: lets you create routing configurations for your AWS resources using existing routing policy types, of which there are 7; supports versioning; GUI; $50/policy record/month
 		* also allows for chaining of routing policies
 	* there are 7 types of Routing Policies:
@@ -597,9 +614,9 @@ VPC:
 		* the size of a NAT instance determines how much traffic can be handled
 		* you can achieve high availability by using Autoscaling Groups, multiple subnets in different AZs, and automate failover
 		* NAT Instances are always behind a Security Group
-	* NAT Gateway: (new) is a managed service which launches redundant NAT instances within the selected AZ
+	* NAT Gateway: is a managed service which launches redundant NAT instances within the selected AZ
 		* Private NAT Gateway: instances in private subnets can connect to stuff outside their current VPC, but stuff outside the VPC can't connect to it
-		* Public NAT Gateway: instances in private subnets can connect to the Internet, but stuff from the Internet can't connect to it
+		* Public NAT Gateway(default): instances in private subnets can connect to the Internet, but stuff from the Internet can't connect to it
 		* they can survive failure of EC2 instances unlike NAT instances
 		* you can only have 1 NAT Gateway per AZ
 		* no requirements for patching NAT Gateways unlike instances
@@ -609,11 +626,13 @@ VPC:
 		* NAT Gateways are not associated with any Security Groups
 		* if you got multiple resources in multiple AZ's, if they share the same NAT Gateway and the NAT Gateway's AZ goes down, resources in the other AZ's will lose internet access
 			* to mitigate this, create a NAT Gateway for each AZ instead
+		* supports Network Address Translation from IPv6 to IPv4 (NAT64)
 	* CIDR blocks: the first part of the bit sequence that comprises the binary representation of the IP address. EX: 0.0.0.0/0 (the first 4 digits with dots around them)
 		* 0.0.0.0/0 represents all possible IP addresses, i.e allows all traffic to go through
 		* you can use an IPv4 Cidr Block or a IPv6 Cidr Block for the address of the VPC
 	* Route Table: determines where network traffic is directed; each subnet in your VPC must be associated with a route table
 		* a subnet can only be associated with one VPC at a time, but you can associate multiple subnets with the same route table
+			* if a subnet is not assigned a Route Table, it gets assigned the Main Route Table: the default Route Table
 	* Network Address Translation (NAT): the method of re-mapping one IP address space into another; EX: needing to re-map a private network IP to a public IP to gain outbound access to the Internet
 	* Internet Gateway: allows your VPC to get access to the Internet; provides a target for your route tables for internet-routable traffic, and provides Network Address Translation(NAT) for instances that...
 		* ...have been assigned public IPv4 addresses
@@ -629,11 +648,14 @@ VPC:
 		* this means traffic btwn your VPC and other AWS services never leave the Amazon Network (i.e never go to the public internet)
 		* VPC Endpoints are virtual devices; they are redundant, horizontally scaled, and highly available; allows communication btwn instances and services in your VPC
 			* does this w/o imposing availability risks or bandwidth constraints on your network traffic
-		* 2 types:
+		* 3 types:
 			* Interface Endpoints: an elastic network interface(ENI) with a private IP that acts as an entry point for traffic destined to go to a supported aws service; powered by AWS PrivateLink
 				* supports many AWS services
 			* Gateway Endpoints: essentially a NAT Gateway supported for only S3 and DynamoDB; free; it's a gateway that is a target for a specific route in your route table
 				* can't go cross-account
+			* Gateway Load Balancer Endpoints (GWLB): a load balancer that acts as an entry point for traffic that you can distribute to network virtual appliances (EX: firewalls) first for an added layer of security
+				* also powered by AWS PrivateLink
+				* you can get network virtual appliances aaS from AWS Marketplace or from the AWS Partner Network
 		* pricing per VPC endpoint per AZ per hour: $0.01, and pricing per GB data processed: $0.01
 	* Transit Gateway: lets you have transitive peering btwn 1000's of VPC's, VPN's, and on-prem data centers; works on a hub-and-spoke model; works regionally but you can change it to be multi-region
 		* you can also use it across multiple AWS accounts using Resource Access Manager (RAM)
@@ -678,6 +700,24 @@ VPC:
 			* traffic to and from 169.254.169.254 for instance metadata
 			* DHCP traffic
 			* traffic to the reserved IP address for the default VPC router
+	* VPC Lattic: fully managed application networking service that takes care of all your networking, so you don't have to worry about setting up a bunch of VPC networking components
+		* it's an abstraction of your networking where each Service is an aws service like with a microservices architecture
+		* Service: EC2, Lambda, ECS, etc.
+			* each Service has a Listener with Rules that get sent to Target Groups: which is just a collection of the aws resources for that Service (EX: Service is EC2, so the Target Group contains a bunch of EC2 instances)
+		* Service Network: network of all the Services that can talk w/ each other
+		* Service Directory: central registry for all Services
+		* can be used cross-vpc and cross-account
+		* uses HTTPS for service-to-service communication
+		* supports weighted routing for blue/green or canary deployments
+	* Traffic Mirroring: lets you copy network traffic from one ENI and sends that copied traffic to a security monitoring appliance (EX: another ENI, NLB, or GWLB) for security purposes
+		* attaches a VXLAN header to each packet of the copied traffic
+		* a Traffic Mirror session needs to be created to mirror traffic, which includes creating a mirror source, destination, and filter(for what kind of data u want to filter from the traffic)
+	* AWS Network Firewall: a stateful and managed firewall and IDS/IPS for VPCs
+		* utilizes Suricata, which is an open source IDS/IPS software
+	* Network Address Usage (NAU): a metric that is used to determine how much space u have left in your VPC
+		* represented by NAU units, which is just 1 NAU = 1 IP address
+		* the VPC NAU limit is 64,000 by default, which u can request a quota limit increase up to 256,000 NAUs
+		* you can enable NAU monitoring in CloudWatch
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -695,7 +735,12 @@ AWS Cognito:
 		* uses SNS to send notifications to all user devices when data in the cloud changes
 Direct Connect:
 	* useful for high throughput workloads like network traffic
-	* AWS Direct Connect is very fast: lower bandwidth is 50-500MB and higher bandwidth is 1GB-10GB; reduces costs and increases bandwidth throughput; good for high traffic; more consistent than Internet
+	* AWS Direct Connect is very fast: lower bandwidth is 50MB-500MB and higher bandwidth is 1GB-100GB; reduces costs and increases bandwidth throughput; good for high traffic; more consistent than Internet
+	* requirements needed before being able to set up:
+		* your network is co-located w/ an existing aws Direct Connect location
+		* you're working w/ an aws Direct Connect Partner from the AWS Partner Network
+		* you're working w/ an ISP
+		* your network must use single-mod fiber for either 1, 10, or 100GB internet bandwidth
 	* how to set it up:
 		* create a public Virtual Interface in the Direct Connect Console
 		* create a Customer Gateway using the VPC Console
@@ -703,6 +748,10 @@ Direct Connect:
 		* attach the Virtual Private Gateway to the desired VPC
 		* create a new VPN connection
 		* set up the VPN on the Customer Gateway
+	* 3 factors that affect pricing:
+		* port size of the connection (1, 10, or 100GB internet bandwidth)
+		* amount of time u use the connection for either as a Dedicated: physical connection, or Hosted: logical connection
+		* any outbound traffic that gets sent outside the aws network
 Global Accelerator:
 	* includes:
 		* Static IP addresses: by default Global Accelerator provides you 2 static IP's that you associate with your accelerator; alternatively you can bring your own
@@ -1240,7 +1289,16 @@ the 3 possible event notification destinations for when things occur in S3 bucke
 	* SQS
 	* SNS
 	* Lambda functions
-to have a site-to-ste VPN connection btwn your on-premise and AWS, you need to configure an Internet-routable static IP of your(customer) gateway for your on-prem
+AWS site-to-Site VPN: lets you connect your AWS VPC to your on-premise network
+	* has the following components:
+		* VPN
+		* VPC Tunnel: for encrypting the data
+		* Customer Gateway
+		* Target Gateway: refers to the target for the VPN (in this case aws)
+		* Virtual Private Gateway: refers to the target endpoint in aws for the VPN (in this case your VPC)
+		* Transit Gateway
+	* to have an site-to-site VPN connection btwn your on-premise and AWS, you need to configure an Internet-routable static IP of your(customer) gateway for your on-prem
+	* you can enable AWS Global Accelerator with your AWS site-to-site VPN
 by default, EC2's use an IPv4 addressing protocol when first created
 Data Lifecycle Manager (DLM): A feature of EBS that lets you automate the creation, retention, and deletion of snapshots taken to back up your EBS instances
 Active-active failover: use this routing policy when you want a majority of your resources to be active a majority of the time; all records with the same name, type, and routing policy are active till Route53 determines it unhealthy.
@@ -1552,6 +1610,24 @@ Service Endpoints: URL entrypoint to an aws service
 	* follow the format: [protocol]://[service_name].[region_name].amazonaws.com
 	* 4 types of Service Endpoints: Global, Regional, FIPS, Dualstack
 		* u can also use all 4 of these in combination
+AWS CLI Autoprompt: an interactive shell built into the AWS CLI. Very useful quality-of-life improvements to working in the AWS CLI terminal/shell
+	* you can use it by specifying the --cli-auto-prompt flag in your AWS CLI command, or export AWS_CLI_AUTO_PROMPT=on-partial
+Migrating from IPv4 to IPv6:
+	* aws is charging everyone for using IPv4 as an incentive to start moving over to IPv6
+	* steps to migrate an IPv4-only VPC to dualstack:
+		* add a new IPv6 CIDR block to the VPC
+		* create IPv6 subnets
+			* IPv4 subnets can't be migrated
+		* update Route Table for IPv6 to IGW
+		* update Security Group rules to include IPv6 address ranges
+		* migrate over any EC2 instance types that don't support IPv6
+AWS Client VPN: fully managed client-based VPN srvice that lets you access aws resources from your laptop or phone
+	* install any OpenVPN-based client and then use AWS Client VPN
+	* has 2 roles:
+		* Administrators: responsible to setting up and configuring the service
+		* Clients: the person who connects to AWS Client VPN with the client installed on their device
+	* you could use it to connect to an RDS instance in a private subnet, so the client can get extremely deep into your aws
+
 
 
 question-answering strategies:

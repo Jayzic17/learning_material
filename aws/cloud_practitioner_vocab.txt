@@ -440,6 +440,10 @@ IAM: allows you to manage users and their level of access to the AWS console
 		* Review: make sure everything's all good
 	* credential report: a report that you can download in IAM that lists meta data about user's passwords, access keys, and whether MFA is enabled
 	* principal of least privilege: when making IAM policies, give users the least amount of privilege necessary to do their job
+		* Just-Enough-Access: only permitting the EXACT amount of access necessary
+		* Just-In-Time: only permitting the smallest length of time needed
+		* Risk-based adaptive policies: a methodology where u can assign a risk score to a resource where each request generates a score based on how likely the resource is compromised
+			* aws doesn't have anything like that in IAM yet, but could be cool...
 	* IAM policy simulator: service in IAM that lets you test and debug policies you create in IAM before assigning them to users and roles
 	* there is a non-explicit deny to all new IAM users added
 
