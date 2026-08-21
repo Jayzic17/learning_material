@@ -313,9 +313,27 @@ EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, H
 		* the amount of data you store in snapshots affects EBS pricing
 EFS: Elastic File Storage; file storage that you can mount to multiple EC2 servers at the same time
 	* EFS is EBS except it automatically can change it's storage size to accommodate more or less data (elastic); multiple EC2's can pull from the same EFS; virtual disk attached to an EC2
-Snowball: physically transferring lots of data using a computer suitcase; default: 50-80 TB; Snowball Edge: 100TB; Snowmobile: a whole-ass shipping container pulled by a semi (100PB)
-	* Snowball: 80TB disc you load up to the snowball, and then send it back to AWS
-	* Snowball Edge: it's the Snowball storage ^ plus a computer for if you for some reason don't have connectivity to the AWS network and want to run compute services on it
+AWS Snow Family: physically moving data in or out of the cloud to and from S3
+Snowcone: either 8TB HHD or 14TB SSD
+	* can send data to aws 2 ways:
+		* physically sending it
+		* DataSync, which u run on the Snowcone itself
+	* can run on a battery for up to 6 hours
+	* can use the onboard wifi to gather sensor data (NA-only)
+	* offers Network File System (NFS) support for Windows, Linux, and Mac
+	* multiple layers of security encryption protection
+	* can collect IoT data using AWS IoT Greengrass
+	* physically smaller than Snowball Edge
+Snowball Edge: same as Snowcone, but with more local processing, edge-computing workloads, and device configuration options
+	* has an LCD display, can use in a cluster of groups of 3 to 16 devices, and can do local processing and edge-computing workloads
+	* 5 options for device configurations:
+		* storage optimized (for data transfer): 100TB (80TB usable)
+		* storage optimized: 210TB
+		* storage optimized w/ EC2-compatible compute: 80TB, 40 vCPUs, 80GB memory
+		* compute optimized: 28TB SSD, 104 vCPUs, 416GB memory
+		* compute optimized (GPU): same as the P3 instance type in EC2
+Snowmobile: a whole-ass shipping container pulled by a semi (100PB)
+	* has security features like GPS tracking, Alarm monitoring, 24/7 video surveillance, and an optional security vehicle escort
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
