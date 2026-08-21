@@ -182,9 +182,9 @@ S3: secure, durable, highly scalable object storage
 		* objects in an existing bucket aren't replicated automatically; only after they've been updated
 		* Delete Markers: when versioning is on, any request to delete any object version is tagged as deleted (it's not actually deleted; AWS tricks itself into thinking it is)
 			* Delete Markers are not replicated and deleting individual versions or delete markers will not be replicated
-	* DataSync: Allows you to sync large amounts of files on your on-prem with AWS; deployed as an agent that connects your file system with AWS
+	* DataSync: Allows you to sync large amounts of files on your on-prem with AWS or with other Cloud Providers; deployed as an agent that connects your file system with AWS
 		* automatically encrypts and accelerates data; performs automatic integrity checks in-transit and at-rest
-		* connects with S3, EFS, and FSx for Windows
+		* connects with S3, EFS, FSx, Snowcone, and Snowball Edge
 		* replication can be done hourly, daily, or weekly
 		* used with Network File System(NFS): a protocol used for accessing a remote server's files from your computer
 	* S3 objects contain:
@@ -419,7 +419,7 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 	* HDD: good for long continuous throughput of data, but really bad with a lot of very small reads and writes (think about the writing arm on the record); can't be used as a boot volume
 		* Throughput Optimized HDD(st1): drive optimized for fast throughput for intensive workloads that are frequently accessed, so data, data warehouses, log processing
 		* Cold HDD(sc1): lowest cost HDD volume for infrequently-accessed workloads (e.g File Servers), storage	
-	* EBS Magnetic(standard): legacy generation (cassettes containing magnetic tape); use for archival storage; HIGHLY durable; CAN be used as a boot volume
+	* EBS Magnetic(standard): legacy generation (cassettes containing magnetic tape or magnetic disks); use for archival storage; HIGHLY durable; CAN be used as a boot volume if we're talking about magnetic disks
 	* to move EBS from one AZ to another: take a snapshot of the volume, create an AMI using the snapshot, launch the EC2 instances in the new AZ
 	* to move EBS from one Region to another: snapshot, AMI, copy the AMI to another region, launch the EC2 instances in the new Region using to copied AMI
 	* EBS Snapshots exist in S3; you can take Snapshots while an instance is still running, but if it's a root volume the EC2 should be stopped before taking the snapshot
@@ -461,11 +461,15 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	* provides Read After Write Consistency: meaning you can view changes RIGHT AFTER making changes
 	* FSx for Windows File Server: fully managed Microsoft Windows file system, so that you can move windows-based apps that require file storage to AWS; built using Windows Server
 		* runs on Windows Servers (not EC2's), SMB file system (not NFS)
+		* integrates with Microsoft Active Directory
 	* FSx for Lustre: fully managed file system optimized for HPC, machine learning, media data processing, and electronic design automation workloads
 		* used for processing big data sets up to 100's of GB/s of throughput, millions of IOPS, and sub-millisecond latencies
 		* integrates natively with S3
+	* FSx for NetApp ONTAP: used when handling petabytes of data
 	* volume is scaled automatically for you
 	* EC2s install the NFSv4.1 client and can then mount the EFS volume for them all to share that storage
+		* you can use the EFS Mount Helper to help mount your EFS volumes onto EC2 instances
+		* installing the client also allows CloudWatch to monitor the EFS volume
 	* creates multiple mount targets in all your VPC subnets, so you can mount from anywhere in your VPC
 	* charge is $0.30/GB/month
 RDS: scalable, managed(not fully), relational database service
@@ -878,11 +882,15 @@ HA (Highly Available) Architecture: planning for failure
 		* Database Migration Service (DMS)
 		* Server Migration Service (SMS): replication of your on-premise's servers/VM's into aws; can be used for backup, on-premise/off-premise multi-site strategies, and for Disaster Recovery
 		* AWS Application Discovery Service (ADS): helps enterprises plan their migration to aws by gathering data about their on-premise data centers
-			* you start by installing the AWS Application Discovery Agentless Connector as a virtual appliance on VMware vCenter
+			* you start by installing the AWS Application Discovery Agent as a virtual appliance on VMware vCenter
 			* it will then build a server utilization map and dependency map of your on-premise's environment
 			* the collected data is then encrypted and stored in ADS; can export this data as a csv for calculating Total Cost of Ownership for running aws and for planning aws migration
-			* this data is also available in aws Migration Hub: a place where you can migrate the discovered servers and track their progress as they are being migrated to aws
-		* VM Import/Export: used to migrate existing apps/VM's to EC2's; can be used for Disaster Recovery or lets you use aws as a second site 
+			* this data is also available in Migration Hub
+		* Migration Hub: a place where you can migrate the discovered servers and track their progress as they are being migrated to aws
+			* Migration Evaluator Collector: a form u submit to AWS to help asses a migration
+			* Migration Hub Refactor: bridges networking across aws accounts so that legacy and new services can communicate while remaining on seperate accounts
+			* Migration Hub Journey: guided templates for end-to-end migrations
+		* VM Import/Export: used to migrate existing apps/VM's to EC2's; can be used for Disaster Recovery or lets you use aws as a second site
 		* Download Amazon Linux 2 as an iso
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -978,19 +986,6 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 		* with the OAI you can then protect the cached content using Signed URLs: urls that provide temp access to cached objects, and Signed Cookies, which are passed along with every...
 			* ...request to CloudFront
 			* the advantage with Cookies being if you wanted to provide access to multiple private files instead of just one
-Snowball:
-	* uses multiple layers of security: tamper-resistant enclosures, 256-bit encryption, and an industry standard Trusted Platform Module (TPM): secures hardware using cryptographic keys
-	* Snowball takes less than a week to transfer 100TB of data and at a fifth of the cost as opposed to high speed internet
-	* Snowball is also weather proof
-	* for security reasons, data transfers must be completed within 90 days
-	* comes in 50TB and a 80TB sizes
-	* Snowball Edge has an LCD display, can use in a cluster of groups of 5 to 10 devices, and can do local processing and edge-computing workloads
-		* 3 options for device configurations:
-			* storage optimize (24 CPU's)
-			* compute optimized (54 CPU's)
-			* GPU optimized (54 GPU's)
-		* comes in 2 sizes: 100TB and 100TB Clustered(use when you have multiple Snowballs)
-	* Snowmobile has security features like GPS tracking, Alarm monitoring, 24/7 video surveillance, and an optional security vehicle escort
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1394,6 +1389,7 @@ RAID 0 Configuration: an EC2 configuration that improves the EC2's storage volum
 	* works on EBS and Instance Store
 	* uses SSD, so good for high I/O performance on short reads
 	* use this when you need storage with very low latency and you don't need data to persist when the instance terminates
+	* there's 0 fault tolerance w/ this one tho...
 RAID 1 Configuration: an EC2 configuration where data is written to multiple volumes of the same EC2 simultaneously
 	* good for disk/data mirroring
 Unified CloudWatch Logs Agent: lets you collect logs from EC2's and on-premise servers and send them into CloudWatch Logs when you install this agent
@@ -1713,6 +1709,28 @@ the EC2 source/destination check restrics an instance to only send and receive t
 move your EC2 images off of Amazon Linux 2 an onto Amazon Linux 2023 cause Amazon Linux 2 is about to be EOL'd
 Amazon Linux Extras: a way to install more packages on an instance running Amazon Linux 2
 	* this is only for Amazon Linux 2 images, cause it's not a problem for Amazon Linux 2023 cause it already comes with a shit-load of packages
+Amazon File Cache: serves as a high-speed cache specifically for file systems like on-premise file systems, aws-ones (EFS), and S3 buckets that are used for burst workloads like aws Batch
+	* is accessible to EC2, ECS, and EKS
+AWS Backup: a place where u can centrally manage all backups across all aws services, so S3, RDS, EFS, EBS, etc.
+	* Backup Plan: a backup policy that defines the backup schedule, window, and lifecycle
+	* Backup Vault: a vault where u store ur backups; lets u set a retention period and allows for WORM
+		* 2 types of vaults:
+			* Standard Vault(default): backups are always initially stored in the standard vault
+			* Air-Gapped Vault: backups can be moved to a logically air-gapped vault for additional security
+	* aws resources can be assigned a Backup Plan using Tags
+	* can backup to other Regions or Accounts
+	* backups are incremental, so you're only charged the difference in data as opposed to whole backups
+	* you can still use your KMS keys with these backups like u normally would
+	* charges from AWS Backup appear as "Backup" under Cost Explorer
+	* backups are immutable
+	* AWS Backup Audit Manager: built-in reporting and auditing tool for AWS Backups
+AWS Transfer Family: offers fully managed support for the transfer of files over FTP(S), SFTP, and AS2 
+	* File Transfer Protocol (FTP): doesn't use encryption; port 20 and 21
+	* FTPS: uses SSL/TLS encryption; port 990
+	* Secure File Transfer Protocol (SFTP): uses SSH; port 22
+	* AS2: uses HTTPS; port 443
+AWS Transfer Family Managed File Transfer Workflows (MFTW): fully managed serverless file transfer workflow service to set up, run, automate, and monitor processing of files uploaded using AWS Transfer Family
+	* the workflows let you copy files to another S3 destination, apply metadata tagging for S3, delete files from S3 or EFS, pass files to Lambdas, and decrypt files once uploaded to S3 or EFS
 
 question-answering strategies:
 
