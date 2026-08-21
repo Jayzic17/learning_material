@@ -26,6 +26,9 @@
 	* some features:
 		* can grant granular permissions
 		* Identity Federation: security by going through a 3rd party, EX: Facebook
+			* 2 types in aws:
+				* Enterprise Identity Federation: using SAML or some other custom federation broker
+				* Web Identity Federation: Facebook, Google, etc.
 		* integrates with many AWS services
 		* supports PCI DSS Compliance (for if you're storing credit card details)
 	* new Users have no permissions when first created, and are assigned an Access Key ID and Secret Access Keys when granted programmatic access
@@ -153,7 +156,7 @@ S3: secure, durable, highly scalable object storage
 		* can only be turned on at the creation of a bucket
 		* different modes:
 			* Governance Mode: users can't overwrite or delete an object version or alter the lock settings unless they have special permissions
-			* Compliance Mode: users can't overwrite or delete the object, even the root account user; ensures object can't be fucked with for the duration of its retention period
+			* Compliance Mode: users can't overwrite or delete the object, even the Root Account user; ensures object can't be fucked with for the duration of its retention period
 	* Retention Period: protects an object version for a set amount of time; after the time expires the object can be overwritten and deleted, unless you put a Legal Hold on the object
 	* Object Legal Hold: prevents an object version from being overwritten or deleted; it remains in effect until removed; can be freely placed and removed
 		* only users who have PutObjectLegalHold permissions can place and remove Legal Holds
@@ -233,10 +236,16 @@ S3: secure, durable, highly scalable object storage
 	* In-Transit Encryption: encryption in transit between your local host and S3 is achieved via SSL/TLS
 	* MFA Delete: ensures users can't delete an object in your S3 bucket w/o an MFA code; Can only be enabled iff: AWS CLI is used to turn it on and the S3 bucket has versioning turned on
 		* makes it so that only the bucket owner logged in as the Root User can delete objects from the bucket
+			* Root User just refers to your Root Account
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 EC2:
+	* types of processors offered for EC2 instances:
+		* Intel, AMD, NVIDIA, etc.
+		* AWS Graviton: aws' own processes that use ARM-based architecture
+		* AWS Inferentia: aws processor designed to run high-performance ML for cheap
+		* AWS Trainium: aws processor designed to train ML models for cheap
 	* Termination Protection: when enabled, it is impossible for you to terminate your EC2 instances; prevents accidental deletion; is disabled by default
 	* Elastic Network Interface(ENI): just a virtual network card that connects a computer/machine to a network
 		* allows:
@@ -250,6 +259,7 @@ EC2:
 			* a source/destination check flag
 			* a description
 		* you would use it if you need to do essentially basic networking
+		* supports speeds up to 100GB
 	* Enhanced Networking(EN): uses SR-IOV to provide high-performance networking capabilities on instances that support EN
 		* SR-IOV: a method of device virtualization that yields higher I/O performance and lower CPU utilization
 		* provides higher bandwidth, higher packets/second(PPS), and consistently lower latency
@@ -288,12 +298,15 @@ EC2:
 			* ...and previously attached volumes are reattached and the instance retains its instance ID
 		* useful for long-running processes and services that take a long time to initialize
 	* EC2 Instance Types:
-		* General Purpose: nice balance btwn compute, memory, and networking power; usually used for web servers and code repos
-		* Compute Optimized: good for high processing, high performance apps; EX: scientific modeling, gaming servers, etc.
-		* Memory Optimized: good for workloads that process large data sets in memory; EX: in-memory caches, in-memory databases, real time big data analytics
-		* Accelerated Computing(GPU) Optimized: hardware accelerators, or co-processors, used to perform float calculations, graphics processing, etc. more efficiently than software running on CPU's
+		* General Purpose (T2, M5a, etc.): nice balance btwn compute, memory, and networking power; usually used for web servers and code repos
+			* Burstable Instances (T2, T3, etc.): allows instances to handle shorts bursts of higher CPU utilizations
+				* Standard Mode(default): provides a cpu utilization baseline, w/ the ability to do short bursts above the baseline using CPU credits
+				* Unlimited Mode: unlimited high cpu utilization, w/ additional charges applied when going beyond the accumulated CPU credits
+		* Compute Optimized (C5, Cba, etc.): good for high processing, high performance apps; EX: scientific modeling, gaming servers, etc.
+		* Memory Optimized (R4, R5a, etc.): good for workloads that process large data sets in memory; EX: in-memory caches, in-memory databases, real time big data analytics
+		* Accelerated Computing(GPU) Optimized (P2, G4ad, etc.): hardware accelerators, or co-processors, used to perform float calculations, graphics processing, etc. more efficiently than software running on CPU's
 			* EX: machine-learning, speech recognition
-		* Storage Optimized: used for high sequential read and write access to very large data sets in storage; EX: data warehousing, NoSQL, etc.
+		* Storage Optimized (I3 D3en, etc.): used for high sequential read and write access to very large data sets in storage; EX: data warehousing, NoSQL, etc.
 	* EC2 Placement Groups: lets you choose the logical placement of your instances to optimize for communication, performance, or durability; they are free and totally optional
 		* name for the Placement Group must be unique across your AWS account
 		* you can't merge Placement Groups
@@ -330,13 +343,20 @@ EC2:
 			* lets you deploy WAF rules for your ALB, API Gateway, and CloudFront distributions
 			* also lets you create AWS Shield Advanced protection policies on your ALB's, ELB Classic's, Elastic IP's(EIP), and CloudFront distributions
 			* also lets you configure security groups for EC2's and ENI's
-	* EC2 Instance Profile: it's a container for your EC2 instance that houses all the instance's assigned Roles, as opposed to just embedding your AWS credentials in code
-		* when you select an IAM Role when launching an EC2 instance, AWS automatically creates the Instance Profile for you 
+	* EC2 Instance Profile: a reference to an IAM Role that will be passed and assumed by the EC2 instance when it starts up, as opposed to just embedding your AWS credentials in code
+		* when you select an IAM Role when launching an EC2 instance, AWS automatically creates the Instance Profile for you
+		* you can assigned the Instance Profile to an already-running instance if it didn't already have one on startup, but in that case a hard reboot is required for the change to take affect]
+		* only a single IAM Role can be associated w/ an Instance Profile
 	* EC2 User Data: a script that will automatically run whenever launching an EC2 instance; used to install packages, apply updates, etc.
-	* EC2 Metadata: metadata relating to your EC2 instances; can access it by SSH'ing into your EC2, then curl'ing into a special url endpoint at: 169.254.169.254
+	* EC2 Metadata: metadata relating to your EC2 instances
+		* can access it by SSH'ing into your EC2, then curl'ing into a special url endpoint from the Metadata Service (MDS) at: http://169.254.169.254/latest/meta-data/ or http://[fd00:ec2::254]/latest/meta-data/ for IPv6
+		* there are config options u can use to configure around Metadata:
+			* enforce the use of tokens when curl'ing for Metadata
+			* turn off the metadata endpoint itself
 	* AMI: lets you turn your EC2 instances into AMIs, allowing you to create copies of your servers, whether running or stopped
 		* an AMI contains a template for the root volume for the instance (EBS Snapshot/Instance Store Template), launch permissions (which AWS accounts can use the AMI to launch instances), and...
 			* a mapping that specifies the volumes to attach to the instance when it's launched
+		* Launch Templates: is what you use to manage revisions to your AMIs, so like v1.0, then v1.1, etc...
 		* AMIs are region specific
 		* Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
 		* AMIs help you keep changes made to your OS, app, sys packages, etc. you can use Systems Manager Automation to routinely patch your AMI's security, and AMIs are used with...
@@ -344,6 +364,22 @@ EC2:
 			* you can't edit the current LaunchConfiguration live; gotta create a new one
 		* you can also copy your AMIs, so since AMIs are region specific, if you want to use your AMI in another region, you have to copy it then change the destination region
 		* AMIs have ID's that vary depending on what types of options they offer and what region they are in
+		* Systems Manager Automation: lets you routinely patch your AMIs w/ security updates and bake those into your AMIs
+		* a lot of AMIs offered on AWS Marketplace; the most popular ones being security-hardened AMIs
+		* AMIs have 2 boot modes:
+			* Legacy BIOS: doesn't support secure boot 
+			* UEFI BIOS: modern; faster; supports secure boot
+		* deregistering an AMI refers to when you're done using an AMI and you don't want to allow any new instances to be launched with that AMI
+			* it does not automatically delete snapshots for you, so u still have to do that seperatly on ur own
+		* deprecating an AMI refers to when at what time/date u want the AMI to be deregistered
+		* disabling an AMI prevents the AMI from being used, but unlike deregistering it still allows you to reenable it later
+		* AMIs can have the following settings:
+			* Public: any AWS account can use It
+			* Explicit: specific Accounts/Organization can use it
+			* Implicit: only the AMI owner can launch it 
+		* AMIs have 2 virtualization types:
+			* Hardware Virtualization (HVM): uses actual hardware, better performance, and works with EBS and Instance Store; used for modern setups
+			* Paravirtualization (PV): relies on a hypervisor to simulate hardware, lesser performance, and only works with Instance Store; used for older setups
 		* you can select AMI's based on:
 			* Region
 			* OS
@@ -375,13 +411,15 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 	* you can now encrypt root device volumes when you're creating your EC2 instance
 		* if you forgot to do it when you were creating your EC2, just take a Snapshot of the root device volume, create a copy of the Snapshot and select the "encrypt" option,...
 			* ...create an AMI using the encrypted Snapshot, and then use that AMI to create an EC2 instance
-	* SSD: really high I/O
+	* SSD: really high I/O; can be used as a boot volume
 		* General Purpose SSD(gp2): good for general usage w/o specific requirements; good for web apps and most workloads
+		* General Purpose SSD(gp3): up to 20% lower cost per GB than gp2
 		* Provisioned IOPS SSD(io1): when you require really fast IO and throughput; use when IOPS >= 16,000 || throughput >= 250 MB/s; use on mission-critical low latency/high throughput workloads
-	* HDD: good for long continuous throughput of data, but really bad with a lot of very small reads and writes (think about the writing arm on the record)
+		* io2 Block Express (the new io2): higher throughput and IOPS than io1; supports larger storage capacity
+	* HDD: good for long continuous throughput of data, but really bad with a lot of very small reads and writes (think about the writing arm on the record); can't be used as a boot volume
 		* Throughput Optimized HDD(st1): drive optimized for fast throughput for intensive workloads that are frequently accessed, so data, data warehouses, log processing
 		* Cold HDD(sc1): lowest cost HDD volume for infrequently-accessed workloads (e.g File Servers), storage	
-	* EBS Magnetic(standard): legacy generation (cassettes containing magnetic tape); use for archival storage; HIGHLY durable
+	* EBS Magnetic(standard): legacy generation (cassettes containing magnetic tape); use for archival storage; HIGHLY durable; CAN be used as a boot volume
 	* to move EBS from one AZ to another: take a snapshot of the volume, create an AMI using the snapshot, launch the EC2 instances in the new AZ
 	* to move EBS from one Region to another: snapshot, AMI, copy the AMI to another region, launch the EC2 instances in the new Region using to copied AMI
 	* EBS Snapshots exist in S3; you can take Snapshots while an instance is still running, but if it's a root volume the EC2 should be stopped before taking the snapshot
@@ -540,6 +578,8 @@ Elastic Map Reduce(EMR): used to process large amounts of data using Apache serv
 	* you can configure a cluster to save all the logs stored on the Master Node to S3; if enabled, EMR will upload these logs to S3 at 5 minute intervals
 		* note: you can only do this when you first set up the cluster
 Route53: more synergies with AWS services when you register your domain through AWS, as opposed to other Domain Registrars
+	* Public Hosted Zones: routing traffic from the Internet
+	* Private Hosted Zones: routing traffic from within an aws VPC
 	* Alias Records: lets you map traffic to AWS services such as ELB's, CloudFront distributions, or S3 buckets, which are configured as websites; it's DNS functionality that is unique to only AWS
 		* they work like a CNAME record in that you can map 1 DNS name to another DNS name
 			* the difference being that CNAME's can't be used for naked domain names (domain name w/o the "www.")
@@ -552,7 +592,9 @@ Route53: more synergies with AWS services when you register your domain through 
 	* Elastic IP (EIP): a static IP that doesn't change, but the EC2/ENI to which it's mapped to is something you can constantly change whenever you need to
 		* they are region-specific and u incur $1 charge everytime they're not mapped to an EC2/ENI, so make sure to use them
 	* Traffic Flow: lets you create routing configurations for your AWS resources using existing routing policy types, of which there are 7; supports versioning; GUI; $50/policy record/month
+		* it's a nice GUI visual editor that lets u visually see how ur traffic flows
 		* also allows for chaining of routing policies
+		* also supports versioning
 	* there are 7 types of Routing Policies:
 		* Simple Routing: default routing policy; multiple addresses result in random selection
 			* you have 1 record for each server, so if a user visits your domain and you have multiple IP addresses for that domain, they would be randomly directed to 1
@@ -576,7 +618,14 @@ Route53: more synergies with AWS services when you register your domain through 
 		* you can set health checks on individual record sets
 		* if a record set fails a health check, it will be removed from Route53 until it passes the health check
 		* you can set SNS notifications to alert you if a health check is failed
-	* Route53 Resolver: regional service that lets you route DNS queries btwn your VPC's and your on-prem network; used for hybrid environments 
+	* Route53 Resolver: regional service that lets you route DNS queries btwn your VPC's and your on-prem network; used for hybrid environments
+	* DNSSEC: a suite of extension specifications by the IETF for securing data exchanged in the Domain Name System(DNS) and Internet Protocol(IP) networks
+		* DNSSEC signing lets DNS servers validate that a DNS response came from Route53 and has not been fucked with
+	* Zonel Shift: shifts an ALB or NLB away from an AZ that's down to a healthy AZ
+		* only for ALBs and NLBs w/ cross-zone load balancing turned off, and ALBs that don't use AWS Global Accelerator
+		* only lets u hop to 1 AZ; can't hop btwn multiple AZ's
+	* Route53 Profiles: lets u save DNS configs as a profile, which u can then use across different VPCs and in different aws accounts
+	
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -753,6 +802,9 @@ Direct Connect:
 		* amount of time u use the connection for either as a Dedicated: physical connection, or Hosted: logical connection
 		* any outbound traffic that gets sent outside the aws network
 Global Accelerator:
+	* 2 Accelerator types:
+		* Standard: automatically route to the nearest healthy endpoint
+		* Custom: route to specific EC2 instances
 	* includes:
 		* Static IP addresses: by default Global Accelerator provides you 2 static IP's that you associate with your accelerator; alternatively you can bring your own
 		* Accelerator: it's what directs traffic to optimal endpoints over the AWS global network
@@ -801,7 +853,11 @@ Auto Scaling Groups(ASG): a collection of EC2 instances that are treated as a gr
 			* manually: by changing min, max, and desired capacity
 			* maintaining current instance levels at all times
 			* based on demand (i.e traffic)
-			* predictive scaling
+			* predictive scaling: analyzes your instances historical load data to detect daily and weekly patters in traffic flows
+				* u need at least 24 hours of CloudWatch data for it to be able to read before you can create it
+				* will continuously use the last 2 weeks of data to tweak the policy
+				* will produce hourly forecasts for capacity requirements for the next 48 hours
+				* will update every 6 hours using the latest CloudWatch data
 	* Auto Scaling can occur in 3 ways:
 		* capacity settings: by tweaking the min, max, and desired capacity of EC2 instances you want running (ASG will always launch instances to meet min capacity)
 		* health check replacements: 2 types:
@@ -892,7 +948,7 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 	* Origin: the origin of all the files that the CDN will distribute; can be an S3 Bucket, an EC2, an ELB, or Route53
 	* when you create a signed url or signed cookie, you attach a policy to it
 		* the policy can include: url expiration time/date, IP ranges (that have access to it), and trusted signers (which AWS accounts can create signed urls?)
-		* also a key-pair is created when you create a signed url/cookie that is account-wide and managed by the root user
+		* also a key-pair is created when you create a signed url/cookie that is account-wide and managed by the Root User
 		* can utilize caching features
 		* if your Origin is EC2 then use CloudFront
 	* S3 presigned urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first
@@ -900,12 +956,23 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 	* Invalidators: you can manually invalidate cache on specific files; this means forcing the cache to immediately expire and then refresh the cached content
 		* refreshing the cache costs money because of transfer costs to update Edge Locations; it's called invalidating the cache
 	* Error Pages: you can create custom error responses to HTTP 5xx's by referencing custom error pages you create
-	* Restrictions: you can blacklist or whitelist countries via geo-restriction
-	* Lambda@Edge functions are Lambda functions that override the behavior of requests and responses in CloudFront. Of the functions there are 4 types:
-		* Viewer Request: When CloudFront receives a request from a viewer
-		* Origin Request: Before CloudFront forwards a request to the origin
-		* Origin Response: When CloudFront receives a response from the origin
-		* Viewer Response: Before CloudFront returns the response to the viewer
+	* Restrictions: you can blacklist or whitelist countries via geo-restriction 
+	* Lambda@Edge Functions: Lambda functions that override the behavior of requests and responses in CloudFront
+		* Supports python and Node.js
+		* Charged per request and function duration
+		* deployed at Regional Edge Caches, which in CloudFront is closer to the Origin
+		* There are 4 types:
+			* Viewer Request: When CloudFront receives a request from a viewer
+			* Viewer Response: Before CloudFront returns the response to the viewer
+			* Origin Request: Before CloudFront forwards a request to the Origin
+			* Origin Response: When CloudFront receives a response from the Origin
+	* CloudFront Functions: cheaper and faster than Lambda@Edge Functions, but limited
+		* Supports JavaScript
+		* Has a free tier and charged per request
+		* deployed at Edge Locations, which in CloudFront is closer to the viewer
+		* There are 2 types:
+			* Viewer Request: When CloudFront receives a request from a viewer
+			* Viewer Response: Before CloudFront returns the response to the viewer
 	* By default CloudFront allows everyone to have access; you can change it by restricting access, which creates an Original Access Identity (OAI) user identity which is used to...
 		* ...give your CloudFront Distribution permission to fetch a private object from private S3 buckets
 		* with the OAI you can then protect the cached content using Signed URLs: urls that provide temp access to cached objects, and Signed Cookies, which are passed along with every...
@@ -1250,8 +1317,10 @@ the default termination policy when scaling-in services:
 	* If there is more than one unprotected instance closest to the next billing hour, choose one of these instances at random.
 in CIDR blocks, /32 refers to a single IP, whereas /0 refers to the entire network
 messages in a SQS queue will continue to exist even after the EC2 instance has processed it; it's up to you to delete the message after the fact
-AWS Security Token Service (STS): gives out limited-temporary credentials for IAM user or federated users using tokens that last 15 minutes
+AWS Security Token Service (STS): gives out limited-temporary credentials for IAM user or federated users using tokens that last 15 minutes; it's a global service
 	* all STS requests go to a single endpoint at: https://sts.amazonaws.com
+	* it's not an aws service u access through the aws console it's strictly from using the AWS CLI/SDK
+		* returns an AccessKeyID, SecretAccessKey, SessionToken, and Expiration
 Default available metrics provided by CloudWatch:
 	* hypervisor and EC2 status checks, CPU Utilization, Network Utilization, Disk Reads
 advanced/custom metrics NOT automatically provided by CloudWatch:
@@ -1627,8 +1696,23 @@ AWS Client VPN: fully managed client-based VPN srvice that lets you access aws r
 		* Administrators: responsible to setting up and configuring the service
 		* Clients: the person who connects to AWS Client VPN with the client installed on their device
 	* you could use it to connect to an RDS instance in a private subnet, so the client can get extremely deep into your aws
-
-
+IAM Temporary Security Credentials can last from minutes to an hour
+	* are useful in the following scenarios:
+		* identity Federation (in general). You inadvertently use it whenever u do this
+		* cross-account access
+		* IAM roles (in general). You inadvertently use it whenever u do this
+Cloud-Init: lets u launch compute instances for any Cloud Provider, which are then refered to by Cloud-Init as Cloud Instances
+	* Cloud Instances contain the following:
+		* Metadata
+		* User data: a script that will automatically run whenever launching an instance; used to install packages, apply updates, etc.
+		* Vendor data
+	* EC2 supports Cloud-Init
+Instance Console Screenshot: takes a screenshot of the current state of an EC2 instance (like a literal screenshot of the terminal/shell)...
+the EC2 source/destination check restrics an instance to only send and receive traffic when itself is the direct source and/or destination of that traffic
+	* disabling it allows other EC2's to just pass directly through it
+move your EC2 images off of Amazon Linux 2 an onto Amazon Linux 2023 cause Amazon Linux 2 is about to be EOL'd
+Amazon Linux Extras: a way to install more packages on an instance running Amazon Linux 2
+	* this is only for Amazon Linux 2 images, cause it's not a problem for Amazon Linux 2023 cause it already comes with a shit-load of packages
 
 question-answering strategies:
 

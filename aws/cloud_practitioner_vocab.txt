@@ -61,6 +61,7 @@ elastic load balancer: allows you manage the load traffic across all of your ser
 		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
 		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games
 		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
+		* GWLB (Gateway): routes traffic to virtual applicances (to analyze for security) before routing it to the actual target
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -234,8 +235,10 @@ AWS pricing calculator: is used to create an estimated cost for your new solutio
 consolidated billing: is where you can combine all billing and payment methods across multiple AWS accounts into one bill, where the master account pays the charges for all the member accounts
 	* consolidated billing allows you to save money by taking advantage of volume discounts.
 	* Ex: you save more money by combining multiple accounts and expenses into 1 bill, as opposed to paying for the expenses of each account separately 
-	* paying/root account pays the bills of all the linked accounts; paying account is independent from linked accounts, and linked accounts are independent; limit of 20 linked accounts
-		* the paying/root account is the email address you use to set up your AWS account; has full admin access; don't let anyone have this!
+	* Root Account pays the bills of all the linked accounts; paying account is independent from linked accounts, and linked accounts are independent; limit of 20 linked accounts
+		* the Root Account is the email address you use to set up your AWS account; has full admin access; don't let anyone have this!
+			* it cannot be deleted, and it's permissions cannot be limited in any way
+			* you primarly use it to change your account settings, close your aws account, and update your AWS Support plan
 	* Consolidated Billing has the advantage of having volume pricing discount, since one account pays for everything, and all other accounts are just linked to that one
 		* Ex: netflix family plan, verizon family phone plan, etc.
 Billing and Cost Management Console: this is where you can see your account's past billing information
