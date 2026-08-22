@@ -1202,6 +1202,7 @@ Redshift: AWS-managed petabyte-scale data warehouse
 		* Single Node: comes in 160 GB sizes
 		* Multi-Node: launching a cluster of Single Nodes; includes a Leader Node: manages client connections and receives queries, and Compute Nodes: stores data and performs the queries
 			* can use up to 128 Compute Nodes
+			* you're not charged for the Leader Node; only the Compute Nodes
 	* there are 2 Node types:
 		* Dense Compute: best for high performance, but has less storage
 		* Dense Storage: clusters that are best for high storage
@@ -1294,6 +1295,10 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 	* ElastiCache lets you deploy, run, and scale popular open source-compatible, in-memory data stores
 	* frequently identical queries are stored in the cache for fast processing
 	* ElastiCache is only accessible to resources operating in the same VPC; this ensures latency is low
+	* can go multi-AZ, and can go cross-region using ElastiCache Global Datastores
+	* has 2 deployment options:
+		* Standard: used for predictable workloads, but u have to manage the cluster and nodes, and ur charged per node and node type (can use w/ AWS Outposts)
+		* Serverless: used for unpredicable workloads, but it automatically scales for u, and ur charged per ECPU and data stored
 	* Memcached vs Redis:
 		* Memcached is preferred for caching HTML fragments; it's a simple key/value store, but it's faster than Redis
 		* Redis lets you do way more operations on data; good for leaderboards and for keeping track of unread notification data
@@ -1302,7 +1307,8 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 		* Redis supports advanced data structures, Snapshots, Replication, Transactions, Pub/Sub, Lua scripting, backup and restore, ranking and sorting datasets, ...
 			* ...persistence, and geospatial support, while MemCached does not
 		* Redis is multi-AZ while Memcached is not
-Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure
+		* Redis is a key/value store that supports strings, sets, sorted sets, lists, and hashes, while Memcached is a key/value store that only supports strings
+Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure; it's a PaaS
 	* powered by a CloudFormation template that sets up: 
 		* ELB, autoscaling groups, RDS, preconfigured/custom EC2's, CloudWatch, SNS, security(rotating passwords), ability to run Dockerized environments if you want, and...
 			* ...In-Place and Blue/Green deployment methodologies
@@ -1310,8 +1316,14 @@ Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry abo
 		* Blue/Green Deployment: create 2 separate, but identical infrastructure environments: blue is PROD and green is TEST
 			* once testing on Green is complete traffic is routed to Green, which then becomes Blue(PROD) and Blue is deprecated
 		* list of the preconfigured platforms you can use for your EC2's:
-			* Java, .NET, PHP, Node.js, Python, Ruby
+			* Java, .NET, PHP, Node.js, Python, Ruby, Go, Docker
 	* Beanstalk is free except for the resources it provisions, so RDS, ELB, EC2, for example
+	* when u create an Elastic Beanstalk instance you have to choose btwn 2 different environments:
+		* Web Environment: connects to the Internet; provisions stuff centered around the idea of hosting a web application; comes in 2 variants:
+			* Load-Balanced Environment: an ASG and an ELB that is designed to scale more
+			* Single-Instance Environment: a single ASG with desiredCapacity set to 1; no ELB, so a Public IP has to be used to connect to the Internet
+		* Worker Environment: provisions stuff centered around the idea of a worker node that is performing compute
+			* so provisions stuff like an ASG of EC2s, an SQS queue, and CloudWatch to alarm to the ASG when to scale
 API Gateway: fully managed; creates, publishes, maintains, monitors, and secures API 
 	* allows other applications to access your application's data, logic, and functionality; can handle hundreds of thousands of API calls at 10,000 requests per second(can increase that speed by contacting AWS Support)
 	* can throttle requests to prevent attacks; lets you track and control usage of the API by API key; can connect it to CloudWatch to log all requests for monitoring; auto-scales; highly scalable; cost-effective
@@ -1344,23 +1356,64 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 	* use cases: stock prices, game data (as player plays), social media data, geospatial data, click stream data
 	* 4 types of Kinesis Streams:
 		* Kinesis Data Streams: producers(EC2's, devices, and servers) send data to Kinesis Data Stream, which gets distributed into Shards that are sent to consumers(specialized EC2's...
+			* 4 kinds of producers u can define:
+				* AWS SDK; doesn't scales
+				* Kinesis Producer Library(KPL): Java Library for writing data to a stream; lets u scale by 100x
+					* you can write data to stream using SDK, but KPL is more efficient
+				* Amazon Kinesis Agent: standalone Java application that monitors whenever changes occur and automatically sends it to Kinesis
+				* any aws service
+			* 4 kinds of consumers u can define:
+				* a 3rd party
+				* Kinesis Data Firehose
+				* AWS SDK; does not scale
+				* Amazon Kinesis Client Library(KCL): a Java library for writing ur own custom consumers; cna use the MultiLang Daemon to configure it to use other languages like Python or Ruby
 			* ...that consume data and send them to AWS services)
-			* Shards: lets you categorize your data for different purposes (EX: a shard for your IoT data, 1 for your social media data, etc.)
+			* Shards: lets you partition your data for different purposes (EX: a shard for your IoT data, 1 for your social media data, etc.)
 				* you pay per Shard that is running
 				* 5 transactions/second for reads; max read rate of 2MB/second; up to 1000 records/second for writes; max write rate of 1MB/second
 				* the data capacity of your stream is a function of the # of shards in the stream (i.e) stream capacity = sum(capacity(shard1, shard2, ...))
+				* each Shard has a sequence of data records where each data record is assigned a Sequence Number assigned to them in the order in which they will be processed
+				* Sequence Number: unique number that acts as another key in a hash, but for each data record in the Shard. They only have to be unique per Partition Key, so not unique across the whole stream
+				* if your data rate increases, u can increase the # of Shards to your stream to meet demand
+			* Partition Keys: if Shards are the "value" in key/value pairs for a hash, then Partition Keys are the "key" in the hash
+				* unicode strings w/ a max length limit of 256 characters
+				* Data Streams uses MD5 hash to map Partition Keys to Shards
 			* you can have multiple consumers, but you must manually configure them
-			* data can persist in the stream from 24(default) to 168 hours
+			* retention periods can be set to have data persist in the stream from 24(default) to 365 days, however you incur additional charges anytime the retention period is set to over 24 hours
+				* it takes several minutes for the retention period to update once changed
 			* data in the stream is ordered
+			* has 2 Capacity Modes:
+				* On Demand: only pay for capacity u use, so good for unpredictable workloads that need to automatically scale, but slower read/write speeds
+					* can only specify 2 consumers by default, but can also add 20 more using Enhanced Fan-Out(EFO)
+				* Provisioned: pay for the number of Shards u specify which u also have to manage urself, so good for predictable workloads
+					* max Shards allowed is 200
+				* Capacity Modes can be changed at any time in either direction
 		* Kinesis Data Firehose: same as Kinesis Data Streams except you can choose only 1 consumer and data immediately disappears from the stream once consumed
 			* you can convert incoming data to other file formats; you can also compress the data; you can also secure the data
+				* you can transform data before it's sent to consumers using Lambda, but whatever u transform it to has to be less than 6MB
 			* you pay only for data that is consumed
+			* simpler setup than On Demand Kunesis Data Streams w/ less customization
+			* 4 kinds of producers u can define:
+				* Kinesis Data Streams
+				* Amazon Managed Streaming for Apache Kafka(MSK)
+					* in this case ^ only S3 can then be the consumer
+				* PUTs via the AWS CLI/SDK
+				* any aws service
+			* 3 kinds of consumers u can define:
+				* a 3rd party
+				* an HTTP endpoint
+				* any aws service (the most popular choices being S3 and Redshift)
+			* Dynamic Partitioning: lets u partition the streamed data by assigning them keys, which is then sent to S3 as a consumer where the data is grouped based on S3 Object Prefixes using the keys
+				* good for running high performance, cost-efficient analytics on streaming data sent to S3, which can then be fed through Athena, QuickSight, EMR, and RedShift Spectrum
+				* 2 ways of selecting the keys:
+					* Inline Partitioning: you provide a JQ expression to parse JSON, which returns the key/values
+					* Lambda: Lambda function parses the data, which returns the key/values
+				* once enabled, it CANNOT be turned off
 		* Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Rekognition(Machine Learning)
-		* Kinesis Data Analytics: input and output are either Kinesis Firehose or Kinesis Data Streams with the intermediary being Data Analytics
-			* data that passes through Data Analytics is run through custom SQL you write, which then outputs to the output stream
+		* Managed Service for Apache Fink (formally Kinesis Data Analytics): input and output are either Kinesis Firehose or Kinesis Data Streams...
+			* ...with the intermediary being Managed Service for Apache Fink for use in data analytics
+			* data that passes through Managed Service for Apache Fink is run through custom SQL you write, which then outputs to the output stream
 			* really good for real-time analytics
-	* Kinesis Producer Library(KPL): Java Library for writing data to a stream
-		* you can write data to stream using SDK, but KPL is more efficient
 Storage Gateway: lets you extend or backup on-premise storage to the cloud
 	* securely connects your on-premise software appliance: a VM that connects your on-prem to cloud, to cloud storage
 	* scalable and cost effective
@@ -1919,6 +1972,38 @@ Amazon Quantum Ledger Database: fully managed serverless ledger database that us
 	* works with a bunch of other aws services
 	* ACID Transactions: ensures database integrity w/ transactions that are atomic, consistent, isolated, and durable
 	* Journal Storage: records change sequentially in a document-oriented format for structured data handling (think... the Linux Journal)
+AWS Compute Optimizer: analyzes the configuration of all your compute resources and their utilization metrics from CloudWatch over 2 weeks and recommends cost savings
+	* that includes all compute resources, so EC2, Lambda, ASGs, EBS, ECS, etc. 
+MemoryDB: Redis-compatible in-memory database
+	* has additional persistence guarantees over ElastiCache, makingg MemoryDB suitable as a primary database
+	* the tradeoff being that writes are in milliseconds, whereas ElastiCache is in microseconds, so it's slower
+Amazon CodeGuru: Copiliot; AI agent that reviews ur code and does PR reviews
+	* has 3 service:
+		* CodeGuru Security
+		* CodeGuru Profiler: find and fix inefficacies in code
+		* CodeGuru Reviewer
+	* supports Java, JavaScript, Python, C#, TypeScript, Ruby, Go, CloudFormation, and Terraform
+Amazon Forecast: AI service that forecasts product demand, resource needs, and financial performance
+	* you need to train the AI model with data u upload to S3, and then Amazon Forecast will spit out graphs for you
+Amazon Fraud Detector: AI service that detects fraudulent online activities such as online payment fraud and the creation of fake accounts
+	* comes with the following AI models for you to choose from:
+		* Online Fraud Insights: optimized to detect early fraud, so attempts to catch the fraud at the very first occurence
+		* Transaction Fraud Insights: testing fraud use cases to improve its own prediction accuracy
+		* Account Takeover Insights: if an account was compromised by phishing or another type of attack
+	* you can use it to create real-time fraud detection systems using Step Functions, Lambda, and Amazon Kinesis for streaming the data in real-time to the AI model
+	* just like the other AI services you upload all your training data to S3
+Amazon Kendra: a search engine that uses ML
+	* instead of keyword-based search it uses semantic and contextual understanding to search for stuff
+	* you can integrate it with Lex to use it like a chatbot
+	* has 2 versions:
+		* Developer Edition: 5 indexes w/ up to 5 data sources each, 4000 queries per day, runs in 1AZ
+		* Enterprise Edition: 5 indexes w/ up to 50 data sources each, 8000 queries per day, runs in 3AZs
+Amazon Personalize: used to give real-time recommendations to customers on your platform
+	* it's what Amazon uses on people shopping on Amazon
+
+
+
+
 
 
 

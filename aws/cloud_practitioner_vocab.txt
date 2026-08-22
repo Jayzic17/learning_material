@@ -229,6 +229,9 @@ AWS cost and usage report: generates a spreadsheet that gives you the most granu
 	* you can put the spreadsheet you get from AWS Cost and Usage Report into Athena and query your database with it, use QuickSight to turn it into graphs, or put it into an S3 bucket
 Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all server less and you pay per query you make
 	* you can use Athena to generate reports based on data stored in S3 and analyze cost and usage reports by querying them
+	* Workgroups: you can save queries to Workgroups, which u can then grant access to for other users
+	* Apache Spark on Athena: lets u run data analytics on the data you query from S3 by using Apache Spark to analyze the data
+	* integrates with a bunch of aws services, not just S3 (although u always query data from S3; just saying that it integrates w/ a bunch of services too)
 QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
 AWS Simple Monthly Calculator: "how much will [this] cost me on a monthly basis?"
 AWS pricing calculator: is used to create an estimated cost for your new solution to be deployed on AWS
