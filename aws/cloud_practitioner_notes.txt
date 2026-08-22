@@ -131,7 +131,7 @@ OLTP and OLAP services:
 	* OLTP services: Aurora, MySQL
 	* OLAP services: Redshift
 
-CloudSearch and ElasticSearch are Amazon's 2 search services
+OpenSearch and ElasticSearch are Amazon's 2 full-text search services
 
 Removing single points of failure when architecting:
 	* always introduce redundancy

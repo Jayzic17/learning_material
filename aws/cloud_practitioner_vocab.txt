@@ -250,7 +250,11 @@ AWS landing zone: helps enterprises getting started with SETTING UP a basic mult
 ControlTower: allows you to PROVISION multiple AWS accounts in minutes, which comply with the companies existing policies; used by enterprises that already have multiple AWS accounts (automated w/ predefined layouts)
 	* allows admins to automate the process of AWS landing zone
 AWS Service Catalog: AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS.
-	* these IT services can include everything from virtual machine images, servers, software, etc.
+	* these IT services can include everything from virtual machine images, servers, software, etc. and are grouped into what they call Portfolios
+	* the IT services themselves they refer to as: Products, which are pretty much just CloudFormation templates
+	* 2 types of Service Catalog users:
+		* Catalog Administrators: create the catalogs/Portfolios
+		* End Users
 AWS CloudFormation template: the template you use to configure resources into your company's cloud
 	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
 	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does

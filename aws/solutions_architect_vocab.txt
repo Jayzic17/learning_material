@@ -430,24 +430,69 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 CloudWatch: monitors your cloud
 	* monitors: EC2's, Autoscaling Groups, ELB's, Route53 Health Checks, EBS volumes, Storage Gateways, and CloudFront
 	* will monitor EC2's every 5 minutes by default
+		* Basic Monitoring: 5 minute intervals
 		* Detailed Monitoring: you can turn this on to monitor EC2's at intervals as low as 1 minute
 	* can make dashboards for metrics, alarms for alerting you when a threshold is met, events for when you need to respond to state changes in your aws, and logs for logging stuff
 	* CloudWatch Logs: monitor, store, and access your log files
 		* Log Group: collection of Log Streams that share the same retention, monitoring, and access control settings; logs must belong to a Log Group
-		* Log Stream: a sequence of log events that share the same source. Each separate source of logs in CloudWatch Logs makes up a separate Log Stream
+		* Log Stream: a sequence of Log Events that share the same source. Each separate source of logs in CloudWatch Logs makes up a separate Log Stream
+		* Log Events: each log/row in the Log Stream (literally just a log...)
 		* logs are kept forever and never expire by default
-		* most AWS services are integrated with CloudWatch Logs
+		* most AWS services are integrated with CloudWatch Logs:
+			* can export logs to S3
+			* stream logs to ECS or EKS
+			* can stream CloudTrail event data to a CloudWatch Log Group
+			* can encrypt logs using KMS
+			* can filter logs using CloudWatch Insights
+		* by default logs are retained forever, but u can adjust the retention period from 1 day to 10 years
 	* CloudWatch Metrics: gives you visual graphs based on CloudWatch Logs
 		* you can use the CLI or SDK to make custom metrics
-		* if you make a custom metric, you can set it to have high resolution, meaning more granular data; EX: going from tracking per minute to per second!
-	* CloudWatch Events: used to trigger an event based on a condition or a schedule
-		* Event Source: the conditions needed to trigger the event
+		* if you make a custom metric, you can set it to have High Resolution, meaning more granular data; EX: going from tracking per minute(Standard Resolution) to per second!
+		* Host Level Metrics: 
+	*  EventBridge (a.k.a CloudWatch Events): an event bus used to trigger events based on a condition or a schedule
+		* EventBridge as an event bus itself is made up of a collection of 3 event buses:
+			* Default Event Bus: the default event bus for the entire aws Account
+			* Custom Event Bus: scoped to multiple other aws Accounts
+			* SaaS Event Bus: scoped to multiple 3rd part SaaS Providers called: Partner Sources
+		* Producers: aws services that emit Events
+		* Rules (a.k.a Event Source): the conditions needed to trigger the event
+			* common Targets include: Lambda, SQS/SNS, Firehose
+			* after it matches your Target, you can also choose what part of the Event to pass along under Configure Input:
+				* Match Events: the entire Event
+				* part of the matched event
+				* constant (JSON text): send a static mocked json object instead of the actual Event data
+				* Input Transformer: lets you transform the Event data into whatever u want it to look like
+			* can't use these as variable names when making Rules: aws.events.rule-arn, aws.events.rule-name, aws.events.event
+			* EventBridge Schema Registry: lets you create, discover, and manage OpenAPI schemas for Events on EventBridge
+				* you can then use that schema to download Code Bindings for whatever programming language u use in your IDE to use as autocomplete when programming
+				* you can also download the AWS Toolkit for VSCode to view schemas and install Code Bindings the same way
 		* Targets: what to trigger
+			* can select up to 5 Targets per Rule
+		* contains the following:
+			* version
+			* ID
+			* detail-type: identifies and summates what kind of Event it is based on the key/value pairs in the detail block
+			* source
+			* account
+			* time
+			* region
+			* resources: collection of ARNS
+			* detail: json object that defines the Event. Can contain up to 50 key/value pairs
+		* you can use cron expressions and rate expressions(same exact thing as cron expressions)
+		* Event Patterns: allows you to filter Events
 	* CloudWatch Alarms: triggers a notification when metrics breach some threshold that you define
-		* the Type: is the threshold a fixed number or range?
+		* the Type: is the threshold a fixed number(Static) or a range?(Anomoly Detection)
 		* the Condition: <, >, <=, etc.
 		* the Threshold: the value(s)
+		* 3 Alarm states:
+			* OK: doesn't fulfill the condition (so don't alarm, it's fine)
+			* ALARM: fulfills the condition, so alarm
+			* INSUFFICIENT_DATA: either the Alarm just started, the Metric used in the Alarm is unavailable, or there's not enough data
 	* CloudWatch Dashboards: lets you create dashboards using CloudWatch Metrics
+	* ServiceLens: visualize and analyze the health, performance, and availability of ur app in a single place
+	* Container Insights: for Containers and Microservices
+	* Synthetics: tests ur apps to see if they're broken
+	* Contributer Insights: view the top contributors impacting the performance of ur app in real-time
 	* Hypervisor: lets you host, access, and run multiple Virtual Machines on a single piece of hardware
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -899,6 +944,7 @@ Simple Queue Service (SQS): fully managed queuing service; lets you decouple and
 	* provides asynchronous communication and decouples processes through messages/events using a producer-consumer/ reader-writer framework
 	* message size can be from 1 to 256 bytes; Amazon SQS Extended Client Library for Java lets you increase it to 2GB, where its stored in S3 and the library will reference the S3 object
 	* messages are retained in the queue for 4 days by default before dropping it from the queue by default, but you can adjust it to be anywhere from 60 seconds to 14 days
+	* can be encrypted using aws-managed SSE or using KMS
 	* 2 different types of queues:
 		* Standard Queues: unlimited # of messages/second; guarantees msg's will be delivered at least once; BUT more than 1 copy of a msg could be delivered out of order
 		* FIFO Queues: limited to 300 messages/second, other than that has the same capabilities as Standard; order is guaranteed; guaranteed to not have duplicative requests
@@ -908,23 +954,50 @@ Simple Queue Service (SQS): fully managed queuing service; lets you decouple and
 		* messages will then be deleted from the queue when they're still invisible
 		* if a message is not processed before the invisibility time expires, the msg will become visible and a different reader will process it, resulting in the request being processed 2x
 		* default visibility time is 30 seconds, but you can set it to be anytime btwn 0 seconds and 12 hours
+	* Delay Queues: lets you postpone the delivery of messages to consumers for a set amount of time
+		* default is 0 seconds, but the max is 900
+		* for Standard queues it applies to only new messages, but for FIFO queues it applies to ALL messages currently in the queue
+	* Message Timers: same as Delay Queues, but only applies to INDIVIDUAL MESSAGES; not supported for FIFO queues
+	* Temporary queues: high-throughput, cheep, short-lived queues that get deleted when they're no longer being used
 	* Polling: the method in which we retrieve messages from the queue
 		* Short Polling(default): returns messages immediately, even if the queue is empty; use this when you want messages right away
 		* Long Polling: waits until a message arrives in the queue || the long poll timeout expires; reduces cost by reducing # of empty receives; most use cases you would use this
-Simple Notification Service (SNS): fully managed; subscribe and send push notifications through text msg, email, web hooks, lambdas, SQS, and mobile notifications
+	* to send large messages up to 2GB in size you need the SQS Extended Client Library for Java/Python
+		* stores the actual message in S3, and the message just contains a reference to it
+	* SQS supports Attribute-based access control (ABAC): an authorization process that defines permissions based on Tags
+	* Message Metadata: lets u attach metadata to ur SQS messages
+	* Access Policy: they are to your SQS Queue what Bucket Policies are to your S3 buckets; they're the same thing
+	* SQS supports the Advanced Message Queuing Protocol(AMQP), which takes the producer-consumer model and has an AMQP broker handle the queue w/ an added Exchange before the queue
+		* messages are published to Exchanges, which distribute copies of the message to queues using rules called Bindings
+		* messages are only removed from the queue when the consumer acknowledges the broker
+		* 4 types of Exchanges u can use:
+			* Direct(default)
+			* Fanout
+			* Topic(for SQS consumer-producer model)
+			* Headers
+	* SQS supports the MQ Telemetry Transport(MQTT) protocol, which is good for minimal network bandwidth and for IoT or real-time messaging apps
+	* SQS supports the Simple Text Oriented Messaging Protocol(STOMP), which is good for communicating with just text for use with any message broker
+Simple Notification Service (SNS): fully managed; subscribe and send push notifications through text msg, email, web hooks, lambdas, SQS, and mobile notifications (pub/sub)
 	* Publishers: use the AWS API through CLI and SDK to push messages to a Topic
 		* all messages published to SNS are stored redundantly across multiple AZ's
 	* Topics: allow you to group multiple subscriptions together, allowing you to deliver to multiple subscribers at once by formatting to each subscriber's protocols all at once
 		* you can encrypt Topics through KMS
 		* Topics can support deliveries to multiple endpoint types (EX: delivering to iOS and Android at the same time)
+		* 2 types of Topics:
+			* Standard: high throughput, but no guarantees on order or duplicates
+			* FIFO: lower throughput, but order is guaranteed as well as no duplicates
 	* Subscriptions: how you receive messages from a Topic; can only subscribe to 1 protocol and 1 topic
-		* list of protocols:
+		* list of protocols and services u can use as Subscribers:
 			* HTTP, HTTPS: create web hooks in your app (API endpoints)
 			* Email: only supports plain text; good for internal email notifications
 			* Email-JSON: sends you json through email
 			* Amazon SQS: place the SNS message into the SQS queue
 			* AWS Lambda: triggers a lambda function
 			* SMS: send a text msg
+			* Data Firehose
+			* Mobile phone numbers
+			* PagerDuty
+			* SQS
 			* Platform application endpoints: mobile push notifications
 				* can appear in mobile as alerts, badge updates, or sound alerts
 	* SNS is pay-as-you-go
@@ -932,7 +1005,23 @@ Simple Notification Service (SNS): fully managed; subscribe and send push notifi
 		* the receivers(Subscribers) subscribe to these SNS Topics, so when new messages appear in the groups, they are immediately delivered to them
 		* Publishers don't know who their Subscribers are
 		* Subscribers don't pull messages: messages are automatically pushed to them; it's a PUSH-based system
-	* is also used for application integration: enables you to decouple micro services, distributed systems, and serverless apps 
+	* is also used for application integration: enables you to decouple micro services, distributed systems, and serverless apps
+	* SNS Filter Policy: lets you filter only a subset of messages to be delivered to Subscribers
+	* SNS Message Data Protection: protects messages published to your SNS Topics by using data protection policies to audit, mask, redact, or block sensitive information
+		* scans for PII and Protected Health Information(PHI) via data identifiers u make, or by using the predefined ones provided
+		* supports the following actions:
+			* Audit: audit the message, then send findings to CloudWatch, S3, or Data Firehose
+			* De-identify: mask/redact data
+			* Deny: blocks data from being sent
+		* good for complying with privacy regulations under HIPAA, PCI, and FedRAMP
+		* only supported for Standard SNS Topics, not FIFO
+	* SNS Delivery Policy: defines how SNS does retries when delivering messages
+		* when the Delivery Policy is exhausted, SNS stops any retries and either discards the message or sends it to the Dead Letter Queue if one exists
+		* here's how the retries are defined (1st or each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
+			* Immediate Retry Phase: 3 times w/o delay (Data Firehose, Lambda, SQS) or 0 times w/o delay (SMTP, SNS, Mobile Push Notifications)
+			* Pre-Backoff Phase: 2 times, 1 second appart or 10 seconds apart
+			* Backoff Phase: 10 times w/ exponential backoff from 1 second to 20 seconds or from 10 seconds to 600 seconds
+			* Post-Backoff Phase: 100,000 times, 20 seconds appart or 38 times, 600 seconds apart
 Simple Workflow Service(SWF): fully-managed; allows you to coordinate, track, and audit multi-step, multi-machine application jobs; used for work across distributed and/or decoupled applications
 	* Workflows are composed of Tasks, which represent each step in the Workflow
 	* also allows for coordination of media, back-end, business, and analytical components as well
@@ -991,6 +1080,9 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 
 Elastic Transcoder: lets you convert media files from its original format into different formats that will play on smartphones, tablets, PCs, etc.
 	* provides presets for popular output formats, so you don't need to guess what settings work best for certain devices
+	* can't use it via CloudFront
+	* MediaConvert is the modern version of Elastic Transcoder, but Elastic Transcoder is still good
+MediaConvert: does everything Elastic Transcoder does, plus converting video and streaming formats and also lets your do video correction
 KMS: Regional secure key management, encryption, and decryption
 	* manages Customer Master Keys (CMKs) i.e keys you or aws create
 		* 3 types of CMK's:
@@ -1159,6 +1251,17 @@ CloudTrail: logs and monitors API calls and actions btwn AWS services
 AWS Lambda: run code w/o provisioning and managing servers; they're serverless functions; pay only for the compute time you consume; very cheap
 	* Lambda executes your code only when needed
 	* scales automatically up to 1000 lambda functions in seconds
+	* can set the time of a Lambda to be 3 seconds(default), 1 second(min), or 15 minutes(max)
+	* can set the storage of a Lambda to be 512MB(default, min) or 10GB(max)
+	* can set the memory of a Lambda to be 128MB(default, min) or 10GB(max)
+	* can be invoked in 2 ways:
+		* Sync Invocations: data that waits for a response
+		* Async Invocations: data that immediately returns to an async aws service (EX: SNS/SQS, another Lambda, EventBridge)
+	* there's 2 ways to reference a Lambda by its ARN:
+		* Qualified ARN: the ARN plus the version added at the end
+		* Unqualified ARN: the ARN w/o the version at the end (by default it just points to latest); you cannot create Aliases using Unqualified ARNs
+	* Lambda supports 2 types of deployment packages for your Lambda code: zip files and container images(EX: Docker)
+		* zip files larger than 50MB have to be uploaded to an S3 bucket first
 	* supports: Ruby, Python, Java, Go, Powershell, NodeJs, C#
 	* you can also create your own custom runtime environments
 	* if you need tasks >15 minutes and a custom OS, then probably consider Fargate instead of Lambda
@@ -1179,6 +1282,9 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	* traditional architecture vs. serverless architecture:
 		* EX of Traditional: ELB -> EC2 -> (some database, EX: RDS) hardware is involved
 		* EX of Serverless: API Gateway -> Lambda -> (some serverless DB, EX: DynamoDB, Serverless Aurora) no hardware involved
+	* Lambdas can run on ARM or x86 architecture
+	* Lambda Runtime: runtime environments for the programming language u use to run your Lambdas
+	* Lambda OS-Only Runtimes: u use these when u want to write Lambdas in other languages that aren't Ruby, Python, Java, Go, Powershell, NodeJs, or C#
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1318,16 +1424,25 @@ AWS Security Token Service (STS): gives out limited-temporary credentials for IA
 		* returns an AccessKeyID, SecretAccessKey, SessionToken, and Expiration
 Default available metrics provided by CloudWatch:
 	* hypervisor and EC2 status checks, CPU Utilization, Network Utilization, Disk Reads
-advanced/custom metrics NOT automatically provided by CloudWatch:
-	* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
-	* you can set up advanced/custom metrics by installing the CloudWatch Agent
+CloudWatch Agent: lets you send logs from your EC2 to a CloudWatch Log Group
+	* can be installed using SSM
+	* you must attach the CloudWatchAgentServerRole IAM Role to the EC2 u want to install the agent on
+	* these are the host level metrics u get from CloudWatch by default when u don't install the CloudWatch Agent:
+		* CPU usage
+		* Network usage
+		* Disk usage
+		* hypervisor and EC2 instance status
+	* advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the CloudWatch Agent for:
+		* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
+		* you can set up advanced/custom metrics by installing the CloudWatch Agent
 Aurora Global Database: designed for globally distributed applications; allows a single Aurora DB to go Multi-Region with no impact on performance; enables fast local reads and low latency in each region
 	* Cross-Region Disaster Recovery: a feature of Aurora Global Database which provides a Recovery Point Objective(RPO) of 1 second and a Recovery Time Objective(RTO) of less than a minute
 		* meaning it takes 1 second for Aurora Global Database to react to an outage and less than 1 minute to promote a secondary Region to Master with read/write capabilities.
 EFS for FsX Lustre is a POSIX-compliant shared file system
 Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
-Amazon MQ: it's a messaging service like SQS and SNS; it's a message broker service that uses industry standard APIs and protocols, making it easy to switch from any standard message broker to Amazon MQ w/o rewriting code
+Amazon MQ: used for messaging queuing kind of like SQS/SNS; it's a AMQP message broker service that uses industry standard APIs and protocols, making it easy to switch from any standard message broker to Amazon MQ w/o rewriting code
 	* good for if you want to move your existing messaging service to the cloud quickly and easily
+	* u have the option of choosing Rabbit MQ (higher performance w/ advanced messaging capabilities) or Active MQ (slower performance with basic messaging capabilities)
 Kinesis Client Library(KCL): allows you to build applications that process data from your Kinesis Data Streams
 	* also helps you consume data from Kinesis data streams by taking care of the many complex extra subtasks that come with streaming data like:
 		* reacting to resharding, load balancing, reacting to instance failures, and checkpointing already-processed records
@@ -1368,7 +1483,6 @@ Data Lifecycle Manager (DLM): A feature of EBS that lets you automate the creati
 Active-active failover: use this routing policy when you want a majority of your resources to be active a majority of the time; all records with the same name, type, and routing policy are active till Route53 determines it unhealthy.
 Active-passive failover: use this routing policy when you want to use a primary group of resources a majority of the time while having a secondary group of resources on standby for when the primary goes down
 	* once all the primary resources are unhealthy, then Route53 starts to only use the healthy secondary resources
-
 S3 Select takes the associated bucket name and object key of the object you want to query with SQL and retrieves that data
 there is a CPU-based On-demand instance limit, which is initially set to 20 instances per region; you can bypass this by submitting a limit increase form to AWS
 Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
@@ -1396,15 +1510,48 @@ Unified CloudWatch Logs Agent: lets you collect logs from EC2's and on-premise s
 	* lets you collect not just logs, but also advanced metrics, which makes it better than CloudWatch Agent which only collects advanced metrics
 	* enables the collection of logs from servers running Windows Server
 	* better performance than CloudWatch Agent
-CloudWatch Logs Insights: lets you interactively search and analyze your log data in CloudWatch Logs
+CloudWatch Insights: lets you interactively search and analyze your log data in CloudWatch Logs
 	* lets you perform queries on CloudWatch Logs
 	* has it's own purpose-built query language with some sample queries included
+	* a single query can query up to 20 Log Groups and queries have a 15 minute timeout
+	* Discovered Fields: CloudWatch Insights will look at ur logs and generate fields for u to use in your queries base on the fields it finds in ur logs
+		* by default it will always generate these 5 system fields:
+			* @message
+			* @timestamps
+			* @ingestionTime: the time when the log was received by CloudWatch
+			* @logStream: the name of the Log Stream that the log was added to 
+			* @log: a Log Group identifier in the format of: <account_id>:<log_group_name>
+		* also automatically discovers fields in logs from aws services such as:
+			* VPC Flow Logs
+			* Route53
+			* Lambda
+			* CloudTrail
 Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
 AWS Global Accelerator routes traffic to the closest edge location through an optimized path in the AWS global network by using Anycast static IP addresses
 AWS Step Functions: serverless functions (like Lambda) that provide serverless orchestration with applications and aws services
 	* centrally manages a workflow by breaking it into multiple steps, adding flow logic, and tracking the inputs and outputs between steps
 	* stores event log data that is passed between decoupled application components
 	* removes the need for excess code that is used to maintain communication between applications/services
+	* has a GUI to visualize each step of the workflow
+	* 2 types:
+		* Standard: long workflows
+		* Express: for streaming data; short workflows
+	* typical usecases:
+		* AWS Batch x SNS: submit a batch job and notify on success/failure using SNS
+		* Fargate x SNS: run a Fargate Tasks and notify on success/failure using SNS
+	* Step Function States: contains parameters passed as input, a Result which represents what's outputed to the next State, and a ResultPath that represents where the output is delivered 
+	* Step Functions have a few different types of States:
+		* Pass States: passes its input to its output; basically not doing anything; good for mocking when debugging/testing your workflows
+		* Task States: represents a single unit of work in the workflow. Can be any of the following:
+			* a Lambda function
+			* an API call to other aws services
+			* an Activity: some compute work node (EX: EC2 instance)
+		* Choice States: adds conditional logic (if/else statements)
+		* Wait States:  delays the workflow for a specified amount of time (wait(), sleep(), etc.)
+		* Parallel States: lets u split the workflow into 2 branches
+			* both branches have to finish before the workflow continues
+		* Succeed States: stops execution of the workflow and returns success
+		* Fail States: stops the execution of the workflow and returns failure
 IAM Certificate Store: a place where you can upload 3rd party certificates
 calculating optimal configuration of IOPS and queue length for Provisioned IOPS SSD volumes: maintain a ratio of 50:1
 S3 Server Access Logging: gives you detailed logs about requests made to S3 buckets and S3 objects
@@ -1425,9 +1572,12 @@ CloudWatch Execution Logging: API logging that lets you capture user requests an
 	* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
 CloudWatch Access Logging: API logging that lets you as an API developer, log who has accessed your API and how the caller accessed it (which method)
 Encryption Helpers: feature of Lambda that allows you to encrypt environment variables before they are sent to Lambda
-Lambda Layers: used to package common code such as libraries, config files, or runtime images
+Lambda Layers: used to package common code such as libraries, config files, or runtime images. the Layer itself is a zip file
+	* you can have up to 5 Layers per Lambda
+	* all Layers for a Lambda unzipped can't exceed 250MB
 Lambda Aliases: used to refer to a specific version of your Lambda function w/o having to know the specific version an Alias is pointing to
 	* good for promotion of new versions of Lambda functions
+	* lets u give Lambda versions a friendlier more human-readable name
 Lifecycle Hooks: a feature in ASG that lets you put instances into a wait period before termination, allowing you to perform custom activities and retrieve critical data from a stateful instance before termination
 	* default wait period is 1 hour
 CloudFormation Drift Detection: used to detect changes made to property values of aws resources outside of what your CloudFormation templates already define
@@ -1469,7 +1619,7 @@ how to decide how many subnets you need:
 the master account of an Organization cannot be removed
 CloudTrail event logs are SSE encrypted by default
 when CORS is enabled, only GET, PUT, POST, DELETE, and HEAD are supported
-SQS Dead-Letter queue: feature of SQS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
+Dead Letter queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
 CloudHSM performs backups by backing up users, keys, and policies, periodically to S3 in the same region as your CloudHSM Cluster
 	* Ephemeral Backup Key(EBK): when HSM backups are made, this AEA-256 key is generated to encrypt the backup using a FIPS-approved AES key wrapping method before it leaves HSM
 	* Persistent Backup Key(PBK): another AES-256 encryption key that's generated by HSM using a FIPS-approved KDF to encrypt the Ephemeral Backup Key
@@ -1731,6 +1881,50 @@ AWS Transfer Family: offers fully managed support for the transfer of files over
 	* AS2: uses HTTPS; port 443
 AWS Transfer Family Managed File Transfer Workflows (MFTW): fully managed serverless file transfer workflow service to set up, run, automate, and monitor processing of files uploaded using AWS Transfer Family
 	* the workflows let you copy files to another S3 destination, apply metadata tagging for S3, delete files from S3 or EFS, pass files to Lambdas, and decrypt files once uploaded to S3 or EFS
+AWS Auto Scaling: a place where u can centrally manage all auto scaling resources across all aws services, so EC2 Auto Scaling Groups (ASG), ECS, Aurora, DynamoDB, and Spot Fleet
+AWS Amplify: an opinionated framework (meaning it's a framework that makes strong choices for you about how ur infrastructure should be built for ur app)
+	* fully-managed infrastructre so that developers can focus more on building their web/mobile app
+	* comes with these features:
+		* Amplify CLI
+		* Amplify SDK
+		* Amplify UI: preformated React components available to use in ur web/mobile app
+		* Amplify Hosting: a static website hosting platform
+		* Amplify Studio: IDE
+	* has direct integrations with Cognito, API Gateway, S3, DynamoDB, Lambda, etc.
+	* works with a bunch of the most popular JavaScript frameworks
+Amazon AppFlow: a managed integration service for data transfer btwn data sources in aws and other cloud data sources (EX: S3 <-> Google Sheets)
+	* 3 Flow Triggers:
+		* run on demand: manually running the flow
+		* run on event: running the flow in response to an event from a SaaS application
+		* run on schedule: runs the flow on a recurring schedule
+	* features:
+		* data can be encrypted at-rest and in-transit
+		* use partition and aggregation settings to optimize query performance
+		* develop Custom Connectors via AppFlow Custom Connector SDKs
+		* create Private Flows via PrivateLink
+		* catalogg data transfered to S3 via AWS Glue Data Catalog
+Device Farm: an application testing service to test your applications in different environments
+	* mobile testing:
+		* lets you remotely connect to a physical phone farm in aws datacenters for mobile app testing
+		* the phones come built-in with Fuzz, which is a testing suite that randomly tests actions on your mobile app
+			* you can also use Appium testing suites too
+		* takes screenshots and videos of the tests
+	* desktop browser testing:
+		* you can test your web-application against different web browsers
+Amazon Quantum Ledger Database: fully managed serverless ledger database that uses SHA256 to maintain a cryptographically verifiable, immutable history of changes to application data
+	* use when u need to cryptographically verifiy financial transactions and that historical records haven't been altered
+	* supports SQL database querying
+	* managed under a central trusted authority for central governance
+	* designed for high throughput and scalability
+	* works with a bunch of other aws services
+	* ACID Transactions: ensures database integrity w/ transactions that are atomic, consistent, isolated, and durable
+	* Journal Storage: records change sequentially in a document-oriented format for structured data handling (think... the Linux Journal)
+
+
+
+
+
+
 
 question-answering strategies:
 
