@@ -464,6 +464,7 @@ CloudWatch: monitors your cloud
 				* Input Transformer: lets you transform the Event data into whatever u want it to look like
 			* can't use these as variable names when making Rules: aws.events.rule-arn, aws.events.rule-name, aws.events.event
 			* EventBridge Schema Registry: lets you create, discover, and manage OpenAPI schemas for Events on EventBridge
+				* OpenAPI: RESTful API standard; can be represented as either JSON or YAML
 				* you can then use that schema to download Code Bindings for whatever programming language u use in your IDE to use as autocomplete when programming
 				* you can also download the AWS Toolkit for VSCode to view schemas and install Code Bindings the same way
 		* Targets: what to trigger
@@ -520,11 +521,29 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 RDS: scalable, managed(not fully), relational database service
 	* runs on virtual machines, but you can't login to these VM's
 	* RDS is not serverless
+	* you can have up to 40 RDS instances per aws account
+	* u define a database identifier for each RDS instance, which forms the beginning of the RDS' DNS hostname, plus an AWS-defined unique identifier
+	* RDS Instance Types:
+		* General-purpose (db.m3, db.m4, etc.)
+		* Memory-optimized:
+			* Optimized X family (xb.x2g, etc.)
+			* Optimized Z family (db.z1d, etc.): high frequency CPU
+			* Optimized R family (db.r7g, etc.): balanced compute
+		* Burstable-performance (db.t3, db.t4, etc.)
+		* Optimized Reads (db.r6gd, db.r6id, etc.)
+	* RDS instances use EBS volumes as their storage
+		* RDS won't let u reduce storage size, only increase it. To decrease, you'll have to create a new instance w/ an EBS w/ smaller storage
 	* Multi-AZ is for disaster recovery and high availability, Read Replicas are for performance improvement
-	* Multi-AZ is available to all RDS databases(5) except Aurora(1)
-	* in Multi-AZ, you can force a failover from 1 AZ to another by rebooting the RDS instance
-	* Read Replicas are available to all RDS databases(5) except SQL Server(1)
-	* you can have Read Replicas that are Multi-AZ, source multiple databases in multiple AZ's, and you can have a Read Replica in a 2nd Region
+	* Multi-AZ is available to all RDS databases(5) except Aurora
+		* in Multi-AZ, you can force a failover from 1 AZ to another by rebooting the RDS instance
+	* Read Replicas are available to all RDS databases(5) except SQL Server
+		* you can have Read Replicas that are Multi-AZ, source multiple databases in multiple AZ's, and you can have a Read Replica in a 2nd Region
+		* when using MySQL and MariaDB, their replicas are writable and logically replicated, whereas the rest are physically replicated and aren't writable
+		* u can perform backups for all RDS databases(5) except SQL Server
+		* u can perform parallel replication for all RDS databases(5) except Postgres
+	* DB Subet Group: a group of Subnets u designate as the ones that can be used by your RDS instances
+		* each DB Subet Group should have subnets in at least 2 AZs in a given Region
+		* for an RDS instance to be Public, all subnets in the DB Subnet Group MUST be public
 	* Multi-AZ RDS vs. Read Replicas RDS:
 		* Multi-AZ's replication is synchronous and highly durable, whereas read replicas' is asynchronous and highly scalable
 		* Multi-AZ has automatic failover, as opposed to read replicas which need the change to be made manually
@@ -533,16 +552,26 @@ RDS: scalable, managed(not fully), relational database service
 		* database upgrades happen on only the master in Multi-AZ, whereas database upgrades in read replicas are independent from master
 		* in RDS Read Replicas, you can have up to 5 replicas per database; each read replica has it's own DNS Endpoint
 			* replicas can be promoted to their own database, but this breaks replication
+			* if the primary fails, u must manually update URLs everywhere to point to the DNS Endpoint of a replica
 	* 2 types of backup solutions for RDS:
 		* Automated Backups: the default; all data is stored in S3; free; stores transactions logs all day; you choose the Retention Period btwn 1 to 35 days; and YOU define the backup window for when you want backups to occur
 			* setting the Retention Period to 0 is how you turn it off
 			* storage I/O may be suspended during the backup, so choose that backup window carefully
 		* Manual Snapshots: these backups persist even after you delete the original RDS instance unlike Automated Backups
+			* you can then share these snapshots cross-region and cross-account, export them to S3, but there's an additional charge for each snapshot u take
+		* your database has to be in the "available" state in order to perform backups
 	* when recovering data, AWS will take the most recent daily backup and apply transactional log data relevant to that day, which allows for recovery down to the second inside the Retention Period
 		* when you recover data using Automated Backup or Manual Snapshots a new RDS instance is created for the restored database, and this new instance will have a new DNS endpoint as well
-	* Domain Name System (DNS): translates domain names to IP addresses, so browsers can find specific Internet sources i.e servers 
-		* it's what uniquely identifies each computer on a network and allows communication between them using Internet Protocol (IP)
-		* comes in 2 different versions: IPv4 and IPv6
+	* you can turn on encryption for all RDS engines via KMS. It will also encrypt your automated backups, Snapshots, and replicas
+	* In-Transit encryption is provided by default via the databases DNS Endpoint
+	* RDS Performance Insights: helps u identify bottlenecks and performance issues with your RDS instances
+		* is turned on by default and has a retention period of 1 week of performance data
+		* u can change it to 2 years at an additional cost
+	* RDS Custom: lets u directly manage aspects of RDS instead of AWS in cases where u require 3rd part applications or customizations for your db's that wouldn't be allowed by aws otherwise
+		* works with Microsoft SQL Server and Oracle
+Domain Name System (DNS): translates domain names to IP addresses, so browsers can find specific Internet sources i.e servers 
+	* it's what uniquely identifies each computer on a network and allows communication between them using Internet Protocol (IP)
+	* comes in 2 different versions: IPv4 and IPv6
 	* Domain Registrars: authorities who have the ability to assign domain names under one or more top-level domains (ex: Go Daddy, Domain.com, etc.)
 		* domains get registered through InterNIC, which is a service provided by ICANN, and enforces the uniqueness of domain names all over the Internet
 		* after registration, all domain names are found publicly in a central WhoIS database
@@ -566,7 +595,6 @@ RDS: scalable, managed(not fully), relational database service
 	* Time-to-live (TTL): the length of time that a DNS record gets cached on the resolving server or user's local machine
 		* so the lower the TTL, the faster that changes to DNS records will propagate across the Internet
 		* always measured in seconds under IPv4
-	* you can turn on encryption for all RDS engines via KMS. It will also encrypt your automated backups, Snapshots, and replicas
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1328,8 +1356,33 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 	* allows other applications to access your application's data, logic, and functionality; can handle hundreds of thousands of API calls at 10,000 requests per second(can increase that speed by contacting AWS Support)
 	* can throttle requests to prevent attacks; lets you track and control usage of the API by API key; can connect it to CloudWatch to log all requests for monitoring; auto-scales; highly scalable; cost-effective
 	* you can expose HTTPS endpoints for defining a RESTful API, maintain multiple versions of your API, and send each API endpoint to a different target; can serverless-ly connect to services like Lambda and DynamoDB
-	* when you create an API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can have child resources too EX: /projects/-id-/edit
+	* when you create a REST API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
+		* and then in those Resources is where u define your Methods
+		* u then choose your Integration: which is just what service it calls:
+			* Lambda, HTTP, Mock, any aws service, or a VPC Link
+	* when you create an HTTP API, you have to define an API container, and multiple Routes: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
+		* the Methods are part of the Routes when u create your Routes, so u aren't defining 2 seperate things like u are with REST API calls when doing Resources and Methods
+		* u then choose your Integration:
+			* Lambda, HTTP, Event Bridge, SQS, Kinesis, Step Functions, or a VPC Link
 	* when creating API, plan them for retries w/ Exponential Backoff (EX: try again after 2 seconds, then 4, then 8, etc.)
+	* 3 types of API for API Gateway:
+		* REST API (API Gateway v1): complete control over requests and response, has the most features, has private and public API options, but more expensive
+		* HTTP API (API Gateway  v2): low latency, simpler feature set, cheap, but only has public API options
+		* WebSocket API: persi stent connections for real-time usecases such as chat applications or dashboards
+	* REST vs HTTP API:
+		* REST is regional, Edge-optimized, and has private, whereas HTTP is only regional
+		* REST can use TLS, certs, and AWS WAF for authentification, whereas HTTP can only use TLS
+		* they both can authorize with IAM, Cognito, and Lambda, but REST can only do auth on resource policies, whereas HTTP is the only one that can use JWT tokens for auth
+		* REST can manage custom domains, API Keys, rate limiting per client, and usage throttling per client, whereas HTTP can't manage custom domains
+		* they both can transform parameters, configure CORS, and perform user-controlled deploys 
+		* REST can transform the request body, do validation, custom API Gateway responses, caching, test invocations, and canary releases, whereas HTTP can't
+		* REST can't do automatic deployments, whereas HTTP can
+		* REST API calls can show up in CloudWatch Metrics and Logs, Firehose, execution logs, and Xray, whereas HTTP only shows up in CloudWatch Metrics and Logs
+		* they both integrate with public HTTP endpoints, aws services, Lambdas, and privately with NLBs
+		* REST API calls can't integrate privately with ALBs and Cloud Map, whereas HTTP can
+		* REST has mock integrations, whereas HTTP doesn't 
+	* for the REST and HTTP APIs you can import an OpenAPI 3 schema file when creating your API in API Gateway 
+	* aws extends the OpenAPI definition, so u can define aws API Gateway-specific features in your OpenAPI schema file
 	* when creating an API you also have to define Methods on your Resources
 		* Methods allow you to make API calls to that Resource url using that url's protocol EX: GET, POST, etc.
 		* you can define multiple Methods for the same Resource
@@ -1719,9 +1772,36 @@ NLB's can maintain millions of simultaneous sessions with no latency while prese
 	* NLB uses a security policy that consists of protocols and ciphers to negotiate TLS connections
 	* NLB does not support custom security policies
 AWS Glue: serverless data integration service that makes it easier to discover, prepare, and combine data for analytics, machine learning, and app development
-	* Table: used to define data schema's
-	* Crawler: used to crawl data and updates/creates your Glue dashboard with tables, which can be used to perform ETL (Extract, Transform, Load) operations
-	* Classifier: component of Crawler that generates the schema to use
+	* you can then query all that data using Athena, EMR, and Redshift Spectrum
+	* discover and connect to more than 70 data sources and manage your data in a ccentralized data catalog
+	* AWS Glue Table: used to define data schemas and metadata
+		* u must specify the data format as JSON, CSV, XML, or Parquet
+		* data can be sourced from S3, Kinesis, or Kafka
+	* AWS Glue Database: container for multiple Glue Tables
+	* AWS Glue Crawler: used to crawl data and updates/creates your Glue dashboard with Tables, which can be used to perform ETL (Extract, Transform, Load) operations
+	* AWS Glue Classifier: component of Crawler that is used to analyze a targeted data source and generates the schema to use, for the Tables
+		* can crawl from S3, Redshift, Snowflake, RDS, DynamoDB, MongoDB, Delta Lake, or Apache Iceberge Tables in S3
+		* it can crawl on-demand or based on a schedule
+	* Jobs: represents the types of things u can do in AWS Glue
+		* 3 kinds of engines used for Jobs in AWS Glue:
+			* Python Shell engine
+			* Ray Job
+			* Spark Job
+		* can use it to create ETL pipelines to load data into your data lakes
+			* charged based on the number of data processing units (DPUs)
+			* AWS Glue allocates 10 DPUs to each Spark Job, 2 DPUs to each Spark streaming Job, and 6 DPUs to each Ray Job
+			* Visual ETL(AWS Glue Studio): a GUI used for building ETL pipelines, where u define the source of the data ur pulling, how u want to transform the data, and the target destination
+				* u can also version control ur ETL pipelines using any repo-based service
+				* once ur done making your pipeline it also gives u the python script version of it which u can download and run
+		* you can create Jobs in Visual ETL(AWS Glue Studio), Jupyter Notebooks(IDE), or the script editor within aws
+		* the DPUs for a Job are determined by the number of worker nodes u assign, as well as what type they are
+	* AWS Glue Data Catalog: fully managed, serverless catalog service that is compatible w/ Apache Hive Metastore
+		* makes it easy to store, annotate, and share metadata about their data
+		* you only pay for what u use
+		* integrates with S3, RDS, Redshift, Athena, Glue ETL, and EMR
+		* 2 Table formats:
+			* AWS Glue Table
+			* Apache Iceberg Table: uses its own SQL data format
 Step Functions vs. Simple Workflow Service (SWF):
 	* step functions are serverless, SWF isn't
 	* step functions are good for short workflows, SWF is for long workflows
@@ -2000,6 +2080,14 @@ Amazon Kendra: a search engine that uses ML
 		* Enterprise Edition: 5 indexes w/ up to 50 data sources each, 8000 queries per day, runs in 3AZs
 Amazon Personalize: used to give real-time recommendations to customers on your platform
 	* it's what Amazon uses on people shopping on Amazon
+AWS Lake Formation: a data lake used to globally share data for analytics and ML
+	* data lake: a repo for unstructured and semi-structured data
+	* lets you manage fine-grained access control for your data lake on S3
+	* lets you manage metadata in AWS Glue Data Catalog
+	* has its own permissions model similar to IAM where access is either granted or revoked
+	* lets u share the data in your data lake cross-account, cross-organization, or directly with IAM Principals in another aws account
+	* permissions are enforced across Athena, Quicksight, Redshift Spectrum, EMR, and Glue
+	* Lake Formation and Glue share the same Data Catatlog
 
 
 
