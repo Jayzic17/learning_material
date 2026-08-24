@@ -569,6 +569,43 @@ RDS: scalable, managed(not fully), relational database service
 		* u can change it to 2 years at an additional cost
 	* RDS Custom: lets u directly manage aspects of RDS instead of AWS in cases where u require 3rd part applications or customizations for your db's that wouldn't be allowed by aws otherwise
 		* works with Microsoft SQL Server and Oracle
+	* RDS Proxy: creates a reserved pool of connections to your RDS instance that are reserved for Lambda functions to reuse 
+		* this is because Lambda always CREATES new connections when executed and never reuses previous connections, which if left unchecked can quickly exhaust your RDS instances connection limit
+	* RDS Optimized Reads and Writes: when enabled, writes are 0.5x faster and reads are 2x faster
+		* uses SSD block storage in order to utilize temporary tables for greater performance
+		* sorts, hash aggregations, high-load JOINs, and Common Table Expressions(CTEs) can make good use of temporary tables
+		* only available for specific RDS Instance Class and db offering combos
+	* IAM Authentification: lets you authenticate to an RDS instance using an IAM authentification token instead of having to use credentials
+		* works for MySQL, MariaDB, and Postgres; each token has a TTL of 15 minutes
+	* Kerberos Authentification: Kerberos is a network authentification protocol which is integrated into Microsoft Active Directory
+		* works with AWS Directory Service for Microsoft Active Directory and your own on-premise Active Directory
+		* can be used with MySQL, Postgres, Oracle, and Microsoft SQL Server
+		* Postgres and Microsoft SQL Server support 1 and 2-way forest trust relationships
+		* Oracle supports 1 and 2y-ay external and forest trust relationships
+	* AWS Secrets Manager can manage an RDS instance's username and password and rotate it every 7 days(default)
+		* does not work with Microsoft SQL Server, RDS instances w/ blue/green deployments, or RDS Custom
+		* your apps need to be able to be programmatically configured to access the creds from Secrets Manager
+		* if you delete and RDS instance, the creds are also deleted
+	* Master User Account: in RDS it refers to the initial user/account that's created when u create a new RDS instance
+		* it's given full admin access and can do anything, so don't use it to do everything (treat it the same like u would an AWS Root Account); you're able to reset the password if u forget it 
+	* Database Activity Streams: lets u control access to data streams that goes from your RDS instance to Kinesis streams
+		* u can turn it on in the CLI, and the Kinesis stream is created automatically when u do this
+	* Parameter Groups: parameters that u can configure for each of your RDS instances
+	* the --publicly-accessible option from the AWS CLI/SDK lets the DNS Endpoint for your RDS instance instanly resolve to the private IP of your RDS instance for traffic coming from outside the VPC of the RDS instance
+		* this doesn't override Security Group DENY rules however, meaning u still got to go into your Security Group and update that as well
+	* public access RDS connection options:
+		* use a DB IDE tool
+		* use AWS CloudShell: the browser-based shell/terminal u can access from the aws console to run CLI/SDK commands
+		* use a db client from your local machine's terminal
+		* programmatically connect to it using a web server
+	* private access RDS connection options:
+		* using Cloud9 (in a public subnet in the same VPC)
+		* using a bastion 
+		* launch an EC2 and connect to it via SSH or Sessions Manager
+		* using AWS Client VPN 
+		* using AWS Direct Connect
+		* ...but you CAN'T use CloudShell
+	* Amazon RDS Extended Support: lets you run MySQL, MariaDB, etc. on a major version above what RDS normally allows at most, but for an additional cost
 Domain Name System (DNS): translates domain names to IP addresses, so browsers can find specific Internet sources i.e servers 
 	* it's what uniquely identifies each computer on a network and allows communication between them using Internet Protocol (IP)
 	* comes in 2 different versions: IPv4 and IPv6
@@ -1199,25 +1236,46 @@ AWS CLI:
 	* CLI is installed using a Python Script, important flags: --profile lets you switch btwn AWS accounts and --output lets you change the output to text, json, and table
 		* you use the aws configure command to setup your AWS credentials for the CLI
 	* you need to set up access using IAM first before being able to use the CLI
-Aurora: fully managed Postgres or MySQL compatible database designed to scale and be really fast
+Aurora: fully managed Postgres or MySQL compatible relational database designed to scale and be really fast
 	* combines speed and availability of high-end db's w/ the simplicity and cost-effectiveness of open-source db's
 	* Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
 	* 1/10th the cost of other solutions, offering similar performance and availability
-	* storage is auto-scaled; you start with 10GB, and scale in 10GB increments up to 64TB; related computing resources can scale up to 32 CPUs and 244GB of memory
+	* storage is auto-scaled; you start with 10GB, and scale in 10GB increments up to 64TB or 128TB; related computing resources can scale up to 32 CPUs and 244GB of memory
 	* holds a minimum of 6 copies of your DB (2 copies per AZ (3 AZ's)); you can lose up to 2 copies w/o affecting write availability and 3 copies w/o affecting read availability; max of 15 replicas
 	* backups and failovers are automatic; they are always enabled and don't impact performance
 	* Snapshots can be shared with other AWS accounts in Aurora; taking Snapshots with Aurora does not impact performance
 	* storage is self-healing: meaning data blocks and disks are continuously scanned for errors and fixed automatically
-	* 3 types of replicas available:
+	* TLS/SSL certificates can be applied to encrypt connections to your Aurora db's, and data is encrypted at-rest by default and cannot be turned off. Can use KMS to encrypt if u want
+	* 2 types of Aurora instances:
+		* Writer Instance: handles writes (but can also read), 1 per Aurora cluster, can only scale it vertically, triggers failover if it goes down cause there's only 1, OLTP, ...
+			* ...can promote a Reader to Writer, and cost is based on instance size and IOPS
+		* Reader Instances (a.k.a Aurora Replicas): handles reads, 15 per cluster, scales horizontally, distributes reads, so it can act as a failover target, OLAP, ...
+			* ...can be promoted to Writer, and cost is based on # of instances
+	* 3 types of Aurora Replicas available:
 		* Amazon Aurora Replicas: asynchronous replication (ms); can have up to 15; low performance impact on master; has automated failover; doesn't support user-defined replication delay
 			* doesn't support different data and/or schema vs the master; acts as a failover target with no data loss; in-region only
 		* MySQL Read Replicas: asynchronous replication(s); can have up to 5; high performance impact on master; doesn't have automated failover; supports user-defined replication delay
 			* supports different data and/or schema vs master; acts as a failover target, but with data loss; can be cross-region
 		* PostgreSQL
-	* Aurora Serverless: Aurora, except the DB will automatically start up, shut down, and scale capacity up/down based on your application
-		* used for apps that are used several times for only a few minutes per day/week; or for new projects
-		* you pay for the DB storage, capacity, and I/O that your DB consumes while active
+	* 2 types of configurations for Aurora:
+		* Aurora Provisioned(default): Aurora cluster contains a primary db that performs reads, writes, and optionally up to 15 Aurora Replicas
+			* the primary db will not be created for you by default. You have to create your db instances after creating your Aurora cluster
+			* scaling is manual, capacity is fixed based on instance size, scaling is manual, and read/write scaling is fixed based on instance type and Read Replicas
+			* used for stable and predictable workloads, cost is based on the instance runtime and storage, starting and stopping is manual, and maintenance has to be performed during MWs
+		* Aurora Serverless v2: fully-manages teh autoscaling configuration for Aurora. the DB will automatically start up, shut down, and scale capacity up/down based on your application
+			* used for apps that are used several times for only a few minutes per day/week; or for new projects
+			* you pay for the DB storage, capacity, and I/O that your DB consumes while active
+			* it does not scale to 0 and must maintain at least 0.5 ACUs
+			* Aurora Capacity Unit(ACUs): units used to determine cost vs. capacity in Aurora; 1ACU = 2GB of memory, CPU, and network
+				* ranges btwn 0.5ACUs and 128ACUs
+			* scaling is fine-grained and instant, capacity ranges based on ACUs, scales in seconds, and read and write scaling is independent per instance
+			* used for highly variable workloads that need immediate scaling, cost is based on ACUs, starting and stopping is responsive and cost-efficient, and minimal downtime when performing maintenance
 	* Aurora Global Database: can use it to have your Aurora DB's go cross-region
+		* has a primary Aurora cluster in 1 Region
+		* has up to 5 secondary Aurora clusters in different Regions
+		* writes always happen on the primary cluster
+		* data is replicated to the secondary clusters in under a second
+		* Global Database is only available in specific Regions and for specific db versions
 Redshift: AWS-managed petabyte-scale data warehouse
 	* Database Transaction: a unit of work performed on a DB; EX: reads/writes
 	* data can be loaded to Redshift through S3, DynamoDB, EMR, etc.
