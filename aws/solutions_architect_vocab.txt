@@ -669,7 +669,17 @@ DynamoDB: fully-managed key-value and document store DB; NoSQL; guarantees consi
 	* is fully-managed, multi-AZ, durable, has in-memory caching, and can use backups and restores
 	* works at whatever capacity you need without you tweaking anything
 	* Table Structure: rows = items, cells = attributes, and then a Primary Key contains a Partition Key and a Sort Key, which are any 2 columns that uniquely identify an Item
-		* no 2 Items can have the same Primary Key
+		* the Primary Key cannot be changed later
+		* Sort Key: determines how data should be sorted on a Partition
+		* Partitions: partitioning your big Tables into smaller Tables for speeding up reads; so when a Table gets too big, the Items are sent to smaller Tables, and the Partition Key tells u...
+			* ...where that smaller Table is located for that Item
+			* DynamoDB automatically creates Partitions for you as u add more data
+			* DynamoDB creates new Partitions either every time 10GB of data gets added, or when u exceed the max 3000 RCU(Read Capacity Units) or 1000 WCU(Write Capacity Units) for a single Partition
+			* DynamoDB evenly splits the RCUs and WCUs across Partitions
+		* Simple Primary Key: when ur only using a Partition Key
+			* no 2 Items can have the same Primary Key when using Simple Primary Keys
+		* Composite Primary Key: when ur using both a Partition and a Sort Key
+			* 2 Items can have the same Primary Key when using Composite Primary Keys, as long as the Sort Key is unique
 	* 2 different types of Read Consistency available to avoid inconsistent reads of data:
 		* Eventual Consistent Reads (default): when copies are being updated it's possible to read an inconsistent copy
 		* Strongly Consistent Reads: when copies are being updated you won't be able to read till all copies are updated, guaranteed consistency but with slower reads
@@ -884,7 +894,7 @@ VPC:
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-AWS Cognito:
+AWS Cognito: a customer identity and access management (CIAM) system
 	* Identity Provider (IdP): a trusted provider of your user identity that lets you access other services (Google, Facebook, etc.)
 	* Web Identity Federation: to exchange identity and security information btwn an IdP and an application
 	* Cognito User Pools: User directory with authentication to IpD's(Google, Facebook, etc.) to grant access to your app on AWS and to manage sign-up, sign-in, account recovery, and account confirmation
@@ -1198,14 +1208,17 @@ ECS:
 	* a container is a package that contains the application, along with all the dependencies required to run it
 		* gives you all the isolation benefits of virtualization, so less overhead and faster starts than VMs, also very portable and environments are always consistent
 	* Docker is an engine that runs containers
-	* ECS creates clusters of EC2's or creates Fargate instances to manage fleets of container deployments; so it does all the scheduling, CPU and memory managing, and monitoring
-	* ECS is free; ECS lets you deploy, update, and rollback containers;
+	* ECS creates clusters of EC2's for the scheduling, CPU and memory managing, and monitoring; u manage the EC2's
+	* ECS is free; ECS lets you deploy, update, and rollback containers
 	* can use it in conjunction with an ELB:
 		* this lets you distribute traffic across Tasks in your service
 		* for ALB's with ECS: you can use it for these 2:
 			* Dynamic Host Port Mapping: use it so that multiple Tasks from the same service can be run on a single container instance by using multiple random host ports
 			* Path-based Routing
 		* so it's obvious that ALB's are recommended over NLBs and CLBs when using ELBs for ECS
+	* ECS Capacity Providers: manage the scaling of infrastructure for Tasks in your clusters
+		* each cluster needs to have 1 or more Capacity Providers, and then optionally a Capacity Provider Strategy
+		* an ASG must be associated with your Capacity Provider in order for it to do the scaling
 	* ECS Security comprises of 2 types of Roles:
 		* EC2 Instance Role: applies the Role's policy to all tasks running on that EC2 instance
 			* from a security perspective not ideal cause more often than not, not all of the tasks are gonna need everything in that Role; we need to apply least privilege 
@@ -1217,16 +1230,41 @@ ECS:
 		* Task: 1 working copy of an application that contains all containers defined by its Task Definition
 		* Service: allows for the scaling-up of Task Definitions by adding Tasks; can define min and max values for how many Tasks
 		* Registry: Storage for container images; used for downloading images that will go on to create containers
-	* Fargate: Serverless container engine; you pay for resources per application; works with both ECS and EKS; each workload runs on its own kernel
+	* Fargate: Serverless container engine; you pay for resources and duration per application; works with both ECS and EKS; each workload runs on its own kernel
 		* you would choose EC2 for containerized apps instead of Fargate when you need to meet compliance req's, need more customization, or if your apps require access to GPU's
+		* it's serverless, so aws manages the EC2's for you
+		* Fargate must use awslogs, and it will have an ENI in the PVC per Task group
+		* when using ELB to point to Fargate, u have to use IP addresses since Fargate Tasks do not have a hostname
 	* EKS: lets you deploy and manage containerized applications
 		* same as ECS, but EKS lets you use the same toolsets on-premise and in cloud
 		* ...also your containers are grouped into Pods: which is similar to a Task in ECS
 		* also supports EC2 and Fargate
 		* you would use EKS if you're already using Kubernetes(K8), or want to migrate to AWS
+		* Amazon EKS Connector: BYOD your own kubernetes cluster to EKS, which then lets u visualize it in the EKS console
+		* EKS CTL: CLI tool for easily setting up kubernetes clusters on aws; it's the aws version of kubectl
+		* EKS Distro(EKS-D): custom distro to use for EKS clusters
+		* EKS Anywhere: ECS Anywhere, but for kubernetes clusters
+	* when configuring a Task for either ECS or Fargate, each Task must be assigned to a Security Group and IAM Role
+	* ECS Exec: service that lets u easily and directly exec into your ECS Containers; works for both ECS and Fargate; accessible via the AWS CLI
+	* ECS Service Connect: makes it easy to setup a service mesh for service-to-service communication within ur cluster, so that services can easily talk to other services in ur cluster
+		* includes service discovery, encrypts data in-transit via TLS, sends telemetry data to the ECS console and CloudWatch, health checks, automatic retries, and rolling deployments
+	* when u launch an EC2 instance for ECS it will automatically use an Amazon EC2 Optimized AMI image by default
+	* Amazon ECS Anywhere: lets u register external VMs from your on-premise to your ECS cluster
+	* Open Telemetry Collector: an agent that is installed on a single node on an ECS, Fargate, or EKS cluster, which can then be used to receive, process, and export telemetry data
+		* removes the need to run multiple agents on multiple nodes
+	* AWS Distro for OpenTelemetry(ADOT): a distro that can be used for an ECS, Fargate, or EKS cluster, which supports OpenTelemetry
+	* Amazon Managed Service for Prometheus(AMP): a Prometheus-compatible monitoring service for ECS, Fargate, and EKS; fully-managed
+	* Amazon Managed Service for Grafana(AMSG): a Grafana-compatible service for ECS, Fargate, and EKS for making Grafana dashboards; fully-managed
 	* ECR: the managed Docker container Registry in AWS
-		* lets you store, manage, and deploy container images; integrated with both ECS and EKS; also works with your on-prem deployments; highly available; also integrated with IAM
+		* lets you store, manage, scan, and deploy container images; integrated with both ECS, Fargate, and EKS; also works with your on-prem deployments; highly available; also integrated with IAM
+		* you can organzie your images into multiple repos
 		* you pay for data storage and transfer
+		* Private Image Replication: lets u have cross-region and cross-account images
+		* ECR encrypts images at-rest
+		* ECR Lifecycle: lifecycle management for your images
+		* you can use AWS Signer to sign your images for added security
+		* supports public and private access by controlling access via Register Policies and Repo Policies
+		* you can set tags on images to define whether the images are mutable or immutable
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1276,6 +1314,15 @@ Aurora: fully managed Postgres or MySQL compatible relational database designed 
 		* writes always happen on the primary cluster
 		* data is replicated to the secondary clusters in under a second
 		* Global Database is only available in specific Regions and for specific db versions
+	* RDS Data API: lets u use HTTP requets to seccurely query an Aurora database
+		* unlimited requests per second
+		* Data API calls are excluded by CloudTrail by default since they are data events
+		* multi statements aren't supported
+		* cannot retrieve multi-dimensional arrays for a query's column
+		* only supports specific datatypes
+		* supports execution and transaction statements
+		* u can use the Query Editor from the aws console in Aurora to use RDS Data APIs
+	* u can use Babelfish for Aurora Postgres instances, which gives it the ability to accept db connections from Microsoft SQL Server
 Redshift: AWS-managed petabyte-scale data warehouse
 	* Database Transaction: a unit of work performed on a DB; EX: reads/writes
 	* data can be loaded to Redshift through S3, DynamoDB, EMR, etc.
@@ -1549,11 +1596,11 @@ Storage Gateway: lets you extend or backup on-premise storage to the cloud
 					* create storage volumes in AWS and attach them as iSCSI devices from your on-premises' servers
 						* your gateway stores data you write to these volumes in S3 and retains recently read data in your on-premise storage gateway cache
 					* cached volumes can be between 1GB - 32TB in size
-		* Tape Gateway(VTL): virtual tape library (literally electric tape); used for archiving to S3 Glacier
-			* store data on virtual tape cartridges that you create on your tape gateway
-			* each tape gateway is pre-configured with a media changer and tape drives, which are available to your existing backup applications as iSCSI devices
-			* you add tape cartridges as you need to archive your data
-			* Supported by NetBackup, Backup Exec, and Veeam
+			* Tape Gateway(VTL): virtual tape library (literally electric tape); used for archiving to S3 Glacier
+				* store data on virtual tape cartridges that you create on your tape gateway
+				* each tape gateway is pre-configured with a media changer and tape drives, which are available to your existing backup applications as iSCSI devices
+				* you add tape cartridges as you need to archive your data
+				* Supported by NetBackup, Backup Exec, and Veeam
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2146,9 +2193,22 @@ AWS Lake Formation: a data lake used to globally share data for analytics and ML
 	* lets u share the data in your data lake cross-account, cross-organization, or directly with IAM Principals in another aws account
 	* permissions are enforced across Athena, Quicksight, Redshift Spectrum, EMR, and Glue
 	* Lake Formation and Glue share the same Data Catatlog
-
-
-
+Amazon Q: aws' chatgpt
+Amazon CodeWhisperer: aws' Copilot 
+Amazon Managed Streaming for Apache Kafka (Amazon MSK): fully-managed service that lets u build and run apps that use Apache Kafka to process streaming data
+	* Apache Kafka: a service that processes and analyzes streaming data that operates on a producer/consumer, pub/sub model, ...
+		* ...where a Kafka cluster is the intermediary that organizes the data into Topics to be sent out to consumers
+	* 2 types of Nodes:
+		* Broker Nodes: handles storage and processing of messages
+		* ZooKeeper Nodes(Znodes): manages the overall structure of the cluster
+	* Apache ZooKeeper: the master/control plane node of the cluster
+	* 2 types of clusters:
+		* Provisioned: you manage the Broker Nodes
+		* Serverless: you don't have to manage Nodes and u pay for what you use
+	* has direct integrations with S3 and EventBridge Pipes 
+	* MSK Connect: lets u send the streaming data to and from your Apache Kafka cluster with other systems such as db's, file systems, etc.
+Amazon FSx File Gateway: allows your files to be stored in Amazon FSx Windows File Storage(WFS)
+	* u must have on-premise access to FSx for Windows File Server either through a VPN or through AWS Direct Connect
 
 
 

@@ -26,16 +26,25 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 		* on demand: useful for low costs, flexibility, no commitment, used for apps with unpredictable/spiky/short-term workloads and apps that are being tested on EC2 for the first time
 			* default pricing; you're charged by the hour, so no up-front or long-term payment; best for short-term or unpredictable workloads
 			* linux systems are charged by the second however
-		* reserved: useful for apps with predictable usage, apps that require reserved capacity, users who want to make their payments upfront to reduce costs even further
+			* default on demand instance limit is 20 per Region
+		* reserved instances(RI): useful for apps with predictable usage, apps that require reserved capacity, users who want to make their payments upfront to reduce costs even further
 			* you commit to a 1-3 year contract. Best used for predictable workloads and/or if you want to reserve servers for specific timeframes. Best long-term solution
 			* reserved instances can be sold at the Reserved Instance Marketplace, and can be shared btwn multiple accounts in the same org
 			* EC2 reserved pricing: TERM x CLASS OFFERING x PAYMENT OPTION
 				* 1 or 3-year contracts; the longer the TERM, the greater the savings
 				* all upfront, partial upfront, and no upfront; the greater the PAYMENT OPTION (all upfront being the best), the greater the savings
 				* CLASS OFFERINGs:
-					* standard: 75% savings compared to on-demand pricing, but can't change RI attributes
-					* convertible: 54% savings compared to on-demand pricing, and allows you to change RI attributes
+					* standard: 75% savings compared to on-demand pricing, lets you change RI attributes, and can be bought and sold at the RI Marketplace, but can't be exchanged for a different RI
+					* convertible: 54% savings compared to on-demand pricing, but doesn't let you change RI attributes, in which case u would have to exchange it for a different RI
+						* can't be bought or sold at the RI Marketplace 
 					* scheduled: allows you to reserve servers for specific timeframes
+			* when u purchase a reserved instance, u determine the scope(doesn't affect pricing):
+				* Regional RI: purchased for a Region, does not reserve capacity, RI discount applies to instance usage in any AZ in the Region and within the instance family(regardless of size), ...
+					* ...and u can queue purchases of Regional RIs  
+				* Zonal RI: purchased for a single AZ: reserves capacity in the specified AZ, RI discount applies to instance usage in the specified AZ for the specified instance type and size only, ...
+					* ... and u can't queue purchases of Zonal RIs 
+			* you are limited to purchasing 20 Regional RIs and 20 Zonal RIs per month
+				* u can't exceed your on demand instance limit by buying more Regional RI's, but you CAN with Zonal RIs as long as the on demand instances match the specs of your Zonal RIs 
 		* spot: useful for apps that have flexible start and end times, apps that don't require a lot of power to run, and when you urgently need more computing power immediately
 			* it's AWS trying to give discounts for idle servers they don't use. 90% savings compared to on-demand pricing, so best savings solution, but they can be terminated at any time
 			* spot instances are designed for small applications and/or have flexible start and end times
@@ -44,6 +53,8 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 			* can be purchased on-demand, which gets charged hourly
 			* only 70% savings compared to on-demand, so most expensive, but the trade-off is you get a single tenant deployment as opposed to a multi-tenant one
 	* you can apply roles to EC2 instances
+	* Capacity Reservations: lets you reserve a specific instance type/family of EC2s for a specific Region and AZ
+		* is charged at the instance type's on demand rate, whether an instance is running or not
 	* EC2 auto recovery: used to automatically recover your EC2 instances when CloudWatch detects a problem with that EC2 server; like if it's broken or something 
 	* factors that impact the price paid for an EC2 instance:
 		* the instance type
@@ -523,15 +534,45 @@ SNS: used for sending notifications that are triggered by AWS services, whereas 
 always design for failure: meaning redundantly duplicate stuff across multiple availability zones
 Route53: how you get and manage domains, domain names, and domain traffic; Route53 is global just like IAM and S3; also use it to reroute network traffic to other IP's
 	* DNS is how you use domain names to look up IP addresses 
-Amazon Neptune: a Graph Database
+Amazon Neptune: a Graph Database; supports multi-AZ
+	* split into 3 offerings:
+		* Amazon Neptune Database: can use Gremlin, SPARQL, or OpenCypher
+		* Amazon Neptune Analytics: load data from a Neptune database or from S3 and perform algorithms like page rank and shortest path; is run using an Apache Spark cluster under-the-hood
+		* Amazon Neptune ML: also uses Graph Neural Networks(GNN)
+	* 2 types:
+		* Neptune Provisioned: u choose the instance type
+		* Neptune Serverless: u set the min and max capacity measured in Neptune Capacity Units(NCUs)
+	* 2 storage configs:
+		* Neptune I/O Optimized: increased I/O at an additional cost
+		* Neptune Standard: 25% cheaper than I/O Optimized
+	* Neptune Bulk Loader: used to import large amounts of data
+	* Gremlin: SQL, but for Graph Databases
+		* designed for Write Once, Run Anywhere(WORA)
+		* can be evaluated as both OLTP and OLAP
+		* Gremlin Host Language Embedding: lets u embed Gremlin with whatever programming language u want
+	* OpenCypher: another SQL, but for Graph Databases; easier to use than Gremlin, but Gremlin is more proficient
 AWS systems manager: the HQ of where you control your entire AWS infrastructure as well as manage operational and automative tasks across all your AWS resources (databases + servers)
 DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relational database system
 	* DynamoDB is also scalable, can be used in multiple AZ's, but you wouldn't use DynamoDB if you got complex queries like JOINs
 	* automatically scales to increases in throughput capacity and offers extremely low latency
 Global Tables: DynamoDB replication service that automatically replicates data across multiple regions globally, thus offering low latency to global users
 	* good for big, global applications
-DAX: (DynamoDB Accelerator): in-memory cache for DynamoDB which delivers 10x performance improvement from milliseconds to microseconds; fully-managed and highly available 
+DAX: (DynamoDB Accelerator): in-memory cache for DynamoDB which delivers 10x performance improvement from milliseconds to microseconds; fully-managed and highly available
+document store: NoSQL db that stores documents (usually XML or JSON)
 DocumentDB: NoSQL document database, mongoDB-compatible
+	* mongoDB: document database that stores JSON-like documents called BSON, which is a binary representation of JSON, which is meant to be faster and take up less storage
+		* can be used as a file system called: GridFS
+	* 2 Cluster types:
+		* Instance based Cluster: manage your instances directly choosing instance type
+		* Elastic Cluster: clusters automatically scale, you choose vCPU and # of instances per Shard
+	* storage volumes grows in increments of 10GB up to a max of 128TB
+	* can create up to 15 replicas
+	* continuously monitors the health of your cluster and automatically restarts failed instances
+	* failover will automatically occur to up to 15 replicas in other AZs
+	* backup is turned on by default(can't be turned off) with a retention period btwn 1-35 days
+	* has Performance Insights just like RDS
+	* has in-transit and at-rest encryption
+	* u can only connect to DocumentDB via TLS
 Aurora: relational database; database is fully managed; Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
 	* Aurora is scalable, can be used in multiple AZ's, and you would use Aurora if you got complex queries like JOINs 
 Aurora Serverless: same as Aurora, but only runs when you need it
