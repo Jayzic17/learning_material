@@ -421,7 +421,7 @@ Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web
 Amazon Guard Duty: an IDS/IPS that uses machine learning to analyze your CloudTrail, VPC, and DNS logs; will alert you of findings and you can automate incident responses to those findings
 	* uses machine-learning that auto detects anomalies and 3rd-party data to protect your account and alerts you; free 30-day trial
 	* GuardDuty gets its data from CloudTrail event logs, VPC Flow Logs, and DNS logs
-IDS/IPS: Intrusion Detection System and Intrusion Protection System
+	* IDS/IPS: Intrusion Detection System and Intrusion Protection System
 Key Management Service: (KMS) lets you create and manage encryption keys; multi-tenant HSM; uses envelope encryption; a lot of AWS services allow you to encrypt your data with KMS
 	* regional; manages your keys for encryption and decryption for S3 objects; KMS is on shared physical hardware (multi-tenant)
 HSM: hardware security module; specific type of hardware for storing encryption keys; extremely secure at AWS data centers; stored in memory, so there's never a write to disk
