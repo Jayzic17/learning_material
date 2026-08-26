@@ -68,7 +68,7 @@ SSM: simple sessions manager; it's what you use to start, record, and log all us
 AMI: amazon machine image; disk image copy of your server
 auto-scaling groups: allows you to increase or decrease the number of servers automatically
 elastic load balancer: allows you manage the load traffic across all of your servers
-	* load balancers come in 3 different flavors:
+	* load balancers come in 4 different flavors:
 		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
 		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games
 		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
@@ -129,7 +129,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 				* placing Object Locks
 				* placing Object Legal Holds
 			* u need to supply the Batch Operation with a list of objects to perform the operation on, either as a csv or S3 Inventory report
-		* S3 Inventory: takes inventory of objects in an S3 bucket on a repeating schedule, so that you ahve an audit history of object changes
+		* S3 Inventory: takes inventory of objects in an S3 bucket on a repeating schedule, so that you have an audit history of object changes
 			* S3 will output the inventory report into another S3 bucket
 			* can perform it daily and get the inventory report within 48 hours, or weekly and get the 1st one within 48 hours, and all other ones every Sunday
 		* S3 Event Notifications: allows your bucket to notify other aws services about stuff that happens in your S3 (very powerful)
@@ -165,7 +165,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 	* Cross-Region Replication: allows you to have duplicative buckets in multiple regions
 	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
 		* it takes 20 minutes before it can begin to take affect once enabled on a bucket
-		* gets transfered using the https://s3-accelerate.amazonaws.com(IPv4) or https://s3-accelerate.dualstack.amazonaws.com(IPv4/IPv6)
+		* gets transfered using the https://s3-accelerate.amazonaws.com(IPv4) or https://s3-accelerate.dualstack.amazonaws.com(IPv4/IPv6) DNS Endpoints
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -188,7 +188,7 @@ RDS: fully managed relational database service; allows you to setup relational d
 		* PostgreSQL
 		* Aurora
 		* MariaDB
-Lambda: server-less applications/functions that you perform w/o provisioning servers; they last 15 minutes! You can also add triggers for when you want them to run; you pay only for the compute time they consume
+Lambda: server-less applications/functions that you perform w/o provisioning servers; they last at most 15 minutes! You can also add triggers for when you want them to run; you pay only for the compute time they consume
 	* Lambda supports: Node.js, C#, Java, Go, Python, PowerShell; essentially it can support any programming language using an API
 	* Lambda supports version control (you can pull up old versions of your code) and it scales out automatically
 	* 2 ways Lambda is priced:
@@ -238,7 +238,7 @@ TCO calculator: total cost of ownership; provides reports and presentations that
 	* you're mostly considering the physical maintenance and labor of your on-premise compared with how much you will save if you switch to AWS
 AWS cost and usage report: generates a spreadsheet that gives you the most granular data about your AWS costs and usage
 	* you can put the spreadsheet you get from AWS Cost and Usage Report into Athena and query your database with it, use QuickSight to turn it into graphs, or put it into an S3 bucket
-Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all server less and you pay per query you make
+Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all serverless and you pay per query you make
 	* you can use Athena to generate reports based on data stored in S3 and analyze cost and usage reports by querying them
 	* Workgroups: you can save queries to Workgroups, which u can then grant access to for other users
 	* Apache Spark on Athena: lets u run data analytics on the data you query from S3 by using Apache Spark to analyze the data
@@ -309,7 +309,7 @@ Elastic Beanstalk: allows you to deploy and scale web applications by setting up
 CodeDeploy: allows you to deploy code to your on-premise architecture and/or EC2 instances
 	* fully managed deployment service that automates software deployments to compute services
 OpsWorks: allows you to programmatically configure how servers are configured, managed, and deployed; uses managed instances of Chef and Puppet (configuration management tools)
-configuration management tools: DevOps tools that automate the process of making code changes, deploying them, and tracking them
+	* configuration management tools: DevOps tools that automate the process of making code changes, deploying them, and tracking them
 codePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
 codeCommit: fully managed source control service that hosts secure Git-based repos
 codeBuild: fully managed build server: it compiles your source code, runs tests, and makes software packages
@@ -429,7 +429,7 @@ HSM: hardware security module; specific type of hardware for storing encryption 
 Envelope Encryption: encrypting your encryption key with a master key; pretty much just an additional layer of security
 Amazon Macie: fully managed machine learning service that monitors your S3 bucket usage by analyzing your CloudTrail logs to detect and alert you on unauthorized access or potential data leaks
 	* security service that uses machine learning to identify whether stuff in your S3 contains PII to prevent ID theft; gives you dashboards, reporting, and alerts on those discoveries
-PII: Personally Identifiable Information; personal data used to ID someone
+	* PII: Personally Identifiable Information; personal data used to ID someone
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
@@ -538,7 +538,7 @@ Amazon Neptune: a Graph Database; supports multi-AZ
 	* split into 3 offerings:
 		* Amazon Neptune Database: can use Gremlin, SPARQL, or OpenCypher
 		* Amazon Neptune Analytics: load data from a Neptune database or from S3 and perform algorithms like page rank and shortest path; is run using an Apache Spark cluster under-the-hood
-		* Amazon Neptune ML: also uses Graph Neural Networks(GNN)
+		* Amazon Neptune ML: ML, but also uses Graph Neural Networks(GNN)
 	* 2 types:
 		* Neptune Provisioned: u choose the instance type
 		* Neptune Serverless: u set the min and max capacity measured in Neptune Capacity Units(NCUs)
