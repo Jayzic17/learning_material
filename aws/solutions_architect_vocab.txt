@@ -242,7 +242,7 @@ S3: secure, durable, highly scalable object storage
 EC2:
 	* types of processors offered for EC2 instances:
 		* Intel, AMD, NVIDIA, etc.
-		* AWS Graviton: aws' own processes that use ARM-based architecture
+		* AWS Graviton: aws' own processer that use ARM-based architecture
 		* AWS Inferentia: aws processor designed to run high-performance ML for cheap
 		* AWS Trainium: aws processor designed to train ML models for cheap
 	* Termination Protection: when enabled, it is impossible for you to terminate your EC2 instances; prevents accidental deletion; is disabled by default
@@ -305,7 +305,7 @@ EC2:
 		* Memory Optimized (R4, R5a, etc.): good for workloads that process large data sets in memory; EX: in-memory caches, in-memory databases, real time big data analytics
 		* Accelerated Computing(GPU) Optimized (P2, G4ad, etc.): hardware accelerators, or co-processors, used to perform float calculations, graphics processing, etc. more efficiently than software running on CPU's
 			* EX: machine-learning, speech recognition
-		* Storage Optimized (I3 D3en, etc.): used for high sequential read and write access to very large data sets in storage; EX: data warehousing, NoSQL, etc.
+		* Storage Optimized (I3, D3en, etc.): used for high sequential read and write access to very large data sets in storage; EX: data warehousing, NoSQL, etc.
 	* EC2 Placement Groups: lets you choose the logical placement of your instances to optimize for communication, performance, or durability; they are free and totally optional
 		* name for the Placement Group must be unique across your AWS account
 		* you can't merge Placement Groups
@@ -325,26 +325,9 @@ EC2:
 	* ParallelCluster: open source cluster management and deployment tool; uses a text file to model and provision all the resources needed for you HPC apps in an automated and secure way
 		* can automate the creation of VPC's, subnets, cluster types, and instance types
 		* can use it to create clusters with EFA to get OS-bypass capabilities
-	* AWS WAF: web application firewall that lets you monitor HTTP(S) request to and from CloudFront, ALB, and API Gateway; also lets you control access to your content; works at Layer 7
-		* can configure what IP addresses are allowed to make requests or things like what query string params need to be passed for the request to be allowed
-			* then either ALB, CloudFront, or API Gateway will either allow this content, or throw a HTTP 403 status code
-		* in general, WAF allows 3 different behaviors:
-			* allow all requests except for the ones you specify
-			* block all requests except the ones you specify
-			* count the requests that match the properties you specify
-		* Regular Rules: can use characteristics of web requests as part of conditions that you specify for an added layer of security
-			* EX: IP address origin, country that the request came from, values in request headers, using regex on strings that appear in requests (EX: SQL injection, XSS), and length of request
-		* Rate-Based Rules: same as Regular Rules, but also tracks the rate of requests that IP's are sending
-			* like if an IP is sending 100's of requests/second, and triggers an action on those IP's when request rates go over a certain limit
-			* you can set the limit as a number of requests per 5-minute timespan
-			* you'd want this for putting a temporary block on IP's that are sending excessive requests 
-		* AWS Firewall Manager: lets you centrally configure and manage firewall rules across your AWS Organization
-			* lets you deploy WAF rules for your ALB, API Gateway, and CloudFront distributions
-			* also lets you create AWS Shield Advanced protection policies on your ALB's, ELB Classic's, Elastic IP's(EIP), and CloudFront distributions
-			* also lets you configure security groups for EC2's and ENI's
 	* EC2 Instance Profile: a reference to an IAM Role that will be passed and assumed by the EC2 instance when it starts up, as opposed to just embedding your AWS credentials in code
 		* when you select an IAM Role when launching an EC2 instance, AWS automatically creates the Instance Profile for you
-		* you can assigned the Instance Profile to an already-running instance if it didn't already have one on startup, but in that case a hard reboot is required for the change to take affect]
+		* you can assigned the Instance Profile to an already-running instance if it didn't already have one on startup, but in that case a hard reboot is required for the change to take affect
 		* only a single IAM Role can be associated w/ an Instance Profile
 	* EC2 User Data: a script that will automatically run whenever launching an EC2 instance; used to install packages, apply updates, etc.
 	* EC2 Metadata: metadata relating to your EC2 instances
@@ -354,7 +337,7 @@ EC2:
 			* turn off the metadata endpoint itself
 	* AMI: lets you turn your EC2 instances into AMIs, allowing you to create copies of your servers, whether running or stopped
 		* an AMI contains a template for the root volume for the instance (EBS Snapshot/Instance Store Template), launch permissions (which AWS accounts can use the AMI to launch instances), and...
-			* a mapping that specifies the volumes to attach to the instance when it's launched
+			* ...a mapping that specifies the volumes to attach to the instance when it's launched
 		* Launch Templates: is what you use to manage revisions to your AMIs, so like v1.0, then v1.1, etc...
 		* AMIs are region specific
 		* Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
@@ -364,7 +347,7 @@ EC2:
 		* you can also copy your AMIs, so since AMIs are region specific, if you want to use your AMI in another region, you have to copy it then change the destination region
 		* AMIs have ID's that vary depending on what types of options they offer and what region they are in
 		* Systems Manager Automation: lets you routinely patch your AMIs w/ security updates and bake those into your AMIs
-		* a lot of AMIs offered on AWS Marketplace; the most popular ones being security-hardened AMIs
+		* a lot of AMIs are offered on AWS Marketplace; the most popular ones being security-hardened AMIs
 		* AMIs have 2 boot modes:
 			* Legacy BIOS: doesn't support secure boot 
 			* UEFI BIOS: modern; faster; supports secure boot
@@ -387,6 +370,23 @@ EC2:
 			* Root device volume:
 				* Instance Store
 				* EBS volumes
+AWS WAF: web application firewall that lets you monitor HTTP(S) request to and from CloudFront, ALB, and API Gateway; also lets you control access to your content; works at Layer 7
+	* can configure what IP addresses are allowed to make requests or things like what query string params need to be passed for the request to be allowed
+		* then either ALB, CloudFront, or API Gateway will either allow this content, or throw a HTTP 403 status code
+	* in general, WAF allows 3 different behaviors:
+		* allow all requests except for the ones you specify
+		* block all requests except the ones you specify
+		* count the requests that match the properties you specify
+	* Regular Rules: can use characteristics of web requests as part of conditions that you specify for an added layer of security
+		* EX: IP address origin, country that the request came from, values in request headers, using regex on strings that appear in requests (EX: SQL injection, XSS), and length of request
+	* Rate-Based Rules: same as Regular Rules, but also tracks the rate of requests that IP's are sending
+		* like if an IP is sending 100's of requests/second, and triggers an action on those IP's when request rates go over a certain limit
+		* you can set the limit as a number of requests per 5-minute timespan
+		* you'd want this for putting a temporary block on IP's that are sending excessive requests 
+	* AWS Firewall Manager: lets you centrally configure and manage firewall rules across your AWS Organization
+		* lets you deploy WAF rules for your ALB, API Gateway, and CloudFront distributions
+		* also lets you create AWS Shield Advanced protection policies on your ALB's, ELB Classic's, Elastic IP's(EIP), and CloudFront distributions
+		* also lets you configure security groups for EC2's and ENI's
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -447,8 +447,7 @@ CloudWatch: monitors your cloud
 	* CloudWatch Metrics: gives you visual graphs based on CloudWatch Logs
 		* you can use the CLI or SDK to make custom metrics
 		* if you make a custom metric, you can set it to have High Resolution, meaning more granular data; EX: going from tracking per minute(Standard Resolution) to per second!
-		* Host Level Metrics: 
-	*  EventBridge (a.k.a CloudWatch Events): an event bus used to trigger events based on a condition or a schedule
+	* EventBridge (a.k.a CloudWatch Events): an event bus used to trigger events based on a condition or a schedule
 		* EventBridge as an event bus itself is made up of a collection of 3 event buses:
 			* Default Event Bus: the default event bus for the entire aws Account
 			* Custom Event Bus: scoped to multiple other aws Accounts
@@ -476,7 +475,7 @@ CloudWatch: monitors your cloud
 			* account
 			* time
 			* region
-			* resources: collection of ARNS
+			* resources: collection of ARNs
 			* detail: json object that defines the Event. Can contain up to 50 key/value pairs
 		* you can use cron expressions and rate expressions(same exact thing as cron expressions)
 		* Event Patterns: allows you to filter Events
@@ -540,7 +539,7 @@ RDS: scalable, managed(not fully), relational database service
 		* when using MySQL and MariaDB, their replicas are writable and logically replicated, whereas the rest are physically replicated and aren't writable
 		* u can perform backups for all RDS databases(5) except SQL Server
 		* u can perform parallel replication for all RDS databases(5) except Postgres
-	* DB Subet Group: a group of Subnets u designate as the ones that can be used by your RDS instances
+	* DB Subnet Group: a group of Subnets u designate as the ones that can be used by your RDS instances
 		* each DB Subet Group should have subnets in at least 2 AZs in a given Region
 		* for an RDS instance to be Public, all subnets in the DB Subnet Group MUST be public
 	* Multi-AZ RDS vs. Read Replicas RDS:
@@ -566,7 +565,7 @@ RDS: scalable, managed(not fully), relational database service
 	* RDS Performance Insights: helps u identify bottlenecks and performance issues with your RDS instances
 		* is turned on by default and has a retention period of 1 week of performance data
 		* u can change it to 2 years at an additional cost
-	* RDS Custom: lets u directly manage aspects of RDS instead of AWS in cases where u require 3rd part applications or customizations for your db's that wouldn't be allowed by aws otherwise
+	* RDS Custom: lets u directly manage aspects of RDS instead of AWS in cases where u require 3rd party applications or customizations for your db's that wouldn't be allowed by aws otherwise
 		* works with Microsoft SQL Server and Oracle
 	* RDS Proxy: creates a reserved pool of connections to your RDS instance that are reserved for Lambda functions to reuse 
 		* this is because Lambda always CREATES new connections when executed and never reuses previous connections, which if left unchecked can quickly exhaust your RDS instances connection limit
@@ -580,7 +579,7 @@ RDS: scalable, managed(not fully), relational database service
 		* works with AWS Directory Service for Microsoft Active Directory and your own on-premise Active Directory
 		* can be used with MySQL, Postgres, Oracle, and Microsoft SQL Server
 		* Postgres and Microsoft SQL Server support 1 and 2-way forest trust relationships
-		* Oracle supports 1 and 2y-ay external and forest trust relationships
+		* Oracle supports 1 and 2-way external and forest trust relationships
 	* AWS Secrets Manager can manage an RDS instance's username and password and rotate it every 7 days(default)
 		* does not work with Microsoft SQL Server, RDS instances w/ blue/green deployments, or RDS Custom
 		* your apps need to be able to be programmatically configured to access the creds from Secrets Manager
@@ -593,7 +592,7 @@ RDS: scalable, managed(not fully), relational database service
 	* the --publicly-accessible option from the AWS CLI/SDK lets the DNS Endpoint for your RDS instance instanly resolve to the private IP of your RDS instance for traffic coming from outside the VPC of the RDS instance
 		* this doesn't override Security Group DENY rules however, meaning u still got to go into your Security Group and update that as well
 	* public access RDS connection options:
-		* use a DB IDE tool
+		* use a db IDE tool
 		* use AWS CloudShell: the browser-based shell/terminal u can access from the aws console to run CLI/SDK commands
 		* use a db client from your local machine's terminal
 		* programmatically connect to it using a web server
@@ -667,7 +666,7 @@ DynamoDB: fully-managed key-value and document store DB; NoSQL; guarantees consi
 			* ...DynamoDB within your VPC without it being accessible from the public Internet
 	* is fully-managed, multi-AZ, durable, has in-memory caching, and can use backups and restores
 	* works at whatever capacity you need without you tweaking anything
-	* Table Structure: rows = items, cells = attributes, and then a Primary Key contains a Partition Key and a Sort Key, which are any 2 columns that uniquely identify an Item
+	* Table Structure: rows = items, cells = attributes, and then a Primary Key contains a Partition Key and a Sort Key, which are 2 columns that uniquely identify an Item
 		* the Primary Key cannot be changed later
 		* Sort Key: determines how data should be sorted on a Partition
 		* Partitions: partitioning your big Tables into smaller Tables for speeding up reads; so when a Table gets too big, the Items are sent to smaller Tables, and the Partition Key tells u...
@@ -730,7 +729,7 @@ Route53: more synergies with AWS services when you register your domain through 
 			* Route53 automatically monitors the health of the end-points for you, so it will make the switch for you, assuming this routing policy is currently in use
 		* Geolocation Routing: route traffic based on the location of the users; good for when you want to direct them to servers that have the content in their language of origin
 		* Geo-proximity Routing: route traffic based on the location of your resources AND users; optionally shift traffic from resources in one location to resources in another location
-			* use a bias value to route more or less traffic per a specific resource; bias values expand or shrink the size of the geographic region from which traffic is routed to
+			* u set a bias value for each geographic region to route more or less traffic per a specific resource; bias values expand or shrink the size of the geographic region
 			* You must use Route53 Traffic Flow in order to use geo-proximity routing policies, unlike the others where you just write records
 		* Multi-value Answer Routing: respond to a single DNS query with up to 8 healthy records, which are selected at random 
 			* meaning traffic is routed to multiple IP addresses in 1 request
@@ -786,7 +785,7 @@ VPC:
 		* the size of a NAT instance determines how much traffic can be handled
 		* you can achieve high availability by using Autoscaling Groups, multiple subnets in different AZs, and automate failover
 		* NAT Instances are always behind a Security Group
-	* NAT Gateway: is a managed service which launches redundant NAT instances within the selected AZ
+	* NAT Gateway: is a managed service which launches redundant NAT Instances within the selected AZ
 		* Private NAT Gateway: instances in private subnets can connect to stuff outside their current VPC, but stuff outside the VPC can't connect to it
 		* Public NAT Gateway(default): instances in private subnets can connect to the Internet, but stuff from the Internet can't connect to it
 		* they can survive failure of EC2 instances unlike NAT instances
@@ -846,7 +845,7 @@ VPC:
 		* so for example if you had multiple sites each with it's own VPN connection, you would use this to connect those VPN connections together
 		* easy to manage; low cost
 		* it operates on the public internet, but all traffic btwn the Customer Gateway and VPN CloudHub is encrypted because of VPN's
-			* Customer Gateway refers to the gateway on your on-prem network
+			* Customer Gateway just refers to the gateway on your on-prem network
 	* Network cost best practices to save money:
 		* use private IP's over public ones to save money, cause it utilizes the AWS Backbone Network
 		* ideally, grouping all EC2's in the same AZ and using private IP's is the cheapest solution (essentially cost-free)
