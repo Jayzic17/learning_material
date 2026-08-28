@@ -83,6 +83,7 @@
 	* you can setup password policies in IAM such as minimum password requirements, rotating passwords, etc.
 	* you're only allowed to have 2 Access Keys per User in IAM
 	* new IAM accounts have no permissions by default until granted
+	* IAM Certificate Store: a place where you can upload 3rd party certificates
 	* IAM Managed Policies: policies managed by AWS that you cannot edit
 	* IAM Customer Managed Policies: policies created by you that you can edit
 	* IAM Access Analyzer: analyzes any aws resource policy (EX: S3 buckets) to help identify and mitigate potential security risks
@@ -166,10 +167,13 @@ S3: secure, durable, highly scalable object storage
 		* can take advantage of this to optimize performance in S3 by spreading your reads across multiple different prefixes for faster requests
 	* speed limits with KMS:
 		* uploading/downloading objects counts towards the KMS quota, which is hard-caped based on the region: (EX: 5,500, 10,000, 30,000 requests/sec), and you can't increase this quota limit
+	* S3 Server Access Logging: gives you detailed logs about requests made to S3 buckets and S3 objects
 	* Multipart Uploads: recommended for objects over 100MB and required for those over 5GB; object is split into parts and uploaded in parallel
 	* S3 Byte-Range Fetches: download objects in parallel by specifying byte ranges; also recommended for big files; good for if you just want a piece of the file if you like
 	* S3 Select: lets your applications pull only a subset of data from S3 objects as opposed to the whole thing; uses SQL to do this; increases performance by as much as 400%; up to 80% cheaper
 		* supported for Storage Classes S3 Glacier Instant Retrieval and above
+		* S3 Select takes the associated bucket name and object key of the object you want to query with SQL and retrieves that data
+		* the objects being queried have to be in CSV, JSON, or Apache Parquet format
 	* Glacier Select: same as S3 Select, but for Glacier; data stays in Glacier, you query the data directly from Glacier using simple SQL; data never leaves Glacier
 	* 3 different ways to share S3 buckets across AWS accounts:
 		* using Bucket Policies in conjunction with IAM; only grants programmatic access
@@ -223,7 +227,7 @@ S3: secure, durable, highly scalable object storage
 		* Glacier Deep Archive
 	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in aws; all S3 Managed keys are handled by Amazon
 		* Server Side Encryption (SSE) 4 types:
-			* SSE-S3 (a.k.a SSE-AES): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
+			* SSE-S3 (a.k.a SSE-AES; default): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
 				* by default, SSE-S3 is turned on for all newly-created S3 objects, free
 			* SSE-KMS: you manage the keys, uses KMS' envelope encryption
 				* KMS keys must be in the same region as the S3 bucket
@@ -292,7 +296,8 @@ EC2:
 		* the instance RAM must be less than 150GB
 		* instances can't be hibernated for more than 60 days
 		* supports the C3-5, M3-5, and R3-5 instance families (so On-Demand, as well as Reserved instances)
-		* available for windows, linux, and ubuntu 
+		* available for windows, linux, and ubuntu
+		* when an EC2 is in a hibernated state, pricing is determined only by the Elastic IP's and EBS volumes attached to that instance, NOT the amount of time it's hibernating
 		* when you start your instance out of hibernation, the EBS root volume is restored to its previous state, RAM contents are reloaded, instance processes are resumed,...
 			* ...and previously attached volumes are reattached and the instance retains its instance ID
 		* useful for long-running processes and services that take a long time to initialize
@@ -306,6 +311,8 @@ EC2:
 		* Accelerated Computing(GPU) Optimized (P2, G4ad, etc.): hardware accelerators, or co-processors, used to perform float calculations, graphics processing, etc. more efficiently than software running on CPU's
 			* EX: machine-learning, speech recognition
 		* Storage Optimized (I3, D3en, etc.): used for high sequential read and write access to very large data sets in storage; EX: data warehousing, NoSQL, etc.
+	* Nitro-based EC2 Instances: built on the AWS Nitro System platform that pumps out the latest generation of EC2's, enabling AWS to innovate faster, further reduce customer cost, and deliver additional security and instance types
+		* good for HPC workloads in I/O, compute, memory, storage, and networking
 	* EC2 Placement Groups: lets you choose the logical placement of your instances to optimize for communication, performance, or durability; they are free and totally optional
 		* name for the Placement Group must be unique across your AWS account
 		* you can't merge Placement Groups
@@ -395,6 +402,7 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 	* EBS root volumes of your default AMI's can be encrypted using 3rd party tools, using the AWS console or API, or it can be done when you're creating your AMI's
 		* additional volumes can be encrypted as well
 	* you can change EBS volume sizes and storage types on the fly(live); this isn't done automatically however
+		* EBS supports live configuration changes while in production, meaning you can tweak volume type, size, and IOPS capacity w/o interruptions
 	* EBS volumes will always be in the same AZ as its associative EC2 instance
 	* Instance Store: similar to EBS, but they're temporary, created from a template stored in S3, can only terminate instances (can't stop them), and data will be lost if it...
 		* ...fails a health check or is terminated
@@ -411,21 +419,24 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 		* if you forgot to do it when you were creating your EC2, just take a Snapshot of the root device volume, create a copy of the Snapshot and select the "encrypt" option,...
 			* ...create an AMI using the encrypted Snapshot, and then use that AMI to create an EC2 instance
 	* SSD: really high I/O; can be used as a boot volume
-		* General Purpose SSD(gp2): good for general usage w/o specific requirements; good for web apps and most workloads
-		* General Purpose SSD(gp3): up to 20% lower cost per GB than gp2
-		* Provisioned IOPS SSD(io1): when you require really fast IO and throughput; use when IOPS >= 16,000 || throughput >= 250 MB/s; use on mission-critical low latency/high throughput workloads
+		* General Purpose SSD(gp2): good for general usage w/o specific requirements; good for web apps and most workloads; IOPS 16,000; throughput 250MB/s
+		* General Purpose SSD(gp3): up to 20% lower cost per GB than gp2; IOPS 16,000; throughput 250MB/s
+		* Provisioned IOPS SSD(io1): when you require really fast IO and throughput; use when IOPS >= 16,000 || throughput >= 500 MB/s; use on mission-critical low latency/high throughput workloads
+			* calculating optimal configuration of IOPS and queue length for Provisioned IOPS SSD volumes: maintain a ratio of 50:1
 		* io2 Block Express (the new io2): higher throughput and IOPS than io1; supports larger storage capacity
 	* HDD: good for long continuous throughput of data, but really bad with a lot of very small reads and writes (think about the writing arm on the record); can't be used as a boot volume
-		* Throughput Optimized HDD(st1): drive optimized for fast throughput for intensive workloads that are frequently accessed, so data, data warehouses, log processing
-		* Cold HDD(sc1): lowest cost HDD volume for infrequently-accessed workloads (e.g File Servers), storage	
+		* Throughput Optimized HDD(st1): drive optimized for fast throughput for intensive workloads that are frequently accessed, so data, data warehouses, log processing; IOPS 500; throughput 500MB/s
+		* Cold HDD(sc1): lowest cost HDD volume for infrequently-accessed workloads (e.g File Servers), storage; IOPS 250; throughput 250MB/s
 	* EBS Magnetic(standard): legacy generation (cassettes containing magnetic tape or magnetic disks); use for archival storage; HIGHLY durable; CAN be used as a boot volume if we're talking about magnetic disks
 	* to move EBS from one AZ to another: take a snapshot of the volume, create an AMI using the snapshot, launch the EC2 instances in the new AZ
 	* to move EBS from one Region to another: snapshot, AMI, copy the AMI to another region, launch the EC2 instances in the new Region using to copied AMI
 	* EBS Snapshots exist in S3; you can take Snapshots while an instance is still running, but if it's a root volume the EC2 should be stopped before taking the snapshot
 		* only changes made since the last Snapshot are moved to S3
+		* the Snapshots are managed by AWS, so you actually can't see the Snapshots in S3
 	* IOPS: input/output per second; how fast are the reads and writes?
 	* throughput: refers to the speed of the data transfer to and from storage; EX: in the analogy of water flowing through a pipe, throughput is the water
 	* bandwidth: the highest possible data transfer speed along a network; EX: in the analogy of water flowing through a pipe, bandwidth is the pipe
+	* Data Lifecycle Manager (DLM): A feature of EBS that lets you automate the creation, retention, and deletion of snapshots taken to back up your EBS instances
 CloudWatch: monitors your cloud
 	* monitors: EC2's, Autoscaling Groups, ELB's, Route53 Health Checks, EBS volumes, Storage Gateways, and CloudFront
 	* will monitor EC2's every 5 minutes by default
@@ -433,6 +444,7 @@ CloudWatch: monitors your cloud
 		* Detailed Monitoring: you can turn this on to monitor EC2's at intervals as low as 1 minute
 	* can make dashboards for metrics, alarms for alerting you when a threshold is met, events for when you need to respond to state changes in your aws, and logs for logging stuff
 	* CloudWatch Logs: monitor, store, and access your log files
+		* by default logs are retained forever, but u can adjust the retention period from 1 day to 10 years
 		* Log Group: collection of Log Streams that share the same retention, monitoring, and access control settings; logs must belong to a Log Group
 		* Log Stream: a sequence of Log Events that share the same source. Each separate source of logs in CloudWatch Logs makes up a separate Log Stream
 		* Log Events: each log/row in the Log Stream (literally just a log...)
@@ -443,7 +455,37 @@ CloudWatch: monitors your cloud
 			* can stream CloudTrail event data to a CloudWatch Log Group
 			* can encrypt logs using KMS
 			* can filter logs using CloudWatch Insights
-		* by default logs are retained forever, but u can adjust the retention period from 1 day to 10 years
+		* CloudWatch Insights: lets you interactively search and analyze your log data in CloudWatch Logs
+			* lets you perform queries on CloudWatch Logs
+			* has it's own purpose-built query language with some sample queries included
+			* a single query can query up to 20 Log Groups and queries have a 15 minute timeout
+			* Discovered Fields: CloudWatch Insights will look at ur logs and generate fields for u to use in your queries base on the fields it finds in ur logs
+				* by default it will always generate these 5 system fields:
+					* @message
+					* @timestamps
+					* @ingestionTime: the time when the log was received by CloudWatch
+					* @logStream: the name of the Log Stream that the log was added to 
+					* @log: a Log Group identifier in the format of: <account_id>:<log_group_name>
+				* also automatically discovers fields in logs from aws services such as:
+					* VPC Flow Logs
+					* Route53
+					* Lambda
+					* CloudTrail
+		* CloudWatch Agent: lets you send logs from your EC2 to a CloudWatch Log Group
+			* can be installed using SSM
+			* you must attach the CloudWatchAgentServerRole IAM Role to the EC2 u want to install the agent on
+			* these are the host level metrics u get from CloudWatch by default when u don't install the CloudWatch Agent:
+				* CPU usage
+				* Network usage
+				* Disk reads and usage
+				* hypervisor and EC2 instance status
+			* advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the CloudWatch Agent for:
+				* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
+				* you can set up advanced/custom metrics by installing the CloudWatch Agent
+		* Unified CloudWatch Logs Agent: lets you collect logs from EC2's and on-premise servers and send them into CloudWatch Logs when you install this agent
+			* lets you collect not just logs, but also advanced metrics, which makes it better than CloudWatch Agent which only collects advanced metrics
+			* enables the collection of logs from servers running Windows Server
+			* better performance than CloudWatch Agent
 	* CloudWatch Metrics: gives you visual graphs based on CloudWatch Logs
 		* you can use the CLI or SDK to make custom metrics
 		* if you make a custom metric, you can set it to have High Resolution, meaning more granular data; EX: going from tracking per minute(Standard Resolution) to per second!
@@ -509,6 +551,7 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	* FSx for Lustre: fully managed file system optimized for HPC, machine learning, media data processing, and electronic design automation workloads
 		* used for processing big data sets up to 100's of GB/s of throughput, millions of IOPS, and sub-millisecond latencies
 		* integrates natively with S3
+		* is a POSIX-compliant shared file system
 	* FSx for NetApp ONTAP: used when handling petabytes of data
 	* volume is scaled automatically for you
 	* EC2s install the NFSv4.1 client and can then mount the EFS volume for them all to share that storage
@@ -520,6 +563,7 @@ RDS: scalable, managed(not fully), relational database service
 	* runs on virtual machines, but you can't login to these VM's
 	* RDS is not serverless
 	* you can have up to 40 RDS instances per aws account
+	* it also captures transactional logs every 5 minutes and sends them to S3
 	* u define a database identifier for each RDS instance, which forms the beginning of the RDS' DNS hostname, plus an AWS-defined unique identifier
 	* RDS Instance Types:
 		* General-purpose (db.m3, db.m4, etc.)
@@ -531,7 +575,8 @@ RDS: scalable, managed(not fully), relational database service
 		* Optimized Reads (db.r6gd, db.r6id, etc.)
 	* RDS instances use EBS volumes as their storage
 		* RDS won't let u reduce storage size, only increase it. To decrease, you'll have to create a new instance w/ an EBS w/ smaller storage
-	* Multi-AZ is for disaster recovery and high availability, Read Replicas are for performance improvement
+	* RDS Automated Backups: creates a snapshot of the DB instance in question within the backup window you specify once a day
+	* Multi-AZ is for disaster recovery and high availability, Read Replicas are for performance improvement and offloading database reads
 	* Multi-AZ is available to all RDS databases(5) except Aurora
 		* in Multi-AZ, you can force a failover from 1 AZ to another by rebooting the RDS instance
 	* Read Replicas are available to all RDS databases(5) except SQL Server
@@ -545,6 +590,7 @@ RDS: scalable, managed(not fully), relational database service
 	* Multi-AZ RDS vs. Read Replicas RDS:
 		* Multi-AZ's replication is synchronous and highly durable, whereas read replicas' is asynchronous and highly scalable
 		* Multi-AZ has automatic failover, as opposed to read replicas which need the change to be made manually
+			* when the primary db fails in a Multi-AZ RDS deployment, the canonical name record (CNAME) is automatically switched from the primary to the standby instance
 		* only the primary instance in Multi-AZ is active, whereas all of read replica's including the master are active
 		* Multi-AZ always spans 2 AZ's in one region, whereas read replicas can be Multi-AZ, Cross-AZ, and allows you to make replicas of replicas 
 		* database upgrades happen on only the master in Multi-AZ, whereas database upgrades in read replicas are independent from master
@@ -604,6 +650,9 @@ RDS: scalable, managed(not fully), relational database service
 		* using AWS Direct Connect
 		* ...but you CAN'T use CloudShell
 	* Amazon RDS Extended Support: lets you run MySQL, MariaDB, etc. on a major version above what RDS normally allows at most, but for an additional cost
+	* Enhanced Monitoring: a feature of RDS; Enhanced Monitoring metrics are stored in CloudWatch logs for 30 days;
+		* different from CloudWatch metrics, where CloudWatch takes data at the hypervisor layer of the DB, whereas Enhanced Monitoring gathers it from an agent on the DB instance
+		* useful for when you want to see how individual Threads are utilizing the CPU for a DB instance (i.e: OS processes and RDS child processes)
 Domain Name System (DNS): translates domain names to IP addresses, so browsers can find specific Internet sources i.e servers 
 	* it's what uniquely identifies each computer on a network and allows communication between them using Internet Protocol (IP)
 	* comes in 2 different versions: IPv4 and IPv6
@@ -621,8 +670,10 @@ Domain Name System (DNS): translates domain names to IP addresses, so browsers c
 		* a Zone file can contain only one SOA record
 		* SOA records store info about: the name of the server that supplied the data for the Zone, the admin of the Zone, current version of the Zone file, and the default time-to-live for resource records in seconds
 	* Address Records (A Records): A type of DNS Record; allows you to convert the name of a domain directly into an IP address
+	* AAAA Records: same as A Records, but with IPv6 support
 	* Canonical Name Records (CNAME Records): A type of DNS Record; allows you to map one domain name to another domain name
 		* the advantage being that they are unlikely to change, whereas IP addresses dynamically change over time
+		* you can create CNAME records only for subdomains, whereas with A Records you can create records at both the root and sub domains
 	* NameServer Records (NS Records): A type of DNS Record; used by Top-Level Domain servers to direct traffic to the DNS server containing the authoritative DNS records for that domain
 		* typically multiple nameservers are provided for redundancy
 		* EX: if you were managing your DNS records with Route53, the NS Records for your domain name would be pointing at the AWS servers
@@ -633,10 +684,12 @@ Domain Name System (DNS): translates domain names to IP addresses, so browsers c
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DynamoDB: fully-managed key-value and document store DB; NoSQL; guarantees consistent read and writes at any scale
+DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees consistent read and writes at any scale
 	* good for mobile, web, gaming, ad-tech, IoT, and other types of applications
+	* DynamoDB data is stored in JSON format and is good for when data is required to be indexed
 	* stored on SSD storage, which is why it is so fast
 	* spread across 3 AZ's for redundancy
+	* autoscaling is not enabled by default
 	* DynamoDB Accelerator(DAX):
 		* makes it so that developers don't have to manage the caching logic
 		* it's compatible with DynamoDB API calls
@@ -682,6 +735,7 @@ DynamoDB: fully-managed key-value and document store DB; NoSQL; guarantees consi
 		* Eventual Consistent Reads (default): when copies are being updated it's possible to read an inconsistent copy
 		* Strongly Consistent Reads: when copies are being updated you won't be able to read till all copies are updated, guaranteed consistency but with slower reads
 		* all copies of data will be consistent within a second
+	* DynamoDB Streams Kinesis Adapter: lets you integrate Kinesis Streams with DynamoDB
 Database Migration Service (DMS): migrate relational db's, data warehouses, NoSQL db's, etc. to AWS Cloud, btwn on-premise instances through AWS cloud, or bwtn combos of cloud and on-prem instances
 	* DMS is a server in the AWS cloud, so you give it a source and target db and schedule a task that runs on this server to move your data
 	* the source can be on-premise, inside AWS, or even from another cloud provider like Microsoft Azure
@@ -705,6 +759,7 @@ Route53: more synergies with AWS services when you register your domain through 
 	* Alias Records: lets you map traffic to AWS services such as ELB's, CloudFront distributions, or S3 buckets, which are configured as websites; it's DNS functionality that is unique to only AWS
 		* they work like a CNAME record in that you can map 1 DNS name to another DNS name
 			* the difference being that CNAME's can't be used for naked domain names (domain name w/o the "www.")
+	* Non-Alias A Records: A Records that don't resolve to an aws resource
 	* ELB's do not have pre-defined IPv4 addresses; you resolve to them using a DNS name
 	* MX records: they're used for mail
 	* PTR records: the reverse of an A record: it's a way of finding a domain name by looking through a bunch of IP addresses
@@ -753,6 +808,7 @@ Route53: more synergies with AWS services when you register your domain through 
 
 VPC:
 	* you cannot have 1 subnet spread across multiple AZ's
+	* you can expand an existing VPC's range by adding a secondary CIDR block to your current VPC, so long as they don't overlap
 	* can make a VPN connection btwn your corporate datacenter and your VPC to leverage aws cloud as an extension of your corporate datacenter
 	* Default vs. Custom VPC:
 		* Default: user friendly, all subnets have a route out to the internet, each EC2 has a public AND private IP
@@ -769,6 +825,8 @@ VPC:
 		* each NACL contains a set of rules that ALLOW and DENY traffic in and out of subnets, meaning it has inbound and outbound rules, unlike Security Groups which only have ALLOW
 		* associating a subnet with a new NACL will disassociate the previous association for you
 		* each rule has a rule # that determines the order of evaluation for the rules from lowest to highest; common practice is to have them each in 10 or 100 increments
+			* for numbered NACL rules, as soon as a rule matches traffic, it is immediately applied regardless of any higher-numbered rule that might contradict it
+			* EX: if rule 100 applies to some incoming IP, only that rule is evaluated, and not rules 101, 102, etc., nor the default rule
 		* you can also use NACLs to block a single IP address
 	* Security Groups: virtual firewall that controls traffic to and from EC2 instances; they contain a set of rules that filter out inbound and outbound traffic passing through EC2's
 		* they are stateful, meaning there are no DENY rules, meaning all inbound traffic is blocked by default unless a rule specifically allows it at the inbound level
@@ -828,6 +886,7 @@ VPC:
 				* also powered by AWS PrivateLink
 				* you can get network virtual appliances aaS from AWS Marketplace or from the AWS Partner Network
 		* pricing per VPC endpoint per AZ per hour: $0.01, and pricing per GB data processed: $0.01
+		* VPC endpoint policy: controls access to the aws service to which you are trying to connect to through the VPC endpoint you are using; doesn't override IAM policies or service-specific policies
 	* Transit Gateway: lets you have transitive peering btwn 1000's of VPC's, VPN's, and on-prem data centers; works on a hub-and-spoke model; works regionally but you can change it to be multi-region
 		* you can also use it across multiple AWS accounts using Resource Access Manager (RAM)
 		* you can use route tables to limit how VPC's talk to one another within Transit Gateway
@@ -923,7 +982,7 @@ Direct Connect:
 		* port size of the connection (1, 10, or 100GB internet bandwidth)
 		* amount of time u use the connection for either as a Dedicated: physical connection, or Hosted: logical connection
 		* any outbound traffic that gets sent outside the aws network
-Global Accelerator:
+Global Accelerator: routes traffic to the closest Edge Location through an optimized path in the AWS global network by using Anycast static IP addresses
 	* 2 Accelerator types:
 		* Standard: automatically route to the nearest healthy endpoint
 		* Custom: route to specific EC2 instances
@@ -995,6 +1054,9 @@ Auto Scaling Groups(ASG): a collection of EC2 instances that are treated as a gr
 		* same thing as just launching an EC2, but you're saving that configuration to use later
 		* they cannot be edited, so gotta create a new one/clone it, then associate with the updated Launch Configuration
 		* they also must be manually updated by updating the Auto Scaling Settings (you can't automate this process)
+	* cooldown period: a configurable setting in ASG; a time delay that ensures instances aren't terminated or launched before the previous scaling activity has time to finish; default time is 300 seconds
+	* Lifecycle Hooks: lets you put instances into a wait period before termination, allowing you to perform custom activities and retrieve critical data from a stateful instance before termination
+		* default wait period is 1 hour
 HA (Highly Available) Architecture: planning for failure
 	* On-premise service strategies with aws:
 		* Database Migration Service (DMS)
@@ -1015,7 +1077,9 @@ HA (Highly Available) Architecture: planning for failure
 
 Simple Queue Service (SQS): fully managed queuing service; lets you decouple and scale micro services, distributed systems, and serverless applications
 	* provides asynchronous communication and decouples processes through messages/events using a producer-consumer/ reader-writer framework
+	* messages in a SQS queue will continue to exist even after a consumer has processed it; it's up to you to configure when to delete the message after the fact with a DeleteMessage
 	* message size can be from 1 to 256 bytes; Amazon SQS Extended Client Library for Java lets you increase it to 2GB, where its stored in S3 and the library will reference the S3 object
+		* stores the actual message in S3, and the message just contains a reference to it
 	* messages are retained in the queue for 4 days by default before dropping it from the queue by default, but you can adjust it to be anywhere from 60 seconds to 14 days
 	* can be encrypted using aws-managed SSE or using KMS
 	* 2 different types of queues:
@@ -1035,8 +1099,6 @@ Simple Queue Service (SQS): fully managed queuing service; lets you decouple and
 	* Polling: the method in which we retrieve messages from the queue
 		* Short Polling(default): returns messages immediately, even if the queue is empty; use this when you want messages right away
 		* Long Polling: waits until a message arrives in the queue || the long poll timeout expires; reduces cost by reducing # of empty receives; most use cases you would use this
-	* to send large messages up to 2GB in size you need the SQS Extended Client Library for Java/Python
-		* stores the actual message in S3, and the message just contains a reference to it
 	* SQS supports Attribute-based access control (ABAC): an authorization process that defines permissions based on Tags
 	* Message Metadata: lets u attach metadata to ur SQS messages
 	* Access Policy: they are to your SQS Queue what Bucket Policies are to your S3 buckets; they're the same thing
@@ -1090,7 +1152,8 @@ Simple Notification Service (SNS): fully managed; subscribe and send push notifi
 		* only supported for Standard SNS Topics, not FIFO
 	* SNS Delivery Policy: defines how SNS does retries when delivering messages
 		* when the Delivery Policy is exhausted, SNS stops any retries and either discards the message or sends it to the Dead Letter Queue if one exists
-		* here's how the retries are defined (1st or each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
+		* Dead Letter Queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
+		* here's how the retries are defined (1st of each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
 			* Immediate Retry Phase: 3 times w/o delay (Data Firehose, Lambda, SQS) or 0 times w/o delay (SMTP, SNS, Mobile Push Notifications)
 			* Pre-Backoff Phase: 2 times, 1 second appart or 10 seconds apart
 			* Backoff Phase: 10 times w/ exponential backoff from 1 second to 20 seconds or from 10 seconds to 600 seconds
@@ -1106,6 +1169,36 @@ Simple Workflow Service(SWF): fully-managed; allows you to coordinate, track, an
 		* Workflow Starters: an application that starts a Workflow
 		* Deciders: an application that decides what to do when a Task finishes/fails; decides on the next step
 		* Activity Workers: application that carries out the Activity Tasks
+Step Functions: serverless functions (like Lambda) that provide serverless orchestration with applications and aws services
+	* centrally manages a workflow by breaking it into multiple steps, adding flow logic, and tracking the inputs and outputs between steps
+	* stores event log data that is passed between decoupled application components
+	* removes the need for excess code that is used to maintain communication between applications/services
+	* has a GUI to visualize each step of the workflow
+	* 2 types:
+		* Standard: long workflows
+		* Express: for streaming data; short workflows
+	* typical usecases:
+		* AWS Batch x SNS: submit a batch job and notify on success/failure using SNS
+		* Fargate x SNS: run a Fargate Tasks and notify on success/failure using SNS
+	* Step Function States: contains parameters passed as input, a Result which represents what's outputed to the next State, and a ResultPath that represents where the output is delivered 
+	* Step Functions have a few different types of States:
+		* Pass States: passes its input to its output; basically not doing anything; good for mocking when debugging/testing your workflows
+		* Task States: represents a single unit of work in the workflow. Can be any of the following:
+			* a Lambda function
+			* an API call to other aws services
+			* an Activity: some compute work node (EX: EC2 instance)
+		* Choice States: adds conditional logic (if/else statements)
+		* Wait States:  delays the workflow for a specified amount of time (wait(), sleep(), etc.)
+		* Parallel States: lets u split the workflow into 2 branches
+			* both branches have to finish before the workflow continues
+		* Succeed States: stops execution of the workflow and returns success
+		* Fail States: stops the execution of the workflow and returns failure
+	* Step Functions vs. Simple Workflow Service (SWF):
+		* step functions are serverless, SWF isn't
+		* step functions are good for short workflows, SWF is for long workflows
+		* step functions are used for synchronous tasks, SWF is for asynchronous tasks
+		* step functions are new and less complex, SWF is legacy and more complex
+	
 CloudFront: CDN that creates cached copies of your websites at Edge Locations based on geographical location, the webpage origin, and a content delivery server
 	* objects are cached at Edge Locations for the duration of their Time To Live (TTL)
 	* Edge Locations aren't just read-only, you can write to them as well
@@ -1128,14 +1221,16 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 	* Error Pages: you can create custom error responses to HTTP 5xx's by referencing custom error pages you create
 	* Restrictions: you can blacklist or whitelist countries via geo-restriction 
 	* Lambda@Edge Functions: Lambda functions that override the behavior of requests and responses in CloudFront
+		* allows your Lambda functions to execute in AWS locations closer to the user
 		* Supports python and Node.js
 		* Charged per request and function duration
-		* deployed at Regional Edge Caches, which in CloudFront is closer to the Origin
+		* deployed at Regional Edge Caches, which in CloudFront is closer to the Origin compared to regular Edge Locations which are positioned closer to the viewer
 		* There are 4 types:
 			* Viewer Request: When CloudFront receives a request from a viewer
 			* Viewer Response: Before CloudFront returns the response to the viewer
 			* Origin Request: Before CloudFront forwards a request to the Origin
 			* Origin Response: When CloudFront receives a response from the Origin
+		* lets you setup Origin failover by creating an Origin group with 2 Origins: one is the primary and one is the secondary, which CloudFront automatically switches to in the event of an HTTP status code failure of the primary
 	* CloudFront Functions: cheaper and faster than Lambda@Edge Functions, but limited
 		* Supports JavaScript
 		* Has a free tier and charged per request
@@ -1148,6 +1243,7 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 		* with the OAI you can then protect the cached content using Signed URLs: urls that provide temp access to cached objects, and Signed Cookies, which are passed along with every...
 			* ...request to CloudFront
 			* the advantage with Cookies being if you wanted to provide access to multiple private files instead of just one
+	* CloudFront Access Logs: captures requests made to your CDN that gets who made the request, where, when, and how 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1213,7 +1309,7 @@ ECS:
 		* for ALB's with ECS: you can use it for these 2:
 			* Dynamic Host Port Mapping: use it so that multiple Tasks from the same service can be run on a single container instance by using multiple random host ports
 			* Path-based Routing
-		* so it's obvious that ALB's are recommended over NLBs and CLBs when using ELBs for ECS
+			* so it's obvious that ALB's are recommended over NLBs and CLBs when using ELBs for ECS
 	* ECS Capacity Providers: manage the scaling of infrastructure for Tasks in your clusters
 		* each cluster needs to have 1 or more Capacity Providers, and then optionally a Capacity Provider Strategy
 		* an ASG must be associated with your Capacity Provider in order for it to do the scaling
@@ -1228,6 +1324,9 @@ ECS:
 		* Task: 1 working copy of an application that contains all containers defined by its Task Definition
 		* Service: allows for the scaling-up of Task Definitions by adding Tasks; can define min and max values for how many Tasks
 		* Registry: Storage for container images; used for downloading images that will go on to create containers
+	* when you launch an ECS, you have the option to pass EC2 User Data to the instance
+		* useful for when you want to run automated tasks and install packages, apply updates, etc. on startup
+	* Amazon ECS Anywhere: lets u register external VMs from your on-premise to your ECS cluster
 	* Fargate: Serverless container engine; you pay for resources and duration per application; works with both ECS and EKS; each workload runs on its own kernel
 		* you would choose EC2 for containerized apps instead of Fargate when you need to meet compliance req's, need more customization, or if your apps require access to GPU's
 		* it's serverless, so aws manages the EC2's for you
@@ -1239,7 +1338,7 @@ ECS:
 		* also supports EC2 and Fargate
 		* you would use EKS if you're already using Kubernetes(K8), or want to migrate to AWS
 		* Amazon EKS Connector: BYOD your own kubernetes cluster to EKS, which then lets u visualize it in the EKS console
-		* EKS CTL: CLI tool for easily setting up kubernetes clusters on aws; it's the aws version of kubectl
+		* eksctl: CLI tool for easily setting up kubernetes clusters on aws; it's the aws version of kubectl
 		* EKS Distro(EKS-D): custom distro to use for EKS clusters
 		* EKS Anywhere: ECS Anywhere, but for kubernetes clusters
 	* when configuring a Task for either ECS or Fargate, each Task must be assigned to a Security Group and IAM Role
@@ -1247,7 +1346,6 @@ ECS:
 	* ECS Service Connect: makes it easy to setup a service mesh for service-to-service communication within ur cluster, so that services can easily talk to other services in ur cluster
 		* includes service discovery, encrypts data in-transit via TLS, sends telemetry data to the ECS console and CloudWatch, health checks, automatic retries, and rolling deployments
 	* when u launch an EC2 instance for ECS it will automatically use an Amazon EC2 Optimized AMI image by default
-	* Amazon ECS Anywhere: lets u register external VMs from your on-premise to your ECS cluster
 	* Open Telemetry Collector: an agent that is installed on a single node on an ECS, Fargate, or EKS cluster, which can then be used to receive, process, and export telemetry data
 		* removes the need to run multiple agents on multiple nodes
 	* AWS Distro for OpenTelemetry(ADOT): a distro that can be used for an ECS, Fargate, or EKS cluster, which supports OpenTelemetry
@@ -1266,8 +1364,7 @@ ECS:
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-AWS SDK:
-	* AWS SDK is available for: C++, Go, Java, JavaScript, .NET, NodeJs, PHP, Python, Ruby
+AWS SDK: AWS SDK is available for: C++, Go, Java, JavaScript, .NET, NodeJs, PHP, Python, Ruby
 AWS CLI: 
 	* CLI is installed using a Python Script, important flags: --profile lets you switch btwn AWS accounts and --output lets you change the output to text, json, and table
 		* you use the aws configure command to setup your AWS credentials for the CLI
@@ -1275,7 +1372,7 @@ AWS CLI:
 Aurora: fully managed Postgres or MySQL compatible relational database designed to scale and be really fast
 	* combines speed and availability of high-end db's w/ the simplicity and cost-effectiveness of open-source db's
 	* Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
-	* 1/10th the cost of other solutions, offering similar performance and availability
+	* 1/10th the cost of other solutions, offering similar performance and availability; but more expensive than RDS
 	* storage is auto-scaled; you start with 10GB, and scale in 10GB increments up to 64TB or 128TB; related computing resources can scale up to 32 CPUs and 244GB of memory
 	* holds a minimum of 6 copies of your DB (2 copies per AZ (3 AZ's)); you can lose up to 2 copies w/o affecting write availability and 3 copies w/o affecting read availability; max of 15 replicas
 	* backups and failovers are automatic; they are always enabled and don't impact performance
@@ -1290,15 +1387,15 @@ Aurora: fully managed Postgres or MySQL compatible relational database designed 
 	* 3 types of Aurora Replicas available:
 		* Amazon Aurora Replicas: asynchronous replication (ms); can have up to 15; low performance impact on master; has automated failover; doesn't support user-defined replication delay
 			* doesn't support different data and/or schema vs the master; acts as a failover target with no data loss; in-region only
-		* MySQL Read Replicas: asynchronous replication(s); can have up to 5; high performance impact on master; doesn't have automated failover; supports user-defined replication delay
+		* Aurora MySQL Read Replicas: asynchronous replication(s); can have up to 5; high performance impact on master; doesn't have automated failover; supports user-defined replication delay
 			* supports different data and/or schema vs master; acts as a failover target, but with data loss; can be cross-region
-		* PostgreSQL
+		* Aurora PostgreSQL
 	* 2 types of configurations for Aurora:
 		* Aurora Provisioned(default): Aurora cluster contains a primary db that performs reads, writes, and optionally up to 15 Aurora Replicas
 			* the primary db will not be created for you by default. You have to create your db instances after creating your Aurora cluster
 			* scaling is manual, capacity is fixed based on instance size, scaling is manual, and read/write scaling is fixed based on instance type and Read Replicas
 			* used for stable and predictable workloads, cost is based on the instance runtime and storage, starting and stopping is manual, and maintenance has to be performed during MWs
-		* Aurora Serverless v2: fully-manages teh autoscaling configuration for Aurora. the DB will automatically start up, shut down, and scale capacity up/down based on your application
+		* Aurora Serverless v2: fully-manages the autoscaling configuration for Aurora. the DB will automatically start up, shut down, and scale capacity up/down based on your application
 			* used for apps that are used several times for only a few minutes per day/week; or for new projects
 			* you pay for the DB storage, capacity, and I/O that your DB consumes while active
 			* it does not scale to 0 and must maintain at least 0.5 ACUs
@@ -1312,7 +1409,9 @@ Aurora: fully managed Postgres or MySQL compatible relational database designed 
 		* writes always happen on the primary cluster
 		* data is replicated to the secondary clusters in under a second
 		* Global Database is only available in specific Regions and for specific db versions
-	* RDS Data API: lets u use HTTP requets to seccurely query an Aurora database
+		* Cross-Region Disaster Recovery: a feature of Aurora Global Database which provides a Recovery Point Objective(RPO) of 1 second and a Recovery Time Objective(RTO) of less than a minute
+			* meaning it takes 1 second for Aurora Global Database to react to an outage and less than 1 minute to promote a secondary Region to Master with read/write capabilities	
+	* RDS Data API: lets u use HTTP requets to securely query an Aurora database from your RDS instance
 		* unlimited requests per second
 		* Data API calls are excluded by CloudTrail by default since they are data events
 		* multi statements aren't supported
@@ -1353,6 +1452,9 @@ Redshift: AWS-managed petabyte-scale data warehouse
 	* you are charged for your backups in Redshift as well
 	* Redshift handles the management of your encryption keys through KMS
 		* ...but you CAN manage them yourself through HSM if you like
+	* Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
+	* Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
+	* Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
 CloudFormation: Infrastructure as Code
 	* uses YAML or JSON files
 	* the anatomy of a CloudFormation Template:
@@ -1368,12 +1470,14 @@ CloudFormation: Infrastructure as Code
 	* AWS QuickStarts: pre-built CloudFormation templates
 	* ROLLBACK_IN_PROGRESS is when CloudFormation encounters an error
 	* any CloudFormation templates larger than 0.05MB are too large to upload directly and need to be imported via a S3 bucket
+	* CloudFormation Drift Detection: used to detect changes made to property values of aws resources outside of what your CloudFormation templates already define
 CloudTrail: logs and monitors API calls and actions btwn AWS services
 	* enables governance, compliance, operational auditing, and risk auditing on your AWS account
+	* CloudTrail event logs are SSE encrypted by default
 	* can easily identify who made the call: can track the source IP, the EventTime it happened, the User/UserAgent that did it, and with which Region/Resource/Action
 	* CloudTrail already logs your stuff by default with logs lasting 90 days via Event History; if you need more than 90 days you have to create a Trail
 		* Trail: logs that output to S3; for when you want to keep logs over 90 days old; they don't have a GUI like Event History, so you have to use Amazon Athena if you want to analyze them
-			* can be set to log all regions, can be set to log across all accounts in an Organization, and can encrypt your logs using Server Side Encryption using KMS
+			* can be set to log all regions(cross-region), can be set to log across all accounts in an Organization(cross-account), and can encrypt your logs using Server Side Encryption using KMS
 			* Log File Validation: to see whether or not someone has tampered with your logs; available with Trails
 	* CloudTrail can be set to deliver events to a CloudWatch log when specific API activity occurs
 	* 2 types of events in CloudTrail:
@@ -1382,6 +1486,7 @@ CloudTrail: logs and monitors API calls and actions btwn AWS services
 		* Data Events: turned off by default; data events are high volume, so additional charges; tracks specific operations only for Lambda and S3 (EX: GetObject, DeleteObject, PutObject)
 AWS Lambda: run code w/o provisioning and managing servers; they're serverless functions; pay only for the compute time you consume; very cheap
 	* Lambda executes your code only when needed
+	* Lambda can scale to meet bursts of traffic in seconds, whereas it takes minutes for services like Auto Scaling groups to provision new resources
 	* scales automatically up to 1000 lambda functions in seconds
 	* can set the time of a Lambda to be 3 seconds(default), 1 second(min), or 15 minutes(max)
 	* can set the storage of a Lambda to be 512MB(default, min) or 10GB(max)
@@ -1406,7 +1511,7 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	* Lambda doesn't run in a VPC by default; you can set it to be a VPC to interact with some services like RDS, but the lambda will lose internet access as a result
 	* you can set timeouts to be a maximum of 15 minutes
 	* Cold Start: if a lambda is invoked and the server is turned off, the server has to turn on and copy your code over. This causes a delay between when the lambda starts and when it runs
-		* can cause delays in the User Experience, so if your app relies on being very responsive, then serverless functions might not be what you need
+		* can cause delays in the user experience, so if your app relies on being very responsive, then serverless functions might not be what you need
 	* Pre Warming: strategy around Cold Starts; keeps servers continuously running
 	* Warm Server: if a lambda is invoked and the server is still running, it will use that same server again, so little to no delay when running the function
 	* Lambda functions can trigger other Lambda functions
@@ -1417,6 +1522,30 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	* Lambdas can run on ARM or x86 architecture
 	* Lambda Runtime: runtime environments for the programming language u use to run your Lambdas
 	* Lambda OS-Only Runtimes: u use these when u want to write Lambdas in other languages that aren't Ruby, Python, Java, Go, Powershell, NodeJs, or C#
+	* 3 required actions for Lambda to write logs to AWS CloudWatch:
+		* logs:CreateLogGroup
+		* logs:CreateLogStream
+		* logs:PutLogEvents
+	* Encryption Helpers: feature of Lambda that allows you to encrypt environment variables before they are sent to Lambda
+	* Lambda Layers: used to package common code such as libraries, config files, or runtime images. the Layer itself is a zip file
+		* you can have up to 5 Layers per Lambda
+		* all Layers for a Lambda unzipped can't exceed 250MB
+	* Lambda Aliases: used to refer to a specific version of your Lambda function w/o having to know the specific version an Alias is pointing to
+		* good for promotion of new versions of Lambda functions
+		* lets u give Lambda versions a friendlier more human-readable name
+	* ARN's for Lambda functions look like this: 
+		* arn:aws:lambda:aws-region:acct-id:function:hellowworld
+		* arn:aws:lambda:aws-region:acct-id:function:hellowworld:$LATEST
+	* Execution Role: Lambda function policy that gives it permission to access certain aws services and resources
+	* Resource-based Policy: Lambda function policy that gives other aws accounts access to use your Lambda functions
+	* 2 ways to get Lambda function version: AWS_LAMBDA_FUNCTION_VERSION or getFunctionVersion
+	* if Lambda functions fail, they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
+	* Lambda function deployment types:
+		* Canary: traffic is shifted in 2 increments:
+			* 1st increment: % of traffic that's shifted to your updated lambda functions
+			* 2nd increment: the interval in minutes before the remaining traffic is shifted to your updated lambda functions
+		* Linear: traffic is shifted in equal increments with an equal number of minutes in between each increment
+		* All-at-once: all traffic is shifted from the old lambda function to the new lambda function at once
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1426,12 +1555,12 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 	* ElastiCache lets you deploy, run, and scale popular open source-compatible, in-memory data stores
 	* frequently identical queries are stored in the cache for fast processing
 	* ElastiCache is only accessible to resources operating in the same VPC; this ensures latency is low
-	* can go multi-AZ, and can go cross-region using ElastiCache Global Datastores
+	* ElastiCache Global Datastores: lets u go multi-AZ and cross-region
 	* has 2 deployment options:
 		* Standard: used for predictable workloads, but u have to manage the cluster and nodes, and ur charged per node and node type (can use w/ AWS Outposts)
 		* Serverless: used for unpredicable workloads, but it automatically scales for u, and ur charged per ECPU and data stored
 	* Memcached vs Redis:
-		* Memcached is preferred for caching HTML fragments; it's a simple key/value store, but it's faster than Redis
+		* Memcached is preferred for caching HTML fragments; it's a simple key/value store, and it's faster than Redis
 		* Redis lets you do way more operations on data; good for leaderboards and for keeping track of unread notification data
 		* they both offer sub-millisecond latency, easy to use, support data partitioning, can scale horizontally, and support a lot of programming languages
 		* MemCached supports multithreaded architectures, while Redis does not
@@ -1439,15 +1568,15 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 			* ...persistence, and geospatial support, while MemCached does not
 		* Redis is multi-AZ while Memcached is not
 		* Redis is a key/value store that supports strings, sets, sorted sets, lists, and hashes, while Memcached is a key/value store that only supports strings
+		* Redis AUTH: improves data security in Redis by requiring the user to enter a password before they are allowed to execute Redis commands
 Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure; it's a PaaS
 	* powered by a CloudFormation template that sets up: 
-		* ELB, autoscaling groups, RDS, preconfigured/custom EC2's, CloudWatch, SNS, security(rotating passwords), ability to run Dockerized environments if you want, and...
-			* ...In-Place and Blue/Green deployment methodologies
+		* ELB, ASGs, RDS, preconfigured/custom EC2's, CloudWatch, SNS, security(rotating passwords), the ability to run Dockerized environments...
 		* In-Place Deployment: updates the application version w/o replacing any infrastructure
 		* Blue/Green Deployment: create 2 separate, but identical infrastructure environments: blue is PROD and green is TEST
 			* once testing on Green is complete traffic is routed to Green, which then becomes Blue(PROD) and Blue is deprecated
-		* list of the preconfigured platforms you can use for your EC2's:
-			* Java, .NET, PHP, Node.js, Python, Ruby, Go, Docker
+	* list of the preconfigured platforms you can use for your EC2's:
+		* Java, .NET, PHP, Node.js, Python, Ruby, Go, Docker
 	* Beanstalk is free except for the resources it provisions, so RDS, ELB, EC2, for example
 	* when u create an Elastic Beanstalk instance you have to choose btwn 2 different environments:
 		* Web Environment: connects to the Internet; provisions stuff centered around the idea of hosting a web application; comes in 2 variants:
@@ -1457,23 +1586,23 @@ Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry abo
 			* so provisions stuff like an ASG of EC2s, an SQS queue, and CloudWatch to alarm to the ASG when to scale
 API Gateway: fully managed; creates, publishes, maintains, monitors, and secures API 
 	* allows other applications to access your application's data, logic, and functionality; can handle hundreds of thousands of API calls at 10,000 requests per second(can increase that speed by contacting AWS Support)
-	* can throttle requests to prevent attacks; lets you track and control usage of the API by API key; can connect it to CloudWatch to log all requests for monitoring; auto-scales; highly scalable; cost-effective
+	* can throttle API requests to prevent attacks; lets you track and control usage of the API by API key; can connect it to CloudWatch to log all requests for monitoring; auto-scales; highly scalable; cost-effective
 	* you can expose HTTPS endpoints for defining a RESTful API, maintain multiple versions of your API, and send each API endpoint to a different target; can serverless-ly connect to services like Lambda and DynamoDB
-	* when you create a REST API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
-		* and then in those Resources is where u define your Methods
-		* u then choose your Integration: which is just what service it calls:
-			* Lambda, HTTP, Mock, any aws service, or a VPC Link
-	* when you create an HTTP API, you have to define an API container, and multiple Routes: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
-		* the Methods are part of the Routes when u create your Routes, so u aren't defining 2 seperate things like u are with REST API calls when doing Resources and Methods
-		* u then choose your Integration:
-			* Lambda, HTTP, Event Bridge, SQS, Kinesis, Step Functions, or a VPC Link
 	* when creating API, plan them for retries w/ Exponential Backoff (EX: try again after 2 seconds, then 4, then 8, etc.)
 	* 3 types of API for API Gateway:
 		* REST API (API Gateway v1): complete control over requests and response, has the most features, has private and public API options, but more expensive
 		* HTTP API (API Gateway  v2): low latency, simpler feature set, cheap, but only has public API options
-		* WebSocket API: persi stent connections for real-time usecases such as chat applications or dashboards
+		* WebSocket API: persistent connections for real-time usecases such as chat applications or dashboards
+	* when you create a REST API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
+		* and then in those Resources is where u define your Methods (EX: GET, POST, etc.)
+		* u then choose your Integration: which is just what service it calls:
+			* Lambda, HTTP, some mock, any aws service, or a VPC Link
+	* when you create an HTTP API, you have to define an API container, and multiple Routes: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
+		* the Methods are part of the Routes when u create your Routes, so u aren't defining 2 seperate things like u are with REST API calls when doing Resources and Methods
+		* u then choose your Integration:
+			* Lambda, HTTP, Event Bridge, SQS, Kinesis, Step Functions, or a VPC Link
 	* REST vs HTTP API:
-		* REST is regional, Edge-optimized, and has private, whereas HTTP is only regional
+		* REST is regional, Edge-optimized, and can be private, whereas HTTP is only regional and can only be public
 		* REST can use TLS, certs, and AWS WAF for authentification, whereas HTTP can only use TLS
 		* they both can authorize with IAM, Cognito, and Lambda, but REST can only do auth on resource policies, whereas HTTP is the only one that can use JWT tokens for auth
 		* REST can manage custom domains, API Keys, rate limiting per client, and usage throttling per client, whereas HTTP can't manage custom domains
@@ -1486,12 +1615,6 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 		* REST has mock integrations, whereas HTTP doesn't 
 	* for the REST and HTTP APIs you can import an OpenAPI 3 schema file when creating your API in API Gateway 
 	* aws extends the OpenAPI definition, so u can define aws API Gateway-specific features in your OpenAPI schema file
-	* when creating an API you also have to define Methods on your Resources
-		* Methods allow you to make API calls to that Resource url using that url's protocol EX: GET, POST, etc.
-		* you can define multiple Methods for the same Resource
-		* when you create a Method on a resource you need to choose the Integration type: the most common one being Lambda
-		* you have control over the Request and Response procedures for the process of executing the Method
-		* for each Resource, you also have to define the security, choose a target (EX: EC2, Lambda, DynamoDB, etc.), and set request and response transformations
 	* Deploy API: every time you make a change to your API you need to deploy it using the Deploy API action. When you deploy you have to choose the Stage
 		* uses the API Gateway domain by default, but you can specify a custom one
 		* now supports AWS Certificate Manager, so free SSL/TLS certs.
@@ -1504,26 +1627,32 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 		* should always be enabled if using JavaScript/AJAX(cause those 2 always use multiple domains)
 		* CORS is always enforced by the client i.e the browser
 		* can use it btwn aws services and external websites
+		* when CORS is enabled, only GET, PUT, POST, DELETE, and HEAD are supported
 	* Same Origin Policy: concept of the Web Application Security Model where a browser permits 1 webpage to run scripts contained on a 2nd webpage, but only if both webpages have the same origin
 		* used to prevent XSS attacks
 		* they ignore tools like Postman or Curl
-	* you can also require authorization of your API through AWS Cognito or custom Lambda you can write
+	CloudWatch Execution Logging: API logging that lets you capture user requests and response payloads as well as error traces
+		* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
+	* CloudWatch Access Logging: API logging that lets you as an API developer, log who has accessed your API and how the caller accessed it (which method)
+		* you can also require authorization of your API through AWS Cognito or custom Lambda you can write
 Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes in and analyzes data from multiple sources
 	* use cases: stock prices, game data (as player plays), social media data, geospatial data, click stream data
 	* 4 types of Kinesis Streams:
-		* Kinesis Data Streams: producers(EC2's, devices, and servers) send data to Kinesis Data Stream, which gets distributed into Shards that are sent to consumers(specialized EC2's...
+		* Kinesis Data Streams: producers send data to Kinesis Data Stream, which gets distributed into Shards that are sent to consumers
 			* 4 kinds of producers u can define:
-				* AWS SDK; doesn't scales
+				* AWS SDK: doesn't scale
 				* Kinesis Producer Library(KPL): Java Library for writing data to a stream; lets u scale by 100x
 					* you can write data to stream using SDK, but KPL is more efficient
 				* Amazon Kinesis Agent: standalone Java application that monitors whenever changes occur and automatically sends it to Kinesis
 				* any aws service
 			* 4 kinds of consumers u can define:
+				* AWS SDK: does not scale
+				* Amazon Kinesis Client Library(KCL): a Java library for writing ur own custom consumers; can use the MultiLang Daemon to configure it to use other languages like Python or Ruby
+					* also helps you consume data from Kinesis data streams by taking care of the many complex extra subtasks that come with streaming data like:
+						* reacting to resharding, load balancing, reacting to instance failures, and checkpointing already-processed records
 				* a 3rd party
 				* Kinesis Data Firehose
-				* AWS SDK; does not scale
-				* Amazon Kinesis Client Library(KCL): a Java library for writing ur own custom consumers; cna use the MultiLang Daemon to configure it to use other languages like Python or Ruby
-			* ...that consume data and send them to AWS services)
+				* any aws service
 			* Shards: lets you partition your data for different purposes (EX: a shard for your IoT data, 1 for your social media data, etc.)
 				* you pay per Shard that is running
 				* 5 transactions/second for reads; max read rate of 2MB/second; up to 1000 records/second for writes; max write rate of 1MB/second
@@ -1566,7 +1695,7 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 					* Lambda: Lambda function parses the data, which returns the key/values
 				* once enabled, it CANNOT be turned off
 		* Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Rekognition(Machine Learning)
-		* Managed Service for Apache Fink (formally Kinesis Data Analytics): input and output are either Kinesis Firehose or Kinesis Data Streams...
+		* Managed Service for Apache Fink (formally Kinesis Data Analytics): producer and consumer are either Kinesis Firehose or Kinesis Data Streams...
 			* ...with the intermediary being Managed Service for Apache Fink for use in data analytics
 			* data that passes through Managed Service for Apache Fink is run through custom SQL you write, which then outputs to the output stream
 			* really good for real-time analytics
@@ -1594,29 +1723,17 @@ Storage Gateway: lets you extend or backup on-premise storage to the cloud
 					* create storage volumes in AWS and attach them as iSCSI devices from your on-premises' servers
 						* your gateway stores data you write to these volumes in S3 and retains recently read data in your on-premise storage gateway cache
 					* cached volumes can be between 1GB - 32TB in size
-			* Tape Gateway(VTL): virtual tape library (literally electric tape); used for archiving to S3 Glacier
-				* store data on virtual tape cartridges that you create on your tape gateway
-				* each tape gateway is pre-configured with a media changer and tape drives, which are available to your existing backup applications as iSCSI devices
-				* you add tape cartridges as you need to archive your data
-				* Supported by NetBackup, Backup Exec, and Veeam
+		* Tape Gateway(VTL): virtual tape library (literally electric tape); used for archiving to S3 Glacier
+			* store data on virtual tape cartridges that you create on your tape gateway
+			* each tape gateway is pre-configured with a media changer and tape drives, which are available to your existing backup applications as iSCSI devices
+			* you add tape cartridges as you need to archive your data
+			* Supported by NetBackup, Backup Exec, and Veeam
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Misc:
 
-Lambda@Edge: lets you run Lambda functions that customize the content that CloudFront delivers
-	* allows your Lambda functions to execute in AWS locations closer to the user
-	* lets you setup origin failover by creating an origin group with 2 origins: one is the primary and one is the secondary, which CloudFront automatically switches to in the event of an HTTP status code failure of the primary
-	* with Lambda@Edge functions, you don't have to provision or manage infrastructure in multiple locations around the world. You pay only for the compute time you consume
-API Throttling: can set throttling limits to be standard rates in the event of bursts of traffic: EX: 1000 requests/sec, 2000 requests/sec, etc.
-Enhanced Monitoring: a feature of RDS; Enhanced Monitoring metrics are stored in CloudWatch logs for 30 days;
-	* different from CloudWatch metrics, where CloudWatch takes data at the hypervisor layer of the DB, whereas Enhanced Monitoring gathers it from an agent on the DB instance
-	* useful for when you want to see how individual Threads are utilizing the CPU for a DB instance (i.e: OS processes and RDS child processes)
-IAM DB Authentication: lets you authenticate to your RDS DB instance using a temporary authentication token that lasts 15 minutes; Works with MySQL and PostgreSQL; means you don't need a password to connect to an RDS DB instance
-	* enables SSL encryption of traffic to and from your RDS DB
-Convertible RI's allow you to exchange for another Convertible RI with a different instance type and tenancy
-AWS Lambda can scale to meet bursts of traffic in seconds, whereas it takes minutes for services like Auto Scaling groups to provision new resources
-Redis AUTH: improves data security in Redis by requiring the user to enter a password before they are allowed to execute Redis commands
+
 the default termination policy when scaling-in services:
 	* If there are instances in multiple Availability Zones, choose the Availability Zone with the most instances and at least one instance that is not protected from scale in.
 	* If there is more than one Availability Zone with this number of instances, choose the Availability Zone with the instances that use the oldest launch configuration.
@@ -1626,57 +1743,17 @@ the default termination policy when scaling-in services:
 	* If there is one such instance, terminate it.
 	* If there is more than one unprotected instance closest to the next billing hour, choose one of these instances at random.
 in CIDR blocks, /32 refers to a single IP, whereas /0 refers to the entire network
-messages in a SQS queue will continue to exist even after the EC2 instance has processed it; it's up to you to delete the message after the fact
 AWS Security Token Service (STS): gives out limited-temporary credentials for IAM user or federated users using tokens that last 15 minutes; it's a global service
 	* all STS requests go to a single endpoint at: https://sts.amazonaws.com
 	* it's not an aws service u access through the aws console it's strictly from using the AWS CLI/SDK
 		* returns an AccessKeyID, SecretAccessKey, SessionToken, and Expiration
-Default available metrics provided by CloudWatch:
-	* hypervisor and EC2 status checks, CPU Utilization, Network Utilization, Disk Reads
-CloudWatch Agent: lets you send logs from your EC2 to a CloudWatch Log Group
-	* can be installed using SSM
-	* you must attach the CloudWatchAgentServerRole IAM Role to the EC2 u want to install the agent on
-	* these are the host level metrics u get from CloudWatch by default when u don't install the CloudWatch Agent:
-		* CPU usage
-		* Network usage
-		* Disk usage
-		* hypervisor and EC2 instance status
-	* advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the CloudWatch Agent for:
-		* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
-		* you can set up advanced/custom metrics by installing the CloudWatch Agent
-Aurora Global Database: designed for globally distributed applications; allows a single Aurora DB to go Multi-Region with no impact on performance; enables fast local reads and low latency in each region
-	* Cross-Region Disaster Recovery: a feature of Aurora Global Database which provides a Recovery Point Objective(RPO) of 1 second and a Recovery Time Objective(RTO) of less than a minute
-		* meaning it takes 1 second for Aurora Global Database to react to an outage and less than 1 minute to promote a secondary Region to Master with read/write capabilities.
-EFS for FsX Lustre is a POSIX-compliant shared file system
-Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
 Amazon MQ: used for messaging queuing kind of like SQS/SNS; it's a AMQP message broker service that uses industry standard APIs and protocols, making it easy to switch from any standard message broker to Amazon MQ w/o rewriting code
 	* good for if you want to move your existing messaging service to the cloud quickly and easily
 	* u have the option of choosing Rabbit MQ (higher performance w/ advanced messaging capabilities) or Active MQ (slower performance with basic messaging capabilities)
-Kinesis Client Library(KCL): allows you to build applications that process data from your Kinesis Data Streams
-	* also helps you consume data from Kinesis data streams by taking care of the many complex extra subtasks that come with streaming data like:
-		* reacting to resharding, load balancing, reacting to instance failures, and checkpointing already-processed records
-	* lets you focus more on just processing records from Shards 
-DynamoDB Streams Kinesis Adapter: lets you integrate Kinesis Streams with DynamoDB
-Nitro-based EC2 Instances: built on the AWS Nitro System platform that pumps out the latest generation of EC2's, enabling AWS to innovate faster, further reduce customer cost, and deliver additional security and instance types
-	* good for HPC workloads in I/O, compute, memory, storage, and networking
-IAM policies are restrictive; Security Group rules are permissive
-cooldown period: a configurable setting in ASG; a time delay that ensures instances aren't terminated or launched before the previous scaling activity has time to finish; default time is 300 seconds
 the prerequisites when routing traffic through Route53 to an S3-hosted website:
 	* the S3 bucket name must be the same as the domain name
 	* you must have a valid registered domain name
 	* Route53 must be the DNS service for the domain name
-VPC endpoint policy: controls access to the aws service to which you are trying to connect to through the VPC endpoint you are using; doesn't override IAM policies or service-specific policies
-SNS message filtering: lets you assign a filtering policy to a Topic, and the subscriber will only receive the message from the Topic they're interested in, since Subscribers receives every message published to a Topic by default
-ALB's provide host-based routing, path-based routing, HTTP header-based routing, HTTP method-based routing, and query string parameter-based routing
-when the primary db fails in a Multi-AZ RDS deployment, the canonical name record (CNAME) is switched from the primary to the standby instance
-Non-Alias A Records: A Records that don't resolve to an aws resource
-AAAA Records: same as A Records, but with IPv6 support
-you can create CNAME records only for subdomains, whereas with A Records you can create records at both the root and sub domains
-EBS supports live configuration changes while in production, meaning you can tweak volume type, size, and IOPS capacity w/o interruptions
-the 3 possible event notification destinations for when things occur in S3 buckets:
-	* SQS
-	* SNS
-	* Lambda functions
 AWS site-to-Site VPN: lets you connect your AWS VPC to your on-premise network
 	* has the following components:
 		* VPN
@@ -1685,157 +1762,46 @@ AWS site-to-Site VPN: lets you connect your AWS VPC to your on-premise network
 		* Target Gateway: refers to the target for the VPN (in this case aws)
 		* Virtual Private Gateway: refers to the target endpoint in aws for the VPN (in this case your VPC)
 		* Transit Gateway
-	* to have an site-to-site VPN connection btwn your on-premise and AWS, you need to configure an Internet-routable static IP of your(customer) gateway for your on-prem
+	* to have an site-to-site VPN connection btwn your on-premise and AWS, you need to configure an Internet-routable static IP of your Customer Gateway for your on-prem
 	* you can enable AWS Global Accelerator with your AWS site-to-site VPN
-by default, EC2's use an IPv4 addressing protocol when first created
-Data Lifecycle Manager (DLM): A feature of EBS that lets you automate the creation, retention, and deletion of snapshots taken to back up your EBS instances
 Active-active failover: use this routing policy when you want a majority of your resources to be active a majority of the time; all records with the same name, type, and routing policy are active till Route53 determines it unhealthy.
 Active-passive failover: use this routing policy when you want to use a primary group of resources a majority of the time while having a secondary group of resources on standby for when the primary goes down
 	* once all the primary resources are unhealthy, then Route53 starts to only use the healthy secondary resources
-S3 Select takes the associated bucket name and object key of the object you want to query with SQL and retrieves that data
-there is a CPU-based On-demand instance limit, which is initially set to 20 instances per region; you can bypass this by submitting a limit increase form to AWS
-Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
-	* you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
 AWS Backup: central area where you can configure and audit the aws resources you want to backup, automate backup scheduling, set retention policies, and look at all backup activity; max is 90 days
 	* can backup aws storage volumes, aws databases, and aws file systems
-for numbered NACL rules, as soon as a rule matches traffic, it is immediately applied regardless of any higher-numbered rule that might contradict it
-	* EX: if rule 100 applies to some incoming IP, only that rule is evaluated, and not rules 101, 102, etc., nor the default rule
 AppSync: fully managed service that makes it easier to develop mobile apps that need very quick real-time data
 ephemeral port ranges: when a client is connecting to a server, they go through some port (EX: 443), but once they're connected, they get assigned a random port in some range (EX: 32768-65535)
 	* this then becomes the port used for outbound traffic from the server to the client
 VPN's use IP Security (IPSec) and TLS Tunnels to secure your private connections and sessions
-S3 by default uses AES-256 encryption for Server-side encryption(SSE)
-autoscaling is not enabled by default in DynamoDB
-NAT gateways let you enable instances in private subnets to connect to the internet or other aws resources
-	* you would use this when you want instances to access the Internet, but not let the Internet access the instances
-RAID 0 Configuration: an EC2 configuration that improves the EC2's storage volume's performance by distributing I/O across volumes into strips, so when you add another storage volume they also get a throughput and IOPS increase
+RAID 0 Configuration: an HDD configuration that improves the storage volume's performance by splitting data across disks
 	* works on EBS and Instance Store
 	* uses SSD, so good for high I/O performance on short reads
-	* use this when you need storage with very low latency and you don't need data to persist when the instance terminates
 	* there's 0 fault tolerance w/ this one tho...
-RAID 1 Configuration: an EC2 configuration where data is written to multiple volumes of the same EC2 simultaneously
+	* minimum of 2 disks required
+RAID 1 Configuration: data is mirrored to multiple disks
 	* good for disk/data mirroring
-Unified CloudWatch Logs Agent: lets you collect logs from EC2's and on-premise servers and send them into CloudWatch Logs when you install this agent
-	* lets you collect not just logs, but also advanced metrics, which makes it better than CloudWatch Agent which only collects advanced metrics
-	* enables the collection of logs from servers running Windows Server
-	* better performance than CloudWatch Agent
-CloudWatch Insights: lets you interactively search and analyze your log data in CloudWatch Logs
-	* lets you perform queries on CloudWatch Logs
-	* has it's own purpose-built query language with some sample queries included
-	* a single query can query up to 20 Log Groups and queries have a 15 minute timeout
-	* Discovered Fields: CloudWatch Insights will look at ur logs and generate fields for u to use in your queries base on the fields it finds in ur logs
-		* by default it will always generate these 5 system fields:
-			* @message
-			* @timestamps
-			* @ingestionTime: the time when the log was received by CloudWatch
-			* @logStream: the name of the Log Stream that the log was added to 
-			* @log: a Log Group identifier in the format of: <account_id>:<log_group_name>
-		* also automatically discovers fields in logs from aws services such as:
-			* VPC Flow Logs
-			* Route53
-			* Lambda
-			* CloudTrail
-Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
-AWS Global Accelerator routes traffic to the closest edge location through an optimized path in the AWS global network by using Anycast static IP addresses
-AWS Step Functions: serverless functions (like Lambda) that provide serverless orchestration with applications and aws services
-	* centrally manages a workflow by breaking it into multiple steps, adding flow logic, and tracking the inputs and outputs between steps
-	* stores event log data that is passed between decoupled application components
-	* removes the need for excess code that is used to maintain communication between applications/services
-	* has a GUI to visualize each step of the workflow
-	* 2 types:
-		* Standard: long workflows
-		* Express: for streaming data; short workflows
-	* typical usecases:
-		* AWS Batch x SNS: submit a batch job and notify on success/failure using SNS
-		* Fargate x SNS: run a Fargate Tasks and notify on success/failure using SNS
-	* Step Function States: contains parameters passed as input, a Result which represents what's outputed to the next State, and a ResultPath that represents where the output is delivered 
-	* Step Functions have a few different types of States:
-		* Pass States: passes its input to its output; basically not doing anything; good for mocking when debugging/testing your workflows
-		* Task States: represents a single unit of work in the workflow. Can be any of the following:
-			* a Lambda function
-			* an API call to other aws services
-			* an Activity: some compute work node (EX: EC2 instance)
-		* Choice States: adds conditional logic (if/else statements)
-		* Wait States:  delays the workflow for a specified amount of time (wait(), sleep(), etc.)
-		* Parallel States: lets u split the workflow into 2 branches
-			* both branches have to finish before the workflow continues
-		* Succeed States: stops execution of the workflow and returns success
-		* Fail States: stops the execution of the workflow and returns failure
-IAM Certificate Store: a place where you can upload 3rd party certificates
-calculating optimal configuration of IOPS and queue length for Provisioned IOPS SSD volumes: maintain a ratio of 50:1
-S3 Server Access Logging: gives you detailed logs about requests made to S3 buckets and S3 objects
-Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
-Remember that in an ASG, instance IP's change all the time when new instances are added and deleted as part of scaling
-when an EC2 is in a hibernated state, pricing is determined only by the Elastic IP's and EBS volumes attached to that instance, NOT the amount of time it's hibernating
-when you launch an ECS, you have the option to pass EC2 User Data to the instance
-	* useful for when you want to run automated tasks and configurations on start-up
-3 required actions for Lambda to write logs to AWS CloudWatch:
-	* logs:CreateLogGroup
-	* logs:CreateLogStream
-	* logs:PutLogEvents
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-you can expand an existing VPC's range by adding a secondary CIDR block to your current VPC, so long as they don't overlap
-CloudWatch Execution Logging: API logging that lets you capture user requests and response payloads as well as error traces
-	* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
-CloudWatch Access Logging: API logging that lets you as an API developer, log who has accessed your API and how the caller accessed it (which method)
-Encryption Helpers: feature of Lambda that allows you to encrypt environment variables before they are sent to Lambda
-Lambda Layers: used to package common code such as libraries, config files, or runtime images. the Layer itself is a zip file
-	* you can have up to 5 Layers per Lambda
-	* all Layers for a Lambda unzipped can't exceed 250MB
-Lambda Aliases: used to refer to a specific version of your Lambda function w/o having to know the specific version an Alias is pointing to
-	* good for promotion of new versions of Lambda functions
-	* lets u give Lambda versions a friendlier more human-readable name
-Lifecycle Hooks: a feature in ASG that lets you put instances into a wait period before termination, allowing you to perform custom activities and retrieve critical data from a stateful instance before termination
-	* default wait period is 1 hour
-CloudFormation Drift Detection: used to detect changes made to property values of aws resources outside of what your CloudFormation templates already define
-	* determines drift from property values explicitly set by stack templates or by you explicitly specifying template parameters
-	* it does not determine drift for property values that are set by default
-		* ...so if you want to determine drift for these property values ^, you can explicitly specify the values as being the same as the default value
+	* minimum of 2 disks required
+RAID 5: RAID 0, but with SOME redundancy
+	* minimum of 3 disks required
+RAID 6: RAID 0, but with MORE redundancy
+	* minimum of 4 disks required
 Compute Savings Plan: you use this plan when you want to get big money savings on EC2's, Lambdas, and/or Fargate instances under the condition that you commit to a 1-3 year contract
 	* similar to Reserved Instances, but Reserved Instances only gets you savings on EC2's, whereas Compute Savings Plan can also apply to Fargate and Lambda
 	* Compute Savings Plans provide the most flexibility and help to reduce your costs by up to 66%. These plans automatically apply to EC2 instance usage regardless of instance family, size, AZ, Region, OS or tenancy
 	* EX: you can change from C4 to M5 instances, shift a workload from EU (Ireland) to EU (London), or move a workload from EC2 to Fargate or Lambda at any time and automatically continue to pay the Savings Plans price
-DynamoDB data is stored in JSON format and is good for when data is required to be indexed
-EBS Snapshots are stored to S3 automatically, but they are managed by AWS, so you actually can't see the Snapshots in S3
-you can make a single CloudTrail go cross-Region
-in RDS, you would pick multi-AZ for things like availability/disaster recovery, whereas read replicas are for performance enhancement and offloading database reads
-RDS automated backups creates a snapshot of the DB instance in question within the backup window you specify once a day
-	* it also captures transactional logs every 5 minutes and sends them to S3
-the Original Access Identity (OAI) is a CloudFront user that is associated with your distribution that gets all the S3 objects your users request through CloudFront for them
-	* this makes it so that users can't access S3 or S3's URLs directly
 to move the master account of one organization to another:
 	* remove all member accounts from the old organization
 	* delete the old organization
 	* invite the master account of the old organization to be a member account of the new organization
-KMS and HSM is for encryption at-rest only
+		* cause the master account cannot be deleted
 Resource Access Manager lets you share something from 1 Organization to the AWS Accounts of another Organization, NOT to the Organization itself
-if you're running PCI or HIPPA-compliant workloads, make sure to enable CloudFront access logs and capture requests that are sent to the CloudFront API
-to use Amazon S3 Select, the objects being queried have to be in CSV, JSON, or Apache Parquet format
-	* GZIP and BZIP2 are supported for CSV and JSON with server-side encryption
-Instance Savings Plan: provide the lowest prices, offering savings up to 72% in exchange for commitment to usage of individual instance families in a Region (e.g. M5 usage in N. Virginia)
-	* automatically reduces your cost on the selected instance family in that region regardless of AZ, size, OS or tenancy
-	* give you the flexibility to change your usage between instances within a family in that region
-	* EX: you can move from c5.xlarge running Windows to c5.2xlarge running Linux and automatically benefit from the Savings Plan prices
-AWS OpsWorks Stacks: lets you manage applications and servers on AWS and on-prem by modeling your application as a Stack with different Layers
-	* Stack: a collection of instances/Layers that are managed together for serving a common task (EX: hosting a web application = web app + DB + ELB)
-	* you can deploy and configure EC2's in each Layer or connect other aws resources such as RDS, ELB's, etc.
-	* a common use-case is to have multiple Stacks that represent multiple environments (EX: DEV, PROD)
-how to decide how many subnets you need:
-	* 1 subnet per AZ
-	* each NAT Gateway needs to be in 1 public subnet
-the master account of an Organization cannot be removed
-CloudTrail event logs are SSE encrypted by default
-when CORS is enabled, only GET, PUT, POST, DELETE, and HEAD are supported
-Dead Letter queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
+
+
+
 CloudHSM performs backups by backing up users, keys, and policies, periodically to S3 in the same region as your CloudHSM Cluster
 	* Ephemeral Backup Key(EBK): when HSM backups are made, this AEA-256 key is generated to encrypt the backup using a FIPS-approved AES key wrapping method before it leaves HSM
 	* Persistent Backup Key(PBK): another AES-256 encryption key that's generated by HSM using a FIPS-approved KDF to encrypt the Ephemeral Backup Key
-Workgroup: a feature of Athena that lets you organize certain SQL queries into groups, along with the query history of those queries
-	* only certain users you permit can see and/or use the queries in that Workgroup
-	* By default, each aws account has a primary workgroup and the default permissions allow all authenticated users access to this workgroup. The primary workgroup cannot be deleted
-	* You can set up workgroup-wide settings and enforce their usage by all queries that run in a workgroup. The settings include query results, location in Amazon S3, and encryption configuration
+
 Cloudfront vs S3 Transfer Acceleration vs S3 Cross-Region replication:
 	* Cloudfront is the cheepest, the other 2 cost money
 	* you use cross-region replication for DR and low latency access locally in S3
@@ -1856,7 +1822,7 @@ Parameter Groups: a group of parameter configurations for your RDS DB
 Option Groups: a group of feature configurations for your RDS DB
 	* used to specify certain features you want included as part of your DB (EX: additional security features)
 	* you can't modify the default or an existing Option Group; gotta create a new one at that point
-increasing cache expiration time for Cloudfront improves performance because it reduces the amount of requests to origin and makes it more likely users will get data from an edge location
+increasing cache expiration time for Cloudfront improves performance because it reduces the amount of requests to Origin and makes it more likely users will get data from an edge location
 4 types of DR scenarios for going from on-prem to AWS:
 	* Backup and Restore: cheapest and simplest; backing up the data from on-prem and restoring it in another Region; methodology is limited in # of Regions used
 	* Pilot Light: you replicate only your most core critical services that you must keep running in AWS, so that in the event of a DR you can use those core services to relaunch your whole infrastructure
@@ -1905,16 +1871,10 @@ AWS Glue: serverless data integration service that makes it easier to discover, 
 		* 2 Table formats:
 			* AWS Glue Table
 			* Apache Iceberg Table: uses its own SQL data format
-Step Functions vs. Simple Workflow Service (SWF):
-	* step functions are serverless, SWF isn't
-	* step functions are good for short workflows, SWF is for long workflows
-	* step functions are used for synchronous tasks, SWF is for asynchronous tasks
-	* step functions are new and less complex, SWF is legacy and more complex
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Throughput specs for EBS volume types: Cold HDD: 250MB/s, General Purpose SSD: 250MB/s, Throughput Optimized HDD: 500MB/s, Provisioned IOPS SSD: 1,000MB/s
-IOPS specs for EBS volume types: Cold HDD: 250, Throughput Optimized HDD: 500, General Purpose SSD: 16,000, Provisioned IOPS SSD: 64,000
+
 RDS Encryption: feature that provides encryption of your RDS DB data at rest using AES-256
 Permission Sets: feature of AWS SSO used to control the time duration for user login to the AWS console by setting session duration; default is 1 hour; maximum is 12 hours
 Job Function Policy: a type of IAM policy that is managed by AWS that are designed to closely align with job functions in the IT industry
@@ -1938,7 +1898,7 @@ you can send DeleteMessage requests in batch to save on costs in SQS
 	* Throughput Mode: use this when you want good data transfers w/o any performance bottlenecks for high throughput workloads
 the memory allocated to each Lambda function affects the price you pay for Lambda per month
 ALB does not charge users more based on enabled AZ's
-if the origin for a Cloudfront CDN is in AWS, fetches to origin are free
+if the Origin for a Cloudfront CDN is in AWS, fetches to Origin are free
 you can mount an EFS on instances in only 1 VPC at a time
 to enable SSH connections for EFS, open port 22 on the EC2 Security Group and port 2049 on the EFS Security Group
 encryption-at-rest is turned on by default when making an EFS
@@ -1990,7 +1950,6 @@ in API Gateway, you can:
 	* flush the entire cache
 	* set TTL
 	* encrypt the cache
-maximum memory per Lambda function is 128 MB
 when using Lambda in a VPC, make sure it isn't running in "no VPC" network mode
 maximum batch size for SQS: 10 queue messages per batch operation
 Constant(JSON Text) option: feature in CloudWatch that lets you pass data to a Lambda function when using a CloudWatch Event to trigger Lambda code
@@ -2002,14 +1961,7 @@ poll-based event sources for Lambda:
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-ARN's for Lambda functions look like this: 
-	* arn:aws:lambda:aws-region:acct-id:function:hellowworld
-	* arn:aws:lambda:aws-region:acct-id:function:hellowworld:$LATEST
-Execution Role: Lambda function policy that gives it permission to access certain aws services and resources
-Resource-based Policy: Lambda function policy that gives other aws accounts access to use your Lambda functions
-targets for your Dead Letter Queue can be either SQS or SNS
-2 ways to get Lambda function version: AWS_LAMBDA_FUNCTION_VERSION or getFunctionVersion
-if Lambda functions fail, they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
+
 S3 does not exist in any VPC because it's global
 2 types of URLs for S3 buckets:
 	* Path-Style (will be discontinued soon): https://s3.[Region].amazonaws.com/[Bucket name]
@@ -2030,12 +1982,7 @@ ENI attach types:
 	* hot attach: attach an ENI to an instance when it's running
 	* warm attach: attach an ENI to an instance when it's stopped
 	* cold attach: attach an ENI to an instance when it's being launched 
-Lambda function deployment types:
-	* Canary: traffic is shifted in 2 increments:
-		* 1st increment: % of traffic that's shifted to your updated lambda functions
-		* 2nd increment: the interval in minutes before the remaining traffic is shifted to your updated lambda functions
-	* Linear: traffic is shifted in equal increments with an equal number of minutes in between each increment
-	* All-at-once: all traffic is shifted from the old lambda function to the new lambda function at once
+
 in Elastic Beanstalk, application files are stored in S3 and server log files are optionally stored in S3 or CloudWatch Logs
 IAM Access Keys' programmatic access usecase also includes the ability to make API calls for a User
 S3 IA and One Zone IA have a minimum storage duration of 30 days; S3 Standard and Intelligent Tiering have no minimum storage duration

@@ -26,7 +26,7 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 		* on demand: useful for low costs, flexibility, no commitment, used for apps with unpredictable/spiky/short-term workloads and apps that are being tested on EC2 for the first time
 			* default pricing; you're charged by the hour, so no up-front or long-term payment; best for short-term or unpredictable workloads
 			* linux systems are charged by the second however
-			* default on demand instance limit is 20 per Region
+			* default on demand instance limit is 20 per Region; you can bypass this by submitting a limit increase form to AWS
 		* reserved instances(RI): useful for apps with predictable usage, apps that require reserved capacity, users who want to make their payments upfront to reduce costs even further
 			* you commit to a 1-3 year contract. Best used for predictable workloads and/or if you want to reserve servers for specific timeframes. Best long-term solution
 			* reserved instances can be sold at the Reserved Instance Marketplace, and can be shared btwn multiple accounts in the same org
@@ -53,8 +53,11 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 			* can be purchased on-demand, which gets charged hourly
 			* only 70% savings compared to on-demand, so most expensive, but the trade-off is you get a single tenant deployment as opposed to a multi-tenant one
 	* you can apply roles to EC2 instances
-	* Capacity Reservations: lets you reserve a specific instance type/family of EC2s for a specific Region and AZ
+	* Capacity Reservations(a.k.a Instance Savings Plan): lets you reserve a specific instance type/family of EC2s for a specific Region and AZ
 		* is charged at the instance type's on demand rate, whether an instance is running or not
+		* automatically reduces your cost on the selected instance family in that region regardless of AZ, size, OS or tenancy
+		* give you the flexibility to change your usage between instances within a family in that region
+		* EX: you can move from c5.xlarge running Windows to c5.2xlarge running Linux and automatically benefit from the Savings Plan prices
 	* EC2 auto recovery: used to automatically recover your EC2 instances when CloudWatch detects a problem with that EC2 server; like if it's broken or something 
 	* factors that impact the price paid for an EC2 instance:
 		* the instance type
@@ -72,6 +75,9 @@ elastic load balancer: allows you manage the load traffic across all of your ser
 		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
 		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games
 		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
+			* ALB's provide host-based routing, path-based routing, HTTP header-based routing, HTTP method-based routing, and query string parameter-based routing
+			* Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
+				* you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
 		* GWLB (Gateway): routes traffic to virtual applicances (to analyze for security) before routing it to the actual target
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -241,6 +247,10 @@ AWS cost and usage report: generates a spreadsheet that gives you the most granu
 Athena: query service that lets you query data in S3 using SQL; you don't have to provision or set anything up; it's all serverless and you pay per query you make
 	* you can use Athena to generate reports based on data stored in S3 and analyze cost and usage reports by querying them
 	* Workgroups: you can save queries to Workgroups, which u can then grant access to for other users
+		* only certain users you permit can see and/or use the queries in that Workgroup
+		* by default, each aws account has a primary workgroup and the default permissions allow all authenticated users access to this workgroup. The primary workgroup cannot be deleted
+		* you can set up workgroup-wide settings and enforce their usage by all queries that run in a workgroup
+			* the settings include query results, location in Amazon S3, and encryption configuration
 	* Apache Spark on Athena: lets u run data analytics on the data you query from S3 by using Apache Spark to analyze the data
 	* integrates with a bunch of aws services, not just S3 (although u always query data from S3; just saying that it integrates w/ a bunch of services too)
 QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
@@ -296,6 +306,7 @@ VPC peering: a network connection btwn 2 VPC's that allows you to route traffic 
 AWS Transit Gateway: simplifies the connection management of multiple VPC's across multiple accounts in a company's network
 	* acts as a central hub for which all connections connect to, and then Transit Gateway routes traffic where it needs to go
 subnets: result of partitioning an IP network into smaller networks; can be public (internet accessible) or private (non-internet accessible); the OG IP that is being referred to is the VPC you create
+	* generally u want to keep 1 subnet per AZ
 Internet Gateway (IGW): enables servers access to the Internet from your VPC out into the Internet
 route tables: determines where network traffic from your subnets are directed when being sent out into the internet
 Security Groups: Firewalls for your servers and databases
@@ -310,6 +321,10 @@ CodeDeploy: allows you to deploy code to your on-premise architecture and/or EC2
 	* fully managed deployment service that automates software deployments to compute services
 OpsWorks: allows you to programmatically configure how servers are configured, managed, and deployed; uses managed instances of Chef and Puppet (configuration management tools)
 	* configuration management tools: DevOps tools that automate the process of making code changes, deploying them, and tracking them
+	* OpsWorks Stacks: lets you manage applications and servers on AWS and on-prem by modeling your application as a Stack with different Layers
+		* Stack: a collection of instances/Layers that are managed together for serving a common task (EX: hosting a web application = web app + DB + ELB)
+		* you can deploy and configure EC2's in each Layer or connect other aws resources such as RDS, ELB's, etc.
+		* a common use-case is to have multiple Stacks that represent multiple environments (EX: DEV, PROD)
 codePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
 codeCommit: fully managed source control service that hosts secure Git-based repos
 codeBuild: fully managed build server: it compiles your source code, runs tests, and makes software packages
