@@ -45,6 +45,8 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 					* ... and u can't queue purchases of Zonal RIs 
 			* you are limited to purchasing 20 Regional RIs and 20 Zonal RIs per month
 				* u can't exceed your on demand instance limit by buying more Regional RI's, but you CAN with Zonal RIs as long as the on demand instances match the specs of your Zonal RIs 
+			* RI Coverage Budget Reports: shows # of RI instances across your AWS account and where you can save money by including more
+			* RI Utilization Budget Reports: shows % utilization of RI instances across your AWS account and where you can save money by utilizing RI's more
 		* spot: useful for apps that have flexible start and end times, apps that don't require a lot of power to run, and when you urgently need more computing power immediately
 			* it's AWS trying to give discounts for idle servers they don't use. 90% savings compared to on-demand pricing, so best savings solution, but they can be terminated at any time
 			* spot instances are designed for small applications and/or have flexible start and end times
@@ -74,10 +76,15 @@ elastic load balancer: allows you manage the load traffic across all of your ser
 	* load balancers come in 4 different flavors:
 		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
 		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games
+			* NLB's can maintain millions of simultaneous sessions with no latency while preserving client IP addresses
+			* NLB uses a security policy that consists of protocols and ciphers to negotiate TLS connections
+			* NLB does not support custom security policies
 		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
 			* ALB's provide host-based routing, path-based routing, HTTP header-based routing, HTTP method-based routing, and query string parameter-based routing
 			* Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
 				* you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
+			* Request Tracing: feature of ALB that lets you monitor ALB by adding a header to HTTP requests with trace identifier information
+			* ALB's and NLB's both support Dynamic Host Port Mapping
 		* GWLB (Gateway): routes traffic to virtual applicances (to analyze for security) before routing it to the actual target
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -86,9 +93,13 @@ U2F Security Key: a type of MFA device that customers can use to protect their A
 S3: simple storage service; allows you to manage your buckets: it's where you put your objects
 	* object storage for immutable files; files can be from 0 bytes to 5 TB; unlimited storage; it's key/value storage; 99.99% availability, and 11 x 9's durability
 	* buckets in S3 must be unique globally
+		* S3 does not exist in any VPC because it's global
 	* objects in S3 consist of:
 		* key: name of the object
 		* value: data of the object
+	* 2 types of URLs for S3 buckets:
+		* Path-Style (will be discontinued soon): https://s3.[Region].amazonaws.com/[Bucket name]
+		* Virtual Hosted-Style: https://[Bucket name].s3.[Region].amazonaws.com
 	* all READ, WRITE, and DELETE operations are strongly consistent in S3, meaning changes to objects are synced everywhere in under a second
 	* S3 features:
 		* tiered storage
@@ -253,6 +264,7 @@ Athena: query service that lets you query data in S3 using SQL; you don't have t
 			* the settings include query results, location in Amazon S3, and encryption configuration
 	* Apache Spark on Athena: lets u run data analytics on the data you query from S3 by using Apache Spark to analyze the data
 	* integrates with a bunch of aws services, not just S3 (although u always query data from S3; just saying that it integrates w/ a bunch of services too)
+	* If Athena is trying to query data in S3, but the data in S3 is encrypted with SSE-KMS, it will automatically decrypt it
 QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
 AWS Simple Monthly Calculator: "how much will [this] cost me on a monthly basis?"
 AWS pricing calculator: is used to create an estimated cost for your new solution to be deployed on AWS
@@ -325,7 +337,8 @@ OpsWorks: allows you to programmatically configure how servers are configured, m
 		* Stack: a collection of instances/Layers that are managed together for serving a common task (EX: hosting a web application = web app + DB + ELB)
 		* you can deploy and configure EC2's in each Layer or connect other aws resources such as RDS, ELB's, etc.
 		* a common use-case is to have multiple Stacks that represent multiple environments (EX: DEV, PROD)
-codePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
+CodePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
+	* for CodePipeline, if you want to automatically kick off a pipeline in response to code changes in S3, make sure periodic checks are disabled to allow for events-based triggering of CodePipeline
 codeCommit: fully managed source control service that hosts secure Git-based repos
 codeBuild: fully managed build server: it compiles your source code, runs tests, and makes software packages
 AWS cloud9: IDE accessed via the web browser
