@@ -517,7 +517,8 @@ CloudWatch: monitors your cloud
 			* after it matches your Target, you can also choose what part of the Event to pass along under Configure Input:
 				* Match Events: the entire Event
 				* part of the matched event
-				* constant (JSON text): send a static mocked json object instead of the actual Event data
+				* Constant (JSON text): send a static mocked json object instead of the actual Event data
+					* really good for passing data to a Lambda function when using a CloudWatch Event to trigger Lambda code
 				* Input Transformer: lets you transform the Event data into whatever u want it to look like
 			* can't use these as variable names when making Rules: aws.events.rule-arn, aws.events.rule-name, aws.events.event
 			* EventBridge Schema Registry: lets you create, discover, and manage OpenAPI schemas for Events on EventBridge
@@ -1260,7 +1261,6 @@ Step Functions: serverless functions (like Lambda) that provide serverless orche
 		* step functions are good for short workflows, SWF is for long workflows
 		* step functions are used for synchronous tasks, SWF is for asynchronous tasks
 		* step functions are new and less complex, SWF is legacy and more complex
-	
 CloudFront: CDN that creates cached copies of your websites at Edge Locations based on geographical location, the webpage origin, and a content delivery server
 	* objects are cached at Edge Locations for the duration of their Time To Live (TTL)
 	* Edge Locations aren't just read-only, you can write to them as well
@@ -1708,6 +1708,11 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 	* API Caching: can be enabled on a Stage to cache your endpoint's response to API calls for a specified time-to-live period
 		* API Gateway will instead respond to Requests by looking up the Response from the cache instead of making a request to the endpoint had API Caching remained disabled
 		* reduces the # of calls made to your endpoints and improves latency of Requests made to your API
+		* API Caching also lets you:
+			* set cache capacity
+			* flush the entire cache
+			* set TTL of cached responses
+			* encrypt the cache
 	* Cross-Origin Resource Sharing(CORS): allows your webpage to request restricted resources from another webpage on a different domain; relaxes Same Origin Policy
 		* should always be enabled if using JavaScript/AJAX(cause those 2 always use multiple domains)
 		* CORS is always enforced by the client i.e the browser
@@ -1828,7 +1833,6 @@ Storage Gateway: lets you extend or backup on-premise storage to the cloud
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Misc:
-
 
 the default termination policy when scaling-in services:
 	* If there are instances in multiple Availability Zones, choose the Availability Zone with the most instances and at least one instance that is not protected from scale in.
@@ -1951,33 +1955,13 @@ AWS DataPipeline: lets you automate and transform the movement of data across di
 you would use CloudWatch and CloudTrail for the monitoring and logging of Route53
 Alias Records are not supported for RDS DB instances
 	* Alias Records are used to point to aws services themselves, but an individual RDS instance is not one of the supported Alias targets
-
-
-
-
-
-
-
-
-
-in API Gateway, you can:
-	* set cache capacity
-	* flush the entire cache
-	* set TTL
-	* encrypt the cache
 when using Lambda in a VPC, make sure it isn't running in "no VPC" network mode
-Constant(JSON Text) option: feature in CloudWatch that lets you pass data to a Lambda function when using a CloudWatch Event to trigger Lambda code
-when you update Lambda code, live requests that are being processed by that Lambda code will be processed by both the old and new versions of that code for a brief minute
 poll-based event sources for Lambda:
 	* SQS
 	* Kinesis
 	* DynamoDB
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
 
 AWS Run Command: feature of System Manager that lets you automate and manage the configuration of your EC2's remotely w/o having to sign in to the instances themselves
 ELB access logs: gives you info about requests sent to your load balancer; contains: time the request was received, client IP, latencies, request paths, and server responses
@@ -2124,7 +2108,7 @@ AWS Lake Formation: a data lake used to globally share data for analytics and ML
 	* permissions are enforced across Athena, Quicksight, Redshift Spectrum, EMR, and Glue
 	* Lake Formation and Glue share the same Data Catatlog
 Amazon Q: aws' chatgpt
-Amazon CodeWhisperer: aws' Copilot 
+Amazon CodeWhisperer: aws' Copilot
 Amazon Managed Streaming for Apache Kafka (Amazon MSK): fully-managed service that lets u build and run apps that use Apache Kafka to process streaming data
 	* Apache Kafka: a service that processes and analyzes streaming data that operates on a producer/consumer, pub/sub model, ...
 		* ...where a Kafka cluster is the intermediary that organizes the data into Topics to be sent out to consumers

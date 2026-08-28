@@ -208,6 +208,7 @@ RDS: fully managed relational database service; allows you to setup relational d
 Lambda: server-less applications/functions that you perform w/o provisioning servers; they last at most 15 minutes! You can also add triggers for when you want them to run; you pay only for the compute time they consume
 	* Lambda supports: Node.js, C#, Java, Go, Python, PowerShell; essentially it can support any programming language using an API
 	* Lambda supports version control (you can pull up old versions of your code) and it scales out automatically
+		* when you update Lambda code, live requests that are being processed by that Lambda code will be processed by both the old and new versions of that code for a brief minute
 	* 2 ways Lambda is priced:
 		* the first 1 million requests are free, then $0.20 per 1 million requests after that
 		* Duration of the execution time
