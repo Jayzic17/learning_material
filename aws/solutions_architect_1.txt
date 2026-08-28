@@ -1,6 +1,9 @@
 
 
 
+
+
+
 cloud computing: using remote servers to host, manage, run, and process all your data
 SaaS: software that is run and managed by a company for customers 
 PaaS: infrastructure that is run and managed by a company for developers

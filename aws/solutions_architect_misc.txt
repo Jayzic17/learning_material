@@ -1,5 +1,9 @@
  
 
+
+
+
+
 6 advantages of cloud computing:
 	* you only have to pay for what you use
 	* amazon has a lot of purchasing power, so don't have to worry about buying servers
@@ -229,3 +233,8 @@ Default ports:
 	* Aurora MySQL: 3306
 	* Aurora Postgres: 5432
 	* MongoDB: 27017
+
+
+
+
+

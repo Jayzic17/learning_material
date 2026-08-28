@@ -1,6 +1,9 @@
 
 
 
+
+
+
  IAM: manage Users and their level of access to the AWS console
 	* AWS credentials: When you enable programmatic access for AWS Users, you'll be able to create an Access Key ID and a Secret Access Key, which represent your AWS Credentials
 		* you'll want to store your credentials in your User's home, so something like: ~/.aws/credentials or ~/.aws/config
@@ -1962,6 +1965,8 @@ poll-based event sources for Lambda:
 	* DynamoDB
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Misc. cont.
 
 AWS Run Command: feature of System Manager that lets you automate and manage the configuration of your EC2's remotely w/o having to sign in to the instances themselves
 ELB access logs: gives you info about requests sent to your load balancer; contains: time the request was received, client IP, latencies, request paths, and server responses
