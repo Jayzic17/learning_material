@@ -29,7 +29,7 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 		* on demand: useful for low costs, flexibility, no commitment, used for apps with unpredictable/spiky/short-term workloads and apps that are being tested on EC2 for the first time
 			* default pricing; you're charged by the hour, so no up-front or long-term payment; best for short-term or unpredictable workloads
 			* linux systems are charged by the second however
-			* default on demand instance limit is 20 per Region; you can bypass this by submitting a limit increase form to AWS
+			# * default on demand instance limit is 20 per Region; you can bypass this by submitting a limit increase form to AWS
 		* reserved instances(RI): useful for apps with predictable usage, apps that require reserved capacity, users who want to make their payments upfront to reduce costs even further
 			* you commit to a 1-3 year contract. Best used for predictable workloads and/or if you want to reserve servers for specific timeframes. Best long-term solution
 			* reserved instances can be sold at the Reserved Instance Marketplace, and can be shared btwn multiple accounts in the same org
@@ -37,19 +37,19 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 				* 1 or 3-year contracts; the longer the TERM, the greater the savings
 				* all upfront, partial upfront, and no upfront; the greater the PAYMENT OPTION (all upfront being the best), the greater the savings
 				* CLASS OFFERINGs:
-					* standard: 75% savings compared to on-demand pricing, lets you change RI attributes, and can be bought and sold at the RI Marketplace, but can't be exchanged for a different RI
-					* convertible: 54% savings compared to on-demand pricing, but doesn't let you change RI attributes, in which case u would have to exchange it for a different RI
-						* can't be bought or sold at the RI Marketplace 
+					# * standard: 75% savings compared to on-demand pricing, lets you change RI attributes, and can be bought and sold at the RI Marketplace, but can't be exchanged for a different RI
+					# * convertible: 54% savings compared to on-demand pricing, but doesn't let you change RI attributes, in which case u would have to exchange it for a different RI
+					# 	* can't be bought or sold at the RI Marketplace 
 					* scheduled: allows you to reserve servers for specific timeframes
 			* when u purchase a reserved instance, u determine the scope(doesn't affect pricing):
-				* Regional RI: purchased for a Region, does not reserve capacity, RI discount applies to instance usage in any AZ in the Region and within the instance family(regardless of size), ...
-					* ...and u can queue purchases of Regional RIs  
-				* Zonal RI: purchased for a single AZ: reserves capacity in the specified AZ, RI discount applies to instance usage in the specified AZ for the specified instance type and size only, ...
-					* ... and u can't queue purchases of Zonal RIs 
-			* you are limited to purchasing 20 Regional RIs and 20 Zonal RIs per month
-				* u can't exceed your on demand instance limit by buying more Regional RI's, but you CAN with Zonal RIs as long as the on demand instances match the specs of your Zonal RIs 
-			* RI Coverage Budget Reports: shows # of RI instances across your AWS account and where you can save money by including more
-			* RI Utilization Budget Reports: shows % utilization of RI instances across your AWS account and where you can save money by utilizing RI's more
+				# * Regional RI: purchased for a Region, does not reserve capacity, RI discount applies to instance usage in any AZ in the Region and within the instance family(regardless of size), ...
+				# 	* ...and u can queue purchases of Regional RIs  
+				# * Zonal RI: purchased for a single AZ: reserves capacity in the specified AZ, RI discount applies to instance usage in the specified AZ for the specified instance type and size only, ...
+				# 	* ... and u can't queue purchases of Zonal RIs 
+			# * you are limited to purchasing 20 Regional RIs and 20 Zonal RIs per month
+				# * u can't exceed your on demand instance limit by buying more Regional RI's, but you CAN with Zonal RIs as long as the on demand instances match the specs of your Zonal RIs 
+			# * RI Coverage Budget Reports: shows # of RI instances across your AWS account and where you can save money by including more
+			# * RI Utilization Budget Reports: shows % utilization of RI instances across your AWS account and where you can save money by utilizing RI's more
 		* spot: useful for apps that have flexible start and end times, apps that don't require a lot of power to run, and when you urgently need more computing power immediately
 			* it's AWS trying to give discounts for idle servers they don't use. 90% savings compared to on-demand pricing, so best savings solution, but they can be terminated at any time
 			* spot instances are designed for small applications and/or have flexible start and end times
@@ -58,7 +58,7 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 			* can be purchased on-demand, which gets charged hourly
 			* only 70% savings compared to on-demand, so most expensive, but the trade-off is you get a single tenant deployment as opposed to a multi-tenant one
 	* you can apply roles to EC2 instances
-	* Capacity Reservations(a.k.a Instance Savings Plan): lets you reserve a specific instance type/family of EC2s for a specific Region and AZ
+	# * Capacity Reservations(a.k.a Instance Savings Plan): lets you reserve a specific instance type/family of EC2s for a specific Region and AZ
 		* is charged at the instance type's on demand rate, whether an instance is running or not
 		* automatically reduces your cost on the selected instance family in that region regardless of AZ, size, OS or tenancy
 		* give you the flexibility to change your usage between instances within a family in that region
@@ -84,9 +84,9 @@ elastic load balancer: allows you manage the load traffic across all of your ser
 			* NLB does not support custom security policies
 		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
 			* ALB's provide host-based routing, path-based routing, HTTP header-based routing, HTTP method-based routing, and query string parameter-based routing
-			* Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
+			# * Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
 				* you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
-			* Request Tracing: feature of ALB that lets you monitor ALB by adding a header to HTTP requests with trace identifier information
+			# * Request Tracing: feature of ALB that lets you monitor ALB by adding a header to HTTP requests with trace identifier information
 			* ALB's and NLB's both support Dynamic Host Port Mapping
 		* GWLB (Gateway): routes traffic to virtual applicances (to analyze for security) before routing it to the actual target
 
@@ -101,63 +101,64 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		* key: name of the object
 		* value: data of the object
 	* 2 types of URLs for S3 buckets:
-		* Path-Style (will be discontinued soon): https://s3.[Region].amazonaws.com/[Bucket name]
-		* Virtual Hosted-Style: https://[Bucket name].s3.[Region].amazonaws.com
-	* all READ, WRITE, and DELETE operations are strongly consistent in S3, meaning changes to objects are synced everywhere in under a second
+		# * Path-Style (will be discontinued soon): https://s3.[Region].amazonaws.com/[Bucket name]
+		# * Virtual Hosted-Style: https://[Bucket name].s3.[Region].amazonaws.com
+	# * all READ, WRITE, and DELETE operations are strongly consistent in S3, meaning changes to objects are synced everywhere in under a second
 	* S3 features:
 		* tiered storage
 		* Lifecycle Management; you can set up lifecycle policies that can move files to different storage classes based on how frequently they're accessed; ex: from standard to Glacier
 		* versioning
 		* encryption
 		* access control list(legacy): a list used in S3 that you create that has a list that says which aws Accounts can access which objects in S3 buckets
-		* bucket policies: same thing as access control, but it's for entire Buckets instead of individual objects; list that says which Principals (accounts, users, roles) gets access to which buckets; you can use it to make buckets public
-		* Block Public Access: offers settings to easily block public access to your S3 buckets
-		* Access Points: named network endpoints that are attached to buckets used to simplify managing s3 bucket access
-			* aims to simplify the management of buckets whose bucket policies are needlessly complex and/or redundant
-			* has it's own distinct permissions via an Access Point policy, it's own Block Public Access, and network controls (e.g have all requests only come from the Internet, a specific VPC, etc.)
-		* Multi-Region Access Points: Access Points, but it's a global network endpoint for routing btwn multiple buckets in multiple regions
-			* it uses Global Accelerator under-the-hood
-		* Object Lambda Access Points: lets you transform the output of a HEAD, GET, or LIST request made to S3 objects (doesn't modify the object itself)
-			* useful for scrubbing PII before returning the output
-		* Access Grants: lets u map Identities(users, groups, roles) in some directory service (EX: Active Directory, IAM, Okta, etc.) to data in S3
-		* Mountpoint: allows you to mount an S3 bucket to your local Linux file system
-			* it's an open source client u install on your local computer and provides high throughput access to objects with basic file system commands
-			* can:
-				* read files up to 5TB in size
-				* list and read existing files
-				* create new files
-			* can't:
-				* modify existing files
-				* delete directories
-				* support symbolic links
-				* support file locking
-			* can be for Storage Classes Glacier Instant Retrieval, and above
-		* Requesters Pay: bucket option that allows the bucket owner to offset the cost to download and request data from the bucket over to the requester
-			* when enabled, all requests must be authenticated (no anonymous or SOAP requests allowed)
-			* requester must include x-amz-request-payer in their API request header when making the request to the bucket
-			* requester assumes an IAM role with the s3:RequestPayer condition attached before making their request
+		* bucket policies: same thing as access control, but it's for entire Buckets instead of individual objects; list that says which Principals (accounts, users, roles) gets access to which buckets
+			* you can use it to make buckets public
+		# * Block Public Access: offers settings to easily block public access to your S3 buckets
+		# * Access Points: named network endpoints that are attached to buckets used to simplify managing s3 bucket access
+			# * aims to simplify the management of buckets whose bucket policies are needlessly complex and/or redundant
+			# * has it's own distinct permissions via an Access Point policy, it's own Block Public Access, and network controls (e.g have all requests only come from the Internet, a specific VPC, etc.)
+		# # # * Multi-Region Access Points: Access Points, but it's a global network endpoint for routing btwn multiple buckets in multiple regions
+		# # # 	* it uses Global Accelerator under-the-hood
+		# # * Object Lambda Access Points: lets you transform the output of a HEAD, GET, or LIST request made to S3 objects (doesn't modify the object itself)
+		# # 	* useful for scrubbing PII before returning the output
+		# * Access Grants: lets u map Identities(users, groups, roles) in some directory service (EX: Active Directory, IAM, Okta, etc.) to data in S3
+		# * Mountpoint: allows you to mount an S3 bucket to your local Linux file system
+		# 	* it's an open source client u install on your local computer and provides high throughput access to objects with basic file system commands
+		# 	* can:
+		# 		* read files up to 5TB in size
+		# 		* list and read existing files
+		# 		* create new files
+		# 	* can't:
+		# 		* modify existing files
+		# 		* delete directories
+		# 		* support symbolic links
+		# 		* support file locking
+		# 	* can be for Storage Classes Glacier Instant Retrieval, and above
+		# * Requesters Pay: bucket option that allows the bucket owner to offset the cost to download and request data from the bucket over to the requester
+		# 	* when enabled, all requests must be authenticated (no anonymous or SOAP requests allowed)
+		# 	* requester must include x-amz-request-payer in their API request header when making the request to the bucket
+		# 	* requester assumes an IAM role with the s3:RequestPayer condition attached before making their request
 			* if any of the above ^ conditions aren't true, a 403 is returned
 			* useful for when u want to share data, but not incur any of the transfer fees
 			* the aws Account of the requester is what gets charged
-		* Batch Operations: can perform batch operations on S3 objects; can go up to exabytes of data
-			* types of operations u can perform:
-				* copy
-				* invoke lambda functions
-				* replacing object Tags
-				* replacing access control lists for objects
-				* restoring objects from S3 Glacier
-				* placing Object Locks
-				* placing Object Legal Holds
-			* u need to supply the Batch Operation with a list of objects to perform the operation on, either as a csv or S3 Inventory report
-		* S3 Inventory: takes inventory of objects in an S3 bucket on a repeating schedule, so that you have an audit history of object changes
-			* S3 will output the inventory report into another S3 bucket
-			* can perform it daily and get the inventory report within 48 hours, or weekly and get the 1st one within 48 hours, and all other ones every Sunday
+		# * Batch Operations: can perform batch operations on S3 objects; can go up to exabytes of data
+		# 	* types of operations u can perform:
+		# 		* copy
+		# 		* invoke lambda functions
+		# 		* replacing object Tags
+		# 		* replacing access control lists for objects
+		# 		* restoring objects from S3 Glacier
+		# 		* placing Object Locks
+		# 		* placing Object Legal Holds
+		# 	* u need to supply the Batch Operation with a list of objects to perform the operation on, either as a csv or S3 Inventory Report
+		# * S3 Inventory: takes inventory of objects in an S3 bucket on a repeating schedule, so that you have an audit history of object changes
+		# 	* S3 will output the Inventory Report into another S3 bucket
+		# 	* can perform it daily and get the Inventory Report within 48 hours, or weekly and get the 1st one within 48 hours, and all other ones every Sunday
 		* S3 Event Notifications: allows your bucket to notify other aws services about stuff that happens in your S3 (very powerful)
 			* notifications are delivered in seconds, but can sometimes take a minute or longer
-		* Storage Class Analysis: Intelligent Tiering, but only btwn Standard and IA
-			* unlike Intelligent Tiering though, YOU manage it, no ML involved (like w/ Lifecycle Management); also cheaper than Intelligent Tiering
-		* Storage Lens: analyzes your S3 bucket storage across your entire AWS Organization
-			* aggregates all the data and displays it in an account snapshot as an interactive dashboard that gets updated daily
+		# * Storage Class Analysis: Intelligent Tiering, but only btwn Standard and IA
+		# 	* unlike Intelligent Tiering though, YOU manage it, no ML involved (like w/ Lifecycle Management); also cheaper than Intelligent Tiering
+		# * Storage Lens: analyzes your S3 bucket storage across your entire AWS Organization
+		# 	* aggregates all the data and displays it in an account snapshot as an interactive dashboard that gets updated daily
 		* Interoperability: Interoperability is the ability of different cloud services to be able to easily exchange and use data seamlessly btwn each other
 			* aws services that dump data into S3:
 				* EC2: for storing snapshots and backups
@@ -168,8 +169,9 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 	* storage classes in S3:
 		most expensive
 			  |	* S3 Standard: data stored redundantly in 3 or more AZ's
-			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access; cheaper than S3, but you're charged a retrieval fee, 50% less than Standard, 99.9% availability
-			  | 	* S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing, 20% less than IA
+			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access
+			  | 	* cheaper than S3, but you're charged a retrieval fee, 50% less than Standard, 99.9% availability
+			  | * S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing, 20% less than IA
 			  |	* S3 Intelligent tiering: uses machine learning to move data through the above 3 access tiers ^ to optimize cost and performance
 			  | * S3 Glacier Instant Retrieval
 			  | * S3 Glacier Flexible Retrieval
@@ -185,7 +187,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 	* Cross-Region Replication: allows you to have duplicative buckets in multiple regions
 	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
 		* it takes 20 minutes before it can begin to take affect once enabled on a bucket
-		* gets transfered using the https://s3-accelerate.amazonaws.com(IPv4) or https://s3-accelerate.dualstack.amazonaws.com(IPv4/IPv6) DNS Endpoints
+		# * gets transfered using the https://s3-accelerate.amazonaws.com(IPv4) or https://s3-accelerate.dualstack.amazonaws.com(IPv4/IPv6) DNS Endpoints
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -211,7 +213,7 @@ RDS: fully managed relational database service; allows you to setup relational d
 Lambda: server-less applications/functions that you perform w/o provisioning servers; they last at most 15 minutes! You can also add triggers for when you want them to run; you pay only for the compute time they consume
 	* Lambda supports: Node.js, C#, Java, Go, Python, PowerShell; essentially it can support any programming language using an API
 	* Lambda supports version control (you can pull up old versions of your code) and it scales out automatically
-		* when you update Lambda code, live requests that are being processed by that Lambda code will be processed by both the old and new versions of that code for a brief minute
+		# * when you update Lambda code, live requests that are being processed by that Lambda code will be processed by both the old and new versions of that code for a brief minute
 	* 2 ways Lambda is priced:
 		* the first 1 million requests are free, then $0.20 per 1 million requests after that
 		* Duration of the execution time
@@ -266,16 +268,16 @@ Athena: query service that lets you query data in S3 using SQL; you don't have t
 		* by default, each aws account has a primary workgroup and the default permissions allow all authenticated users access to this workgroup. The primary workgroup cannot be deleted
 		* you can set up workgroup-wide settings and enforce their usage by all queries that run in a workgroup
 			* the settings include query results, location in Amazon S3, and encryption configuration
-	* Apache Spark on Athena: lets u run data analytics on the data you query from S3 by using Apache Spark to analyze the data
+	# * Apache Spark on Athena: lets u run data analytics on the data you query from S3 by using Apache Spark to analyze the data
 	* integrates with a bunch of aws services, not just S3 (although u always query data from S3; just saying that it integrates w/ a bunch of services too)
-	* If Athena is trying to query data in S3, but the data in S3 is encrypted with SSE-KMS, it will automatically decrypt it
+	# * If Athena is trying to query data in S3, but the data in S3 is encrypted with SSE-KMS, it will automatically decrypt it
 QuickSight: Business Intelligence Service that lets you visualize data in the form of graphs without having to know how to program
 AWS Simple Monthly Calculator: "how much will [this] cost me on a monthly basis?"
 AWS pricing calculator: is used to create an estimated cost for your new solution to be deployed on AWS
 consolidated billing: is where you can combine all billing and payment methods across multiple AWS accounts into one bill, where the master account pays the charges for all the member accounts
 	* consolidated billing allows you to save money by taking advantage of volume discounts.
 	* Ex: you save more money by combining multiple accounts and expenses into 1 bill, as opposed to paying for the expenses of each account separately 
-	* Root Account pays the bills of all the linked accounts; paying account is independent from linked accounts, and linked accounts are independent; limit of 20 linked accounts
+	# * Root Account pays the bills of all the linked accounts; paying account is independent from linked accounts, and linked accounts are independent; limit of 20 linked accounts
 		* the Root Account is the email address you use to set up your AWS account; has full admin access; don't let anyone have this!
 			* it cannot be deleted, and it's permissions cannot be limited in any way
 			* you primarly use it to change your account settings, close your aws account, and update your AWS Support plan
@@ -299,10 +301,10 @@ AWS CloudFormation template: the template you use to configure resources into yo
 	* allows you to "codify" your infrastructure. Super powerful, meaning you can automate the process of setting up and provisioning servers, databases, and stuff like that
 	* allows you to create a JSON or YAML file, which instructs how you want all your AWS services provisioned and configured in one go, so way more powerful than what Chef does
 	* CloudFormation is Infrastructure as code
-AWS quickStarts: pre-built CloudFormation templates by AWS Partners that help you deploy popular stacks: a collection of resources that you can manage.
+AWS QuickStarts: pre-built CloudFormation templates by AWS Partners that help you deploy popular stacks: a collection of resources that you can manage.
 	* All the resources in the stack are defined by the stack's AWS CloudFormation template
 	* you can use it to deploy environments quickly using CloudFormation templates made by AWS Solutions Architects who are experts in their respective technologies
-	* 3 parts to AWS quickStarts:
+	* 3 parts to AWS QuickStarts:
 		* a reference architecture for the deployment
 		* AWS CloudFormation templates for automating and configuring the deployment
 		* following the deployment guide
@@ -364,16 +366,16 @@ EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, H
 EFS: Elastic File Storage; file storage that you can mount to multiple EC2 servers at the same time
 	* EFS is EBS except it automatically can change it's storage size to accommodate more or less data (elastic); multiple EC2's can pull from the same EFS; virtual disk attached to an EC2
 AWS Snow Family: physically moving data in or out of the cloud to and from S3
-Snowcone: either 8TB HHD or 14TB SSD
-	* can send data to aws 2 ways:
-		* physically sending it
-		* DataSync, which u run on the Snowcone itself
-	* can run on a battery for up to 6 hours
-	* can use the onboard wifi to gather sensor data (NA-only)
-	* offers Network File System (NFS) support for Windows, Linux, and Mac
-	* multiple layers of security encryption protection
-	* can collect IoT data using AWS IoT Greengrass
-	* physically smaller than Snowball Edge
+# Snowcone: either 8TB HHD or 14TB SSD
+# 	* can send data to aws 2 ways:
+# 		* physically sending it
+# 		* DataSync, which u run on the Snowcone itself
+# 	* can run on a battery for up to 6 hours
+# 	* can use the onboard wifi to gather sensor data (NA-only)
+# 	* offers Network File System (NFS) support for Windows, Linux, and Mac
+# 	* multiple layers of security encryption protection
+# 	* can collect IoT data using AWS IoT Greengrass
+# 	* physically smaller than Snowball Edge
 Snowball Edge: same as Snowcone, but with more local processing, edge-computing workloads, and device configuration options
 	* has an LCD display, can use in a cluster of groups of 3 to 16 devices, and can do local processing and edge-computing workloads
 	* 5 options for device configurations:
@@ -411,7 +413,7 @@ inherited controls: controls that the customer fully inherits from AWS, so physi
 shared controls: controls that apply to both the infrastructure and customer layers; for example:
 	* patch management: AWS patches the infrastructure, but the customer has to patch their own OS's and applications
 	* configuration management: AWS maintains the configuration of their infrastructure devices, but the customer has to maintain config for their own...
-		* OS's, applications, and databases
+		* ...OS's, applications, and databases
 	* AWS must train their employees, but the customer is responsible for training their own employees
 AWS Artifact: generates pdfs that give you access to AWS's security and compliance reports for any Compliance Program; asking the question: "why should we trust AWS?"
 AWS Inspector: runs a security benchmark to make sure your EC2 servers are as secure as possible; can perform network and host checks; asks the question "are your servers secure? Prove it!"
@@ -431,6 +433,8 @@ AWS Shield Advanced: protection against larger DDoS'; $3000/yr; visibility into 
 AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications
 	* done by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
 	* this prevents packet loss, latency, and improves the user's performance by 60%
+	* AWS claims Global Accelerator is it's own thing, even though it sounds just like CloudFront it doesn't use a CDN
+		* it's main purpose is strictly just to route traffic faster, not deliver info and cache it for users for accessing data faster like with CloudFront
 PenTesting: penetration testing; simulated cyber attack on a computer system to evaluate if the system is secure
 	* You can PenTest on AWS, but only on the following services:
 		* EC2 servers, NAT Gateways, and ELB
@@ -450,9 +454,9 @@ PenTesting: penetration testing; simulated cyber attack on a computer system to 
 	* if you wanted to PenTest against something that isn't one of the pre-approved services, you'll need to submit a request to AWS, takes 7 days to reply
 Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web applications and websites for small developers who don't need complex functionality from their servers
 	* you use it to launch VPS's (Virtual Private Servers)
-Amazon Guard Duty: an IDS/IPS that uses machine learning to analyze your CloudTrail, VPC, and DNS logs; will alert you of findings and you can automate incident responses to those findings
-	* uses machine-learning that auto detects anomalies and 3rd-party data to protect your account and alerts you; free 30-day trial
-	* GuardDuty gets its data from CloudTrail event logs, VPC Flow Logs, and DNS logs
+# Amazon Guard Duty: an IDS/IPS that uses machine learning to analyze your CloudTrail, VPC, and DNS logs; will alert you of findings and you can automate incident responses to those findings
+	# * uses machine-learning that auto detects anomalies and 3rd-party data to protect your account and alerts you; free 30-day trial
+	# * GuardDuty gets its data from CloudTrail event logs, VPC Flow Logs, and DNS logs
 	* IDS/IPS: Intrusion Detection System and Intrusion Protection System
 Key Management Service: (KMS) lets you create and manage encryption keys; multi-tenant HSM; uses envelope encryption; a lot of AWS services allow you to encrypt your data with KMS
 	* regional; manages your keys for encryption and decryption for S3 objects; KMS is on shared physical hardware (multi-tenant)
@@ -484,9 +488,9 @@ IAM: allows you to manage users and their level of access to the AWS console
 		* groups: collection of users; all users in the group inherit the same permissions
 		* policy: a JSON file that applies permissions to users, groups, and/or roles; a list of ALLOW and DENY rules to a certain resource
 		* roles: a role contains a collection of policies that can be temporarily assigned to a user; ex: john assumes the DynamoReadWrite Role, giving him access to the DynamoRead policy and the DynamoWrite policy
-		* entities: the objects that are used in IAM for authentication purposes, so users and roles; not groups and policies 
-		* principal: a person/application that is authenticated as a root account, IAM user, or role used to make requests and actions to AWS; a principal itself is an entity
-		* identities: users, groups, and roles; essentially it's the object's name, or way of identifying the object, so that you can give it permissions 
+		# * entities: the objects that are used in IAM for authentication purposes, so users and roles; not groups and policies 
+		# * principal: a person/application that is authenticated as a root account, IAM user, or role (accounts, users, roles) used to make requests and actions to AWS; a principal itself is an entity
+		# * identities: users, groups, and roles; essentially it's the object's name, or way of identifying the object, so that you can give it permissions 
 		* resources: ex: aurora, dynamoDB, S3, etc.
 	* IAM offers:
 		* multi-factor authentication
@@ -509,7 +513,7 @@ IAM: allows you to manage users and their level of access to the AWS console
 		* Consider: consider invalidating any temporary security credentials that might have been made with those credentials
 		* Restore: restore the appropriate access to the user
 		* Review: make sure everything's all good
-	* credential report: a report that you can download in IAM that lists meta data about user's passwords, access keys, and whether MFA is enabled
+	# * credential report: a report that you can download in IAM that lists meta data about user's passwords, access keys, and whether MFA is enabled
 	* principal of least privilege: when making IAM policies, give users the least amount of privilege necessary to do their job
 		* Just-Enough-Access: only permitting the EXACT amount of access necessary
 		* Just-In-Time: only permitting the smallest length of time needed
@@ -566,23 +570,23 @@ SNS: used for sending notifications that are triggered by AWS services, whereas 
 always design for failure: meaning redundantly duplicate stuff across multiple availability zones
 Route53: how you get and manage domains, domain names, and domain traffic; Route53 is global just like IAM and S3; also use it to reroute network traffic to other IP's
 	* DNS is how you use domain names to look up IP addresses 
-Amazon Neptune: a Graph Database; supports multi-AZ
-	* split into 3 offerings:
-		* Amazon Neptune Database: can use Gremlin, SPARQL, or OpenCypher
-		* Amazon Neptune Analytics: load data from a Neptune database or from S3 and perform algorithms like page rank and shortest path; is run using an Apache Spark cluster under-the-hood
-		* Amazon Neptune ML: ML, but also uses Graph Neural Networks(GNN)
-	* 2 types:
-		* Neptune Provisioned: u choose the instance type
-		* Neptune Serverless: u set the min and max capacity measured in Neptune Capacity Units(NCUs)
-	* 2 storage configs:
-		* Neptune I/O Optimized: increased I/O at an additional cost
-		* Neptune Standard: 25% cheaper than I/O Optimized
-	* Neptune Bulk Loader: used to import large amounts of data
-	* Gremlin: SQL, but for Graph Databases
-		* designed for Write Once, Run Anywhere(WORA)
-		* can be evaluated as both OLTP and OLAP
-		* Gremlin Host Language Embedding: lets u embed Gremlin with whatever programming language u want
-	* OpenCypher: another SQL, but for Graph Databases; easier to use than Gremlin, but Gremlin is more proficient
+# Amazon Neptune: a Graph Database; supports multi-AZ
+# 	* split into 3 offerings:
+# 		* Amazon Neptune Database: can use Gremlin, SPARQL, or OpenCypher
+# 		* Amazon Neptune Analytics: load data from a Neptune database or from S3 and perform algorithms like page rank and shortest path; is run using an Apache Spark cluster under-the-hood
+# 		* Amazon Neptune ML: ML, but also uses Graph Neural Networks(GNN)
+# 	* 2 types:
+# 		* Neptune Provisioned: u choose the instance type
+# 		* Neptune Serverless: u set the min and max capacity measured in Neptune Capacity Units(NCUs)
+# 	* 2 storage configs:
+# 		* Neptune I/O Optimized: increased I/O at an additional cost
+# 		* Neptune Standard: 25% cheaper than I/O Optimized
+# 	* Neptune Bulk Loader: used to import large amounts of data
+# 	* Gremlin: SQL, but for Graph Databases
+# 		* designed for Write Once, Run Anywhere(WORA)
+# 		* can be evaluated as both OLTP and OLAP
+# 		* Gremlin Host Language Embedding: lets u embed Gremlin with whatever programming language u want
+# 	* OpenCypher: another SQL, but for Graph Databases; easier to use than Gremlin, but Gremlin is more proficient
 AWS systems manager: the HQ of where you control your entire AWS infrastructure as well as manage operational and automative tasks across all your AWS resources (databases + servers)
 DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relational database system
 	* DynamoDB is also scalable, can be used in multiple AZ's, but you wouldn't use DynamoDB if you got complex queries like JOINs
@@ -590,21 +594,21 @@ DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relationa
 Global Tables: DynamoDB replication service that automatically replicates data across multiple regions globally, thus offering low latency to global users
 	* good for big, global applications
 DAX: (DynamoDB Accelerator): in-memory cache for DynamoDB which delivers 10x performance improvement from milliseconds to microseconds; fully-managed and highly available
-document store: NoSQL db that stores documents (usually XML or JSON)
-DocumentDB: NoSQL document database, mongoDB-compatible
-	* mongoDB: document database that stores JSON-like documents called BSON, which is a binary representation of JSON, which is meant to be faster and take up less storage
-		* can be used as a file system called: GridFS
-	* 2 Cluster types:
-		* Instance based Cluster: manage your instances directly choosing instance type
-		* Elastic Cluster: clusters automatically scale, you choose vCPU and # of instances per Shard
-	* storage volumes grows in increments of 10GB up to a max of 128TB
-	* can create up to 15 replicas
-	* continuously monitors the health of your cluster and automatically restarts failed instances
-	* failover will automatically occur to up to 15 replicas in other AZs
-	* backup is turned on by default(can't be turned off) with a retention period btwn 1-35 days
-	* has Performance Insights just like RDS
-	* has in-transit and at-rest encryption
-	* u can only connect to DocumentDB via TLS
+# document store: NoSQL db that stores documents (usually XML or JSON)
+# DocumentDB: NoSQL document database, mongoDB-compatible
+# 	* mongoDB: document database that stores JSON-like documents called BSON, which is a binary representation of JSON, which is meant to be faster and take up less storage
+# 		* can be used as a file system called: GridFS
+# 	* 2 Cluster types:
+# 		* Instance based Cluster: manage your instances directly choosing instance type
+# 		* Elastic Cluster: clusters automatically scale, you choose vCPU and # of instances per Shard
+# 	* storage volumes grows in increments of 10GB up to a max of 128TB
+# 	* can create up to 15 replicas
+# 	* continuously monitors the health of your cluster and automatically restarts failed instances
+# 	* failover will automatically occur to up to 15 replicas in other AZs
+# 	* backup is turned on by default(can't be turned off) with a retention period btwn 1-35 days
+# 	* has Performance Insights just like RDS
+# 	* has in-transit and at-rest encryption
+# 	* u can only connect to DocumentDB via TLS
 Aurora: relational database; database is fully managed; Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
 	* Aurora is scalable, can be used in multiple AZ's, and you would use Aurora if you got complex queries like JOINs 
 Aurora Serverless: same as Aurora, but only runs when you need it

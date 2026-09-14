@@ -67,30 +67,30 @@
 				* you would use this for things like org charts, course catalogs, and device registries
 			* Amazon Cognito User Pools: managed user directory for SaaS applications
 	* Amazon Resource Name (ARN): a string that uniquely identifies any resource used in AWS (used for IAM Policies)
-		* EX: arn:partition  :service:     region:    account_id:                           resource
-			       (aws) (s3, ec2, etc.) (us-east-1) (12-digit #) (resource_type/resource, resource_type/resource/qualifier, etc.)
+		# * EX: arn:partition  :service:      region:    account_id:                           resource
+		# 	    (aws)     (s3, ec2, etc.) (us-east-1) (12-digit #) (resource_type/resource, resource_type/resource/qualifier, etc.)
 	* if you have multiple Policies attached to the same resource, AWS will join all those policies together, but any explicit deny in any of the policies obviously overrides the rules
 	* Permission Boundaries: supported only for IAM Users and Roles; used to delegate administration to other Users
 		* helps prevent privilege escalation, or unnecessarily broad permissions
 		* lets you control the maximum permissions an IAM policy can grant
 		* use cases: developers creating roles for Lambda functions, application owners creating Roles for EC2 instances, Admins creating ad hoc users, etc.
-	* Resource Access Manager(RAM): allows resource sharing between individual AWS accounts
-		* the types of resources you're allowed to share: App Mesh, Aurora, CodeBuild, EC2, EC2 Image Builder, License Manager, Resource Groups, Route 53
+	# * Resource Access Manager(RAM): allows resource sharing between individual AWS accounts
+	# 	* the types of resources you're allowed to share: App Mesh, Aurora, CodeBuild, EC2, EC2 Image Builder, License Manager, Resource Groups, Route 53
 	* AWS Single Sign-On(SSO): service that helps centrally manage access to AWS accounts and applications
 		* a lot of 3rd party applications integrate with SSO like: GitHub, salesforce, slack, etc.
 		* lets you use existing corporate ID's to sign in using the SSO portal
 		* you can use this to manage user permissions to aws resources across all you accounts using AWS Organizations
 		* integrates with SAML: Security Assertion Markup Language; a security standard that allows Identity Providers to pass authorization credentials to Service Providers
-		* Permission Sets: feature of AWS SSO used to control the time duration for user login to the AWS console by setting session duration; default is 1 hour; maximum is 12 hours
-	* Service Control Policies(SCP): lets you enable and disable AWS services either on an organizational unit, or on individual accounts
+		# * Permission Sets: feature of AWS SSO used to control the time duration for user login to the AWS console by setting session duration; default is 1 hour; maximum is 12 hours
+	# * Service Control Policies(SCP): lets you enable and disable AWS services either on an organizational unit, or on individual accounts
 	* Users in IAM have to turn on MFA themselves; Admins cannot turn them on for them, but an admin COULD create a policy that requires MFA to be turned on before being able to access certain resources
 	* you can setup password policies in IAM such as minimum password requirements, rotating passwords, etc.
 	* you're only allowed to have 2 Access Keys per User in IAM
 	* new IAM accounts have no permissions by default until granted
-	* IAM Certificate Store: a place where you can upload 3rd party certificates
+	# * IAM Certificate Store: a place where you can upload 3rd party certificates
 	* IAM Managed Policies: policies managed by AWS that you cannot edit
 	* IAM Customer Managed Policies: policies created by you that you can edit
-	* IAM Access Analyzer: analyzes any aws resource policy (EX: S3 buckets) to help identify and mitigate potential security risks
+	# * IAM Access Analyzer: analyzes any aws resource policy (EX: S3 buckets) to help identify and mitigate potential security risks
 	* IAM Inline Policies: A policy that is directly attached to an IAM User
 	* Job Function Policy: a type of IAM policy that is managed by AWS that are designed to closely align with job functions in the IT industry
 	* IAM policy contents:
@@ -108,34 +108,34 @@
 S3: secure, durable, highly scalable object storage
 	* S3 Presigned URL's: generate a temporary url using the AWS CLI or SDK to give download or upload access to a private object
 	* when you upload a file to S3, you will get a HTTP 200 code back if the upload was successful
-	* GET, PUT, LIST, and DELETEs to buckets are designed for high availability, however CREATEs and DELETEs should be ran less often
+	# * GET, PUT, LIST, and DELETEs to buckets are designed for high availability, however CREATEs and DELETEs should be ran less often
 	* the IPv4 endpoint for S3 is: https://s3.[region].amazonaws.com, and the one for IPv4 and IPv6 is: https://s3.dualstack.[region].amazonaws.com
 	* 2 types of S3 buckets:
 		* General Purpose buckets: the OG
-			* by default you can create up to 10,000 of these per AWS Account
+			# * by default you can create up to 10,000 of these per AWS Account
 			* flat hierarchy, so no directories/folders
 				* the "folders" u do see in these buckets are TECHNICALLY 0-byte S3 objects that, once objects are added to, just have their names prefix'd w/ the "folder" name...
 					* ...which mimics the idea of directories. This is what is referred to as: Object Prefixes
 			* can't be used w/ S3 Express One Zone
 		* Directory buckets:
-			* by default you can create up to 100 of these per Region
+			# * by default you can create up to 100 of these per Region
 			* has directory/folder hierarchy
 			* can only be used for S3 Express One Zone
-			* recommended when u need single-digit millisecond performance on PUTs and GETs
-	* Replication options in S3:
-		* Cross-Region Replication
-		* Same-Region Replication
-		* Bi-Directional Replication: 2 buckets are sole-linked, meaning changes made in either bucket are replicated to the other one
-		* S3 Batch Replication
+			# * recommended when u need single-digit millisecond performance on PUTs and GETs
+	# * Replication options in S3:
+	# 	* Cross-Region Replication
+	# 	* Same-Region Replication
+	# 	* Bi-Directional Replication: 2 buckets are sole-linked, meaning changes made in either bucket are replicated to the other one
+	# 	* S3 Batch Replication
 	* S3 bucket naming rules:
-		* must be between 3-63 characters
+		# * must be between 3-63 characters
 		* lowercase, numbers, dots, and hyphens only
 		* must begin and end with a letter or number
 		* can't have 2 or more dots next to each other
 		* can't start with: xn--, sthree-, or sthree-configurator, or end with: -s3alias, or --ol-s3
 		* can't have an IP address-looking name
-		* buckets that use S3 Transfer Acceleration can't have dots
-	* S3 URI format: s3://[bucket name]/[file name]
+		# * buckets that use S3 Transfer Acceleration can't have dots
+	# * S3 URI format: s3://[bucket name]/[file name]
 	* how you are billed for S3:
 		* how much storage you use
 		* the number of requests you make to objects in S3
@@ -143,19 +143,19 @@ S3: secure, durable, highly scalable object storage
 		* amount of data that is transferred
 		* you get charged for using S3 Transfer Acceleration
 		* you also get charged for using Cross Region Replication
-	* Object Policies: like Bucket Policies, but only applies to individual Objects
+	# * Object Policies: like Bucket Policies, but only applies to individual Objects
 	* S3 Buckets can be configured to create access logs which log all requests made to an S3 bucket; these logs can be sent to other buckets and/or buckets in another account
-	* S3 versioning stores all versions of an object including all writes, as well as all deletions of objects; is disabled by default
+	# * S3 versioning stores all versions of an object including all writes, as well as all deletions of objects; is disabled by default
 	* S3 Lifecycle Management: allows you to automate the process of moving Objects btwn the different S3 storage tiers; can be used in conjunction with versioning
 		* S3 lifecycle management can be applied to both old and new versions of objects; you can use it to move objects to a different storage class after a certain timeframe, or delete them after time has passed
 		* different from S3 Intelligent Tiering in that YOU manage it. Isn't managed for you using ML like with Intelligent Tiering
 		* 2 types of actions you can take:
 			* Transition Actions: move current and older versions of objects btwn Storage Classes
-			* Expiring Actions:
-				* expire current versions of objects
-				* delete older versions of objects
-				* delete expired Delete Markers or incomplete Multipart Uploads
-		* Lifecycle Filters: can filter based on Object Prefixes, Tags, and object size
+			# * Expiring Actions:
+			# 	* expire current versions of objects
+			# 	* delete older versions of objects
+			# 	* delete expired Delete Markers or incomplete Multipart Uploads
+		# * Lifecycle Filters: can filter based on Object Prefixes, Tags, and object size
 	* S3 Object Lock: makes it so that you can only write once to that object, but you can read it many times (WORM model); good for meeting WORM regulatory requirements; added security to Objects
 		* also prevents accidental deletion
 		* can apply to individual objects or applied across entire buckets
@@ -170,30 +170,30 @@ S3: secure, durable, highly scalable object storage
 	* S3 Object Prefixes: the middle portion of an object's location address (not including the bucket name); EX: mybucketname/folder1/subfolder1/myfile.jpg -> folder1/subfolder1
 		* this is effectively the path to the file
 		* can take advantage of this to optimize performance in S3 by spreading your reads across multiple different prefixes for faster requests
-	* speed limits with KMS:
-		* uploading/downloading objects counts towards the KMS quota, which is hard-caped based on the region: (EX: 5,500, 10,000, 30,000 requests/sec), and you can't increase this quota limit
-	* S3 Server Access Logging: gives you detailed logs about requests made to S3 buckets and S3 objects
-	* Multipart Uploads: recommended for objects over 100MB and required for those over 5GB; object is split into parts and uploaded in parallel
+	# * speed limits with KMS:
+	# 	* uploading/downloading objects counts towards the KMS quota, which is hard-caped based on the region: (EX: 5,500, 10,000, 30,000 requests/sec), and you can't increase this quota limit
+	# * S3 Server Access Logging: gives you detailed logs about requests made to S3 buckets and S3 objects
+	# * Multipart Uploads: recommended for objects over 100MB and required for those over 5GB; object is split into parts and uploaded in parallel
 	* S3 Byte-Range Fetches: download objects in parallel by specifying byte ranges; also recommended for big files; good for if you just want a piece of the file if you like
 	* S3 Select: lets your applications pull only a subset of data from S3 objects as opposed to the whole thing; uses SQL to do this; increases performance by as much as 400%; up to 80% cheaper
-		* supported for Storage Classes S3 Glacier Instant Retrieval and above
-		* S3 Select takes the associated bucket name and object key of the object you want to query with SQL and retrieves that data
-		* the objects being queried have to be in CSV, JSON, or Apache Parquet format
+		# * supported for Storage Classes S3 Glacier Instant Retrieval and above
+		# * S3 Select takes the associated bucket name and object key of the object you want to query with SQL and retrieves that data
+		# * the objects being queried have to be in CSV, JSON, or Apache Parquet format
 	* Glacier Select: same as S3 Select, but for Glacier; data stays in Glacier, you query the data directly from Glacier using simple SQL; data never leaves Glacier
 	* 3 different ways to share S3 buckets across AWS accounts:
 		* using Bucket Policies in conjunction with IAM; only grants programmatic access
 		* using Access Control Lists in conjunction with IAM; also only grants programmatic access
 		* cross-account IAM Roles; grants both programmatic and console access
 	* Cross Region Replication:	
-		* Versioning must be enabled on both the source and destination buckets if you want to use it
-		* You can also have CRR replicate to another AWS account
-		* objects in an existing bucket aren't replicated automatically; only after they've been updated
+		# * Versioning must be enabled on both the source and destination buckets if you want to use it
+		# * You can also have CRR replicate to another AWS account
+		# * objects in an existing bucket aren't replicated automatically; only after they've been updated
 		* Delete Markers: when versioning is on, any request to delete any object version is tagged as deleted (it's not actually deleted; AWS tricks itself into thinking it is)
 			* Delete Markers are not replicated and deleting individual versions or Delete Markers will not be replicated
 			* when versioning is disabled in S3, so is the Delete Marker functionality
 		* If you're using Cross Region Replication, but the data is encrypted with KMS, you can provide the KMS key name when replicating so that other Regions can decrypt the data
 	* DataSync: Allows you to sync large amounts of files on your on-prem with AWS or with other Cloud Providers; deployed as an agent that connects your file system with AWS
-		* automatically encrypts and accelerates data; performs automatic integrity checks in-transit and at-rest
+		# * automatically encrypts and accelerates data; performs automatic integrity checks in-transit and at-rest
 		* connects with S3, EFS, FSx, Snowcone, and Snowball Edge
 		* replication can be done hourly, daily, or weekly
 		* used with Network File System(NFS): a protocol used for accessing a remote server's files from your computer
@@ -208,46 +208,46 @@ S3: secure, durable, highly scalable object storage
 					* when u name it, it must start with: x-amz-meta-
 		* Access Control Lists
 		* checksums (can use SHA1, SHA256, CRC32, or CRC32C)
-		* Etag (entity tag): a response header that is used as a way to detect when an object has been edited w/o having to downloading the object itself
-			* the value is usually represented as an MD5 hash of the object's contents
-			* Etags are part of the HTTP protocol; used as revalidation for caching systems
-			* reflects changes only to the contents of an object; not its metadata
-			* good for programmatically detecting if an object has been edited
+		# * Etag (entity tag): a response header that is used as a way to detect when an object has been edited w/o having to downloading the object itself
+		# 	* the value is usually represented as an MD5 hash of the object's contents
+		# 	* Etags are part of the HTTP protocol; used as revalidation for caching systems
+		# 	* reflects changes only to the contents of an object; not its metadata
+		# 	* good for programmatically detecting if an object has been edited
 		* Torrents: decentralized file sharing system utilizing the BitTorrent Protocol that's peer-to-peer, meaning the more people join the Torrent, the faster the download speed of the file you're trying to download
 	* S3 storage classes:
 		* Standard: no minimum storage duration required
-		* S3 Express One-Zone: single-digit millisecond performance using Directory Buckets, data access is 10x faster than Standard, single AZ, 50% less than Standard
-			* Additional retrieval fee is applied (this is also the same for the rest below). For Express One-Zone, you're charged per GET request over 512kb
-			* no minimum storage duration required
+		# * S3 Express One-Zone: single-digit millisecond performance using Directory Buckets, data access is 10x faster than Standard, single AZ, 50% less than Standard
+		# 	* Additional retrieval fee is applied (this is also the same for the rest below). For Express One-Zone, you're charged per GET request over 512KB
+		# 	* no minimum storage duration required
 		* Standard IA: 50% less than Standard iff u don't access buckets more than once a month
 			* minimum storage duration: 30 days
 		* One Zone IA: object can only exist in 1 AZ (all other storage classes are guaranteed at least 3), availability is 99.5%
 			* minimum storage duration: 30 days
 		* S3 Intelligent tiering
-		* Glacier Instant Retrieval: 68% lower than Standard IA; good for data that is accessed once per quarter or rarely accessed data that once needed needs to be retrieved instantly (EX: file-sharing, health records, etc.)
-			* minimum storage duration of 90 days
-		* Glacier Flexible Retrieval:
-			* Expedited Retrievals: 1-5 min retrieval time; size limit of 250MB
-				* Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed
-					* assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
-				* buy this when you require highly reliable and predictable access to your archival data and need it in minutes
-			* Standard(default): 3-5 hours; no size limit
-			* Bulk: 5-12 hours; no size limit; good for petabyte retrievals
-			* minimum storage duration of 90 days
+		# * Glacier Instant Retrieval: 68% lower than Standard IA; good for data that is accessed once per quarter or rarely accessed data that once needed needs to be retrieved instantly (EX: file-sharing, health records, etc.)
+		# 	* minimum storage duration of 90 days
+		# * Glacier Flexible Retrieval:
+		# 	* Expedited Retrievals: 1-5 min retrieval time; size limit of 250MB
+		# 		* Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed
+		# 			* assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
+		# 		* buy this when you require highly reliable and predictable access to your archival data and need it in minutes
+		# 	* Standard(default): 3-5 hours; no size limit
+		# 	* Bulk: 5-12 hours; no size limit; good for petabyte retrievals
+		# 	* minimum storage duration of 90 days
 		* Glacier Deep Archive
 	* Server Side Encryption (SSE): Amazon helps you encrypt the object data in aws; all S3 Managed keys are handled by Amazon
-		* Server Side Encryption (SSE) 4 types:
-			* SSE-S3 (a.k.a SSE-AES; default): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
-				* by default, SSE-S3 is turned on for all newly-created S3 objects, free
-			* SSE-KMS: you manage the keys, uses KMS' envelope encryption
-				* KMS keys must be in the same region as the S3 bucket
-				* S3 Bucket Key: ephermeral bucket-level KMS key
-					* SSE-KMS charges you per request made to objects, so using an S3 Bucket Key for the bucket instead reduces KMS cost
-			* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
-			* DDSE-KMS: it's SSE-KMS, plus an additional client-side encryption layer
+		# * Server Side Encryption (SSE) 4 types:
+		# 	* SSE-S3 (a.k.a SSE-AES; default): S3 handles the key, uses the AES-GCM (a.k.a AES256) algorithm
+		# 		* by default, SSE-S3 is turned on for all newly-created S3 objects, free
+		# 	* SSE-KMS: you manage the keys, uses KMS' envelope encryption
+		# 		* KMS keys must be in the same region as the S3 bucket
+		# 		* S3 Bucket Key: ephermeral bucket-level KMS key
+		# 			* SSE-KMS charges you per request made to objects, so using an S3 Bucket Key for the bucket instead reduces KMS cost
+		# 	* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
+		# 	* DDSE-KMS: it's SSE-KMS, plus an additional client-side encryption layer
 	* Client-Side Encryption: You encrypting your own files locally (at rest) before uploading them to S3
 	* In-Transit Encryption: encryption in transit between your local host and S3 is achieved via SSL/TLS
-	* MFA Delete: ensures users can't delete an object in your S3 bucket w/o an MFA code; Can only be enabled iff: AWS CLI is used to turn it on and the S3 bucket has versioning turned on
+	# * MFA Delete: ensures users can't delete an object in your S3 bucket w/o an MFA code; Can only be enabled iff: AWS CLI is used to turn it on and the S3 bucket has versioning turned on
 		* makes it so that only the bucket owner logged in as the Root User can delete objects from the bucket
 			* Root User just refers to your Root Account
 
@@ -256,7 +256,7 @@ S3: secure, durable, highly scalable object storage
 EC2:
 	* types of processors offered for EC2 instances:
 		* Intel, AMD, NVIDIA, etc.
-		* AWS Graviton: aws' own processer that use ARM-based architecture
+		# * AWS Graviton: aws' own processer that use ARM-based architecture
 		* AWS Inferentia: aws processor designed to run high-performance ML for cheap
 		* AWS Trainium: aws processor designed to train ML models for cheap
 	* Termination Protection: when enabled, it is impossible for you to terminate your EC2 instances; prevents accidental deletion; is disabled by default
@@ -273,85 +273,85 @@ EC2:
 			* a description
 		* you would use it if you need to do essentially basic networking
 		* supports speeds up to 100GB
-		* ENI attach types:
-			* hot attach: attach an ENI to an instance when it's running
-			* warm attach: attach an ENI to an instance when it's stopped
-			* cold attach: attach an ENI to an instance when it's being launched
-	* Enhanced Networking(EN): uses SR-IOV to provide high-performance networking capabilities on instances that support EN
-		* SR-IOV: a method of device virtualization that yields higher I/O performance and lower CPU utilization
-		* provides higher bandwidth, higher packets/second(PPS), and consistently lower latency
-		* EN is free
-		* you use this when you want good network performance
-		* 2 ways to enable it using:
-			* Elastic Network Adapter(ENA): it's a custom network interface; supports network speeds up to 100 GB/s for instance types that support it; (preferred option)
-			* Intel 82599 Virtual Function(VF) interface: also a custom network interface; supports network speeds up to 10 GB/s for instances that support it; typically used on older instances
-	* Elastic Fabric Adapter: a network device that you can put on your EC2 to accelerate High Performance Computing and machine learning applications
-		* provides consistently low latency, and high throughput
-		* can use OS-bypass: enables HPC and machine learning apps to bypass the OS kernel to communicate directly with the EFA device; only supported for Linux
-			* OS-bypass for EFA's have to be a member of a security group that allows all inbound and outbound traffic
-	* to use Spot instances first you must determine the maximum amount you're willing to pay for your Spot Instances as they're running
-		* the hourly Spot price varies depending on capacity and region
-		* if the Spot price goes over your maximum, you have 2 minutes to decide whether to stop or terminate the instance; can prevent this using Spot Blocks
-			* Spot Blocks: allows you to request Spot Instances for 1 to 6 hours at a time to avoid your Spot Instances from being interrupted during their jobs
-		* Spot requests include: max price, launch specification, # of instances, request type, the date ranges for which the request is valid
-			* request types:
-				* one-time: meaning once the Spot price exceeds maximum price it is terminated
-				* persistent: once Spot price exceeds maximum price, instances are stopped, and then the instances are re-launched once the Spot price goes below the maximum
-		* Spot Fleets: a collection of Spot instances and optionally On-Demand instances
-			* you put in a request that attempts to get you the # of Spot and On-Demand instances needed to meet your target capacity at the Spot price you want
-			* if your Spot instances are interrupted the Spot Fleet will try to maintain your target capacity by launching more Spot instances given your price constraints
-			* can setup multiple different launch pools, and launches them based on the strategies you define for each of the launch pools
-			* different strategies with Spot Fleets:
-				* capacityOptimized: the Spot instances come from the launch pool with the optimal capacity for the # of instances launching
-				* lowestPrice: the Spot instances come from the launch pool with the lowest price (default)
-				* diversified: the Spot instances are distributed across all launch pools
-				* InstancePoolsToUseCount: the Spot instances are distributed across the # of launch pools you specify; valid only when used in combination w/ lowestPrice
+		# * ENI attach types:
+		# 	* hot attach: attach an ENI to an instance when it's running
+		# 	* warm attach: attach an ENI to an instance when it's stopped
+		# 	* cold attach: attach an ENI to an instance when it's being launched
+	# * Enhanced Networking(EN): uses SR-IOV to provide high-performance networking capabilities on instances that support EN
+		# * SR-IOV: a method of device virtualization that yields higher I/O performance and lower CPU utilization
+		# * provides higher bandwidth, higher packets/second(PPS), and consistently lower latency
+		# # * EN is free
+		# * you use this when you want good network performance
+		# * 2 ways to enable it using:
+		# 	* Elastic Network Adapter(ENA): it's a custom network interface; supports network speeds up to 100 GB/s for instance types that support it; (preferred option)
+		# 	* Intel 82599 Virtual Function(VF) interface: also a custom network interface; supports network speeds up to 10 GB/s for instances that support it; typically used on older instances
+	# * Elastic Fabric Adapter: a network device that you can put on your EC2 to accelerate High Performance Computing and machine learning applications
+	# 	* provides consistently low latency, and high throughput
+	# 	* can use OS-bypass: enables HPC and machine learning apps to bypass the OS kernel to communicate directly with the EFA device; only supported for Linux
+	# 		* OS-bypass for EFA's have to be a member of a security group that allows all inbound and outbound traffic
+	# * to use Spot instances first you must determine the maximum amount you're willing to pay for your Spot Instances as they're running
+	# 	# * the hourly Spot price varies depending on capacity and region
+	# 	* if the Spot price goes over your maximum, you have 2 minutes to decide whether to stop or terminate the instance; can prevent this using Spot Blocks
+	# 		* Spot Blocks: allows you to request Spot Instances for 1 to 6 hours at a time to avoid your Spot Instances from being interrupted during their jobs
+	# 	* Spot requests include: max price, launch specification, # of instances, request type, the date ranges for which the request is valid
+	# 		* request types:
+	# 			* one-time: meaning once the Spot price exceeds maximum price it is terminated
+	# 			* persistent: once Spot price exceeds maximum price, instances are stopped, and then the instances are re-launched once the Spot price goes below the maximum
+		# * Spot Fleets: a collection of Spot instances and optionally On-Demand instances
+		# 	* you put in a request that attempts to get you the # of Spot and On-Demand instances needed to meet your target capacity at the Spot price you want
+		# 	* if your Spot instances are interrupted the Spot Fleet will try to maintain your target capacity by launching more Spot instances given your price constraints
+		# 	* can setup multiple different launch pools, and launches them based on the strategies you define for each of the launch pools
+		# 	* different strategies with Spot Fleets:
+		# 		* capacityOptimized: the Spot instances come from the launch pool with the optimal capacity for the # of instances launching
+		# 		* lowestPrice: the Spot instances come from the launch pool with the lowest price (default)
+		# 		* diversified: the Spot instances are distributed across all launch pools
+		# 		* InstancePoolsToUseCount: the Spot instances are distributed across the # of launch pools you specify; valid only when used in combination w/ lowestPrice
 	* when you start an EC2 instance, the OS boots up, bootstrap scripts start running, and applications start
-	* EC2 Hibernate: on startup of an EC2 instance, OS is instead told to perform hibernation, which saves the contents of the EC2's RAM to your EBS root volume and any other attached volumes
-		* the instance RAM must be less than 150GB
-		* instances can't be hibernated for more than 60 days
-		* supports the C3-5, M3-5, and R3-5 instance families (so On-Demand, as well as Reserved instances)
-		* available for windows, linux, and ubuntu
-		* when an EC2 is in a hibernated state, pricing is determined only by the Elastic IP's and EBS volumes attached to that instance, NOT the amount of time it's hibernating
-		* when you start your instance out of hibernation, the EBS root volume is restored to its previous state, RAM contents are reloaded, instance processes are resumed,...
-			* ...and previously attached volumes are reattached and the instance retains its instance ID
-		* useful for long-running processes and services that take a long time to initialize
+	# * EC2 Hibernate: on startup of an EC2 instance, OS is instead told to perform hibernation, which saves the contents of the EC2's RAM to your EBS root volume and any other attached volumes
+	# 	* the instance RAM must be less than 150GB
+	# 	* instances can't be hibernated for more than 60 days
+	# 	* supports the C3-5, M3-5, and R3-5 instance families (so On-Demand, as well as Reserved instances)
+	# 	* available for windows, linux, and ubuntu
+	# 	* when an EC2 is in a hibernated state, pricing is determined only by the Elastic IP's and EBS volumes attached to that instance, NOT the amount of time it's hibernating
+	# 	* when you start your instance out of hibernation, the EBS root volume is restored to its previous state, RAM contents are reloaded, instance processes are resumed,...
+	# 		* ...and previously attached volumes are reattached and the instance retains its instance ID
+	# 	* useful for long-running processes and services that take a long time to initialize
 	* EC2 Instance Types:
 		* General Purpose (T2, M5a, etc.): nice balance btwn compute, memory, and networking power; usually used for web servers and code repos
-			* Burstable Instances (T2, T3, etc.): allows instances to handle shorts bursts of higher CPU utilizations
-				* Standard Mode(default): provides a cpu utilization baseline, w/ the ability to do short bursts above the baseline using CPU credits
-				* Unlimited Mode: unlimited high cpu utilization, w/ additional charges applied when going beyond the accumulated CPU credits
+			# * Burstable Instances (T2, T3, etc.): allows instances to handle shorts bursts of higher CPU utilizations
+			# 	* Standard Mode(default): provides a cpu utilization baseline, w/ the ability to do short bursts above the baseline using CPU credits
+			# 	* Unlimited Mode: unlimited high cpu utilization, w/ additional charges applied when going beyond the accumulated CPU credits
 		* Compute Optimized (C5, Cba, etc.): good for high processing, high performance apps; EX: scientific modeling, gaming servers, etc.
 		* Memory Optimized (R4, R5a, etc.): good for workloads that process large data sets in memory; EX: in-memory caches, in-memory databases, real time big data analytics
 		* Accelerated Computing(GPU) Optimized (P2, G4ad, etc.): hardware accelerators, or co-processors, used to perform float calculations, graphics processing, etc. more efficiently than software running on CPU's
 			* EX: machine-learning, speech recognition
 		* Storage Optimized (I3, D3en, etc.): used for high sequential read and write access to very large data sets in storage; EX: data warehousing, NoSQL, etc.
-	* Nitro-based EC2 Instances: built on the AWS Nitro System platform that pumps out the latest generation of EC2's, enabling AWS to innovate faster, further reduce customer cost, and deliver additional security and instance types
-		* good for HPC workloads in I/O, compute, memory, storage, and networking
+	# * Nitro-based EC2 Instances: built on the AWS Nitro System platform that pumps out the latest generation of EC2's, enabling AWS to innovate faster, further reduce customer cost, and deliver additional security and instance types
+	# 	* good for HPC workloads in I/O, compute, memory, storage, and networking
 	* EBS-Optimized EC2 Instances: an EC2 instance that uses an EBS-optimized stack and provides additional, dedicated capacity for EBS I/O
 		* can be used with all 4 different EBS types
 	* EC2 Placement Groups: lets you choose the logical placement of your instances to optimize for communication, performance, or durability; they are free and totally optional
 		* name for the Placement Group must be unique across your AWS account
-		* you can't merge Placement Groups
+		# * you can't merge Placement Groups
 		* 3 types:
-			* Clustered Placement Groups: grouping of EC2's in a single AZ; used for apps that need low latency, high network throughput, or both
-				* packs instances close together inside 1 AZ; so good for communication and performance; the tradeoff being they are limited to only 1 AZ
-				* only Compute Optimized, GPU Optimized, Memory Optimized, and Storage Optimized instances can be used here
-				* Amazon recommends the same instance type for each EC2 in a Clustered Placement Group (e.g: all instances in the cluster are Memory Optimized)
+			# * Clustered Placement Groups: grouping of EC2's in a single AZ; used for apps that need low latency, high network throughput, or both
+			# 	* packs instances close together inside 1 AZ; so good for communication and performance; the tradeoff being they are limited to only 1 AZ
+			# 	* only Compute Optimized, GPU Optimized, Memory Optimized, and Storage Optimized instances can be used here
+			# 	* Amazon recommends the same instance type for each EC2 in a Clustered Placement Group (e.g: all instances in the cluster are Memory Optimized)
 			* Spread Placement Groups: grouping of EC2's into distinct individual hardware; used when you have a small # of critical instances that need to be separate from each other
-				* CAN go multi AZ, but needs to be in the same region
+				# * CAN go multi AZ, but needs to be in the same region
 				* can spread a max of 7 instances per AZ
 			* Partitioned: a group of EC2's share 1 partition of a Placement Group of EC2's within a single AZ; partitions have their own individual network and power source
 				* reduces the damage done by correlated hardware failures
 				* partitions don't share same hardware (1 rack/partition); good for stuff like Hadoop
-				* CAN go multi AZ, but needs to be in the same region
+				# * CAN go multi AZ, but needs to be in the same region
 		* you can move an existing instance into a Placement Group. The instance must first be stopped, and then you can move it via the CLI or SDK, then restart the cluster
-	* ParallelCluster: open source cluster management and deployment tool; uses a text file to model and provision all the resources needed for you HPC apps in an automated and secure way
-		* can automate the creation of VPC's, subnets, cluster types, and instance types
-		* can use it to create clusters with EFA to get OS-bypass capabilities
+	# * ParallelCluster: open source cluster management and deployment tool; uses a text file to model and provision all the resources needed for you HPC apps in an automated and secure way
+	# 	* can automate the creation of VPC's, subnets, cluster types, and instance types
+	# 	* can use it to create clusters with EFA to get OS-bypass capabilities
 	* EC2 Instance Profile: a reference to an IAM Role that will be passed and assumed by the EC2 instance when it starts up, as opposed to just embedding your AWS credentials in code
 		* when you select an IAM Role when launching an EC2 instance, AWS automatically creates the Instance Profile for you
-		* you can assigned the Instance Profile to an already-running instance if it didn't already have one on startup, but in that case a hard reboot is required for the change to take affect
+		# * you can assign the Instance Profile to an already-running instance if it didn't already have one on startup, but in that case a hard reboot is required for the change to take affect
 		* only a single IAM Role can be associated w/ an Instance Profile
 	* EC2 User Data: a script that will automatically run whenever launching an EC2 instance; used to install packages, apply updates, etc.
 	* EC2 Metadata: metadata relating to your EC2 instances
@@ -363,29 +363,29 @@ EC2:
 		* an AMI contains a template for the root volume for the instance (EBS Snapshot/Instance Store Template), launch permissions (which AWS accounts can use the AMI to launch instances), and...
 			* ...a mapping that specifies the volumes to attach to the instance when it's launched
 		* Launch Templates: is what you use to manage revisions to your AMIs, so like v1.0, then v1.1, etc...
-		* AMIs are region specific
-		* Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
-		* AMIs help you keep changes made to your OS, app, sys packages, etc. you can use Systems Manager Automation to routinely patch your AMI's security, and AMIs are used with...
-			* ...LaunchConfigurations, so if you want to update multiple instances, just make a new copy of your LaunchConfiguration and use it with the new AMI you created containing those updates
-			* you can't edit the current LaunchConfiguration live; gotta create a new one
+		# * AMIs are region specific
+		# * Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
+			# * lets you routinely patch your AMIs w/ security updates and bake those into your AMIs
+		# * AMIs help you keep changes made to your OS, app, sys packages, etc. you can use Systems Manager Automation to routinely patch your AMI's security, and AMIs are used with...
+		# 	* ...LaunchConfigurations, so if you want to update multiple instances, just make a new copy of your LaunchConfiguration and use it with the new AMI you created containing those updates
+		# 	* you can't edit the current LaunchConfiguration live; gotta create a new one
 		* you can also copy your AMIs, so since AMIs are region specific, if you want to use your AMI in another region, you have to copy it then change the destination region
 		* AMIs have ID's that vary depending on what types of options they offer and what region they are in
-		* Systems Manager Automation: lets you routinely patch your AMIs w/ security updates and bake those into your AMIs
 		* a lot of AMIs are offered on AWS Marketplace; the most popular ones being security-hardened AMIs
 		* AMIs have 2 boot modes:
 			* Legacy BIOS: doesn't support secure boot 
 			* UEFI BIOS: modern; faster; supports secure boot
-		* deregistering an AMI refers to when you're done using an AMI and you don't want to allow any new instances to be launched with that AMI
-			* it does not automatically delete snapshots for you, so u still have to do that seperatly on ur own
-		* deprecating an AMI refers to when at what time/date u want the AMI to be deregistered
-		* disabling an AMI prevents the AMI from being used, but unlike deregistering it still allows you to reenable it later
-		* AMIs can have the following settings:
-			* Public: any AWS account can use It
-			* Explicit: specific Accounts/Organization can use it
-			* Implicit: only the AMI owner can launch it 
-		* AMIs have 2 virtualization types:
-			* Hardware Virtualization (HVM): uses actual hardware, better performance, and works with EBS and Instance Store; used for modern setups
-			* Paravirtualization (PV): relies on a hypervisor to simulate hardware, lesser performance, and only works with Instance Store; used for older setups
+		# * deregistering an AMI refers to when you're done using an AMI and you don't want to allow any new instances to be launched with that AMI
+		# 	* it does not automatically delete snapshots for you, so u still have to do that seperatly on ur own
+		# * deprecating an AMI refers to when at what time/date u want the AMI to be deregistered
+		# * disabling an AMI prevents the AMI from being used, but unlike deregistering it still allows you to reenable it later
+		# * AMIs can have the following settings:
+		# 	* Public: any AWS account can use It
+		# 	* Explicit: specific Accounts/Organization can use it
+		# 	* Implicit: only the AMI owner can launch it 
+		# * AMIs have 2 virtualization types:
+		# 	* Hardware Virtualization (HVM): uses actual hardware, better performance, and works with EBS and Instance Store; used for modern setups
+		# 	* Paravirtualization (PV): relies on a hypervisor to simulate hardware, lesser performance, and only works with Instance Store; used for older setups
 		* you can select AMI's based on:
 			* Region
 			* OS
@@ -418,9 +418,9 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 	* on an EBS instance the default action upon deletion is for the root EBS volume to be deleted when its EC2 instance is terminated
 	* EBS root volumes of your default AMI's can be encrypted using 3rd party tools, using the AWS console or API, or it can be done when you're creating your AMI's
 		* additional volumes can be encrypted as well
-	* you can change EBS volume sizes and storage types on the fly(live); this isn't done automatically however
-		* EBS supports live configuration changes while in production, meaning you can tweak volume type, size, and IOPS capacity w/o interruptions
-		* EBS volumes can be used even while a Snapshot is in progress
+	# * you can change EBS volume sizes and storage types on the fly(live); this isn't done automatically however
+		# * EBS supports live configuration changes while in production, meaning you can tweak volume type, size, and IOPS capacity w/o interruptions
+		# * EBS volumes can be used even while a Snapshot is in progress
 	* EBS volumes will always be in the same AZ as its associative EC2 instance
 	* Instance Store: similar to EBS, but they're temporary, created from a template stored in S3, can only terminate instances (can't stop them), and data will be lost if it...
 		* ...fails a health check or is terminated
@@ -432,8 +432,8 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 			* it's Ephermeral Storage: meaning if the host fails, then all the data contained in those volumes are lost
 		* you can reboot both and you will not lose data on either
 		* by default, both root volumes will be deleted on termination, but with EBS you can tell AWS to keep the root device volume
-	* Snapshots of encrypted volumes are encrypted automatically and volumes restored from encrypted Snapshots are encrypted automatically
-	* you can share Snapshots, but only if they are unencrypted; these Snapshots can then be shared with other AWS accounts or be made public
+	# * Snapshots of encrypted volumes are encrypted automatically and volumes restored from encrypted Snapshots are encrypted automatically
+	# * you can share Snapshots, but only if they are unencrypted; these Snapshots can then be shared with other AWS accounts or be made public
 	* you can now encrypt root device volumes when you're creating your EC2 instance
 		* if you forgot to do it when you were creating your EC2, just take a Snapshot of the root device volume, create a copy of the Snapshot and select the "encrypt" option,...
 			* ...create an AMI using the encrypted Snapshot, and then use that AMI to create an EC2 instance
@@ -442,16 +442,16 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 		* General Purpose SSD(gp3): up to 20% lower cost per GB than gp2; IOPS 16,000; throughput 250MB/s
 		* Provisioned IOPS SSD(io1): when you require really fast IO and throughput; use when IOPS >= 16,000 || throughput >= 500 MB/s; use on mission-critical low latency/high throughput workloads
 			* calculating optimal configuration of IOPS and queue length for Provisioned IOPS SSD volumes: maintain a ratio of 50:1
-		* io2 Block Express (the new io2): higher throughput and IOPS than io1; supports larger storage capacity
+		* io2 Block Express (the new io2): higher throughput and IOPS than io1; supports larger storage capacity; up to 256,000 IOPS; throughput up to 4,000MB/s
 	* HDD: good for long continuous throughput of data, but really bad with a lot of very small reads and writes (think about the writing arm on the record); can't be used as a boot volume
-		* Throughput Optimized HDD(st1): drive optimized for fast throughput for intensive workloads that are frequently accessed, so data, data warehouses, log processing; IOPS 500; throughput 500MB/s
-		* Cold HDD(sc1): lowest cost HDD volume for infrequently-accessed workloads (e.g File Servers), storage; IOPS 250; throughput 250MB/s
+		# * Throughput Optimized HDD(st1): drive optimized for fast throughput for intensive workloads that are frequently accessed, so data, data warehouses, log processing; IOPS 500; throughput 500MB/s
+		# * Cold HDD(sc1): lowest cost HDD volume for infrequently-accessed workloads (e.g File Servers), storage; IOPS 250; throughput 250MB/s
 	* EBS Magnetic(standard): legacy generation (cassettes containing magnetic tape or magnetic disks); use for archival storage; HIGHLY durable; CAN be used as a boot volume if we're talking about magnetic disks
 	* to move EBS from one AZ to another: take a snapshot of the volume, create an AMI using the snapshot, launch the EC2 instances in the new AZ
 	* to move EBS from one Region to another: snapshot, AMI, copy the AMI to another region, launch the EC2 instances in the new Region using to copied AMI
-	* EBS Snapshots exist in S3; you can take Snapshots while an instance is still running, but if it's a root volume the EC2 should be stopped before taking the snapshot
-		* only changes made since the last Snapshot are moved to S3
-		* the Snapshots are managed by AWS, so you actually can't see the Snapshots in S3
+	# * EBS Snapshots exist in S3; you can take Snapshots while an instance is still running, but if it's a root volume the EC2 should be stopped before taking the snapshot
+	# 	* only changes made since the last Snapshot are moved to S3
+	# 	* the Snapshots are managed by AWS, so you actually can't see the Snapshots in S3
 	* IOPS: input/output per second; how fast are the reads and writes?
 	* throughput: refers to the speed of the data transfer to and from storage; EX: in the analogy of water flowing through a pipe, throughput is the water
 	* bandwidth: the highest possible data transfer speed along a network; EX: in the analogy of water flowing through a pipe, bandwidth is the pipe
@@ -460,14 +460,13 @@ CloudWatch: monitors your cloud
 	* monitors: EC2's, Autoscaling Groups, ELB's, Route53 Health Checks, EBS volumes, Storage Gateways, and CloudFront
 	* will monitor EC2's every 5 minutes by default
 		* Basic Monitoring: 5 minute intervals
-		* Detailed Monitoring: you can turn this on to monitor EC2's at intervals as low as 1 minute
+		# * Detailed Monitoring: you can turn this on to monitor EC2's at intervals as low as 1 minute
 	* can make dashboards for metrics, alarms for alerting you when a threshold is met, events for when you need to respond to state changes in your aws, and logs for logging stuff
 	* CloudWatch Logs: monitor, store, and access your log files
-		* by default logs are retained forever, but u can adjust the retention period from 1 day to 10 years
+		# * by default logs are retained forever and never expire, but u can adjust the retention period from 1 day to 10 years
 		* Log Group: collection of Log Streams that share the same retention, monitoring, and access control settings; logs must belong to a Log Group
 		* Log Stream: a sequence of Log Events that share the same source. Each separate source of logs in CloudWatch Logs makes up a separate Log Stream
 		* Log Events: each log/row in the Log Stream (literally just a log...)
-		* logs are kept forever and never expire by default
 		* most AWS services are integrated with CloudWatch Logs:
 			* can export logs to S3
 			* stream logs to ECS or EKS
@@ -477,59 +476,56 @@ CloudWatch: monitors your cloud
 		* CloudWatch Insights: lets you interactively search and analyze your log data in CloudWatch Logs
 			* lets you perform queries on CloudWatch Logs
 			* has it's own purpose-built query language with some sample queries included
-			* a single query can query up to 20 Log Groups and queries have a 15 minute timeout
-			* Discovered Fields: CloudWatch Insights will look at ur logs and generate fields for u to use in your queries base on the fields it finds in ur logs
-				* by default it will always generate these 5 system fields:
-					* @message
-					* @timestamps
-					* @ingestionTime: the time when the log was received by CloudWatch
-					* @logStream: the name of the Log Stream that the log was added to 
-					* @log: a Log Group identifier in the format of: <account_id>:<log_group_name>
-				* also automatically discovers fields in logs from aws services such as:
-					* VPC Flow Logs
-					* Route53
-					* Lambda
-					* CloudTrail
-		* CloudWatch Agent: lets you send logs from your EC2 to a CloudWatch Log Group
-			* can be installed using SSM
-			* you would use the awslogs agent if u only care about logs, whereas u would use the CloudWatch Agent for logs AND metrics
-			* you must attach the CloudWatchAgentServerRole IAM Role to the EC2 u want to install the agent on
-			* these are the host level metrics u get from CloudWatch by default when u don't install the CloudWatch Agent:
-				* CPU usage
-				* Network usage
-				* Disk reads and usage
-				* hypervisor and EC2 instance status
-			* advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the CloudWatch Agent for:
-				* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
-				* you can set up advanced/custom metrics by installing the CloudWatch Agent
-		* Unified CloudWatch Logs Agent: lets you collect logs from EC2's and on-premise servers and send them into CloudWatch Logs when you install this agent
-			* lets you collect not just logs, but also advanced metrics, which makes it better than CloudWatch Agent which only collects advanced metrics
-			* enables the collection of logs from servers running Windows Server
-			* better performance than CloudWatch Agent
+			# * a single query can query up to 20 Log Groups and queries have a 15 minute timeout
+			# * Discovered Fields: CloudWatch Insights will look at ur logs and generate fields for u to use in your queries base on the fields it finds in ur logs
+			# 	* by default it will always generate these 5 system fields:
+			# 		* @message
+			# 		* @timestamps
+			# 		* @ingestionTime: the time when the log was received by CloudWatch
+			# 		* @logStream: the name of the Log Stream that the log was added to 
+			# 		* @log: a Log Group identifier in the format of: <account_id>:<log_group_name>
+			# 	* also automatically discovers fields in logs from aws services such as:
+			# 		* VPC Flow Logs
+			# 		* Route53
+			# 		* Lambda
+			# 		* CloudTrail
+		# * Unified CloudWatch Agent(a.k.a CloudWatch Agent): lets you send logs from your EC2 to a CloudWatch Log Group
+		# 	* you can set up advanced/custom metrics by installing the Unified CloudWatch Agent
+		# 	# * you would use the CloudWatch Logs Agent(awslogs) agent if u only care about logs, whereas u would use the Unified CloudWatch Agent(CloudWatch Agent) for logs AND metrics
+		# 	* enables the collection of logs from servers running Windows Server
+		# 	* you must attach the CloudWatchAgentServerRole IAM Role to the EC2 u want to install the agent on
+		# 	* can be installed using SSM
+			# * these are the host level metrics u get from CloudWatch by default when u don't install ANY agents:
+			# 	* CPU usage
+			# 	* Network usage
+			# 	* Disk reads and usage
+			# 	* hypervisor and EC2 instance status
+			# * advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the Unified CloudWatch Agent for:
+			# 	* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
 	* CloudWatch Metrics: gives you visual graphs based on CloudWatch Logs
 		* you can use the CLI or SDK to make custom metrics
-		* if you make a custom metric, you can set it to have High Resolution, meaning more granular data; EX: going from tracking per minute(Standard Resolution) to per second!
+		# * if you make a custom metric, you can set it to have High Resolution, meaning more granular data; EX: going from tracking per minute(Standard Resolution) to per second!
 	* EventBridge (a.k.a CloudWatch Events): an event bus used to trigger events based on a condition or a schedule
 		* EventBridge as an event bus itself is made up of a collection of 3 event buses:
 			* Default Event Bus: the default event bus for the entire aws Account
 			* Custom Event Bus: scoped to multiple other aws Accounts
 			* SaaS Event Bus: scoped to multiple 3rd part SaaS Providers called: Partner Sources
 		* Producers: aws services that emit Events
-		* Rules (a.k.a Event Source): the conditions needed to trigger the event
-			* common Targets include: Lambda, SQS/SNS, Firehose
-			* after it matches your Target, you can also choose what part of the Event to pass along under Configure Input:
-				* Match Events: the entire Event
-				* part of the matched event
-				* Constant (JSON text): send a static mocked json object instead of the actual Event data
-					* really good for passing data to a Lambda function when using a CloudWatch Event to trigger Lambda code
-				* Input Transformer: lets you transform the Event data into whatever u want it to look like
-			* can't use these as variable names when making Rules: aws.events.rule-arn, aws.events.rule-name, aws.events.event
-			* EventBridge Schema Registry: lets you create, discover, and manage OpenAPI schemas for Events on EventBridge
-				* OpenAPI: RESTful API standard; can be represented as either JSON or YAML
-				* you can then use that schema to download Code Bindings for whatever programming language u use in your IDE to use as autocomplete when programming
-				* you can also download the AWS Toolkit for VSCode to view schemas and install Code Bindings the same way
-		* Targets: what to trigger
-			* can select up to 5 Targets per Rule
+		# * Rules (a.k.a Event Source): the conditions needed to trigger the event
+		# 	* common Targets include: Lambda, SQS/SNS, Firehose
+		# 	* after it matches your Target, you can also choose what part of the Event to pass along under Configure Input:
+		# 		* Match Events: the entire Event
+		# 		* part of the matched event
+		# 		* Constant (JSON text): send a static mocked json object instead of the actual Event data
+		# 			* really good for passing data to a Lambda function when using a CloudWatch Event to trigger Lambda code
+		# 		* Input Transformer: lets you transform the Event data into whatever u want it to look like
+		# 	* can't use these as variable names when making Rules: aws.events.rule-arn, aws.events.rule-name, aws.events.event
+		# 	* EventBridge Schema Registry: lets you create, discover, and manage OpenAPI schemas for Events on EventBridge
+		# 		* OpenAPI: RESTful API standard; can be represented as either JSON or YAML
+		# 		* you can then use that schema to download Code Bindings for whatever programming language u use in your IDE to use as autocomplete when programming
+		# 		* you can also download the AWS Toolkit for VSCode to view schemas and install Code Bindings the same way
+		# * Targets: what to trigger
+		# 	* can select up to 5 Targets per Rule
 		* contains the following:
 			* version
 			* ID
@@ -541,7 +537,7 @@ CloudWatch: monitors your cloud
 			* resources: collection of ARNs
 			* detail: json object that defines the Event. Can contain up to 50 key/value pairs
 		* you can use cron expressions and rate expressions(same exact thing as cron expressions)
-		* Event Patterns: allows you to filter Events
+		# * Event Patterns: allows you to filter Events
 	* CloudWatch Alarms: triggers a notification when metrics breach some threshold that you define
 		* the Type: is the threshold a fixed number(Static) or a range?(Anomoly Detection)
 		* the Condition: <, >, <=, etc.
@@ -549,12 +545,12 @@ CloudWatch: monitors your cloud
 		* 3 Alarm states:
 			* OK: doesn't fulfill the condition (so don't alarm, it's fine)
 			* ALARM: fulfills the condition, so alarm
-			* INSUFFICIENT_DATA: either the Alarm just started, the Metric used in the Alarm is unavailable, or there's not enough data
+			# * INSUFFICIENT_DATA: either the Alarm just started, the Metric used in the Alarm is unavailable, or there's not enough data
 	* CloudWatch Dashboards: lets you create dashboards using CloudWatch Metrics
-	* ServiceLens: visualize and analyze the health, performance, and availability of ur app in a single place
+	# * ServiceLens: visualize and analyze the health, performance, and availability of ur app in a single place
 	* Container Insights: for Containers and Microservices
-	* Synthetics: tests ur apps to see if they're broken
-	* Contributer Insights: view the top contributors impacting the performance of ur app in real-time
+	# * Synthetics: tests ur apps to see if they're broken
+	# * Contributer Insights: view the top contributors impacting the performance of ur app in real-time
 	* Hypervisor: lets you host, access, and run multiple Virtual Machines on a single piece of hardware
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -563,24 +559,24 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	* supports the Network File System v4 (NFSv4) protocol
 	* you only pay for the storage you use
 	* can scale up to petabytes
-	* can support thousands of concurrent NFS connections
-	* provides Read After Write Consistency: meaning you can view changes RIGHT AFTER making changes
-	* data is stored multi AZ within a region by default
+	# * can support thousands of concurrent NFS connections
+	# * provides Read After Write Consistency: meaning you can view changes RIGHT AFTER making changes
+	# * data is stored multi AZ within a region by default
 	* EFS One Zone: feature where files can instead be stored in a single AZ
 		* you would use EFS One Zone when: 
 			* things aren't multi-AZ dependent
 			* EC2's from multiple AZ's accessing a single EFS in a single AZ
-	* 3 performance modes in EFS: 
-		* Max I/O: use this if you have, tens/hundreds/thousands of EC2's using the same EFS. improves I/O and throughput, but has higher latency. Good for parallelized applications
-		* General Purpose Performance Mode: use this if you want to keep things low-latency
-		* Throughput Mode: use this when you want good data transfers w/o any performance bottlenecks for high throughput workloads
-	* FSx Windows File Server: fully managed Microsoft Windows file system, so that you can move windows-based apps that require file storage to AWS; built using Windows Server
-		* runs on Windows Servers (not EC2's), SMB file system (not NFS)
-		* integrates with Microsoft Active Directory
-		* offers single and multi-az deployments with SSD and HDD storage options
-		* allows access to file systems to multiple VPC's, accounts, and Regions through VPC Peering and Transit Gateway
-		* FSx File Gateway: allows your on-prem files to be stored in Amazon FSx Windows File Storage(WFS)
-			* u must have on-premise access to FSx Windows File Server either through a VPN or through AWS Direct Connect
+	# * 3 performance modes in EFS: 
+	# 	* Max I/O: use this if you have, tens/hundreds/thousands of EC2's using the same EFS. improves I/O and throughput, but has higher latency. Good for parallelized applications
+	# 	* General Purpose Performance Mode: use this if you want to keep things low-latency
+	# 	* Throughput Mode: use this when you want good data transfers w/o any performance bottlenecks for high throughput workloads
+	# * FSx Windows File Server: fully managed Microsoft Windows file system, so that you can move windows-based apps that require file storage to AWS; built using Windows Server
+	# 	* runs on Windows Servers (not EC2's), SMB file system (not NFS)
+	# 	* integrates with Microsoft Active Directory
+	# 	* offers single and multi-az deployments with SSD and HDD storage options
+	# 	* allows access to file systems to multiple VPC's, accounts, and Regions through VPC Peering and Transit Gateway
+	# 	* FSx File Gateway: allows your on-prem files to be stored in Amazon FSx Windows File Storage(WFS)
+	# 		* u must have on-premise access to FSx Windows File Server either through a VPN or through AWS Direct Connect
 	* FSx for Lustre: fully managed file system optimized for HPC, machine learning, media data processing, and electronic design automation workloads
 		* used for processing big data sets up to 100's of GB/s of throughput, millions of IOPS, and sub-millisecond latencies
 		* integrates natively with S3
