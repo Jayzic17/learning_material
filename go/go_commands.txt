@@ -16,10 +16,10 @@ go mod why -m [dependency_name]
     * shows you the dependency graph for the specified dependency in the current Go project
 go mod graph | grep [dependency_name]
     * also shows you the dependency graph for the specified dependency in the current Go project
-    * shows version numbers as well
+    * shows versiin.go
+go run .on numbers as well
 go run main.go
-    * runs your main.go
-go run .
+    * runs your ma
     * runs the whole directory - you would run this if you have multiple entry points (i.e multiple main() functions)
 go clean
     * cleans up disk space by removing cache and build artifacts in your Go application (Module) and reformates your files like '$ terraform fmt'

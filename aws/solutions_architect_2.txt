@@ -1133,12 +1133,12 @@ HA (Highly Available) Architecture: planning for failure
 
 Simple Queue Service (SQS): fully managed queuing service; lets you decouple and scale micro services, distributed systems, and serverless applications
 	* provides asynchronous communication and decouples processes through messages/events using a producer-consumer/ reader-writer framework
-	* messages in a SQS queue will continue to exist even after a consumer has processed it; it's up to you to configure when to delete the message after the fact with a DeleteMessage
-		* you can send DeleteMessage requests in batch to save on costs in SQS
-		* maximum batch size for SQS: 10 queue messages per batch operation
-	* message size can be from 1 to 256 bytes; Amazon SQS Extended Client Library for Java lets you increase it to 2GB, where its stored in S3 and the library will reference the S3 object
-		* stores the actual message in S3, and the message just contains a reference to it
-	* messages are retained in the queue for 4 days by default before dropping it from the queue by default, but you can adjust it to be anywhere from 60 seconds to 14 days
+	# * messages in a SQS queue will continue to exist even after a consumer has processed it; it's up to you to configure when to delete the message after the fact with a DeleteMessage
+	# 	* you can send DeleteMessage requests in batch to save on costs in SQS
+	# 	* maximum batch size for SQS: 10 queue messages per batch operation
+	# * message size can be from 1 to 256 bytes; Amazon SQS Extended Client Library for Java lets you increase it to 2GB, where its stored in S3 and the library will reference the S3 object
+	# 	* stores the actual message in S3, and the message just contains a reference to it
+	# * messages are retained in the queue for 4 days by default before dropping it from the queue by default, but you can adjust it to be anywhere from 60 seconds to 14 days
 	* can be encrypted using aws-managed SSE or using KMS
 	* 2 different types of queues:
 		* Standard Queues: unlimited # of messages/second; guarantees msg's will be delivered at least once; BUT more than 1 copy of a msg could be delivered out of order
@@ -1149,34 +1149,34 @@ Simple Queue Service (SQS): fully managed queuing service; lets you decouple and
 		* messages will then be deleted from the queue when they're still invisible
 		* if a message is not processed before the invisibility time expires, the msg will become visible and a different reader will process it, resulting in the request being processed 2x
 		* default visibility time is 30 seconds, but you can set it to be anytime btwn 0 seconds and 12 hours
-	* Delay Queues: lets you postpone the delivery of messages to consumers for a set amount of time
-		* default is 0 seconds, but the max is 900
-		* for Standard queues it applies to only new messages, but for FIFO queues it applies to ALL messages currently in the queue
-	* Message Timers: same as Delay Queues, but only applies to INDIVIDUAL MESSAGES; not supported for FIFO queues
-	* Temporary queues: high-throughput, cheep, short-lived queues that get deleted when they're no longer being used
+	# * Delay Queues: lets you postpone the delivery of messages to consumers for a set amount of time
+	# 	* default is 0 seconds, but the max is 900
+	# 	* for Standard queues it applies to only new messages, but for FIFO queues it applies to ALL messages currently in the queue
+	# * Message Timers: same as Delay Queues, but only applies to INDIVIDUAL MESSAGES; not supported for FIFO queues
+	# * Temporary queues: high-throughput, cheep, short-lived queues that get deleted when they're no longer being used
 	* Polling: the method in which we retrieve messages from the queue
 		* Short Polling(default): returns messages immediately, even if the queue is empty; use this when you want messages right away
 		* Long Polling: waits until a message arrives in the queue || the long poll timeout expires; reduces cost by reducing # of empty receives; most use cases you would use this
 	* SQS supports Attribute-based access control (ABAC): an authorization process that defines permissions based on Tags
 	* Message Metadata: lets u attach metadata to ur SQS messages
 	* Access Policy: they are to your SQS Queue what Bucket Policies are to your S3 buckets; they're the same thing
-	* SQS supports the Advanced Message Queuing Protocol(AMQP), which takes the producer-consumer model and has an AMQP broker handle the queue w/ an added Exchange before the queue
-		* messages are published to Exchanges, which distribute copies of the message to queues using rules called Bindings
-		* messages are only removed from the queue when the consumer acknowledges the broker
-		* 4 types of Exchanges u can use:
-			* Direct(default)
-			* Fanout
-			* Topic(for SQS consumer-producer model)
-			* Headers
-	* SQS supports the MQ Telemetry Transport(MQTT) protocol, which is good for minimal network bandwidth and for IoT or real-time messaging apps
-	* SQS supports the Simple Text Oriented Messaging Protocol(STOMP), which is good for communicating with just text for use with any message broker
+	# * SQS supports the Advanced Message Queuing Protocol(AMQP), which takes the producer-consumer model and has an AMQP broker handle the queue w/ an added Exchange before the queue
+	# 	* messages are published to Exchanges, which distribute copies of the message to queues using rules called Bindings
+	# 	* messages are only removed from the queue when the consumer acknowledges the broker
+	# 	* 4 types of Exchanges u can use:
+	# 		* Direct(default)
+	# 		* Fanout
+	# 		* Topic(for SQS consumer-producer model)
+	# 		* Headers
+	# * SQS supports the MQ Telemetry Transport(MQTT) protocol, which is good for minimal network bandwidth and for IoT or real-time messaging apps
+	# * SQS supports the Simple Text Oriented Messaging Protocol(STOMP), which is good for communicating with just text for use with any message broker
 Simple Notification Service (SNS): fully managed; subscribe and send push notifications through text msg, email, web hooks, lambdas, SQS, and mobile notifications (pub/sub)
 	* 3 attributes of SNS messages:
 		* Name
 		* Type
 		* Value ...all 3 attributes can't be empty
 	* Publishers: use the AWS API through CLI and SDK to push messages to a Topic
-		* all messages published to SNS are stored redundantly across multiple AZ's
+		# * all messages published to SNS are stored redundantly across multiple AZ's
 	* Topics: allow you to group multiple subscriptions together, allowing you to deliver to multiple subscribers at once by formatting to each subscriber's protocols all at once
 		* you can encrypt Topics through KMS
 		* Topics can support deliveries to multiple endpoint types (EX: delivering to iOS and Android at the same time)
@@ -1203,8 +1203,8 @@ Simple Notification Service (SNS): fully managed; subscribe and send push notifi
 		* Publishers don't know who their Subscribers are
 		* Subscribers don't pull messages: messages are automatically pushed to them; it's a PUSH-based system
 	* is also used for application integration: enables you to decouple micro services, distributed systems, and serverless apps
-	* SNS Filter Policy: lets you filter only a subset of messages to be delivered to Subscribers
-	* SNS Message Data Protection: protects messages published to your SNS Topics by using data protection policies to audit, mask, redact, or block sensitive information
+	# * SNS Filter Policy: lets you filter only a subset of messages to be delivered to Subscribers
+	# * SNS Message Data Protection: protects messages published to your SNS Topics by using data protection policies to audit, mask, redact, or block sensitive information
 		* scans for PII and Protected Health Information(PHI) via data identifiers u make, or by using the predefined ones provided
 		* supports the following actions:
 			* Audit: audit the message, then send findings to CloudWatch, S3, or Data Firehose
@@ -1212,14 +1212,14 @@ Simple Notification Service (SNS): fully managed; subscribe and send push notifi
 			* Deny: blocks data from being sent
 		* good for complying with privacy regulations under HIPAA, PCI, and FedRAMP
 		* only supported for Standard SNS Topics, not FIFO
-	* SNS Delivery Policy: defines how SNS does retries when delivering messages
-		* when the Delivery Policy is exhausted, SNS stops any retries and either discards the message or sends it to the Dead Letter Queue if one exists
-		* Dead Letter Queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
-		* here's how the retries are defined (1st of each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
-			* Immediate Retry Phase: 3 times w/o delay (Data Firehose, Lambda, SQS) or 0 times w/o delay (SMTP, SNS, Mobile Push Notifications)
-			* Pre-Backoff Phase: 2 times, 1 second appart or 10 seconds apart
-			* Backoff Phase: 10 times w/ exponential backoff from 1 second to 20 seconds or from 10 seconds to 600 seconds
-			* Post-Backoff Phase: 100,000 times, 20 seconds appart or 38 times, 600 seconds apart
+	# * SNS Delivery Policy: defines how SNS does retries when delivering messages
+	# 	* when the Delivery Policy is exhausted, SNS stops any retries and either discards the message or sends it to the Dead Letter Queue if one exists
+	# 	* Dead Letter Queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
+		# * here's how the retries are defined (1st of each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
+		# 	* Immediate Retry Phase: 3 times w/o delay (Data Firehose, Lambda, SQS) or 0 times w/o delay (SMTP, SNS, Mobile Push Notifications)
+		# 	* Pre-Backoff Phase: 2 times, 1 second appart or 10 seconds apart
+		# 	* Backoff Phase: 10 times w/ exponential backoff from 1 second to 20 seconds or from 10 seconds to 600 seconds
+		# 	* Post-Backoff Phase: 100,000 times, 20 seconds appart or 38 times, 600 seconds apart
 Simple Workflow Service(SWF): fully-managed; allows you to coordinate, track, and audit multi-step, multi-machine application jobs; used for work across distributed and/or decoupled applications
 	* Workflows are composed of Tasks, which represent each step in the Workflow
 	* also allows for coordination of media, back-end, business, and analytical components as well
@@ -1255,11 +1255,11 @@ Step Functions: serverless functions (like Lambda) that provide serverless orche
 			* both branches have to finish before the workflow continues
 		* Succeed States: stops execution of the workflow and returns success
 		* Fail States: stops the execution of the workflow and returns failure
-	* Step Functions vs. Simple Workflow Service (SWF):
-		* step functions are serverless, SWF isn't
-		* step functions are good for short workflows, SWF is for long workflows
-		* step functions are used for synchronous tasks, SWF is for asynchronous tasks
-		* step functions are new and less complex, SWF is legacy and more complex
+	# * Step Functions vs. Simple Workflow Service (SWF):
+	# 	* step functions are serverless, SWF isn't
+	# 	* step functions are good for short workflows, SWF is for long workflows
+	# 	* step functions are used for synchronous tasks, SWF is for asynchronous tasks
+	# 	* step functions are new and less complex, SWF is legacy and more complex
 CloudFront: CDN that creates cached copies of your websites at Edge Locations based on geographical location, the webpage origin, and a content delivery server
 	* objects are cached at Edge Locations for the duration of their Time To Live (TTL)
 	* Edge Locations aren't just read-only, you can write to them as well
@@ -1273,12 +1273,6 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 	* Origin: the origin of all the files that the CDN will distribute; can be an S3 Bucket, an EC2, an ELB, or Route53
 		* increasing cache expiration time for Cloudfront improves performance because it reduces the amount of requests to Origin and makes it more likely users will get data from an Edge Location
 		* if the Origin for a Cloudfront CDN is in AWS, fetches to Origin are free
-	* when you create a signed url or signed cookie, you attach a policy to it
-		* the policy can include: url expiration time/date, IP ranges (that have access to it), and trusted signers (which AWS accounts can create signed urls?)
-		* also a key-pair is created when you create a signed url/cookie that is account-wide and managed by the Root User
-		* can utilize caching features
-		* if your Origin is EC2 then use CloudFront
-	* S3 presigned urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first
 	* Behaviors: you can redirect to HTTPs, restrict HTTP methods, restrict viewer access, set Time To Live (TTLs), etc.
 	* Invalidators: you can manually invalidate cache on specific files; this means forcing the cache to immediately expire and then refresh the cached content
 		* refreshing the cache costs money because of transfer costs to update Edge Locations; it's called invalidating the cache
@@ -1304,10 +1298,16 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 			* Viewer Response: Before CloudFront returns the response to the viewer
 	* By default CloudFront allows everyone to have access; you can change it by restricting access, which creates an Original Access Identity (OAI) user identity which is used to...
 		* ...give your CloudFront Distribution permission to fetch a private object from private S3 buckets
-		* with the OAI you can then protect the cached content using Signed URLs: urls that provide temp access to cached objects, and Signed Cookies, which are passed along with every...
+		* with the OAI you can then protect the cached content using CloudFront Signed URLs: urls that provide temp access to cached objects, and Signed Cookies, which are passed along with every...
 			* ...request to CloudFront
 			* the advantage with Cookies being if you wanted to provide access to multiple private files instead of just one
-	* CloudFront Access Logs: captures requests made to your CDN that gets who made the request, where, when, and how 
+		# * when you create a CloudFront Signed URL or signed cookie, you attach a policy to it
+		# 	* the policy can include: url expiration time/date, IP ranges (that have access to it), and trusted signers (which AWS accounts can create signed urls?)
+		# 	* also a key-pair is created when you create a signed url/cookie that is account-wide and managed by the Root User
+		# 	* can utilize caching features
+		# 	* if your Origin is EC2 then use CloudFront
+		# 	* S3 presigned urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first
+	# * CloudFront Access Logs: captures requests made to your CDN that gets who made the request, where, when, and how 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1337,11 +1337,11 @@ KMS: Regional secure key management, encryption, and decryption
 				* must call the KMS APIs to use the private key
 				* you can download the public key and use it outside of aws
 				* this is used outside of aws by users who can't call KMS APIs
-				* AWS services w/KMS don't support asymmetric CMK's
+				* AWS services w/ KMS don't support asymmetric CMK's
 				* is used to sign messages and verify signatures
 	* good for S3 objects, database passwords, and API keys that are stored in Parameter Store
 	* can encrypt and decrypt data up to 4KB in size
-	* you pay per API call and per CMK key
+	# * you pay per API call and per CMK key
 	* you can run audit logs to S3 using CloudTrail with KMS
 	* uses FIPS140-2 Level 2
 CloudHSM: dedicated hardware security module for your keys; the name for AWS's HSM offering
@@ -1353,34 +1353,34 @@ CloudHSM: dedicated hardware security module for your keys; the name for AWS's H
 	* uses industry-standard APIs, so there are no AWS APIs used by it
 	* if you need to meet compliance under: PKCS#11, JCE, or CNG, use CloudHSM
 	* if you lose your keys with CloudHSM, they can't be retrieved, which would suck
-	* CloudHSM performs backups by backing up users, keys, and policies, periodically to S3 in the same region as your CloudHSM Cluster
-		* Ephemeral Backup Key(EBK): when HSM backups are made, this AEA-256 key is generated to encrypt the backup using a FIPS-approved AES key wrapping method before it leaves HSM
-		* Persistent Backup Key(PBK): another AES-256 encryption key that's generated by HSM using a FIPS-approved KDF to encrypt the Ephemeral Backup Key
+	# * CloudHSM performs backups by backing up users, keys, and policies, periodically to S3 in the same region as your CloudHSM Cluster
+	# 	* Ephemeral Backup Key(EBK): when HSM backups are made, this AEA-256 key is generated to encrypt the backup using a FIPS-approved AES key wrapping method before it leaves HSM
+	# 	* Persistent Backup Key(PBK): another AES-256 encryption key that's generated by HSM using a FIPS-approved KDF to encrypt the Ephemeral Backup Key
 Systems Manager Parameter Store: part of SSM; serverless storage of secrets (i.e Passwords, connections strings, API keys, etc.)
 	* values can be stored encrypted with KMS, or in plaintext
 	* separates secrets from source code
 	* you can store parameters in hierarchies, track versions, and set TTL to expire secrets
 Secrets Manager: same as Parameter Store, except it automatically rotates secrets, can generate random secrets, applies new passwords in RDS for you, and you're charged per secret stored and...
 	* ...per  10,000 API calls
-Serverless Application Model (SAM): CloudFormation extension optimized for serverless applications
-	* can use it to run serverless applications locally, meaning you don't have to provision anything in AWS that would otherwise cost you money
-	* can also package and deploy your SAM code using CodeDeploy
-ECS: not fully managed; you manage the containers
+# Serverless Application Model (SAM): CloudFormation extension optimized for serverless applications
+# 	* can use it to run serverless applications locally, meaning you don't have to provision anything in AWS that would otherwise cost you money
+# 	* can also package and deploy your SAM code using CodeDeploy
+# ECS: not fully managed; you manage the containers; ECS is free
 	* a container is a package that contains the application, along with all the dependencies required to run it
 		* gives you all the isolation benefits of virtualization, so less overhead and faster starts than VMs, also very portable and environments are always consistent
 		* ECS containers have public IP's for connecting to and giving u full access
 	* Docker is an engine that runs containers
 	* ECS creates clusters of EC2's for the scheduling, CPU and memory managing, and monitoring; u manage the EC2's
-	* ECS is free; ECS lets you deploy, update, and rollback containers
+	* ECS lets you deploy, update, and rollback containers
 	* can use it in conjunction with an ELB:
 		* this lets you distribute traffic across Tasks in your service
 		* for ALB's with ECS: you can use it for these 2:
 			* Dynamic Host Port Mapping: use it so that multiple Tasks from the same service can be run on a single container instance by using multiple random host ports
 			* Path-based Routing
 			* so it's obvious that ALB's are recommended over NLBs and CLBs when using ELBs for ECS
-	* ECS Capacity Providers: manage the scaling of infrastructure for Tasks in your clusters
-		* each cluster needs to have 1 or more Capacity Providers, and then optionally a Capacity Provider Strategy
-		* an ASG must be associated with your Capacity Provider in order for it to do the scaling
+	# * ECS Capacity Providers: manage the scaling of infrastructure for Tasks in your clusters
+	# 	* each cluster needs to have 1 or more Capacity Providers, and then optionally a Capacity Provider Strategy
+	# 	* an ASG must be associated with your Capacity Provider in order for it to do the scaling
 	* ECS Security comprises of 2 types of Roles:
 		* EC2 Instance Role: applies the Role's policy to all tasks running on that EC2 instance
 			* from a security perspective not ideal cause more often than not, not all of the tasks are gonna need everything in that Role; we need to apply least privilege 
@@ -1403,28 +1403,28 @@ ECS: not fully managed; you manage the containers
 		* Registry: Storage for container images; used for downloading images that will go on to create containers
 	* when you launch an ECS, you have the option to pass EC2 User Data to the instance
 		* useful for when you want to run automated tasks and install packages, apply updates, etc. on startup
-	* Amazon ECS Anywhere: lets u register external VMs from your on-premise to your ECS cluster
+	# * Amazon ECS Anywhere: lets u register external VMs from your on-premise to your ECS cluster
 	* Fargate: Serverless container engine; you pay for resources and duration per application; works with both ECS and EKS; each workload runs on its own kernel
 		* you would choose EC2 for containerized apps instead of Fargate when you need to meet compliance req's, need more customization, or if your apps require access to GPU's
-		* it's serverless, so aws manages the EC2's for you
-		* Fargate must use awslogs, and it will have an ENI in the PVC per Task group
+		# * it's serverless, so aws manages the EC2's for you
+		* Fargate must use awslogs, and it will have an ENI in the VPC per Task group
 		* when using ELB to point to Fargate, u have to use IP addresses since Fargate Tasks do not have a hostname
 	* EKS: lets you deploy and manage containerized applications
 		* same as ECS, but EKS lets you use the same toolsets on-premise and in cloud
 		* ...also your containers are grouped into Pods: which is similar to a Task in ECS
 		* also supports EC2 and Fargate
 		* you would use EKS if you're already using Kubernetes(K8), or want to migrate to AWS
-		* Amazon EKS Connector: BYOD your own kubernetes cluster to EKS, which then lets u visualize it in the EKS console
+		# * Amazon EKS Connector: BYOD your own kubernetes cluster to EKS, which then lets u visualize it in the EKS console
 		* eksctl: CLI tool for easily setting up kubernetes clusters on aws; it's the aws version of kubectl
 		* EKS Distro(EKS-D): custom distro to use for EKS clusters
-		* EKS Anywhere: ECS Anywhere, but for kubernetes clusters
+		# * EKS Anywhere: ECS Anywhere, but for kubernetes clusters
 	* when configuring a Task for either ECS or Fargate, each Task must be assigned to a Security Group and IAM Role
-	* ECS Exec: service that lets u easily and directly exec into your ECS Containers; works for both ECS and Fargate; accessible via the AWS CLI
-	* ECS Service Connect: makes it easy to setup a service mesh for service-to-service communication within ur cluster, so that services can easily talk to other services in ur cluster
-		* includes service discovery, encrypts data in-transit via TLS, sends telemetry data to the ECS console and CloudWatch, health checks, automatic retries, and rolling deployments
+	# * ECS Exec: service that lets u easily and directly exec into your ECS Containers; works for both ECS and Fargate; accessible via the AWS CLI
+	# * ECS Service Connect: makes it easy to setup a service mesh for service-to-service communication within ur cluster, so that services can easily talk to other services in ur cluster
+	# 	* includes service discovery, encrypts data in-transit via TLS, sends telemetry data to the ECS console and CloudWatch, health checks, automatic retries, and rolling deployments
 	* when u launch an EC2 instance for ECS it will automatically use an Amazon EC2 Optimized AMI image by default
-	* Open Telemetry Collector: an agent that is installed on a single node on an ECS, Fargate, or EKS cluster, which can then be used to receive, process, and export telemetry data
-		* removes the need to run multiple agents on multiple nodes
+	# * Open Telemetry Collector: an agent that is installed on a single node on an ECS, Fargate, or EKS cluster, which can then be used to receive, process, and export telemetry data
+	# 	* removes the need to run multiple agents on multiple nodes
 	* AWS Distro for OpenTelemetry(ADOT): a distro that can be used for an ECS, Fargate, or EKS cluster, which supports OpenTelemetry
 	* Amazon Managed Service for Prometheus(AMP): a Prometheus-compatible monitoring service for ECS, Fargate, and EKS; fully-managed
 	* Amazon Managed Service for Grafana(AMSG): a Grafana-compatible service for ECS, Fargate, and EKS for making Grafana dashboards; fully-managed
