@@ -76,7 +76,6 @@ SSM: simple sessions manager; it's what you use to start, record, and log all us
 AMI: amazon machine image; disk image copy of your server
 auto-scaling groups: allows you to increase or decrease the number of servers automatically
 elastic load balancer: allows you manage the load traffic across all of your servers
-	# * ELB's do not have pre-defined IPv4 addresses; you resolve to them using a DNS name
 	* load balancers come in 4 different flavors:
 		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
 		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games

@@ -1002,8 +1002,8 @@ AWS Cognito: a customer identity and access management (CIAM) system
 		* it uses AWS Cognito as the identity broker btwn AWS and the IdP
 		* successful user authentication generates a JSON Web Token (JWT)
 		* can set a bunch of attributes like password req's, apply MFA, setup sign-up restrictions, trigger Lambda functions after sign-up, etc.
-	* Cognito Identity Pools: Provides temporary credentials for users to access AWS services through Amazon Cognito
-		* User Pools are all about user credentials, whereas Identity Pools are all about getting access to AWS services
+	# * Cognito Identity Pools: Provides temporary credentials for users to access AWS services through Amazon Cognito
+	# 	* User Pools are all about user credentials, whereas Identity Pools are all about getting access to AWS services
 	* Cognito Sync: Syncs user data and preferences across all devices using one line of code powered by SNS
 		* uses push synchronization to push updates and synchronize data
 		* uses SNS to send notifications to all user devices when data in the cloud changes
@@ -1026,8 +1026,8 @@ Direct Connect:
 		* port size of the connection (1, 10, or 100GB internet bandwidth)
 		* amount of time u use the connection for either as a Dedicated: physical connection, or Hosted: logical connection
 		* any outbound traffic that gets sent outside the aws network
-	* Link Aggregation Group(LAG): a setup you can specify in Direct Connect that uses the LACP Protocol to aggregate multiple Direct Connect connections at a single Direct Connect endpoint
-		* all LAGs operate in active/active mode, meaning all of the Direct Connect connections in a LAG are active
+	# * Link Aggregation Group(LAG): a setup you can specify in Direct Connect that uses the LACP Protocol to aggregate multiple Direct Connect connections at a single Direct Connect endpoint
+	# 	* all LAGs operate in active/active mode, meaning all of the Direct Connect connections in a LAG are active
 Global Accelerator: routes traffic to the closest Edge Location through an optimized path in the AWS global network by using Anycast static IP addresses
 	* 2 Accelerator types:
 		* Standard: automatically route to the nearest healthy endpoint
@@ -1048,10 +1048,13 @@ Global Accelerator: routes traffic to the closest Edge Location through an optim
 				* Weights are useful for performance testing within a Region 
 		* DNS Name: each Accelerator is given a default DNS Name that points to the 2 static IP's given to you by default
 			* can use the static IP's or DNS Name to route traffic to your accelerator, or set up DNS records to route traffic using your own custom domain name
-		* Network Zone: services the Static IP's for your Accelerator from a unique IP subnet; similar to an AZ: is it's own isolated unit
-			* if 1 static IP is unavailable from its Network Zone, you can retry on the healthy static IP from the other isolated Network Zone
-ELB: distributes traffic for EC2's, containers, IP addresses, and Lambda functions; must have at least 2 AZ's; cannot be cross-region
+		# * Network Zone: services the Static IP's for your Accelerator from a unique IP subnet; similar to an AZ: is it's own isolated unit
+		# 	* if 1 static IP is unavailable from its Network Zone, you can retry on the healthy static IP from the other isolated Network Zone
+ELB: distributes traffic for EC2's, containers, IP addresses, and Lambda functions
+	# * must have at least 2 AZ's
+	# * cannot be cross-region
 	* ELB's have their own DNS name, so you're never given an IP address for them
+		# * ELB's do not have pre-defined IPv4 addresses; you resolve to them using a DNS name
 	* Classic ELB's route each request independently to the EC2 instance with the smallest load
 	* Path-based Routing: lets you forward requests based on their URL path; you do this by writing certain rules that you specify to a Listener that you define
 	* Listeners: evaluates any traffic that matches the Listener's port
@@ -1063,7 +1066,7 @@ ELB: distributes traffic for EC2's, containers, IP addresses, and Lambda functio
 		* uses cookies to remember which EC2 instance the user is bound to
 		* useful for when information is only stored locally on a particular instance
 		* can be enabled for ALB, but can only be set for a Target Group, not an individual EC2
-	* the X-Forward-For Header command is used for ID'ing the original IPv4 address of the user, since once a request is sent through a proxy or load balancer the IP then becomes the proxy's/LB's
+	# * the X-Forward-For Header command is used for ID'ing the original IPv4 address of the user, since once a request is sent through a proxy or load balancer the IP then becomes the proxy's/LB's
 	* ELB health checks communicate directly w/ EC2s and report back InService or OutofService; note OutofService does not mean it kills unhealthy instances, it just doesn't send traffic there
 		* for ALB and NLB, health checks are found at the Target Group as opposed to the EC2 instances directly
 	* Cross Zone Load Balancing: only for CLB and NLB; requests are distributed evenly across EC2 instances in all enabled AZ's, as opposed to requests being distributed evenly across EC2...
@@ -1090,11 +1093,11 @@ Auto Scaling Groups(ASG): a collection of EC2 instances that are treated as a gr
 			* manually: by changing min, max, and desired capacity
 			* maintaining current instance levels at all times
 			* based on demand (i.e traffic)
-			* predictive scaling: analyzes your instances historical load data to detect daily and weekly patters in traffic flows
-				* u need at least 24 hours of CloudWatch data for it to be able to read before you can create it
-				* will continuously use the last 2 weeks of data to tweak the policy
-				* will produce hourly forecasts for capacity requirements for the next 48 hours
-				* will update every 6 hours using the latest CloudWatch data
+			# * predictive scaling: analyzes your instances historical load data to detect daily and weekly patters in traffic flows
+			# 	* u need at least 24 hours of CloudWatch data for it to be able to read before you can create it
+			# 	* will continuously use the last 2 weeks of data to tweak the policy
+			# 	* will produce hourly forecasts for capacity requirements for the next 48 hours
+			# 	* will update every 6 hours using the latest CloudWatch data
 	* Auto Scaling can occur in 3 ways:
 		* capacity settings: by tweaking the min, max, and desired capacity of EC2 instances you want running (ASG will always launch instances to meet min capacity)
 		* health check replacements: 2 types:
@@ -1110,9 +1113,9 @@ Auto Scaling Groups(ASG): a collection of EC2 instances that are treated as a gr
 		* same thing as just launching an EC2, but you're saving that configuration to use later
 		* they cannot be edited, so gotta create a new one/clone it, then associate with the updated Launch Configuration
 		* they also must be manually updated by updating the Auto Scaling Settings (you can't automate this process)
-	* cooldown period: a configurable setting in ASG; a time delay that ensures instances aren't terminated or launched before the previous scaling activity has time to finish; default time is 300 seconds
-	* Lifecycle Hooks: lets you put instances into a wait period before termination, allowing you to perform custom activities and retrieve critical data from a stateful instance before termination
-		* default wait period is 1 hour
+	# * cooldown period: a configurable setting in ASG; a time delay that ensures instances aren't terminated or launched before the previous scaling activity has time to finish; default time is 300 seconds
+	# * Lifecycle Hooks: lets you put instances into a wait period before termination, allowing you to perform custom activities and retrieve critical data from a stateful instance before termination
+	# 	* default wait period is 1 hour
 HA (Highly Available) Architecture: planning for failure
 	* On-premise service strategies with aws:
 		* Database Migration Service (DMS)
@@ -1122,10 +1125,10 @@ HA (Highly Available) Architecture: planning for failure
 			* it will then build a server utilization map and dependency map of your on-premise's environment
 			* the collected data is then encrypted and stored in ADS; can export this data as a csv for calculating Total Cost of Ownership for running aws and for planning aws migration
 			* this data is also available in Migration Hub
-		* Migration Hub: a place where you can migrate the discovered servers and track their progress as they are being migrated to aws
-			* Migration Evaluator Collector: a form u submit to AWS to help asses a migration
-			* Migration Hub Refactor: bridges networking across aws accounts so that legacy and new services can communicate while remaining on seperate accounts
-			* Migration Hub Journey: guided templates for end-to-end migrations
+		# * Migration Hub: a place where you can migrate the discovered servers and track their progress as they are being migrated to aws
+		# 	* Migration Evaluator Collector: a form u submit to AWS to help asses a migration
+		# 	* Migration Hub Refactor: bridges networking across aws accounts so that legacy and new services can communicate while remaining on seperate accounts
+		# 	* Migration Hub Journey: guided templates for end-to-end migrations
 		* VM Import/Export: used to migrate existing apps/VM's to EC2's; can be used for Disaster Recovery or lets you use aws as a second site
 		* Download Amazon Linux 2 as an iso
 
