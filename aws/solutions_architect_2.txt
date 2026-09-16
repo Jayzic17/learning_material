@@ -577,66 +577,66 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	# 	* allows access to file systems to multiple VPC's, accounts, and Regions through VPC Peering and Transit Gateway
 	# 	* FSx File Gateway: allows your on-prem files to be stored in Amazon FSx Windows File Storage(WFS)
 	# 		* u must have on-premise access to FSx Windows File Server either through a VPN or through AWS Direct Connect
-	* FSx for Lustre: fully managed file system optimized for HPC, machine learning, media data processing, and electronic design automation workloads
-		* used for processing big data sets up to 100's of GB/s of throughput, millions of IOPS, and sub-millisecond latencies
-		* integrates natively with S3
-		* is a POSIX-compliant shared file system
-	* FSx for NetApp ONTAP: used when handling petabytes of data
+	# * FSx for Lustre: fully managed file system optimized for HPC, machine learning, media data processing, and electronic design automation workloads
+	# 	* used for processing big data sets up to 100's of GB/s of throughput, millions of IOPS, and sub-millisecond latencies
+	# 	* integrates natively with S3
+	# 	* is a POSIX-compliant shared file system
+	# * FSx for NetApp ONTAP: used when handling petabytes of data
 	* volume is scaled automatically for you
-	* EC2s install the NFSv4.1 client and can then mount the EFS volume for them all to share that storage
-		* EFS Mount Helper: helps u mount your EFS volumes onto EC2 instances
-			* also encrypts data in transit when moving data to on-prem to aws for use in EFS
-		* installing the client also allows CloudWatch to monitor the EFS volume
-	* creates multiple mount targets in all your VPC subnets, so you can mount from anywhere in your VPC
-		* you can mount an EFS on instances in only 1 VPC at a time
+	# * EC2s install the NFSv4.1 client and can then mount the EFS volume for them all to share that storage
+	# 	* EFS Mount Helper: helps u mount your EFS volumes onto EC2 instances
+	# 		* also encrypts data in transit when moving data to on-prem to aws for use in EFS
+	# 	* installing the client also allows CloudWatch to monitor the EFS volume
+	# * creates multiple mount targets in all your VPC subnets, so you can mount from anywhere in your VPC
+	# 	* you can mount an EFS on instances in only 1 VPC at a time
 	* charge is $0.30/GB/month
 	* encryption-at-rest is turned on by default when making an EFS
-	* to enable SSH connections for EFS for encryption In-Transit, open port 22 on the EC2 Security Group and port 2049 on the EFS Security Group
+	# * to enable SSH connections for EFS for encryption In-Transit, open port 22 on the EC2 Security Group and port 2049 on the EFS Security Group
 RDS: scalable, managed(not fully), relational database service
 	* runs on virtual machines, but you can't login to these VM's
 	* RDS is not serverless
-	* you can have up to 40 RDS instances per aws account
-	* it also captures transactional logs every 5 minutes and sends them to S3
+	# * you can have up to 40 RDS instances per aws account
+	# * it also captures transactional logs every 5 minutes and sends them to S3
 	* u define a database identifier for each RDS instance, which forms the beginning of the RDS' DNS hostname, plus an AWS-defined unique identifier
-	* RDS Instance Types:
-		* General-purpose (db.m3, db.m4, etc.)
-		* Memory-optimized:
-			* Optimized X family (xb.x2g, etc.)
-			* Optimized Z family (db.z1d, etc.): high frequency CPU
-			* Optimized R family (db.r7g, etc.): balanced compute
-		* Burstable-performance (db.t3, db.t4, etc.)
-		* Optimized Reads (db.r6gd, db.r6id, etc.)
+	# * RDS Instance Types:
+	# 	* General-purpose (db.m3, db.m4, etc.)
+	# 	* Memory-optimized:
+	# 		* Optimized X family (xb.x2g, etc.)
+	# 		* Optimized Z family (db.z1d, etc.): high frequency CPU
+	# 		* Optimized R family (db.r7g, etc.): balanced compute
+	# 	* Burstable-performance (db.t3, db.t4, etc.)
+	# 	* Optimized Reads (db.r6gd, db.r6id, etc.)
 	* RDS instances use EBS volumes as their storage
 		* RDS won't let u reduce storage size, only increase it. To decrease, you'll have to create a new instance w/ an EBS w/ smaller storage
 	* RDS Automated Backups: creates a snapshot of the DB instance in question within the backup window you specify once a day
 	* Multi-AZ is for disaster recovery and high availability, Read Replicas are for performance improvement and offloading database reads
-	* Multi-AZ is available to all RDS databases(5) except Aurora
+	# * Multi-AZ is available to all RDS databases(5) except Aurora
 		* in Multi-AZ, you can force a failover from 1 AZ to another by rebooting the RDS instance
-	* Read Replicas are available to all RDS databases(5) except SQL Server
+	# * Read Replicas are available to all RDS databases(5) except SQL Server
 		* you can have Read Replicas that are Multi-AZ, source multiple databases in multiple AZ's, and you can have a Read Replica in a 2nd Region
 		* when using MySQL and MariaDB, their replicas are writable and logically replicated, whereas the rest are physically replicated and aren't writable
-		* u can perform backups for all RDS databases(5) except SQL Server
-		* u can perform parallel replication for all RDS databases(5) except Postgres
-	* DB Subnet Group: a group of Subnets u designate as the ones that can be used by your RDS instances
-		* each DB Subet Group should have subnets in at least 2 AZs in a given Region
-		* for an RDS instance to be Public, all subnets in the DB Subnet Group MUST be public
-	* Multi-AZ RDS vs. Read Replicas RDS:
-		* Multi-AZ's replication is synchronous and highly durable, whereas read replicas' is asynchronous and highly scalable
-		* Multi-AZ has automatic failover, as opposed to read replicas which need the change to be made manually
-			* when the primary db fails in a Multi-AZ RDS deployment, the canonical name record (CNAME) is automatically switched from the primary to the standby instance
-		* only the primary instance in Multi-AZ is active, whereas all of read replica's including the master are active
-		* Multi-AZ always spans 2 AZ's in one region, whereas read replicas can be Multi-AZ, Cross-AZ, and allows you to make replicas of replicas 
-		* database upgrades happen on only the master in Multi-AZ, whereas database upgrades in read replicas are independent from master
-		* in RDS Read Replicas, you can have up to 5 replicas per database; each read replica has it's own DNS Endpoint
-			* replicas can be promoted to their own database, but this breaks replication
-			* if the primary fails, u must manually update URLs everywhere to point to the DNS Endpoint of a replica
-	* 2 types of backup solutions for RDS:
-		* Automated Backups: the default; all data is stored in S3; free; stores transactions logs all day; you choose the Retention Period btwn 1 to 35 days; and YOU define the backup window for when you want backups to occur
-			* setting the Retention Period to 0 is how you turn it off
-			* storage I/O may be suspended during the backup, so choose that backup window carefully
-		* Manual Snapshots: these backups persist even after you delete the original RDS instance unlike Automated Backups
-			* you can then share these snapshots cross-region and cross-account, export them to S3, but there's an additional charge for each snapshot u take
-		* your database has to be in the "available" state in order to perform backups
+		# * u can perform backups for all RDS databases(5) except SQL Server
+		# * u can perform parallel replication for all RDS databases(5) except Postgres
+	# * DB Subnet Group: a group of Subnets u designate as the ones that can be used by your RDS instances
+	# 	* each DB Subet Group should have subnets in at least 2 AZs in a given Region
+	# 	* for an RDS instance to be Public, all subnets in the DB Subnet Group MUST be public
+	# * Multi-AZ RDS vs. Read Replicas RDS:
+	# 	* Multi-AZ's replication is synchronous and highly durable, whereas read replicas' is asynchronous and highly scalable
+	# 	* Multi-AZ has automatic failover, as opposed to Read Replicas which need the change to be made manually
+	# 		* when the primary db fails in a Multi-AZ RDS deployment, the cname name record (CNAME) is automatically switched from the primary to the standby instance
+	# 	* only the primary instance in Multi-AZ is active, whereas all of Read Replica's including the master are active
+	# 	* Multi-AZ always spans 2 AZ's in one region, whereas read replicas can be Multi-AZ, Cross-AZ, and allows you to make replicas of replicas 
+	# 	* database upgrades happen on only the master in Multi-AZ, whereas database upgrades in Read Replicas are independent from master
+	# 	* in RDS Read Replicas, you can have up to 5 replicas per database; each read replica has it's own DNS Endpoint
+	# 		* replicas can be promoted to their own database, but this breaks replication
+	# 		* if the primary fails, u must manually update URLs everywhere to point to the DNS Endpoint of a replica
+	# * 2 types of backup solutions for RDS:
+	# 	* Automated Backups: the default; all data is stored in S3; free; stores transactions logs all day; you choose the Retention Period btwn 1 to 35 days; and YOU define the backup window for when you want backups to occur
+	# 		* setting the Retention Period to 0 is how you turn it off
+	# 		* storage I/O may be suspended during the backup, so choose that backup window carefully
+	# 	* Manual Snapshots: these backups persist even after you delete the original RDS instance unlike Automated Backups
+	# 		* you can then share these snapshots cross-region and cross-account, export them to S3, but there's an additional charge for each snapshot u take
+	# 	* your database has to be in the "available" state in order to perform backups
 	* when recovering data, AWS will take the most recent daily backup and apply transactional log data relevant to that day, which allows for recovery down to the second inside the Retention Period
 		* when you recover data using Automated Backup or Manual Snapshots a new RDS instance is created for the restored database, and this new instance will have a new DNS endpoint as well
 	* RDS Encryption: feature that provides encryption of your RDS DB data at rest using AES-256
@@ -647,35 +647,35 @@ RDS: scalable, managed(not fully), relational database service
 		* u can change it to 2 years at an additional cost
 	* RDS Custom: lets u directly manage aspects of RDS instead of AWS in cases where u require 3rd party applications or customizations for your db's that wouldn't be allowed by aws otherwise
 		* works with Microsoft SQL Server and Oracle
-	* RDS Proxy: creates a reserved pool of connections to your RDS instance that are reserved for Lambda functions to reuse 
-		* this is because Lambda always CREATES new connections when executed and never reuses previous connections, which if left unchecked can quickly exhaust your RDS instances connection limit
-	* RDS Optimized Reads and Writes: when enabled, writes are 0.5x faster and reads are 2x faster
-		* uses SSD block storage in order to utilize temporary tables for greater performance
-		* sorts, hash aggregations, high-load JOINs, and Common Table Expressions(CTEs) can make good use of temporary tables
-		* only available for specific RDS Instance Class and db offering combos
+	# * RDS Proxy: creates a reserved pool of connections to your RDS instance that are reserved for Lambda functions to reuse 
+	# 	* this is because Lambda always CREATES new connections when executed and never reuses previous connections, which if left unchecked can quickly exhaust your RDS instances connection limit
+	# * RDS Optimized Reads and Writes: when enabled, writes are 0.5x faster and reads are 2x faster
+	# 	* uses SSD block storage in order to utilize temporary tables for greater performance
+	# 	* sorts, hash aggregations, high-load JOINs, and Common Table Expressions(CTEs) can make good use of temporary tables
+	# 	* only available for specific RDS Instance Class and db offering combos
 	* IAM Authentification: lets you authenticate to an RDS instance using an IAM authentification token instead of having to use credentials
 		* works for MySQL, MariaDB, and Postgres; each token has a TTL of 15 minutes
-	* Kerberos Authentification: Kerberos is a network authentification protocol which is integrated into Microsoft Active Directory
-		* works with AWS Directory Service for Microsoft Active Directory and your own on-premise Active Directory
-		* can be used with MySQL, Postgres, Oracle, and Microsoft SQL Server
-		* Postgres and Microsoft SQL Server support 1 and 2-way forest trust relationships
-		* Oracle supports 1 and 2-way external and forest trust relationships
-	* AWS Secrets Manager can manage an RDS instance's username and password and rotate it every 7 days(default)
-		* does not work with Microsoft SQL Server, RDS instances w/ blue/green deployments, or RDS Custom
-		* your apps need to be able to be programmatically configured to access the creds from Secrets Manager
-		* if you delete and RDS instance, the creds are also deleted
+	# * Kerberos Authentification: Kerberos is a network authentification protocol which is integrated into Microsoft Active Directory
+	# 	* works with AWS Directory Service for Microsoft Active Directory and your own on-premise Active Directory
+	# 	* can be used with MySQL, Postgres, Oracle, and Microsoft SQL Server
+	# 	* Postgres and Microsoft SQL Server support 1 and 2-way forest trust relationships
+	# 	* Oracle supports 1 and 2-way external and forest trust relationships
+	# * AWS Secrets Manager can manage an RDS instance's username and password and rotate it every 7 days(default)
+	# 	* does not work with Microsoft SQL Server, RDS instances w/ blue/green deployments, or RDS Custom
+	# 	* your apps need to be able to be programmatically configured to access the creds from Secrets Manager
+	# 	* if you delete and RDS instance, the creds are also deleted
 	* Master User Account: in RDS it refers to the initial user/account that's created when u create a new RDS instance
 		* it's given full admin access and can do anything, so don't use it to do everything (treat it the same like u would an AWS Root Account); you're able to reset the password if u forget it 
-	* Database Activity Streams: lets u control access to data streams that goes from your RDS instance to Kinesis streams
-		* u can turn it on in the CLI, and the Kinesis stream is created automatically when u do this
+	# * Database Activity Streams: lets u control access to data streams that goes from your RDS instance to Kinesis streams
+	# 	* u can turn it on in the CLI, and the Kinesis stream is created automatically when u do this
 	* Parameter Groups: parameters that u can configure for each of your RDS instances
 		* used to specify the amount of something (EX: # of connections, resources, amount of memory, etc.)
 		* you can't modify the default or an existing Parameter Group; gotta create a new one at that point
 	* Option Groups: a group of feature configurations for your RDS DB
 		* used to specify certain features you want included as part of your DB (EX: additional security features)
 		* you can't modify the default or an existing Option Group; gotta create a new one at that point
-	* the --publicly-accessible option from the AWS CLI/SDK lets the DNS Endpoint for your RDS instance instanly resolve to the private IP of your RDS instance for traffic coming from outside the VPC of the RDS instance
-		* this doesn't override Security Group DENY rules however, meaning u still got to go into your Security Group and update that as well
+	# * the --publicly-accessible option from the AWS CLI/SDK lets the DNS Endpoint for your RDS instance instanly resolve to the private IP of your RDS instance for traffic coming from outside the VPC of the RDS instance
+	# 	* this doesn't override Security Group DENY rules however, meaning u still got to go into your Security Group and update that as well
 	* public access RDS connection options:
 		* use a db IDE tool
 		* use AWS CloudShell: the browser-based shell/terminal u can access from the aws console to run CLI/SDK commands
@@ -688,10 +688,10 @@ RDS: scalable, managed(not fully), relational database service
 		* using AWS Client VPN 
 		* using AWS Direct Connect
 		* ...but you CAN'T use CloudShell
-	* Amazon RDS Extended Support: lets you run MySQL, MariaDB, etc. on a major version above what RDS normally allows at most, but for an additional cost
-	* Enhanced Monitoring: a feature of RDS; Enhanced Monitoring metrics are stored in CloudWatch logs for 30 days;
-		* different from CloudWatch metrics, where CloudWatch takes data at the hypervisor layer of the DB, whereas Enhanced Monitoring gathers it from an agent on the DB instance
-		* useful for when you want to see how individual Threads are utilizing the CPU for a DB instance (i.e: OS processes and RDS child processes)
+	# * Amazon RDS Extended Support: lets you run MySQL, MariaDB, etc. on a major version above what RDS normally allows at most, but for an additional cost
+	# * Enhanced Monitoring: a feature of RDS; Enhanced Monitoring metrics are stored in CloudWatch logs for 30 days;
+	# 	* different from CloudWatch metrics, where CloudWatch takes data at the hypervisor layer of the DB, whereas Enhanced Monitoring gathers it from an agent on the DB instance
+	# 	* useful for when you want to see how individual Threads are utilizing the CPU for a DB instance (i.e: OS processes and RDS child processes)
 Domain Name System (DNS): translates domain names to IP addresses, so browsers can find specific Internet sources i.e servers 
 	* it's what uniquely identifies each computer on a network and allows communication between them using Internet Protocol (IP)
 	* comes in 2 different versions: IPv4 and IPv6
@@ -725,10 +725,10 @@ Domain Name System (DNS): translates domain names to IP addresses, so browsers c
 
 DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees consistent read and writes at any scale
 	* good for mobile, web, gaming, ad-tech, IoT, and other types of applications
-	* DynamoDB data is stored in JSON format and is good for when data is required to be indexed
+	# * DynamoDB data is stored in JSON format and is good for when data is required to be indexed
 	* stored on SSD storage, which is why it is so fast
-	* spread across 3 AZ's for redundancy
-	* autoscaling is not enabled by default
+	# * spread across 3 AZ's for redundancy
+	# * autoscaling is not enabled by default
 	* DynamoDB Accelerator(DAX):
 		* makes it so that developers don't have to manage the caching logic
 		* it's compatible with DynamoDB API calls
@@ -752,7 +752,7 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 		* you don't have to change anything about your application in order to use Global Tables
 		* replication latency is under one second
 	* Database Migration Service(DMS) doesn't support DynamoDB as a source database as part of the migration, but it DOES support it as a target DB as part of the migration
-	* all data in DynamoDB is encrypted at rest using KMS
+	# * all data in DynamoDB is encrypted at rest using KMS
 	* you can secure access to DynamoDB using AWS site-to-site VPN's, Direct Connect, and IAM Policies and Roles
 		* you can also utilize more fine-grained access, like having IAM policy access to only certain attributes of table items, or by using VPC endpoints so that you can connect EC2's to...
 			* ...DynamoDB within your VPC without it being accessible from the public Internet
@@ -764,8 +764,8 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 		* Partitions: partitioning your big Tables into smaller Tables for speeding up reads; so when a Table gets too big, the Items are sent to smaller Tables, and the Partition Key tells u...
 			* ...where that smaller Table is located for that Item
 			* DynamoDB automatically creates Partitions for you as u add more data
-			* DynamoDB creates new Partitions either every time 10GB of data gets added, or when u exceed the max 3000 RCU(Read Capacity Units) or 1000 WCU(Write Capacity Units) for a single Partition
-			* DynamoDB evenly splits the RCUs and WCUs across Partitions
+			# * DynamoDB creates new Partitions either every time 10GB of data gets added, or when u exceed the max 3000 RCU(Read Capacity Units) or 1000 WCU(Write Capacity Units) for a single Partition
+			# * DynamoDB evenly splits the RCUs and WCUs across Partitions
 		* Simple Primary Key: when ur only using a Partition Key
 			* no 2 Items can have the same Primary Key when using Simple Primary Keys
 		* Composite Primary Key: when ur using both a Partition and a Sort Key
@@ -774,15 +774,15 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 		* Eventual Consistent Reads (default): when copies are being updated it's possible to read an inconsistent copy
 		* Strongly Consistent Reads: when copies are being updated you won't be able to read till all copies are updated, guaranteed consistency but with slower reads
 		* all copies of data will be consistent within a second
-	* DynamoDB Streams Kinesis Adapter: lets you integrate Kinesis Streams with DynamoDB
+	# * DynamoDB Streams Kinesis Adapter: lets you integrate Kinesis Streams with DynamoDB
 Database Migration Service (DMS): migrate relational db's, data warehouses, NoSQL db's, etc. to AWS Cloud, btwn on-premise instances through AWS cloud, or bwtn combos of cloud and on-prem instances
 	* DMS is a server in the AWS cloud, so you give it a source and target db and schedule a task that runs on this server to move your data
 	* the source can be on-premise, inside AWS, or even from another cloud provider like Microsoft Azure
 	* DMS will create tables and associated primary keys if they don't exist on the target db but do exist on the source db
 		* you can make the target tables manually if you like, or use AWS Schema Conversion Tool instead
-		* AWS Schema Conversion Tool: helps you create some or all of the target tables, indexes, views, triggers, etc. during migration of db's, so you don't have to tediously do that manually
+		# * AWS Schema Conversion Tool: helps you create some or all of the target tables, indexes, views, triggers, etc. during migration of db's, so you don't have to tediously do that manually
 	* supports homogenous migrations (EX: an Oracle db -> another Oracle db), and heterogeneous migrations (EX: a Microsoft SQL Server db -> an Amazon Aurora db)
-	* you need AWS Schema Conversion Tool if you are to do a heterogenous migration
+	# * you need AWS Schema Conversion Tool if you are to do a heterogenous migration
 Elastic Map Reduce(EMR): used to process large amounts of data using Apache services; used to run petabyte-scale analysis at <1/2 the cost of similar on-prem solutions and 3x faster than Apache Spark
 	* solution used for Big Data
 	* it's a cluster of EC2 nodes; you can set the node types to be different so that each node has a separate role within the cluster with different software installed
@@ -799,14 +799,13 @@ Route53: more synergies with AWS services when you register your domain through 
 		* they work like a CNAME record in that you can map 1 DNS name to another DNS name
 			* the difference being that CNAME's can't be used for naked domain names (domain name w/o the "www.")
 	* Non-Alias A Records: A Records that don't resolve to an aws resource
-	* ELB's do not have pre-defined IPv4 addresses; you resolve to them using a DNS name
 	* MX records: they're used for mail
 	* PTR records: the reverse of an A record: it's a way of finding a domain name by looking through a bunch of IP addresses
 	* you can buy domain names directly with AWS; can take up to 3 days to register;
 	* you use it to create and manage domains, create records, implement complex traffic flows, monitor records using health checks, and resolve VPC's outside of AWS
 	* you can use it to route Internet traffic apps backed by ELB, to an EC2 instance to tweak your AMI, to API Gateway to power your API, to CloudFront for serving you S3 static-hosted websites, etc.
 	* Elastic IP (EIP): a static IP that doesn't change, but the EC2/ENI to which it's mapped to is something you can constantly change whenever you need to
-		* they are region-specific and u incur $1 charge everytime they're not mapped to an EC2/ENI, so make sure to use them
+		# * they are region-specific and u incur $1 charge everytime they're not mapped to an EC2/ENI, so make sure to use them
 	* Traffic Flow: lets you create routing configurations for your AWS resources using existing routing policy types, of which there are 7; supports versioning; GUI; $50/policy record/month
 		* it's a nice GUI visual editor that lets u visually see how ur traffic flows
 		* also allows for chaining of routing policies
@@ -835,13 +834,13 @@ Route53: more synergies with AWS services when you register your domain through 
 		* you can set health checks on individual record sets
 		* if a record set fails a health check, it will be removed from Route53 until it passes the health check
 		* you can set SNS notifications to alert you if a health check is failed
-	* Route53 Resolver: regional service that lets you route DNS queries btwn your VPC's and your on-prem network; used for hybrid environments
-	* DNSSEC: a suite of extension specifications by the IETF for securing data exchanged in the Domain Name System(DNS) and Internet Protocol(IP) networks
-		* DNSSEC signing lets DNS servers validate that a DNS response came from Route53 and has not been fucked with
-	* Zonel Shift: shifts an ALB or NLB away from an AZ that's down to a healthy AZ
-		* only for ALBs and NLBs w/ cross-zone load balancing turned off, and ALBs that don't use AWS Global Accelerator
-		* only lets u hop to 1 AZ; can't hop btwn multiple AZ's
-		* ALB and NLB does not charge users more based on enabled AZ's
+	# * Route53 Resolver: regional service that lets you route DNS queries btwn your VPC's and your on-prem network; used for hybrid environments
+	# * DNSSEC: a suite of extension specifications by the IETF for securing data exchanged in the Domain Name System(DNS) and Internet Protocol(IP) networks
+	# 	* DNSSEC signing lets DNS servers validate that a DNS response came from Route53 and has not been fucked with
+	# * Zonel Shift: shifts an ALB or NLB away from an AZ that's down to a healthy AZ
+	# 	* only for ALBs and NLBs w/ cross-zone load balancing turned off, and ALBs that don't use AWS Global Accelerator
+	# 	* only lets u hop to 1 AZ; can't hop btwn multiple AZ's
+	# 	* ALB and NLB does not charge users more based on enabled AZ's
 	* Route53 Profiles: lets u save DNS configs as a profile, which u can then use across different VPCs and in different aws accounts
 	
 
@@ -849,7 +848,7 @@ Route53: more synergies with AWS services when you register your domain through 
 
 VPC:
 	* you cannot have 1 subnet spread across multiple AZ's
-	* you can expand an existing VPC's range by adding a secondary CIDR block to your current VPC, so long as they don't overlap
+	# * you can expand an existing VPC's range by adding a secondary CIDR block to your current VPC, so long as they don't overlap
 	* can make a VPN connection btwn your corporate datacenter and your VPC to leverage aws cloud as an extension of your corporate datacenter
 	* Default vs. Custom VPC:
 		* Default: user friendly, all subnets have a route out to the internet, each EC2 has a public AND private IP
@@ -857,7 +856,7 @@ VPC:
 	* if a server doesn't have a public IP, then you can't SSH into it
 	* AZ's across aws accounts are randomized, meaning US-East-1A in one account isn't necessarily the same US-East-1A in another
 	* amazon always reserves 5 IP addresses within your subnets: the first 4 IP addresses and the last IP address in each subnet
-	* VPC's are region-specific: they can't span regions, you can create up to 5 VPC's per region, every region comes with a default VPC, and you can have 200 subnets per VPC
+	# * VPC's are region-specific: they can't span regions, you can create up to 5 VPC's per region, every region comes with a default VPC, and you can have 200 subnets per VPC
 	* DNS hostnames are disabled by default; enabling it will allow your VPC instance to have domain name addresses
 	* NACLs: a layer of security that acts as a virtual firewall for controlling traffic in and out of subnets
 		* subnets can only belong to a single NACL, but NACL's can associate with multiple subnets; VPCs automatically get a default NACL which allows all inbound and outbound traffic b/c...
@@ -865,19 +864,19 @@ VPC:
 		* this makes NACL's stateless, meaning they'll just allow anything unless you explicitly define DENY rules at the inbound and outbound levels
 		* each NACL contains a set of rules that ALLOW and DENY traffic in and out of subnets, meaning it has inbound and outbound rules, unlike Security Groups which only have ALLOW
 		* associating a subnet with a new NACL will disassociate the previous association for you
-		* each rule has a rule # that determines the order of evaluation for the rules from lowest to highest; common practice is to have them each in 10 or 100 increments
-			* for numbered NACL rules, as soon as a rule matches traffic, it is immediately applied regardless of any higher-numbered rule that might contradict it
-			* EX: if rule 100 applies to some incoming IP, only that rule is evaluated, and not rules 101, 102, etc., nor the default rule
+		# * each rule has a rule # that determines the order of evaluation for the rules from lowest to highest; common practice is to have them each in 10 or 100 increments
+		# 	* for numbered NACL rules, as soon as a rule matches traffic, it is immediately applied regardless of any higher-numbered rule that might contradict it
+		# 	* EX: if rule 100 applies to some incoming IP, only that rule is evaluated, and not rules 101, 102, etc., nor the default rule
 		* you can also use NACLs to block a single IP address
 	* Security Groups: virtual firewall that controls traffic to and from EC2 instances; they contain a set of rules that filter out inbound and outbound traffic passing through EC2's
 		* they are stateful, meaning there are no DENY rules, meaning all inbound traffic is blocked by default unless a rule specifically allows it at the inbound level
 			* Security Groups allow all outbound traffic by default, but deny all inbound traffic by default
-		* EC2's can be in the same Security Group even if they are in different subnets
+		# * EC2's can be in the same Security Group even if they are in different subnets
 		* you can specify the source of the traffic to be an IP range, a specific IP address(#.#.#.#/32), or ANOTHER Security Group
-		* an EC2 can belong to multiple Security Groups and rules in multiple Security Groups are permissive instead of restrictive, meaning ALLOW rules override BLOCK rules...
-			* ...when dealing with an EC2 with multiple security groups with rules from the same source
-		* you can have up to 10,000 security groups in a region(default is 2,500), you can have 60 inbound and 60 outbound rules per security group, and 16 security groups per ENI(default is 5)
-		* you can't block specific IP addresses with Security Groups, for that you need an NACL
+		# * an EC2 can belong to multiple Security Groups and rules in multiple Security Groups are permissive instead of restrictive, meaning ALLOW rules override BLOCK rules...
+		# 	* ...when dealing with an EC2 with multiple security groups with rules from the same source
+		# * you can have up to 10,000 security groups in a region(default is 2,500), you can have 60 inbound and 60 outbound rules per security group, and 16 security groups per ENI(default is 5)
+		# * you can't block specific IP addresses with Security Groups, for that you need an NACL
 		* any changes made to a security group take effect immediately
 		* Security Groups can't span multiple VPC's
 	* NAT Instances: (legacy) are individual EC2 instances that are launched using community-made AMIs
@@ -886,51 +885,52 @@ VPC:
 		* you can achieve high availability by using Autoscaling Groups, multiple subnets in different AZs, and automate failover
 		* NAT Instances are always behind a Security Group
 	* NAT Gateway: is a managed service which launches redundant NAT Instances within the selected AZ
-		* Private NAT Gateway: instances in private subnets can connect to stuff outside their current VPC, but stuff outside the VPC can't connect to it
-		* Public NAT Gateway(default): instances in private subnets can connect to the Internet, but stuff from the Internet can't connect to it
+		# * Private NAT Gateway: instances in private subnets can connect to stuff outside their current VPC, but stuff outside the VPC can't connect to it
+		# * Public NAT Gateway(default): instances in private subnets can connect to the Internet, but stuff from the Internet can't connect to it
 		* they can survive failure of EC2 instances unlike NAT instances
-		* you can only have 1 NAT Gateway per AZ
+		# * you can only have 1 NAT Gateway per AZ
 		* no requirements for patching NAT Gateways unlike instances
 		* no need to disable source/destination checks unlike NAT instances
 		* are automatically assigned a public IP address
 		* Route Tables must be updated
 		* NAT Gateways are not associated with any Security Groups
-		* if you got multiple resources in multiple AZ's, if they share the same NAT Gateway and the NAT Gateway's AZ goes down, resources in the other AZ's will lose internet access
-			* to mitigate this, create a NAT Gateway for each AZ instead
+		# * if you got multiple resources in multiple AZ's, if they share the same NAT Gateway and the NAT Gateway's AZ goes down, resources in the other AZ's will lose internet access
+		# 	* to mitigate this, create a NAT Gateway for each AZ instead
 		* supports Network Address Translation from IPv6 to IPv4 (NAT64)
 	* CIDR blocks: the first part of the bit sequence that comprises the binary representation of the IP address. EX: 0.0.0.0/0 (the first 4 digits with dots around them)
 		* 0.0.0.0/0 represents all possible IP addresses, i.e allows all traffic to go through
 		* you can use an IPv4 Cidr Block or a IPv6 Cidr Block for the address of the VPC
 	* Route Table: determines where network traffic is directed; each subnet in your VPC must be associated with a route table
-		* a subnet can only be associated with one VPC at a time, but you can associate multiple subnets with the same route table
-			* if a subnet is not assigned a Route Table, it gets assigned the Main Route Table: the default Route Table
+		# * a subnet can only be associated with one VPC at a time, but you can associate multiple subnets with the same route table
+			# * if a subnet is not assigned a Route Table, it gets assigned the Main Route Table: the default Route Table
 	* Network Address Translation (NAT): the method of re-mapping one IP address space into another; EX: needing to re-map a private network IP to a public IP to gain outbound access to the Internet
 	* Internet Gateway: allows your VPC to get access to the Internet; provides a target for your route tables for internet-routable traffic, and provides Network Address Translation(NAT) for instances that...
 		* ...have been assigned public IPv4 addresses
-		* you can only have 1 Internet Gateway per VPC
-	* Egress-only Internet Gateway: VPC component that allows outbound communication over IPv6(doesn't support IPv4) from instances in your VPC to the Internet, but not the other way around
+		# * you can only have 1 Internet Gateway per VPC
+	# * Egress-only Internet Gateway: VPC component that allows outbound communication over IPv6(doesn't support IPv4) from instances in your VPC to the Internet, but not the other way around
 	* Bastions(aka: jump boxes): security-hardened EC2 instances that help you gain access to your EC2 instances in private subnets using SSH or RDP
 		* NAT Gateways are only intended to help EC2 instances get outbound access to the Internet, don't use them as Bastions!
 		* System Manager's Simple Sessions Manager(SSM) replaces the need for Bastions however...
-	* PrivateLink: if you have an app or aws resource or aws service in a VPC and you want to share that with multiple VPC's, you would use PrivateLink; not free however
-		* so instead of either opening the app or aws resource or aws service up to the public internet (security risk) or making VPC Peering connections with each VPC you want to share it with (complex)
-		* requires a NLB on the VPC providing the service and an ENI on the app/resource/service u want to share
-		* can go cross-account
+	# * PrivateLink: if you have an app or aws resource or aws service in a VPC and you want to share that with multiple VPC's, you would use PrivateLink; not free however
+	# 	* so instead of either opening the app or aws resource or aws service up to the public internet (security risk) or making VPC Peering connections with each VPC you want to share it with (complex)
+	# 	* requires a NLB on the VPC providing the service and an ENI on the app/resource/service u want to share
+	# 	* can go cross-account
 	* VPC Endpoints: lets you privately connect to your VPC to support VPC services (using PrivateLink) w/o having to use an Internet Gateway, NAT device, VPN connection, or Direct Connect
 		* this means traffic btwn your VPC and other AWS services never leave the Amazon Network (i.e never go to the public internet)
 		* VPC Endpoints are virtual devices; they are redundant, horizontally scaled, and highly available; allows communication btwn instances and services in your VPC
 			* does this w/o imposing availability risks or bandwidth constraints on your network traffic
-		* 3 types:
-			* Interface Endpoints: an elastic network interface(ENI) with a private IP that acts as an entry point for traffic destined to go to a supported aws service; powered by AWS PrivateLink
-				* supports many AWS services
-			* Gateway Endpoints: essentially a NAT Gateway supported for only S3 and DynamoDB; free; it's a gateway that is a target for a specific route in your route table
-				* can't go cross-account
-			* Gateway Load Balancer Endpoints (GWLB): a load balancer that acts as an entry point for traffic that you can distribute to network virtual appliances (EX: firewalls) first for an added layer of security
-				* also powered by AWS PrivateLink
-				* you can get network virtual appliances aaS from AWS Marketplace or from the AWS Partner Network
+		# * 3 types:
+		# 	* Interface Endpoints: an elastic network interface(ENI) with a private IP that acts as an entry point for traffic destined to go to a supported aws service; powered by AWS PrivateLink
+		# 		* supports many AWS services
+		# 	* Gateway Endpoints: essentially a NAT Gateway supported for only S3 and DynamoDB; free; it's a gateway that is a target for a specific route in your route table
+		# 		* can't go cross-account
+		# 	* Gateway Load Balancer Endpoints (GWLB): a load balancer that acts as an entry point for traffic that you can distribute to network virtual appliances (EX: firewalls) first for an added layer of security
+		# 		* also powered by AWS PrivateLink
+		# 		* you can get network virtual appliances aaS from AWS Marketplace or from the AWS Partner Network
 		* pricing per VPC endpoint per AZ per hour: $0.01, and pricing per GB data processed: $0.01
-		* VPC endpoint policy: controls access to the aws service to which you are trying to connect to through the VPC endpoint you are using; doesn't override IAM policies or service-specific policies
-	* Transit Gateway: lets you have transitive peering btwn 1000's of VPC's, VPN's, and on-prem data centers; works on a hub-and-spoke model; works regionally but you can change it to be multi-region
+		# * VPC endpoint policy: controls access to the aws service to which you are trying to connect to through the VPC endpoint you are using; doesn't override IAM policies or service-specific policies
+	* Transit Gateway: lets you have transitive peering btwn 1000's of VPC's, VPN's, and on-prem data centers; works regionally but you can change it to be multi-region
+		# * works on a hub-and-spoke model
 		* you can also use it across multiple AWS accounts using Resource Access Manager (RAM)
 		* you can use route tables to limit how VPC's talk to one another within Transit Gateway
 		* supports the use of Direct Connect, as well as VPN connections
@@ -938,36 +938,36 @@ VPC:
 			* IP multicast: a method in which a single server is able to communicate data in a single transmission to a group of interested participants
 	* VPC Peering: allows you to connect one VPC with another through a direct network route using private IP's
 		* you can connect VPCs even if they are in a different region or account
-		* VPC peering uses a Star Configuration: 1 Central VPC - 4 other VPCs
+		# * VPC peering uses a Star Configuration: 1 Central VPC - 4 other VPCs
 		* instances behave as if they are on the same private network
 		* setting up a VPC Peering connection allows each VPCs access to the other VPCs' subnets
 		* no transitive peering: meaning you can't go through a VPC to get to another one; needs to be a direct connection
 		* no Overlapping CIDR blocks: meaning you can't have 2 VPC's with the same CIDR block
 		* VPC's and everything in them plus VPC Peering are free except for NAT Gateways, VPC Endpoints, and VPN Gateways
-	* VPN CloudHub: it's like a single point of contact to connect your VPN infrastructure into; uses a hub-and-spoke model
-		* so for example if you had multiple sites each with it's own VPN connection, you would use this to connect those VPN connections together
-		* easy to manage; low cost
-		* it operates on the public internet, but all traffic btwn the Customer Gateway and VPN CloudHub is encrypted because of VPN's
-			* Customer Gateway just refers to the gateway on your on-prem network
+	# * VPN CloudHub: it's like a single point of contact to connect your VPN infrastructure into; uses a hub-and-spoke model
+	# 	* so for example if you had multiple sites each with it's own VPN connection, you would use this to connect those VPN connections together
+	# 	* easy to manage; low cost
+	# 	* it operates on the public internet, but all traffic btwn the Customer Gateway and VPN CloudHub is encrypted because of VPN's
+	# 		* Customer Gateway just refers to the gateway on your on-prem network
 	* Network cost best practices to save money:
 		* use private IP's over public ones to save money, cause it utilizes the AWS Backbone Network
 		* ideally, grouping all EC2's in the same AZ and using private IP's is the cheapest solution (essentially cost-free)
 		* so basically the less "public" you are, and the less amount of time you spend hopping around, the cheaper
-	* AWS has a default VPC in every region, so that you can immediately deploy instances; so the default VPC creates:
-		* a VPC with a size /16 IPv4 CIDR block
-		* a size /20 default subnet for each AZ
-		* an Internet Gateway that connects to the default VPC
-		* a default security group that is associated with your default VPC
-		* a default NACL that is associated with your default VPC
-		* associates the default:
-			* DHCP options: a protocol standard for passing config information to host servers on a TCP/IP network that are set with your AWS account with your default VPC
-		* a default main route table
+	# * AWS has a default VPC in every region, so that you can immediately deploy instances; so the default VPC creates:
+	# 	* a VPC with a size /16 IPv4 CIDR block
+	# 	* a size /20 default subnet for each AZ
+	# 	* an Internet Gateway that connects to the default VPC
+	# 	* a default security group that is associated with your default VPC
+	# 	* a default NACL that is associated with your default VPC
+	# 	* associates the default:
+	# 		* DHCP options: a protocol standard for passing config information to host servers on a TCP/IP network that are set with your AWS account with your default VPC
+	# 	* a default main route table
 	* VPC Flow Logs: lets you capture IP traffic data in and out of ENI's within your VPC; can be turned on at the VPC, subnet, or network interface level
 		* all data is stored using CloudWatch Logs(can also be delivered to S3) and after a Flow Log is created it can be viewed in detail using CloudWatch Logs
 		* VPC Flow Logs contain a lot of data: the most important of which are the source IPv4/IPv6 address and the destination IPv4/IPv6 address
 		* you cannot change the configuration of a Flow Log after it's been created: you can only delete it and create a new one at that point
 		* VPC Flow Logs can be tagged now
-		* you cannot enable Flow Logs for VPCs that are peered with your VPC unless the peered VPC is in the same AWS account
+		# * you cannot enable Flow Logs for VPCs that are peered with your VPC unless the peered VPC is in the same AWS account
 		* not all instance traffic is monitored by VPC Flow Logs, for example:
 			* traffic generated by instances when they contact Amazon DNS
 			* traffic generated by a Windows instance for Amazon Windows license activation
@@ -983,15 +983,15 @@ VPC:
 		* can be used cross-vpc and cross-account
 		* uses HTTPS for service-to-service communication
 		* supports weighted routing for blue/green or canary deployments
-	* Traffic Mirroring: lets you copy network traffic from one ENI and sends that copied traffic to a security monitoring appliance (EX: another ENI, NLB, or GWLB) for security purposes
-		* attaches a VXLAN header to each packet of the copied traffic
-		* a Traffic Mirror session needs to be created to mirror traffic, which includes creating a mirror source, destination, and filter(for what kind of data u want to filter from the traffic)
-	* AWS Network Firewall: a stateful and managed firewall and IDS/IPS for VPCs
-		* utilizes Suricata, which is an open source IDS/IPS software
-	* Network Address Usage (NAU): a metric that is used to determine how much space u have left in your VPC
-		* represented by NAU units, which is just 1 NAU = 1 IP address
-		* the VPC NAU limit is 64,000 by default, which u can request a quota limit increase up to 256,000 NAUs
-		* you can enable NAU monitoring in CloudWatch
+	# * Traffic Mirroring: lets you copy network traffic from one ENI and sends that copied traffic to a security monitoring appliance (EX: another ENI, NLB, or GWLB) for security purposes
+	# 	* attaches a VXLAN header to each packet of the copied traffic
+	# 	* a Traffic Mirror session needs to be created to mirror traffic, which includes creating a mirror source, destination, and filter(for what kind of data u want to filter from the traffic)
+	# * AWS Network Firewall: a stateful and managed firewall and IDS/IPS for VPCs
+	# 	* utilizes Suricata, which is an open source IDS/IPS software
+	# * Network Address Usage (NAU): a metric that is used to determine how much space u have left in your VPC
+	# 	* represented by NAU units, which is just 1 NAU = 1 IP address
+	# 	* the VPC NAU limit is 64,000 by default, which u can request a quota limit increase up to 256,000 NAUs
+	# 	* you can enable NAU monitoring in CloudWatch
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
