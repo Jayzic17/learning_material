@@ -1451,26 +1451,26 @@ AWS CLI:
 	* you need to set up access using IAM first before being able to use the CLI
 Aurora: fully managed Postgres or MySQL compatible relational database designed to scale and be really fast
 	* combines speed and availability of high-end db's w/ the simplicity and cost-effectiveness of open-source db's
-	* Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
+	# * Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
 	* 1/10th the cost of other solutions, offering similar performance and availability; but more expensive than RDS
 	* storage is auto-scaled; you start with 10GB, and scale in 10GB increments up to 64TB or 128TB; related computing resources can scale up to 32 CPUs and 244GB of memory
-	* holds a minimum of 6 copies of your DB (2 copies per AZ (3 AZ's)); you can lose up to 2 copies w/o affecting write availability and 3 copies w/o affecting read availability; max of 15 replicas
-	* backups and failovers are automatic; they are always enabled and don't impact performance
-		* when the primary DB of Aurora goes down, it will attempt to create a new DB in the same AZ as the one that failed and is done on a best-effort basis
+	# * holds a minimum of 6 copies of your DB (2 copies per AZ (3 AZ's)); you can lose up to 2 copies w/o affecting write availability and 3 copies w/o affecting read availability; max of 15 replicas
+	# * backups and failovers are automatic; they are always enabled and don't impact performance
+	# 	* when the primary DB of Aurora goes down, it will attempt to create a new DB in the same AZ as the one that failed and is done on a best-effort basis
 	* Snapshots can be shared with other AWS accounts in Aurora; taking Snapshots with Aurora does not impact performance
 	* storage is self-healing: meaning data blocks and disks are continuously scanned for errors and fixed automatically
 	* TLS/SSL certificates can be applied to encrypt connections to your Aurora db's, and data is encrypted at-rest by default and cannot be turned off. Can use KMS to encrypt if u want
-	* 2 types of Aurora instances:
-		* Writer Instance: handles writes (but can also read), 1 per Aurora cluster, can only scale it vertically, triggers failover if it goes down cause there's only 1, OLTP, ...
-			* ...can promote a Reader to Writer, and cost is based on instance size and IOPS
-		* Reader Instances (a.k.a Aurora Replicas): handles reads, 15 per cluster, scales horizontally, distributes reads, so it can act as a failover target, OLAP, ...
-			* ...can be promoted to Writer, and cost is based on # of instances
-	* 3 types of Aurora Replicas available:
-		* Amazon Aurora Replicas: asynchronous replication (ms); can have up to 15; low performance impact on master; has automated failover; doesn't support user-defined replication delay
-			* doesn't support different data and/or schema vs the master; acts as a failover target with no data loss; in-region only
-		* Aurora MySQL Read Replicas: asynchronous replication(s); can have up to 5; high performance impact on master; doesn't have automated failover; supports user-defined replication delay
-			* supports different data and/or schema vs master; acts as a failover target, but with data loss; can be cross-region
-		* Aurora PostgreSQL
+	# * 2 types of Aurora instances:
+	# 	* Writer Instance: handles writes (but can also read), 1 per Aurora cluster, can only scale it vertically, triggers failover if it goes down cause there's only 1, OLTP, ...
+	# 		* ...can promote a Reader to Writer, and cost is based on instance size and IOPS
+	# 	* Reader Instances (a.k.a Aurora Replicas): handles reads, 15 per cluster, scales horizontally, distributes reads, so it can act as a failover target, OLAP, ...
+	# 		* ...can be promoted to Writer, and cost is based on # of instances
+	# * 3 types of Aurora Replicas available:
+	# 	* Amazon Aurora Replicas: asynchronous replication (ms); can have up to 15; low performance impact on master; has automated failover; doesn't support user-defined replication delay
+	# 		* doesn't support different data and/or schema vs the master; acts as a failover target with no data loss; in-region only
+	# 	* Aurora MySQL Read Replicas: asynchronous replication(s); can have up to 5; high performance impact on master; doesn't have automated failover; supports user-defined replication delay
+	# 		* supports different data and/or schema vs master; acts as a failover target, but with data loss; can be cross-region
+	# 	* Aurora PostgreSQL
 	* 2 types of configurations for Aurora:
 		* Aurora Provisioned(default): Aurora cluster contains a primary db that performs reads, writes, and optionally up to 15 Aurora Replicas
 			* the primary db will not be created for you by default. You have to create your db instances after creating your Aurora cluster
@@ -1484,22 +1484,22 @@ Aurora: fully managed Postgres or MySQL compatible relational database designed 
 				* ranges btwn 0.5ACUs and 128ACUs
 			* scaling is fine-grained and instant, capacity ranges based on ACUs, scales in seconds, and read and write scaling is independent per instance
 			* used for highly variable workloads that need immediate scaling, cost is based on ACUs, starting and stopping is responsive and cost-efficient, and minimal downtime when performing maintenance
-	* Aurora Global Database: can use it to have your Aurora DB's go cross-region
-		* has a primary Aurora cluster in 1 Region
-		* has up to 5 secondary Aurora clusters in different Regions
-		* writes always happen on the primary cluster
-		* data is replicated to the secondary clusters in under a second
-		* Global Database is only available in specific Regions and for specific db versions
-		* Cross-Region Disaster Recovery: a feature of Aurora Global Database which provides a Recovery Point Objective(RPO) of 1 second and a Recovery Time Objective(RTO) of less than a minute
-			* meaning it takes 1 second for Aurora Global Database to react to an outage and less than 1 minute to promote a secondary Region to Master with read/write capabilities	
-	* RDS Data API: lets u use HTTP requets to securely query an Aurora database from your RDS instance
-		* unlimited requests per second
-		* Data API calls are excluded by CloudTrail by default since they are data events
-		* multi statements aren't supported
-		* cannot retrieve multi-dimensional arrays for a query's column
-		* only supports specific datatypes
-		* supports execution and transaction statements
-		* u can use the Query Editor from the aws console in Aurora to use RDS Data APIs
+	# * Aurora Global Database: can use it to have your Aurora DB's go cross-region
+	# 	* has a primary Aurora cluster in 1 Region
+	# 	* has up to 5 secondary Aurora clusters in different Regions
+	# 	* writes always happen on the primary cluster
+	# 	* data is replicated to the secondary clusters in under a second
+	# 	* Global Database is only available in specific Regions and for specific db versions
+	# 	* Cross-Region Disaster Recovery: a feature of Aurora Global Database which provides a Recovery Point Objective(RPO) of 1 second and a Recovery Time Objective(RTO) of less than a minute
+	# 		* meaning it takes 1 second for Aurora Global Database to react to an outage and less than 1 minute to promote a secondary Region to Master with read/write capabilities	
+	# * RDS Data API: lets u use HTTP requets to securely query an Aurora database from your RDS instance
+	# 	* unlimited requests per second
+	# 	* Data API calls are excluded by CloudTrail by default since they are data events
+	# 	* multi statements aren't supported
+	# 	* cannot retrieve multi-dimensional arrays for a query's column
+	# 	* only supports specific datatypes
+	# 	* supports execution and transaction statements
+	# 	* u can use the Query Editor from the aws console in Aurora to use RDS Data APIs
 	* u can use Babelfish for Aurora Postgres instances, which gives it the ability to accept db connections from Microsoft SQL Server
 Redshift: AWS-managed petabyte-scale data warehouse
 	* Database Transaction: a unit of work performed on a DB; EX: reads/writes
@@ -1520,22 +1520,22 @@ Redshift: AWS-managed petabyte-scale data warehouse
 	* Redshift uses multiple compression techniques: similar data is stored sequentially on disk, does not require indexes or materialized views which saves a lot of space,...
 		* ...and when loading data to an empty table data is sampled and the most appropriate compression scheme is automatically selected
 	* uses Massively Parallel Processing (MPP): meaning it automatically distributes data and query loads across all nodes; allows you to add new nodes while still maintaining high query performance 
-	* backups are enabled by default with a 1 day retention period, which can be modified to be up to 35 days
-	* Redshift always tries to keep at least 3 copies of your data: the OG copy, replicas of the compute nodes, and an S3 backup copy
+	# * backups are enabled by default with a 1 day retention period, which can be modified to be up to 35 days
+	# * Redshift always tries to keep at least 3 copies of your data: the OG copy, replicas of the compute nodes, and an S3 backup copy
 	* you can also asynchronously replicate your Redshift Snapshots to S3 in a different region for disaster recovery
 	* Nodes are charged per node per hour; Leader Nodes are NOT charged; only Compute Nodes get charged
 	* Redshift backups are stored in S3 and you're billed for that based on the S3 storage fees
 	* any Redshift data transfers within a VPN are billed, not outside of one
 	* you can encrypt data-in-transit using SSL and data-at-rest using AES-256
 	* data encryption can be applied using KMS and CloudHSM
-	* Redshift is single-AZ; if you want multi-AZ you would have to run Redshift clusters in different AZ's with the same inputs
+	# * Redshift is single-AZ; if you want multi-AZ you would have to run Redshift clusters in different AZ's with the same inputs
 	* Snapshots can be restored to a different AZ in the event an outage occurs
 	* you are charged for your backups in Redshift as well
 	* Redshift handles the management of your encryption keys through KMS
 		* ...but you CAN manage them yourself through HSM if you like
-	* Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
-	* Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
-	* Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
+	# * Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
+	# * Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
+	# * Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
 CloudFormation: Infrastructure as Code
 	* uses YAML or JSON files
 	* the anatomy of a CloudFormation Template:
@@ -1556,8 +1556,8 @@ CloudTrail: logs and monitors API calls and actions btwn AWS services
 	* enables governance, compliance, operational auditing, and risk auditing on your AWS account
 	* CloudTrail event logs are SSE encrypted by default
 	* can easily identify who made the call: can track the source IP, the EventTime it happened, the User/UserAgent that did it, and with which Region/Resource/Action
-	* CloudTrail already logs your stuff by default with logs lasting 90 days via Event History; if you need more than 90 days you have to create a Trail
-		* Trail: logs that output to S3; for when you want to keep logs over 90 days old; they don't have a GUI like Event History, so you have to use Amazon Athena if you want to analyze them
+	# * CloudTrail already logs your stuff by default with logs lasting 90 days via Event History; if you need more than 90 days you have to create a Trail
+	# 	* Trail: logs that output to S3; for when you want to keep logs over 90 days old; they don't have a GUI like Event History, so you have to use Amazon Athena if you want to analyze them
 			* can be set to log all regions(cross-region), can be set to log across all accounts in an Organization(cross-account), and can encrypt your logs using Server Side Encryption using KMS
 			* Log File Validation: to see whether or not someone has tampered with your logs; available with Trails
 	* CloudTrail can be set to deliver events to a CloudWatch log when specific API activity occurs
@@ -1575,22 +1575,22 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	* can be invoked in 2 ways:
 		* Sync Invocations: data that waits for a response
 		* Async Invocations: data that immediately returns to an async aws service (EX: SNS/SQS, another Lambda, EventBridge)
-	* there's 2 ways to reference a Lambda by its ARN:
-		* Qualified ARN: the ARN plus the version added at the end
-		* Unqualified ARN: the ARN w/o the version at the end (by default it just points to latest); you cannot create Aliases using Unqualified ARNs
+	# * there's 2 ways to reference a Lambda by its ARN:
+	# 	* Qualified ARN: the ARN plus the version added at the end
+	# 	* Unqualified ARN: the ARN w/o the version at the end (by default it just points to latest); you cannot create Aliases using Unqualified ARNs
 	* Lambda supports 2 types of deployment packages for your Lambda code: zip files and container images(EX: Docker)
 		* zip files larger than 50MB have to be uploaded to an S3 bucket first
 	* supports: Ruby, Python, Java, Go, Powershell, NodeJs, C#
 	* you can also create your own custom runtime environments
 	* if you need tasks >15 minutes and a custom OS, then probably consider Fargate instead of Lambda
 	* Lambdas can be invoked using the SDK or by using triggers from other AWS services
-	* 1st million requests per month are free, then $0.20 per additional 1 million requests after that
-		* also 1st 400,000 GB seconds per month are free, then $0.0000166667 for every GB second after that
-		* billing is rounded up to the nearest 100 milliseconds
-		* the memory allocated to each Lambda function affects the price you pay for Lambda per month
+	# * 1st million requests per month are free, then $0.20 per additional 1 million requests after that
+	# 	* also 1st 400,000 GB seconds per month are free, then $0.0000166667 for every GB second after that
+	# 	* billing is rounded up to the nearest 100 milliseconds
+	# 	* the memory allocated to each Lambda function affects the price you pay for Lambda per month
 	* by default you can have 1000 Lambda functions running concurrently
 	* /tmp directory has a max size of 500MB
-	* Lambda doesn't run in a VPC by default; you can set it to be a VPC to interact with some services like RDS, but the lambda will lose internet access as a result
+	# * Lambda doesn't run in a VPC by default; you can set it to be a VPC to interact with some services like RDS, but the lambda will lose internet access as a result
 	* you can set timeouts to be a maximum of 15 minutes
 	* Cold Start: if a lambda is invoked and the server is turned off, the server has to turn on and copy your code over. This causes a delay between when the lambda starts and when it runs
 		* can cause delays in the user experience, so if your app relies on being very responsive, then serverless functions might not be what you need
@@ -1603,25 +1603,25 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 		* EX of Serverless: API Gateway -> Lambda -> (some serverless DB, EX: DynamoDB, Serverless Aurora) no hardware involved
 	* Lambdas can run on ARM or x86 architecture
 	* Lambda Runtime: runtime environments for the programming language u use to run your Lambdas
-	* Lambda OS-Only Runtimes: u use these when u want to write Lambdas in other languages that aren't Ruby, Python, Java, Go, Powershell, NodeJs, or C#
+	# * Lambda OS-Only Runtimes: u use these when u want to write Lambdas in other languages that aren't Ruby, Python, Java, Go, Powershell, NodeJs, or C#
 	* 3 required actions for Lambda to write logs to AWS CloudWatch:
 		* logs:CreateLogGroup
 		* logs:CreateLogStream
 		* logs:PutLogEvents
-	* Encryption Helpers: feature of Lambda that allows you to encrypt environment variables before they are sent to Lambda
-	* Lambda Layers: used to package common code such as libraries, config files, or runtime images. the Layer itself is a zip file
-		* you can have up to 5 Layers per Lambda
-		* all Layers for a Lambda unzipped can't exceed 250MB
+	# * Encryption Helpers: feature of Lambda that allows you to encrypt environment variables before they are sent to Lambda
+	# * Lambda Layers: used to package common code such as libraries, config files, or runtime images. the Layer itself is a zip file
+	# 	* you can have up to 5 Layers per Lambda
+	# 	* all Layers for a Lambda unzipped can't exceed 250MB
 	* Lambda Aliases: used to refer to a specific version of your Lambda function w/o having to know the specific version an Alias is pointing to
 		* good for promotion of new versions of Lambda functions
 		* lets u give Lambda versions a friendlier more human-readable name
 	* ARN's for Lambda functions look like this: 
 		* arn:aws:lambda:aws-region:acct-id:function:hellowworld
 		* arn:aws:lambda:aws-region:acct-id:function:hellowworld:$LATEST
-	* Execution Role: Lambda function policy that gives it permission to access certain aws services and resources
-	* Resource-based Policy: Lambda function policy that gives other aws accounts access to use your Lambda functions
+	# * Execution Role: Lambda function policy that gives it permission to access certain aws services and resources
+	# * Resource-based Policy: Lambda function policy that gives other aws accounts access to use your Lambda functions
 	* 2 ways to get Lambda function version: AWS_LAMBDA_FUNCTION_VERSION or getFunctionVersion
-	* if Lambda functions fail, they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
+	# * if Lambda functions fail, they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
 	* Lambda function deployment types:
 		* Canary: traffic is shifted in 2 increments:
 			* 1st increment: % of traffic that's shifted to your updated lambda functions
