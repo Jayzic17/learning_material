@@ -1637,24 +1637,24 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 	* frequently identical queries are stored in the cache for fast processing
 	* In-Memory Data Store: data stored In-Memory(RAM); low durability, so risk of data loss, but access is really fast
 	* ElastiCache lets you deploy, run, and scale popular open source-compatible, in-memory data stores
-	* ElastiCache is only accessible to resources operating in the same VPC; this ensures latency is low
-	* ElastiCache Global Datastores: lets u go multi-AZ and cross-region
+	# * ElastiCache is only accessible to resources operating in the same VPC; this ensures latency is low
+	# * ElastiCache Global Datastores: lets u go multi-AZ and cross-region
 	* has 2 deployment options:
 		* Standard: used for predictable workloads, but u have to manage the cluster and nodes, and ur charged per node and node type (can use w/ AWS Outposts)
 		* Serverless: used for unpredicable workloads, but it automatically scales for u, and ur charged per ECPU and data stored
-	* Memcached vs Redis:
-		* Memcached is preferred for caching HTML fragments; it's a simple key/value store, and it's faster than Redis
-		* Redis lets you do way more operations on data; good for leaderboards and for keeping track of unread notification data
-		* they both offer sub-millisecond latency, easy to use, support data partitioning, can scale horizontally, and support a lot of programming languages
-		* MemCached supports multithreaded architectures, while Redis does not
-		* Redis supports advanced data structures, Snapshots, Replication, Transactions, Pub/Sub, Lua scripting, backup and restore, ranking and sorting datasets, ...
-			* ...persistence, and geospatial support, while MemCached does not
-		* Redis is multi-AZ while Memcached is not
-		* Redis is a key/value store that supports strings, sets, sorted sets, lists, and hashes, while Memcached is a key/value store that only supports strings
-		* Redis AUTH: improves data security in Redis by requiring the user to enter a password before they are allowed to execute Redis commands
-		* MemoryDB: Redis-compatible in-memory database
-			* has additional persistence guarantees over ElastiCache, makingg MemoryDB suitable as a primary database
-			* the tradeoff being that writes are in milliseconds, whereas ElastiCache is in microseconds, so it's slower
+	# * Memcached vs Redis:
+	# 	* Memcached is preferred for caching HTML fragments; it's a simple key/value store, and it's faster than Redis
+	# 	* Redis lets you do way more operations on data; good for leaderboards and for keeping track of unread notification data
+	# 	* they both offer sub-millisecond latency, easy to use, support data partitioning, can scale horizontally, and support a lot of programming languages
+	# 	* MemCached supports multithreaded architectures, while Redis does not
+	# 	* Redis supports advanced data structures, Snapshots, Replication, Transactions, Pub/Sub, Lua scripting, backup and restore, ranking and sorting datasets, ...
+	# 		* ...persistence, and geospatial support, while MemCached does not
+	# 	* Redis is multi-AZ while Memcached is not
+	# 	* Redis is a key/value store that supports strings, sets, sorted sets, lists, and hashes, while Memcached is a key/value store that only supports strings
+	# 	* Redis AUTH: improves data security in Redis by requiring the user to enter a password before they are allowed to execute Redis commands
+	# 	* MemoryDB: Redis-compatible in-memory database
+	# 		* has additional persistence guarantees over ElastiCache, makingg MemoryDB suitable as a primary database
+	# 		* the tradeoff being that writes are in milliseconds, whereas ElastiCache is in microseconds, so it's slower
 Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure; it's a PaaS
 	* powered by a CloudFormation template that sets up: 
 		* ELB, ASGs, RDS, preconfigured/custom EC2's, CloudWatch, SNS, security(rotating passwords), the ability to run Dockerized environments...
@@ -1664,42 +1664,42 @@ Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry abo
 	* list of the preconfigured platforms you can use for your EC2's:
 		* Java, .NET, PHP, Node.js, Python, Ruby, Go, Docker
 	* Beanstalk is free except for the resources it provisions, so RDS, ELB, EC2, for example
-	* when u create an Elastic Beanstalk instance you have to choose btwn 2 different environments:
-		* Web Environment: connects to the Internet; provisions stuff centered around the idea of hosting a web application; comes in 2 variants:
-			* Load-Balanced Environment: an ASG and an ELB that is designed to scale more
-			* Single-Instance Environment: a single ASG with desiredCapacity set to 1; no ELB, so a Public IP has to be used to connect to the Internet
-		* Worker Environment: provisions stuff centered around the idea of a worker node that is performing compute
-			* so provisions stuff like an ASG of EC2s, an SQS queue, and CloudWatch to alarm to the ASG when to scale
+	# * when u create an Elastic Beanstalk instance you have to choose btwn 2 different environments:
+	# 	* Web Environment: connects to the Internet; provisions stuff centered around the idea of hosting a web application; comes in 2 variants:
+	# 		* Load-Balanced Environment: an ASG and an ELB that is designed to scale more
+	# 		* Single-Instance Environment: a single ASG with desiredCapacity set to 1; no ELB, so a Public IP has to be used to connect to the Internet
+	# 	* Worker Environment: provisions stuff centered around the idea of a worker node that is performing compute
+	# 		* so provisions stuff like an ASG of EC2s, an SQS queue, and CloudWatch to alarm to the ASG when to scale
 API Gateway: fully managed; creates, publishes, maintains, monitors, and secures API 
 	* allows other applications to access your application's data, logic, and functionality; can handle hundreds of thousands of API calls at 10,000 requests per second(can increase that speed by contacting AWS Support)
 	* can throttle API requests to prevent attacks; lets you track and control usage of the API by API key; can connect it to CloudWatch to log all requests for monitoring; auto-scales; highly scalable; cost-effective
 	* you can expose HTTPS endpoints for defining a RESTful API, maintain multiple versions of your API, and send each API endpoint to a different target; can serverless-ly connect to services like Lambda and DynamoDB
 	* when creating API, plan them for retries w/ Exponential Backoff (EX: try again after 2 seconds, then 4, then 8, etc.)
-	* 3 types of API for API Gateway:
-		* REST API (API Gateway v1): complete control over requests and response, has the most features, has private and public API options, but more expensive
-		* HTTP API (API Gateway  v2): low latency, simpler feature set, cheap, but only has public API options
-		* WebSocket API: persistent connections for real-time usecases such as chat applications or dashboards
-	* when you create a REST API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
-		* and then in those Resources is where u define your Methods (EX: GET, POST, etc.)
-		* u then choose your Integration: which is just what service it calls:
-			* Lambda, HTTP endpoints outside the AWS Network, some mock, any aws service, or a VPC Link
-			* VPC Link: a way to connect to aws resources within a private VPC
-	* when you create an HTTP API, you have to define an API container, and multiple Routes: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
-		* the Methods are part of the Routes when u create your Routes, so u aren't defining 2 seperate things like u are with REST API calls when doing Resources and Methods
-		* u then choose your Integration:
-			* Lambda, HTTP endpoints outside the AWS Network, Event Bridge, SQS, Kinesis, Step Functions, or a VPC Link
-	* REST vs HTTP API:
-		* REST is regional, Edge-optimized, and can be private, whereas HTTP is only regional and can only be public
-		* REST can use TLS, certs, and AWS WAF for authentification, whereas HTTP can only use TLS
-		* they both can authorize with IAM, Cognito, and Lambda, but REST can only do auth on resource policies, whereas HTTP is the only one that can use JWT tokens for auth
-		* REST can manage custom domains, API Keys, rate limiting per client, and usage throttling per client, whereas HTTP can't manage custom domains
-		* they both can transform parameters, configure CORS, and perform user-controlled deploys 
-		* REST can transform the request body, do validation, custom API Gateway responses, caching, test invocations, and canary releases, whereas HTTP can't
-		* REST can't do automatic deployments, whereas HTTP can
-		* REST API calls can show up in CloudWatch Metrics and Logs, Firehose, execution logs, and Xray, whereas HTTP only shows up in CloudWatch Metrics and Logs
-		* they both integrate with public HTTP endpoints, aws services, Lambdas, and privately with NLBs
-		* REST API calls can't integrate privately with ALBs and Cloud Map, whereas HTTP can
-		* REST has mock integrations, whereas HTTP doesn't 
+	# * 3 types of API for API Gateway:
+	# 	* REST API (API Gateway v1): complete control over requests and response, has the most features, has private and public API options, but more expensive
+	# 	* HTTP API (API Gateway  v2): low latency, simpler feature set, cheap, but only has public API options
+	# 	* WebSocket API: persistent connections for real-time usecases such as chat applications or dashboards
+	# * when you create a REST API, you have to define an API container, and multiple Resources: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
+	# 	* and then in those Resources is where u define your Methods (EX: GET, POST, etc.)
+	# 	* u then choose your Integration: which is just what service it calls:
+	# 		* Lambda, HTTP endpoints outside the AWS Network, some mock, any aws service, or a VPC Link
+	# 		* VPC Link: a way to connect to aws resources within a private VPC
+	# * when you create an HTTP API, you have to define an API container, and multiple Routes: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
+	# 	* the Methods are part of the Routes when u create your Routes, so u aren't defining 2 seperate things like u are with REST API calls when doing Resources and Methods
+	# 	* u then choose your Integration:
+	# 		* Lambda, HTTP endpoints outside the AWS Network, Event Bridge, SQS, Kinesis, Step Functions, or a VPC Link
+	# * REST vs HTTP API:
+	# 	* REST is regional, Edge-optimized, and can be private, whereas HTTP is only regional and can only be public
+	# 	* REST can use TLS, certs, and AWS WAF for authentification, whereas HTTP can only use TLS
+	# 	* they both can authorize with IAM, Cognito, and Lambda, but REST can only do auth on resource policies, whereas HTTP is the only one that can use JWT tokens for auth
+	# 	* REST can manage custom domains, API Keys, rate limiting per client, and usage throttling per client, whereas HTTP can't manage custom domains
+	# 	* they both can transform parameters, configure CORS, and perform user-controlled deploys 
+	# 	* REST can transform the request body, do validation, custom API Gateway responses, caching, test invocations, and canary releases, whereas HTTP can't
+	# 	* REST can't do automatic deployments, whereas HTTP can
+	# 	* REST API calls can show up in CloudWatch Metrics and Logs, Firehose, execution logs, and Xray, whereas HTTP only shows up in CloudWatch Metrics and Logs
+	# 	* they both integrate with public HTTP endpoints, aws services, Lambdas, and privately with NLBs
+	# 	* REST API calls can't integrate privately with ALBs and Cloud Map, whereas HTTP can
+	# 	* REST has mock integrations, whereas HTTP doesn't 
 	* for the REST and HTTP APIs you can import an OpenAPI 3 schema file when creating your API in API Gateway 
 	* aws extends the OpenAPI definition, so u can define aws API Gateway-specific features in your OpenAPI schema file
 	* Deploy API: every time you make a change to your API you need to deploy it using the Deploy API action. When you deploy you have to choose the Stage
@@ -1719,14 +1719,14 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 		* should always be enabled if using JavaScript/AJAX(cause those 2 always use multiple domains)
 		* CORS is always enforced by the client i.e the browser
 		* can use it btwn aws services and external websites
-		* when CORS is enabled, only GET, PUT, POST, DELETE, and HEAD are supported
+		# * when CORS is enabled, only GET, PUT, POST, DELETE, and HEAD are supported
 	* Same Origin Policy: concept of the Web Application Security Model where a browser permits 1 webpage to run scripts contained on a 2nd webpage, but only if both webpages have the same origin
 		* used to prevent XSS attacks
 		* they ignore tools like Postman or Curl
-	CloudWatch Execution Logging: API logging that lets you capture user requests and response payloads as well as error traces
-		* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
-	* CloudWatch Access Logging: API logging that lets you as an API developer, log who has accessed your API and how the caller accessed it (which method)
-		* you can also require authorization of your API through AWS Cognito or custom Lambda you can write
+	# * CloudWatch Execution Logging: API logging that lets you capture user requests and response payloads as well as error traces
+	# 	* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
+	# * CloudWatch Access Logging: API logging that lets you as an API developer, log who has accessed your API and how the caller accessed it (which method)
+	# 	* you can also require authorization of your API through AWS Cognito or custom Lambda you can write
 	* different ways you can control access to API's in your API Gateway:
 		* IAM Roles and Policies
 		* CORS
@@ -1734,73 +1734,73 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 		* Lambda Authorizers: Lambda functions that control access to your API method's authentication, headers, paths, query strings, and parameters
 		* Cognito User Pools
 		* Client-Side SSL Certificates
-		* API Usage Plans: let you provide API keys to your customers and then track and limit the methods for each API key
+		# * API Usage Plans: let you provide API keys to your customers and then track and limit the methods for each API key
 Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes in and analyzes data from multiple sources
 	* use cases: stock prices, game data (as player plays), social media data, geospatial data, click stream data
 	* 4 types of Kinesis Streams:
 		* Kinesis Data Streams: producers send data to Kinesis Data Stream, which gets distributed into Shards that are sent to consumers
-			* 4 kinds of producers u can define:
-				* AWS SDK: doesn't scale
-				* Kinesis Producer Library(KPL): Java Library for writing data to a stream; lets u scale by 100x
-					* you can write data to stream using SDK, but KPL is more efficient
-				* Amazon Kinesis Agent: standalone Java application that monitors whenever changes occur and automatically sends it to Kinesis
-				* any aws service
-			* 4 kinds of consumers u can define:
-				* AWS SDK: does not scale
-				* Amazon Kinesis Client Library(KCL): a Java library for writing ur own custom consumers; can use the MultiLang Daemon to configure it to use other languages like Python or Ruby
-					* also helps you consume data from Kinesis data streams by taking care of the many complex extra subtasks that come with streaming data like:
-						* reacting to resharding, load balancing, reacting to instance failures, and checkpointing already-processed records
-				* a 3rd party
-				* Kinesis Data Firehose
-				* any aws service
+			# * 4 kinds of producers u can define:
+			# 	* AWS SDK: doesn't scale
+			# 	* Kinesis Producer Library(KPL): Java Library for writing data to a stream; lets u scale by 100x
+			# 		* you can write data to stream using SDK, but KPL is more efficient
+			# 	* Amazon Kinesis Agent: standalone Java application that monitors whenever changes occur and automatically sends it to Kinesis
+			# 	* any aws service
+			# * 4 kinds of consumers u can define:
+			# 	* AWS SDK: does not scale
+			# 	* Amazon Kinesis Client Library(KCL): a Java library for writing ur own custom consumers; can use the MultiLang Daemon to configure it to use other languages like Python or Ruby
+			# 		* also helps you consume data from Kinesis data streams by taking care of the many complex extra subtasks that come with streaming data like:
+			# 			* reacting to resharding, load balancing, reacting to instance failures, and checkpointing already-processed records
+			# 	* a 3rd party
+			# 	* Kinesis Data Firehose
+			# 	* any aws service
 			* Shards: lets you partition your data for different purposes (EX: a shard for your IoT data, 1 for your social media data, etc.)
 				* you pay per Shard that is running
-				* 5 transactions/second for reads; max read rate of 2MB/second; up to 1000 records/second for writes; max write rate of 1MB/second
+				# * 5 transactions/second for reads; max read rate of 2MB/second; up to 1000 records/second for writes; max write rate of 1MB/second
 				* the data capacity of your stream is a function of the # of shards in the stream (i.e) stream capacity = sum(capacity(shard1, shard2, ...))
-				* AWS Kinesis Scaling Utility: lets you scale in and out Kinesis Data Streams by number of Shards
-					* can do this manually by tweaking the # of Shards, or by doing it automatically when used in conjunction with Elastic Beanstalk
-				* each Shard has a sequence of data records where each data record is assigned a Sequence Number assigned to them in the order in which they will be processed
-				* Sequence Number: unique number that acts as another key in a hash, but for each data record in the Shard. They only have to be unique per Partition Key, so not unique across the whole stream
-				* if your data rate increases, u can increase the # of Shards to your stream to meet demand
-			* Partition Keys: if Shards are the "value" in key/value pairs for a hash, then Partition Keys are the "key" in the hash
-				* unicode strings w/ a max length limit of 256 characters
-				* Data Streams uses MD5 hash to map Partition Keys to Shards
-			* you can have multiple consumers, but you must manually configure them
-			* retention periods can be set to have data persist in the stream from 24(default) to 365 days, however you incur additional charges anytime the retention period is set to over 24 hours
-				* it takes several minutes for the retention period to update once changed
-			* data in the stream is ordered
-			* has 2 Capacity Modes:
-				* On Demand: only pay for capacity u use, so good for unpredictable workloads that need to automatically scale, but slower read/write speeds
-					* can only specify 2 consumers by default, but can also add 20 more using Enhanced Fan-Out(EFO)
-				* Provisioned: pay for the number of Shards u specify which u also have to manage urself, so good for predictable workloads
-					* max Shards allowed is 200
-				* Capacity Modes can be changed at any time in either direction
+				# * AWS Kinesis Scaling Utility: lets you scale in and out Kinesis Data Streams by number of Shards
+				# 	* can do this manually by tweaking the # of Shards, or by doing it automatically when used in conjunction with Elastic Beanstalk
+			# 	* each Shard has a sequence of data records where each data record is assigned a Sequence Number assigned to them in the order in which they will be processed
+			# 	* Sequence Number: unique number that acts as another key in a hash, but for each data record in the Shard. They only have to be unique per Partition Key, so not unique across the whole stream
+			# 	* if your data rate increases, u can increase the # of Shards to your stream to meet demand
+			# * Partition Keys: if Shards are the "value" in key/value pairs for a hash, then Partition Keys are the "key" in the hash
+			# 	* unicode strings w/ a max length limit of 256 characters
+			# 	* Data Streams uses MD5 hash to map Partition Keys to Shards
+			# * you can have multiple consumers, but you must manually configure them
+			# * retention periods can be set to have data persist in the stream from 24(default) to 365 days, however you incur additional charges anytime the retention period is set to over 24 hours
+			# 	* it takes several minutes for the retention period to update once changed
+			# * data in the stream is ordered
+			# * has 2 Capacity Modes:
+			# 	* On Demand: only pay for capacity u use, so good for unpredictable workloads that need to automatically scale, but slower read/write speeds
+			# 		* can only specify 2 consumers by default, but can also add 20 more using Enhanced Fan-Out(EFO)
+			# 	* Provisioned: pay for the number of Shards u specify which u also have to manage urself, so good for predictable workloads
+			# 		* max Shards allowed is 200
+			# 	* Capacity Modes can be changed at any time in either direction
 		* Kinesis Data Firehose: same as Kinesis Data Streams except you can choose only 1 consumer and data immediately disappears from the stream once consumed
 			* you can convert incoming data to other file formats; you can also compress the data; you can also secure the data
 				* you can transform data before it's sent to consumers using Lambda, but whatever u transform it to has to be less than 6MB
 			* you pay only for data that is consumed
 			* simpler setup than On Demand Kunesis Data Streams w/ less customization
-			* 4 kinds of producers u can define:
-				* Kinesis Data Streams
-				* Amazon Managed Streaming for Apache Kafka(MSK)
-					* in this case ^ only S3 can then be the consumer
-				* PUTs via the AWS CLI/SDK
-				* any aws service
-			* 3 kinds of consumers u can define:
-				* a 3rd party
-				* an HTTP endpoint
-				* any aws service (the most popular choices being S3 and Redshift)
-			* Dynamic Partitioning: lets u partition the streamed data by assigning them keys, which is then sent to S3 as a consumer where the data is grouped based on S3 Object Prefixes using the keys
-				* good for running high performance, cost-efficient analytics on streaming data sent to S3, which can then be fed through Athena, QuickSight, EMR, and RedShift Spectrum
-				* 2 ways of selecting the keys:
-					* Inline Partitioning: you provide a JQ expression to parse JSON, which returns the key/values
-					* Lambda: Lambda function parses the data, which returns the key/values
-				* once enabled, it CANNOT be turned off
+			# * 4 kinds of producers u can define:
+			# 	* Kinesis Data Streams
+			# 	* Amazon Managed Streaming for Apache Kafka(MSK)
+			# 		* in this case ^ only S3 can then be the consumer
+			# 	* PUTs via the AWS CLI/SDK
+			# 	* any aws service
+			# * 3 kinds of consumers u can define:
+			# 	* a 3rd party
+			# 	* an HTTP endpoint
+			# 	* any aws service (the most popular choices being S3 and Redshift)
+			# * Dynamic Partitioning: lets u partition the streamed data by assigning them keys, which is then sent to S3 as a consumer where the data is grouped based on S3 Object Prefixes using the keys
+			# 	* good for running high performance, cost-efficient analytics on streaming data sent to S3, which can then be fed through Athena, QuickSight, EMR, and RedShift Spectrum
+			# 	* 2 ways of selecting the keys:
+			# 		* Inline Partitioning: you provide a JQ expression to parse JSON, which returns the key/values
+			# 		* Lambda: Lambda function parses the data, which returns the key/values
+			# 	* once enabled, it CANNOT be turned off
 		* Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Rekognition(Machine Learning)
-		* Managed Service for Apache Fink (formally Kinesis Data Analytics): producer and consumer are either Kinesis Firehose or Kinesis Data Streams...
-			* ...with the intermediary being Managed Service for Apache Fink for use in data analytics
-			* data that passes through Managed Service for Apache Fink is run through custom SQL you write, which then outputs to the output stream
-			* really good for real-time analytics
+		# * Managed Service for Apache Fink (formally Kinesis Data Analytics): producer and consumer are either Kinesis Firehose or Kinesis Data Streams...
+		# 	* ...with the intermediary being Managed Service for Apache Fink for use in data analytics
+		# 	* data that passes through Managed Service for Apache Fink is run through custom SQL you write, which then outputs to the output stream
+		# 	* really good for real-time analytics
 Storage Gateway: lets you extend or backup on-premise storage to the cloud
 	* securely connects your on-premise software appliance: a VM that connects your on-prem to cloud, to cloud storage
 	* scalable and cost effective
@@ -1811,8 +1811,7 @@ Storage Gateway: lets you extend or backup on-premise storage to the cloud
 		* File Gateway: store your files as objects in S3; used for extending your storage
 			* access your files through a Network File System(NFS) or SMB mount point (SMB is an internet protocol used for NFS'); i.e they're both just ways of accessing the files
 			* ownership, permissions, and timestamps are all stored within the S3 metadata of the object associated with that file
-			* now that they're objects you get all the benefits of S3 like Bucket Policies, Versioning, Lifecycle Management, Cross-Region Replication, etc.
-			
+			* now that they're objects you get all the benefits of S3 like Bucket Policies, Versioning, Lifecycle Management, Cross-Region Replication, etc.	
 		* Volume Gateway: stores copies of your hard disk drives in S3; used for backup; uses the Internet Small Computer Systems Interface(iSCSI) block protocol
 			* data is backed up as point-in-time snapshots of the volumes, and stored in the cloud as AWS EBS Snapshots
 				* Snapshots are incremental backups that only capture changed blocks in the volume
