@@ -67,8 +67,8 @@
 				* you would use this for things like org charts, course catalogs, and device registries
 			* Amazon Cognito User Pools: managed user directory for SaaS applications
 	* Amazon Resource Name (ARN): a string that uniquely identifies any resource used in AWS (used for IAM Policies)
-		# * EX: arn:partition  :service:      region:    account_id:                           resource
-		# 	    (aws)     (s3, ec2, etc.) (us-east-1) (12-digit #) (resource_type/resource, resource_type/resource/qualifier, etc.)
+		# * arn:partition:service:region:account_id:resource
+		# * arn:(aws):(s3, ec2, etc.):(us-east-1):(12-digit #):(resource_type/resource, resource_type/resource/qualifier, etc.)
 	* if you have multiple Policies attached to the same resource, AWS will join all those policies together, but any explicit deny in any of the policies obviously overrides the rules
 	* Permission Boundaries: supported only for IAM Users and Roles; used to delegate administration to other Users
 		* helps prevent privilege escalation, or unnecessarily broad permissions
@@ -109,16 +109,16 @@ S3: secure, durable, highly scalable object storage
 	* S3 Presigned URL's: generate a temporary url using the AWS CLI or SDK to give download or upload access to a private object
 	* when you upload a file to S3, you will get a HTTP 200 code back if the upload was successful
 	# * GET, PUT, LIST, and DELETEs to buckets are designed for high availability, however CREATEs and DELETEs should be ran less often
-	* the IPv4 endpoint for S3 is: https://s3.[region].amazonaws.com, and the one for IPv4 and IPv6 is: https://s3.dualstack.[region].amazonaws.com
+	# * the IPv4 endpoint for S3 is: https://s3.[region].amazonaws.com, and the one for IPv4 and IPv6 is: https://s3.dualstack.[region].amazonaws.com
 	* 2 types of S3 buckets:
 		* General Purpose buckets: the OG
-			# * by default you can create up to 10,000 of these per AWS Account
+			# * by default you can create up to 10,000 General Purpose buckets per AWS Account
 			* flat hierarchy, so no directories/folders
 				* the "folders" u do see in these buckets are TECHNICALLY 0-byte S3 objects that, once objects are added to, just have their names prefix'd w/ the "folder" name...
 					* ...which mimics the idea of directories. This is what is referred to as: Object Prefixes
 			* can't be used w/ S3 Express One Zone
 		* Directory buckets:
-			# * by default you can create up to 100 of these per Region
+			# * by default you can create up to 100 of these per account
 			* has directory/folder hierarchy
 			* can only be used for S3 Express One Zone
 			# * recommended when u need single-digit millisecond performance on PUTs and GETs
@@ -129,7 +129,7 @@ S3: secure, durable, highly scalable object storage
 	# 	* S3 Batch Replication
 	* S3 bucket naming rules:
 		# * must be between 3-63 characters
-		* lowercase, numbers, dots, and hyphens only
+		# * lowercase, numbers, dots, and hyphens only
 		* must begin and end with a letter or number
 		* can't have 2 or more dots next to each other
 		* can't start with: xn--, sthree-, or sthree-configurator, or end with: -s3alias, or --ol-s3
@@ -146,15 +146,16 @@ S3: secure, durable, highly scalable object storage
 	# * Object Policies: like Bucket Policies, but only applies to individual Objects
 	* S3 Buckets can be configured to create access logs which log all requests made to an S3 bucket; these logs can be sent to other buckets and/or buckets in another account
 	# * S3 versioning stores all versions of an object including all writes, as well as all deletions of objects; is disabled by default
-	* S3 Lifecycle Management: allows you to automate the process of moving Objects btwn the different S3 storage tiers; can be used in conjunction with versioning
-		* S3 lifecycle management can be applied to both old and new versions of objects; you can use it to move objects to a different storage class after a certain timeframe, or delete them after time has passed
+	# * S3 Lifecycle Management: allows you to automate the process of moving Objects btwn ALL the different S3 storage tiers; can be used in conjunction with versioning
+	# 	* S3 Lifecycle Management can be applied to both old and new versions of objects
+		* you can use it to move objects to a different storage class after a certain timeframe, or delete them after time has passed
 		* different from S3 Intelligent Tiering in that YOU manage it. Isn't managed for you using ML like with Intelligent Tiering
-		* 2 types of actions you can take:
-			* Transition Actions: move current and older versions of objects btwn Storage Classes
-			# * Expiring Actions:
-			# 	* expire current versions of objects
-			# 	* delete older versions of objects
-			# 	* delete expired Delete Markers or incomplete Multipart Uploads
+		# * 2 types of actions you can take:
+		# 	* Transition Actions: move current and older versions of objects btwn Storage Classes
+		# 	* Expiring Actions:
+		# 		* expire current versions of objects
+		# 		* delete older versions of objects
+		# 		* delete expired Delete Markers or incomplete Multipart Uploads
 		# * Lifecycle Filters: can filter based on Object Prefixes, Tags, and object size
 	* S3 Object Lock: makes it so that you can only write once to that object, but you can read it many times (WORM model); good for meeting WORM regulatory requirements; added security to Objects
 		* also prevents accidental deletion
@@ -192,7 +193,7 @@ S3: secure, durable, highly scalable object storage
 			* Delete Markers are not replicated and deleting individual versions or Delete Markers will not be replicated
 			* when versioning is disabled in S3, so is the Delete Marker functionality
 		* If you're using Cross Region Replication, but the data is encrypted with KMS, you can provide the KMS key name when replicating so that other Regions can decrypt the data
-	* DataSync: Allows you to sync large amounts of files on your on-prem with AWS or with other Cloud Providers; deployed as an agent that connects your file system with AWS
+	# * DataSync: Allows you to sync large amounts of files on your on-prem with AWS; deployed as an agent that connects your file system with AWS
 		# * automatically encrypts and accelerates data; performs automatic integrity checks in-transit and at-rest
 		* connects with S3, EFS, FSx, Snowcone, and Snowball Edge
 		* replication can be done hourly, daily, or weekly
@@ -229,7 +230,7 @@ S3: secure, durable, highly scalable object storage
 		# * Glacier Flexible Retrieval:
 		# 	* Expedited Retrievals: 1-5 min retrieval time; size limit of 250MB
 		# 		* Provisioned Capacity: ensures that the capacity needed to make an Expedited Retrieval is available when needed
-		# 			* assures 3 Expedited Retrievals can be made in 5 minutes and provides up to 150MB of retrieval throughput
+		# 			* assures 3 Expedited Retrievals can be made per 5 minutes and provides up to 300MB of retrieval throughput
 		# 		* buy this when you require highly reliable and predictable access to your archival data and need it in minutes
 		# 	* Standard(default): 3-5 hours; no size limit
 		# 	* Bulk: 5-12 hours; no size limit; good for petabyte retrievals

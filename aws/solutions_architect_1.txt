@@ -85,7 +85,7 @@ elastic load balancer: allows you manage the load traffic across all of your ser
 		* ALB (Application) Layer 7 -> handles HTTP and HTTPS traffic; can attach a Web Access Firewall (WAF); uses routing rules, so you can make better use out of 1 LB instead of having to make many
 			* ALB's provide host-based routing, path-based routing, HTTP header-based routing, HTTP method-based routing, and query string parameter-based routing
 			# * Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
-				* you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
+				# * you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
 			# * Request Tracing: feature of ALB that lets you monitor ALB by adding a header to HTTP requests with trace identifier information
 			* ALB's and NLB's both support Dynamic Host Port Mapping
 		* GWLB (Gateway): routes traffic to virtual applicances (to analyze for security) before routing it to the actual target
@@ -116,10 +116,10 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		# * Access Points: named network endpoints that are attached to buckets used to simplify managing s3 bucket access
 			# * aims to simplify the management of buckets whose bucket policies are needlessly complex and/or redundant
 			# * has it's own distinct permissions via an Access Point policy, it's own Block Public Access, and network controls (e.g have all requests only come from the Internet, a specific VPC, etc.)
-		# # # * Multi-Region Access Points: Access Points, but it's a global network endpoint for routing btwn multiple buckets in multiple regions
-		# # # 	* it uses Global Accelerator under-the-hood
-		# # * Object Lambda Access Points: lets you transform the output of a HEAD, GET, or LIST request made to S3 objects (doesn't modify the object itself)
-		# # 	* useful for scrubbing PII before returning the output
+		# * Multi-Region Access Points: Access Points, but it's a global network endpoint for routing btwn multiple buckets in multiple regions
+		# 	* it uses Global Accelerator under-the-hood
+		# * Object Lambda Access Points: lets you transform the output of a HEAD, GET, or LIST request made to S3 objects (doesn't modify the object itself)
+		# 	* useful for scrubbing PII before returning the output
 		# * Access Grants: lets u map Identities(users, groups, roles) in some directory service (EX: Active Directory, IAM, Okta, etc.) to data in S3
 		# * Mountpoint: allows you to mount an S3 bucket to your local Linux file system
 		# 	* it's an open source client u install on your local computer and provides high throughput access to objects with basic file system commands
@@ -137,7 +137,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		# 	* when enabled, all requests must be authenticated (no anonymous or SOAP requests allowed)
 		# 	* requester must include x-amz-request-payer in their API request header when making the request to the bucket
 		# 	* requester assumes an IAM role with the s3:RequestPayer condition attached before making their request
-			* if any of the above ^ conditions aren't true, a 403 is returned
+			# * if any of the above ^ conditions aren't true, a 403 is returned
 			* useful for when u want to share data, but not incur any of the transfer fees
 			* the aws Account of the requester is what gets charged
 		# * Batch Operations: can perform batch operations on S3 objects; can go up to exabytes of data
@@ -152,7 +152,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		# 	* u need to supply the Batch Operation with a list of objects to perform the operation on, either as a csv or S3 Inventory Report
 		# * S3 Inventory: takes inventory of objects in an S3 bucket on a repeating schedule, so that you have an audit history of object changes
 		# 	* S3 will output the Inventory Report into another S3 bucket
-		# 	* can perform it daily and get the Inventory Report within 48 hours, or weekly and get the 1st one within 48 hours, and all other ones every Sunday
+		# 	* can perform it daily and get the 1st Inventory Report within 48 hours, or weekly and get the 1st one within 48 hours, and all other ones every Sunday
 		* S3 Event Notifications: allows your bucket to notify other aws services about stuff that happens in your S3 (very powerful)
 			* notifications are delivered in seconds, but can sometimes take a minute or longer
 		# * Storage Class Analysis: Intelligent Tiering, but only btwn Standard and IA
@@ -185,8 +185,8 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 	* S3 is a regional AWS service that gives global views
 	* S3 is used for storing objects; can't install databases or OS's on it
 	* Cross-Region Replication: allows you to have duplicative buckets in multiple regions
-	* Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
-		* it takes 20 minutes before it can begin to take affect once enabled on a bucket
+	# * Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
+		# * it takes 20 minutes before it can begin to take affect once enabled on a bucket
 		# * gets transfered using the https://s3-accelerate.amazonaws.com(IPv4) or https://s3-accelerate.dualstack.amazonaws.com(IPv4/IPv6) DNS Endpoints
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -456,7 +456,6 @@ Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web
 	* you use it to launch VPS's (Virtual Private Servers)
 # Amazon Guard Duty: an IDS/IPS that uses machine learning to analyze your CloudTrail, VPC, and DNS logs; will alert you of findings and you can automate incident responses to those findings
 	# * uses machine-learning that auto detects anomalies and 3rd-party data to protect your account and alerts you; free 30-day trial
-	# * GuardDuty gets its data from CloudTrail event logs, VPC Flow Logs, and DNS logs
 	* IDS/IPS: Intrusion Detection System and Intrusion Protection System
 Key Management Service: (KMS) lets you create and manage encryption keys; multi-tenant HSM; uses envelope encryption; a lot of AWS services allow you to encrypt your data with KMS
 	* regional; manages your keys for encryption and decryption for S3 objects; KMS is on shared physical hardware (multi-tenant)
