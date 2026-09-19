@@ -244,8 +244,8 @@ S3: secure, durable, highly scalable object storage
 		# 		* KMS keys must be in the same region as the S3 bucket
 		# 		* S3 Bucket Key: ephermeral bucket-level KMS key
 		# 			* SSE-KMS charges you per request made to objects, so using an S3 Bucket Key for the bucket instead reduces KMS cost
-		# 	* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
 		# 	* DDSE-KMS: it's SSE-KMS, plus an additional client-side encryption layer
+		# 	* SSE-C: you manage the keys, (Customer provided key) using you own encryption method
 	* Client-Side Encryption: You encrypting your own files locally (at rest) before uploading them to S3
 	* In-Transit Encryption: encryption in transit between your local host and S3 is achieved via SSL/TLS
 	# * MFA Delete: ensures users can't delete an object in your S3 bucket w/o an MFA code; Can only be enabled iff: AWS CLI is used to turn it on and the S3 bucket has versioning turned on
@@ -281,7 +281,7 @@ EC2:
 	# * Enhanced Networking(EN): uses SR-IOV to provide high-performance networking capabilities on instances that support EN
 		# * SR-IOV: a method of device virtualization that yields higher I/O performance and lower CPU utilization
 		# * provides higher bandwidth, higher packets/second(PPS), and consistently lower latency
-		# # * EN is free
+		# * EN is free
 		# * you use this when you want good network performance
 		# * 2 ways to enable it using:
 		# 	* Elastic Network Adapter(ENA): it's a custom network interface; supports network speeds up to 100 GB/s for instance types that support it; (preferred option)
@@ -291,7 +291,7 @@ EC2:
 	# 	* can use OS-bypass: enables HPC and machine learning apps to bypass the OS kernel to communicate directly with the EFA device; only supported for Linux
 	# 		* OS-bypass for EFA's have to be a member of a security group that allows all inbound and outbound traffic
 	# * to use Spot instances first you must determine the maximum amount you're willing to pay for your Spot Instances as they're running
-	# 	# * the hourly Spot price varies depending on capacity and region
+	# 	* the hourly Spot price varies depending on capacity and region
 	# 	* if the Spot price goes over your maximum, you have 2 minutes to decide whether to stop or terminate the instance; can prevent this using Spot Blocks
 	# 		* Spot Blocks: allows you to request Spot Instances for 1 to 6 hours at a time to avoid your Spot Instances from being interrupted during their jobs
 	# 	* Spot requests include: max price, launch specification, # of instances, request type, the date ranges for which the request is valid
@@ -311,7 +311,7 @@ EC2:
 	# * EC2 Hibernate: on startup of an EC2 instance, OS is instead told to perform hibernation, which saves the contents of the EC2's RAM to your EBS root volume and any other attached volumes
 	# 	* the instance RAM must be less than 150GB
 	# 	* instances can't be hibernated for more than 60 days
-	# 	* supports the C3-5, M3-5, and R3-5 instance families (so On-Demand, as well as Reserved instances)
+	# 	* supports the C3-5, M3-5, and R3-5 instance families (so On-Demand, as well as Reserved Instances)
 	# 	* available for windows, linux, and ubuntu
 	# 	* when an EC2 is in a hibernated state, pricing is determined only by the Elastic IP's and EBS volumes attached to that instance, NOT the amount of time it's hibernating
 	# 	* when you start your instance out of hibernation, the EBS root volume is restored to its previous state, RAM contents are reloaded, instance processes are resumed,...
@@ -321,7 +321,7 @@ EC2:
 		* General Purpose (T2, M5a, etc.): nice balance btwn compute, memory, and networking power; usually used for web servers and code repos
 			# * Burstable Instances (T2, T3, etc.): allows instances to handle shorts bursts of higher CPU utilizations
 			# 	* Standard Mode(default): provides a cpu utilization baseline, w/ the ability to do short bursts above the baseline using CPU credits
-			# 	* Unlimited Mode: unlimited high cpu utilization, w/ additional charges applied when going beyond the accumulated CPU credits
+			# 	* Unlimited Mode: unlimited high cpu utilization beyond the cpu utilization baseline, w/ additional charges applied when going beyond the baseline
 		* Compute Optimized (C5, Cba, etc.): good for high processing, high performance apps; EX: scientific modeling, gaming servers, etc.
 		* Memory Optimized (R4, R5a, etc.): good for workloads that process large data sets in memory; EX: in-memory caches, in-memory databases, real time big data analytics
 		* Accelerated Computing(GPU) Optimized (P2, G4ad, etc.): hardware accelerators, or co-processors, used to perform float calculations, graphics processing, etc. more efficiently than software running on CPU's
@@ -341,7 +341,7 @@ EC2:
 			# 	* Amazon recommends the same instance type for each EC2 in a Clustered Placement Group (e.g: all instances in the cluster are Memory Optimized)
 			* Spread Placement Groups: grouping of EC2's into distinct individual hardware; used when you have a small # of critical instances that need to be separate from each other
 				# * CAN go multi AZ, but needs to be in the same region
-				* can spread a max of 7 instances per AZ
+				# * can spread a max of 7 instances per AZ
 			* Partitioned: a group of EC2's share 1 partition of a Placement Group of EC2's within a single AZ; partitions have their own individual network and power source
 				* reduces the damage done by correlated hardware failures
 				* partitions don't share same hardware (1 rack/partition); good for stuff like Hadoop
@@ -363,13 +363,13 @@ EC2:
 	* AMI: lets you turn your EC2 instances into AMIs, allowing you to create copies of your servers, whether running or stopped
 		* an AMI contains a template for the root volume for the instance (EBS Snapshot/Instance Store Template), launch permissions (which AWS accounts can use the AMI to launch instances), and...
 			* ...a mapping that specifies the volumes to attach to the instance when it's launched
-		* Launch Templates: is what you use to manage revisions to your AMIs, so like v1.0, then v1.1, etc...
+		# * Launch Templates: is what you use to manage revisions to your AMIs, so like v1.0, then v1.1, etc...
 		# * AMIs are region specific
 		# * Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
 			# * lets you routinely patch your AMIs w/ security updates and bake those into your AMIs
 		# * AMIs help you keep changes made to your OS, app, sys packages, etc. you can use Systems Manager Automation to routinely patch your AMI's security, and AMIs are used with...
 		# 	* ...LaunchConfigurations, so if you want to update multiple instances, just make a new copy of your LaunchConfiguration and use it with the new AMI you created containing those updates
-		# 	* you can't edit the current LaunchConfiguration live; gotta create a new one
+		# 	* you can't edit the current LaunchConfiguration live; gotta create a new one, cause it doesn't include versioning
 		* you can also copy your AMIs, so since AMIs are region specific, if you want to use your AMI in another region, you have to copy it then change the destination region
 		* AMIs have ID's that vary depending on what types of options they offer and what region they are in
 		* a lot of AMIs are offered on AWS Marketplace; the most popular ones being security-hardened AMIs
@@ -491,21 +491,21 @@ CloudWatch: monitors your cloud
 			# 		* Lambda
 			# 		* CloudTrail
 		# * Unified CloudWatch Agent(a.k.a CloudWatch Agent): lets you send logs from your EC2 to a CloudWatch Log Group
-		# 	* you can set up advanced/custom metrics by installing the Unified CloudWatch Agent
-		# 	# * you would use the CloudWatch Logs Agent(awslogs) agent if u only care about logs, whereas u would use the Unified CloudWatch Agent(CloudWatch Agent) for logs AND metrics
-		# 	* enables the collection of logs from servers running Windows Server
 		# 	* you must attach the CloudWatchAgentServerRole IAM Role to the EC2 u want to install the agent on
 		# 	* can be installed using SSM
-			# * these are the host level metrics u get from CloudWatch by default when u don't install ANY agents:
-			# 	* CPU usage
-			# 	* Network usage
-			# 	* Disk reads and usage
-			# 	* hypervisor and EC2 instance status
-			# * advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the Unified CloudWatch Agent for:
-			# 	* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
+		# 	* you can set up advanced/custom metrics by installing the Unified CloudWatch Agent
+		#		* these are the host level metrics u get from CloudWatch by default w/o needing to install the Unified CloudWatch Agent:
+		#			* CPU usage
+		# 			* Network usage
+		# 			* Disk reads and usage
+		# 			* hypervisor and EC2 instance status
+		#		* advanced/custom metrics NOT automatically provided by CloudWatch that u need to install the Unified CloudWatch Agent for:
+		# 			* log collection, memory utilization, disk swap utilization, disk space utilization, and page file utilization
+		# 	* you would use the CloudWatch Logs Agent(awslogs) agent if u only care about logs, whereas u would use the Unified CloudWatch Agent(CloudWatch Agent) for logs AND metrics
+		# 	* enables the collection of logs from servers running Windows Server
 	* CloudWatch Metrics: gives you visual graphs based on CloudWatch Logs
 		* you can use the CLI or SDK to make custom metrics
-		# * if you make a custom metric, you can set it to have High Resolution, meaning more granular data; EX: going from tracking per minute(Standard Resolution) to per second!
+		# * if you make a custom metric, you can set it to have High Resolution: going from tracking per minute(Standard Resolution) to per second!
 	* EventBridge (a.k.a CloudWatch Events): an event bus used to trigger events based on a condition or a schedule
 		* EventBridge as an event bus itself is made up of a collection of 3 event buses:
 			* Default Event Bus: the default event bus for the entire aws Account
@@ -560,6 +560,9 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	* supports the Network File System v4 (NFSv4) protocol
 	* you only pay for the storage you use
 	* can scale up to petabytes
+	# * volume is scaled automatically for you
+	# * charge is $0.30/GB/month
+	# * encryption-at-rest is turned on by default when making an EFS
 	# * can support thousands of concurrent NFS connections
 	# * provides Read After Write Consistency: meaning you can view changes RIGHT AFTER making changes
 	# * data is stored multi AZ within a region by default
@@ -583,19 +586,16 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	# 	* integrates natively with S3
 	# 	* is a POSIX-compliant shared file system
 	# * FSx for NetApp ONTAP: used when handling petabytes of data
-	* volume is scaled automatically for you
 	# * EC2s install the NFSv4.1 client and can then mount the EFS volume for them all to share that storage
 	# 	* EFS Mount Helper: helps u mount your EFS volumes onto EC2 instances
 	# 		* also encrypts data in transit when moving data to on-prem to aws for use in EFS
 	# 	* installing the client also allows CloudWatch to monitor the EFS volume
 	# * creates multiple mount targets in all your VPC subnets, so you can mount from anywhere in your VPC
 	# 	* you can mount an EFS on instances in only 1 VPC at a time
-	* charge is $0.30/GB/month
-	* encryption-at-rest is turned on by default when making an EFS
 	# * to enable SSH connections for EFS for encryption In-Transit, open port 22 on the EC2 Security Group and port 2049 on the EFS Security Group
 RDS: scalable, managed(not fully), relational database service
 	* runs on virtual machines, but you can't login to these VM's
-	* RDS is not serverless
+	# * RDS is not serverless
 	# * you can have up to 40 RDS instances per aws account
 	# * it also captures transactional logs every 5 minutes and sends them to S3
 	* u define a database identifier for each RDS instance, which forms the beginning of the RDS' DNS hostname, plus an AWS-defined unique identifier
@@ -626,7 +626,7 @@ RDS: scalable, managed(not fully), relational database service
 	# 	* Multi-AZ has automatic failover, as opposed to Read Replicas which need the change to be made manually
 	# 		* when the primary db fails in a Multi-AZ RDS deployment, the cname name record (CNAME) is automatically switched from the primary to the standby instance
 	# 	* only the primary instance in Multi-AZ is active, whereas all of Read Replica's including the master are active
-	# 	* Multi-AZ always spans 2 AZ's in one region, whereas read replicas can be Multi-AZ, Cross-AZ, and allows you to make replicas of replicas 
+	# 	* Multi-AZ always spans 2 AZ's in one region, whereas read replicas can be Multi-AZ, Cross-AZ, Cross-Region, and allows you to make replicas of replicas 
 	# 	* database upgrades happen on only the master in Multi-AZ, whereas database upgrades in Read Replicas are independent from master
 	# 	* in RDS Read Replicas, you can have up to 5 replicas per database; each read replica has it's own DNS Endpoint
 	# 		* replicas can be promoted to their own database, but this breaks replication
@@ -635,6 +635,7 @@ RDS: scalable, managed(not fully), relational database service
 	# 	* Automated Backups: the default; all data is stored in S3; free; stores transactions logs all day; you choose the Retention Period btwn 1 to 35 days; and YOU define the backup window for when you want backups to occur
 	# 		* setting the Retention Period to 0 is how you turn it off
 	# 		* storage I/O may be suspended during the backup, so choose that backup window carefully
+	#		* deleting the RDS instance deletes your Automated Backups however...
 	# 	* Manual Snapshots: these backups persist even after you delete the original RDS instance unlike Automated Backups
 	# 		* you can then share these snapshots cross-region and cross-account, export them to S3, but there's an additional charge for each snapshot u take
 	# 	* your database has to be in the "available" state in order to perform backups
@@ -657,7 +658,7 @@ RDS: scalable, managed(not fully), relational database service
 	* IAM Authentification: lets you authenticate to an RDS instance using an IAM authentification token instead of having to use credentials
 		* works for MySQL, MariaDB, and Postgres; each token has a TTL of 15 minutes
 	# * Kerberos Authentification: Kerberos is a network authentification protocol which is integrated into Microsoft Active Directory
-	# 	* works with AWS Directory Service for Microsoft Active Directory and your own on-premise Active Directory
+	# 	* works with AWS Directory Service for Microsoft Active Directory and your own on-premise AD
 	# 	* can be used with MySQL, Postgres, Oracle, and Microsoft SQL Server
 	# 	* Postgres and Microsoft SQL Server support 1 and 2-way forest trust relationships
 	# 	* Oracle supports 1 and 2-way external and forest trust relationships
@@ -689,7 +690,7 @@ RDS: scalable, managed(not fully), relational database service
 		* using AWS Client VPN 
 		* using AWS Direct Connect
 		* ...but you CAN'T use CloudShell
-	# * Amazon RDS Extended Support: lets you run MySQL, MariaDB, etc. on a major version above what RDS normally allows at most, but for an additional cost
+	# * Amazon RDS Extended Support: lets you run ur RDS db type(MySQL, Postgres, etc.) on a major version above what RDS normally allows at most, but for an additional cost
 	# * Enhanced Monitoring: a feature of RDS; Enhanced Monitoring metrics are stored in CloudWatch logs for 30 days;
 	# 	* different from CloudWatch metrics, where CloudWatch takes data at the hypervisor layer of the DB, whereas Enhanced Monitoring gathers it from an agent on the DB instance
 	# 	* useful for when you want to see how individual Threads are utilizing the CPU for a DB instance (i.e: OS processes and RDS child processes)
