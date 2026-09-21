@@ -731,6 +731,7 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 	* stored on SSD storage, which is why it is so fast
 	# * spread across 3 AZ's for redundancy
 	# * autoscaling is not enabled by default
+	# * all data in DynamoDB is encrypted at rest using KMS
 	* DynamoDB Accelerator(DAX):
 		* makes it so that developers don't have to manage the caching logic
 		* it's compatible with DynamoDB API calls
@@ -754,7 +755,6 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 		* you don't have to change anything about your application in order to use Global Tables
 		* replication latency is under one second
 	* Database Migration Service(DMS) doesn't support DynamoDB as a source database as part of the migration, but it DOES support it as a target DB as part of the migration
-	# * all data in DynamoDB is encrypted at rest using KMS
 	* you can secure access to DynamoDB using AWS site-to-site VPN's, Direct Connect, and IAM Policies and Roles
 		* you can also utilize more fine-grained access, like having IAM policy access to only certain attributes of table items, or by using VPC endpoints so that you can connect EC2's to...
 			* ...DynamoDB within your VPC without it being accessible from the public Internet
@@ -839,7 +839,7 @@ Route53: more synergies with AWS services when you register your domain through 
 	# * Route53 Resolver: regional service that lets you route DNS queries btwn your VPC's and your on-prem network; used for hybrid environments
 	# * DNSSEC: a suite of extension specifications by the IETF for securing data exchanged in the Domain Name System(DNS) and Internet Protocol(IP) networks
 	# 	* DNSSEC signing lets DNS servers validate that a DNS response came from Route53 and has not been fucked with
-	# * Zonel Shift: shifts an ALB or NLB away from an AZ that's down to a healthy AZ
+	# * Zonal Shift: shifts an ALB or NLB away from an AZ that's down to a healthy AZ
 	# 	* only for ALBs and NLBs w/ cross-zone load balancing turned off, and ALBs that don't use AWS Global Accelerator
 	# 	* only lets u hop to 1 AZ; can't hop btwn multiple AZ's
 	# 	* ALB and NLB does not charge users more based on enabled AZ's
@@ -859,7 +859,7 @@ VPC:
 	* AZ's across aws accounts are randomized, meaning US-East-1A in one account isn't necessarily the same US-East-1A in another
 	* amazon always reserves 5 IP addresses within your subnets: the first 4 IP addresses and the last IP address in each subnet
 	# * VPC's are region-specific: they can't span regions, you can create up to 5 VPC's per region, every region comes with a default VPC, and you can have 200 subnets per VPC
-	* DNS hostnames are disabled by default; enabling it will allow your VPC instance to have domain name addresses
+	# * DNS hostnames are disabled by default; enabling it will allow your VPC instance to have domain name addresses
 	* NACLs: a layer of security that acts as a virtual firewall for controlling traffic in and out of subnets
 		* subnets can only belong to a single NACL, but NACL's can associate with multiple subnets; VPCs automatically get a default NACL which allows all inbound and outbound traffic b/c...
 			* ...NACLs don't care about the state of the traffic
@@ -872,7 +872,7 @@ VPC:
 		* you can also use NACLs to block a single IP address
 	* Security Groups: virtual firewall that controls traffic to and from EC2 instances; they contain a set of rules that filter out inbound and outbound traffic passing through EC2's
 		* they are stateful, meaning there are no DENY rules, meaning all inbound traffic is blocked by default unless a rule specifically allows it at the inbound level
-			* Security Groups allow all outbound traffic by default, but deny all inbound traffic by default
+			# * Security Groups allow all outbound traffic by default, but deny all inbound traffic by default
 		# * EC2's can be in the same Security Group even if they are in different subnets
 		* you can specify the source of the traffic to be an IP range, a specific IP address(#.#.#.#/32), or ANOTHER Security Group
 		# * an EC2 can belong to multiple Security Groups and rules in multiple Security Groups are permissive instead of restrictive, meaning ALLOW rules override BLOCK rules...
@@ -943,8 +943,8 @@ VPC:
 		# * VPC peering uses a Star Configuration: 1 Central VPC - 4 other VPCs
 		* instances behave as if they are on the same private network
 		* setting up a VPC Peering connection allows each VPCs access to the other VPCs' subnets
-		* no transitive peering: meaning you can't go through a VPC to get to another one; needs to be a direct connection
-		* no Overlapping CIDR blocks: meaning you can't have 2 VPC's with the same CIDR block
+		# * no transitive peering: meaning you can't go through a VPC to get to another one; needs to be a direct connection
+		# * no Overlapping CIDR blocks: meaning you can't have 2 VPC's with the same CIDR block
 		* VPC's and everything in them plus VPC Peering are free except for NAT Gateways, VPC Endpoints, and VPN Gateways
 	# * VPN CloudHub: it's like a single point of contact to connect your VPN infrastructure into; uses a hub-and-spoke model
 	# 	* so for example if you had multiple sites each with it's own VPN connection, you would use this to connect those VPN connections together
@@ -963,13 +963,13 @@ VPC:
 	# 	* a default NACL that is associated with your default VPC
 	# 	* associates the default:
 	# 		* DHCP options: a protocol standard for passing config information to host servers on a TCP/IP network that are set with your AWS account with your default VPC
-	# 	* a default main route table
+	# 	* a default Main Route Table
 	* VPC Flow Logs: lets you capture IP traffic data in and out of ENI's within your VPC; can be turned on at the VPC, subnet, or network interface level
 		* all data is stored using CloudWatch Logs(can also be delivered to S3) and after a Flow Log is created it can be viewed in detail using CloudWatch Logs
 		* VPC Flow Logs contain a lot of data: the most important of which are the source IPv4/IPv6 address and the destination IPv4/IPv6 address
 		* you cannot change the configuration of a Flow Log after it's been created: you can only delete it and create a new one at that point
 		* VPC Flow Logs can be tagged now
-		# * you cannot enable Flow Logs for VPCs that are peered with your VPC unless the peered VPC is in the same AWS account
+		# * you cannot enable VPC Flow Logs for VPCs that are peered with your VPC unless the peered VPC is in the same AWS account
 		* not all instance traffic is monitored by VPC Flow Logs, for example:
 			* traffic generated by instances when they contact Amazon DNS
 			* traffic generated by a Windows instance for Amazon Windows license activation
@@ -985,9 +985,10 @@ VPC:
 		* can be used cross-vpc and cross-account
 		* uses HTTPS for service-to-service communication
 		* supports weighted routing for blue/green or canary deployments
-	# * Traffic Mirroring: lets you copy network traffic from one ENI and sends that copied traffic to a security monitoring appliance (EX: another ENI, NLB, or GWLB) for security purposes
+	# * VPC Traffic Mirroring: lets you copy network traffic from an EC2's ENI and sends that copied traffic to a security monitoring appliance (EX: another ENI, NLB, or GWLB) for security purposes
 	# 	* attaches a VXLAN header to each packet of the copied traffic
 	# 	* a Traffic Mirror session needs to be created to mirror traffic, which includes creating a mirror source, destination, and filter(for what kind of data u want to filter from the traffic)
+	#	* it's considered a VPC feature since u configure this for your VPC, even though what's being manipulated is an EC2's ENI
 	# * AWS Network Firewall: a stateful and managed firewall and IDS/IPS for VPCs
 	# 	* utilizes Suricata, which is an open source IDS/IPS software
 	# * Network Address Usage (NAU): a metric that is used to determine how much space u have left in your VPC
@@ -1129,7 +1130,7 @@ HA (Highly Available) Architecture: planning for failure
 			* this data is also available in Migration Hub
 		# * Migration Hub: a place where you can migrate the discovered servers and track their progress as they are being migrated to aws
 		# 	* Migration Evaluator Collector: a form u submit to AWS to help asses a migration
-		# 	* Migration Hub Refactor: bridges networking across aws accounts so that legacy and new services can communicate while remaining on seperate accounts
+		# 	* Migration Hub Refactor: helps you break up your monolithic on-prem infra into individual aws services
 		# 	* Migration Hub Journey: guided templates for end-to-end migrations
 		* VM Import/Export: used to migrate existing apps/VM's to EC2's; can be used for Disaster Recovery or lets you use aws as a second site
 		* Download Amazon Linux 2 as an iso
@@ -1156,7 +1157,7 @@ Simple Queue Service (SQS): fully managed queuing service; lets you decouple and
 		* default visibility time is 30 seconds, but you can set it to be anytime btwn 0 seconds and 12 hours
 	# * Delay Queues: lets you postpone the delivery of messages to consumers for a set amount of time
 	# 	* default is 0 seconds, but the max is 900
-	# 	* for Standard queues it applies to only new messages, but for FIFO queues it applies to ALL messages currently in the queue
+	# 	* for Standard queues it applies to only new messages, but for FIFO queues it also applies to ALL messages currently in the queue
 	# * Message Timers: same as Delay Queues, but only applies to INDIVIDUAL MESSAGES; not supported for FIFO queues
 	# * Temporary queues: high-throughput, cheep, short-lived queues that get deleted when they're no longer being used
 	* Polling: the method in which we retrieve messages from the queue
@@ -1166,8 +1167,8 @@ Simple Queue Service (SQS): fully managed queuing service; lets you decouple and
 	* Message Metadata: lets u attach metadata to ur SQS messages
 	* Access Policy: they are to your SQS Queue what Bucket Policies are to your S3 buckets; they're the same thing
 	# * SQS supports the Advanced Message Queuing Protocol(AMQP), which takes the producer-consumer model and has an AMQP broker handle the queue w/ an added Exchange before the queue
-	# 	* messages are published to Exchanges, which distribute copies of the message to queues using rules called Bindings
-	# 	* messages are only removed from the queue when the consumer acknowledges the broker
+	# 	* messages are published to Exchanges, which distribute copies of the message to multiple queues using rules called Bindings
+	# 	* messages are only removed from the queues when the consumer acknowledges the broker
 	# 	* 4 types of Exchanges u can use:
 	# 		* Direct(default)
 	# 		* Fanout
@@ -1217,14 +1218,14 @@ Simple Notification Service (SNS): fully managed; subscribe and send push notifi
 			* Deny: blocks data from being sent
 		* good for complying with privacy regulations under HIPAA, PCI, and FedRAMP
 		* only supported for Standard SNS Topics, not FIFO
-	# * SNS Delivery Policy: defines how SNS does retries when delivering messages
+	# * Delivery Policy: defines how SNS/SQS does retries when delivering messages
 	# 	* when the Delivery Policy is exhausted, SNS stops any retries and either discards the message or sends it to the Dead Letter Queue if one exists
 	# 	* Dead Letter Queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
-		# * here's how the retries are defined (1st of each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
-		# 	* Immediate Retry Phase: 3 times w/o delay (Data Firehose, Lambda, SQS) or 0 times w/o delay (SMTP, SNS, Mobile Push Notifications)
-		# 	* Pre-Backoff Phase: 2 times, 1 second appart or 10 seconds apart
-		# 	* Backoff Phase: 10 times w/ exponential backoff from 1 second to 20 seconds or from 10 seconds to 600 seconds
-		# 	* Post-Backoff Phase: 100,000 times, 20 seconds appart or 38 times, 600 seconds apart
+	# 	* here's how the retries are defined (1st of each is for Data Firehose, Lambda, and SQS, while the second of each is for SMTP, SNS, and Mobile Push Notifications):
+	# 		* Immediate Retry Phase: 3 times, 0 seconds apart (Data Firehose, Lambda, SQS) or 0 times, 0 seconds apart (SMTP, SNS, Mobile Push Notifications)
+	# 		* Pre-Backoff Phase: 2 times, 1 second apart or 10 seconds apart
+	# 		* Backoff Phase: 10 times w/ exponential backoff from 1 second to 20 seconds or from 10 seconds to 600 seconds
+	# 		* Post-Backoff Phase: 100,000 times, 20 seconds apart or 38 times, 600 seconds apart
 Simple Workflow Service(SWF): fully-managed; allows you to coordinate, track, and audit multi-step, multi-machine application jobs; used for work across distributed and/or decoupled applications
 	* Workflows are composed of Tasks, which represent each step in the Workflow
 	* also allows for coordination of media, back-end, business, and analytical components as well
@@ -1308,7 +1309,7 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 			* the advantage with Cookies being if you wanted to provide access to multiple private files instead of just one
 		# * when you create a CloudFront Signed URL or signed cookie, you attach a policy to it
 		# 	* the policy can include: url expiration time/date, IP ranges (that have access to it), and trusted signers (which AWS accounts can create signed urls?)
-		# 	* also a key-pair is created when you create a signed url/cookie that is account-wide and managed by the Root User
+		# 	* also a key-pair is created that is account-wide and managed by the Root User used as auth in order to get temp access to objects
 		# 	* can utilize caching features
 		# 	* if your Origin is EC2 then use CloudFront
 		# 	* S3 presigned urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first

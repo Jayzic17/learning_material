@@ -366,7 +366,7 @@ EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, H
 EFS: Elastic File Storage; file storage that you can mount to multiple EC2 servers at the same time
 	* EFS is EBS except it automatically can change it's storage size to accommodate more or less data (elastic); multiple EC2's can pull from the same EFS; virtual disk attached to an EC2
 AWS Snow Family: physically moving data in or out of the cloud to and from S3
-# Snowcone: either 8TB HHD or 14TB SSD
+# Snowcone: either 8TB HDD or 14TB SSD
 # 	* can send data to aws 2 ways:
 # 		* physically sending it
 # 		* DataSync, which u run on the Snowcone itself
