@@ -1409,7 +1409,7 @@ Secrets Manager: same as Parameter Store, except it automatically rotates secret
 		* Registry: Storage for container images; used for downloading images that will go on to create containers
 	* when you launch an ECS, you have the option to pass EC2 User Data to the instance
 		* useful for when you want to run automated tasks and install packages, apply updates, etc. on startup
-	# * Amazon ECS Anywhere: lets u register external VMs from your on-premise to your ECS cluster
+	# * Amazon ECS Anywhere: "I want to run an ECS deployment on my own on-prem infrastructure"
 	* Fargate: Serverless container engine; you pay for resources and duration per application; works with both ECS and EKS; each workload runs on its own kernel
 		* you would choose EC2 for containerized apps instead of Fargate when you need to meet compliance req's, need more customization, or if your apps require access to GPU's
 		# * it's serverless, so aws manages the EC2's for you
@@ -1420,10 +1420,10 @@ Secrets Manager: same as Parameter Store, except it automatically rotates secret
 		* ...also your containers are grouped into Pods: which is similar to a Task in ECS
 		* also supports EC2 and Fargate
 		* you would use EKS if you're already using Kubernetes(K8), or want to migrate to AWS
-		# * Amazon EKS Connector: BYOD your own kubernetes cluster to EKS, which then lets u visualize it in the EKS console
+		# * Amazon EKS Connector: connect your own kubernetes cluster from on-prem to EKS, which then lets u visualize it in the EKS console
 		* eksctl: CLI tool for easily setting up kubernetes clusters on aws; it's the aws version of kubectl
 		* EKS Distro(EKS-D): custom distro to use for EKS clusters
-		# * EKS Anywhere: ECS Anywhere, but for kubernetes clusters
+		# * EKS Anywhere:"I want to run an EKS deployment on my own on-prem infrastructure"
 	* when configuring a Task for either ECS or Fargate, each Task must be assigned to a Security Group and IAM Role
 	# * ECS Exec: service that lets u easily and directly exec into your ECS Containers; works for both ECS and Fargate; accessible via the AWS CLI
 	# * ECS Service Connect: makes it easy to setup a service mesh for service-to-service communication within ur cluster, so that services can easily talk to other services in ur cluster
@@ -1452,11 +1452,11 @@ AWS CLI:
 	* CLI is installed using a Python Script, important flags: --profile lets you switch btwn AWS accounts and --output lets you change the output to text, json, and table
 		* you use the aws configure command to setup your AWS credentials for the CLI
 	* you need to set up access using IAM first before being able to use the CLI
-Aurora: fully managed Postgres or MySQL compatible relational database designed to scale and be really fast
+# Aurora: fully managed Postgres or MySQL compatible relational database designed to scale and be really fast
 	* combines speed and availability of high-end db's w/ the simplicity and cost-effectiveness of open-source db's
 	# * Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
 	* 1/10th the cost of other solutions, offering similar performance and availability; but more expensive than RDS
-	* storage is auto-scaled; you start with 10GB, and scale in 10GB increments up to 64TB or 128TB; related computing resources can scale up to 32 CPUs and 244GB of memory
+	# * storage is auto-scaled; you start with 10GB, and scale in 10GB increments up to 64TB or 128TB; related computing resources can scale up to 32 CPUs and 244GB of memory
 	# * holds a minimum of 6 copies of your DB (2 copies per AZ (3 AZ's)); you can lose up to 2 copies w/o affecting write availability and 3 copies w/o affecting read availability; max of 15 replicas
 	# * backups and failovers are automatic; they are always enabled and don't impact performance
 	# 	* when the primary DB of Aurora goes down, it will attempt to create a new DB in the same AZ as the one that failed and is done on a best-effort basis
@@ -1497,7 +1497,7 @@ Aurora: fully managed Postgres or MySQL compatible relational database designed 
 	# 		* meaning it takes 1 second for Aurora Global Database to react to an outage and less than 1 minute to promote a secondary Region to Master with read/write capabilities	
 	# * RDS Data API: lets u use HTTP requets to securely query an Aurora database from your RDS instance
 	# 	* unlimited requests per second
-	# 	* Data API calls are excluded by CloudTrail by default since they are data events
+	# 	* Data API calls are excluded by CloudTrail by default since they are Data Events
 	# 	* multi statements aren't supported
 	# 	* cannot retrieve multi-dimensional arrays for a query's column
 	# 	* only supports specific datatypes
@@ -1523,7 +1523,7 @@ Redshift: AWS-managed petabyte-scale data warehouse
 	* Redshift uses multiple compression techniques: similar data is stored sequentially on disk, does not require indexes or materialized views which saves a lot of space,...
 		* ...and when loading data to an empty table data is sampled and the most appropriate compression scheme is automatically selected
 	* uses Massively Parallel Processing (MPP): meaning it automatically distributes data and query loads across all nodes; allows you to add new nodes while still maintaining high query performance 
-	# * backups are enabled by default with a 1 day retention period, which can be modified to be up to 35 days
+	 # * backups are enabled by default with a 1 day retention period, which can be modified to be up to 35 days
 	# * Redshift always tries to keep at least 3 copies of your data: the OG copy, replicas of the compute nodes, and an S3 backup copy
 	* you can also asynchronously replicate your Redshift Snapshots to S3 in a different region for disaster recovery
 	* Nodes are charged per node per hour; Leader Nodes are NOT charged; only Compute Nodes get charged
@@ -1567,7 +1567,7 @@ CloudTrail: logs and monitors API calls and actions btwn AWS services
 	* 2 types of events in CloudTrail:
 		* Management Events: tracks management operations; turned on by default; can't be turned off
 			* EX: configuring security (EX: through IAM), registering devices, configuring rules for routing data, and setting up logging (EX: through CloudTrail)
-		* Data Events: turned off by default; data events are high volume, so additional charges; tracks specific operations only for Lambda and S3 (EX: GetObject, DeleteObject, PutObject)
+		# * Data Events: turned off by default; data events are high volume, so additional charges; tracks specific operations only for Lambda and S3 (EX: GetObject, DeleteObject, PutObject)
 AWS Lambda: run code w/o provisioning and managing servers; they're serverless functions; pay only for the compute time you consume; very cheap
 	* Lambda executes your code only when needed
 	* Lambda can scale to meet bursts of traffic in seconds, whereas it takes minutes for services like Auto Scaling groups to provision new resources
