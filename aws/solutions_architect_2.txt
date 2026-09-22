@@ -1523,7 +1523,7 @@ Redshift: AWS-managed petabyte-scale data warehouse
 	* Redshift uses multiple compression techniques: similar data is stored sequentially on disk, does not require indexes or materialized views which saves a lot of space,...
 		* ...and when loading data to an empty table data is sampled and the most appropriate compression scheme is automatically selected
 	* uses Massively Parallel Processing (MPP): meaning it automatically distributes data and query loads across all nodes; allows you to add new nodes while still maintaining high query performance 
-	 # * backups are enabled by default with a 1 day retention period, which can be modified to be up to 35 days
+	# * backups are enabled by default with a 1 day retention period, which can be modified to be up to 35 days
 	# * Redshift always tries to keep at least 3 copies of your data: the OG copy, replicas of the compute nodes, and an S3 backup copy
 	* you can also asynchronously replicate your Redshift Snapshots to S3 in a different region for disaster recovery
 	* Nodes are charged per node per hour; Leader Nodes are NOT charged; only Compute Nodes get charged
@@ -1570,11 +1570,11 @@ CloudTrail: logs and monitors API calls and actions btwn AWS services
 		# * Data Events: turned off by default; data events are high volume, so additional charges; tracks specific operations only for Lambda and S3 (EX: GetObject, DeleteObject, PutObject)
 AWS Lambda: run code w/o provisioning and managing servers; they're serverless functions; pay only for the compute time you consume; very cheap
 	* Lambda executes your code only when needed
-	* Lambda can scale to meet bursts of traffic in seconds, whereas it takes minutes for services like Auto Scaling groups to provision new resources
-	* scales automatically up to 1000 lambda functions in seconds
+	# * Lambda can scale to meet bursts of traffic in seconds, whereas it takes minutes for services like Auto Scaling groups to provision new resources
+	# * scales automatically up to 1000 lambda functions in seconds
 	* can set the time of a Lambda to be 3 seconds(default), 1 second(min), or 15 minutes(max)
-	* can set the storage of a Lambda to be 512MB(default, min) or 10GB(max)
-	* can set the memory of a Lambda to be 128MB(default, min) or 10GB(max)
+	# * can set the storage of a Lambda to be 512MB(default, min) or 10GB(max)
+	# * can set the memory of a Lambda to be 128MB(default, min) or 10GB(max)
 	* can be invoked in 2 ways:
 		* Sync Invocations: data that waits for a response
 		* Async Invocations: data that immediately returns to an async aws service (EX: SNS/SQS, another Lambda, EventBridge)
@@ -1624,7 +1624,8 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	# * Execution Role: Lambda function policy that gives it permission to access certain aws services and resources
 	# * Resource-based Policy: Lambda function policy that gives other aws accounts access to use your Lambda functions
 	* 2 ways to get Lambda function version: AWS_LAMBDA_FUNCTION_VERSION or getFunctionVersion
-	# * if Lambda functions fail, they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
+	# * if Lambda functions fail (when invoked asynchronously), they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
+		# * when it is invoked synchronously however, there is no automatic retry attempts
 	* Lambda function deployment types:
 		* Canary: traffic is shifted in 2 increments:
 			* 1st increment: % of traffic that's shifted to your updated lambda functions
