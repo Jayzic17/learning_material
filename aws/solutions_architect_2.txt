@@ -550,7 +550,7 @@ CloudWatch: monitors your cloud
 	* CloudWatch Dashboards: lets you create dashboards using CloudWatch Metrics
 	# * ServiceLens: visualize and analyze the health, performance, and availability of ur app in a single place
 	* Container Insights: for Containers and Microservices
-	# * Synthetics: tests ur apps to see if they're broken
+	# * Synthetics: tests ur apps to see if they're broken using canaries
 	# * Contributer Insights: view the top contributors impacting the performance of ur app in real-time
 	* Hypervisor: lets you host, access, and run multiple Virtual Machines on a single piece of hardware
 
@@ -577,7 +577,7 @@ EFS: scalable cloud network file system (NFS); you can attach one EFS to multipl
 	# * FSx Windows File Server: fully managed Microsoft Windows file system, so that you can move windows-based apps that require file storage to AWS; built using Windows Server
 	# 	* runs on Windows Servers (not EC2's), SMB file system (not NFS)
 	# 	* integrates with Microsoft Active Directory
-	# 	* offers single and multi-az deployments with SSD and HDD storage options
+	# 	* offers single and multi-AZ deployments with SSD and HDD storage options
 	# 	* allows access to file systems to multiple VPC's, accounts, and Regions through VPC Peering and Transit Gateway
 	# 	* FSx File Gateway: allows your on-prem files to be stored in Amazon FSx Windows File Storage(WFS)
 	# 		* u must have on-premise access to FSx Windows File Server either through a VPN or through AWS Direct Connect
@@ -861,8 +861,8 @@ VPC:
 	# * VPC's are region-specific: they can't span regions, you can create up to 5 VPC's per region, every region comes with a default VPC, and you can have 200 subnets per VPC
 	# * DNS hostnames are disabled by default; enabling it will allow your VPC instance to have domain name addresses
 	* NACLs: a layer of security that acts as a virtual firewall for controlling traffic in and out of subnets
-		* subnets can only belong to a single NACL, but NACL's can associate with multiple subnets; VPCs automatically get a default NACL which allows all inbound and outbound traffic b/c...
-			* ...NACLs don't care about the state of the traffic
+		# * subnets can only belong to a single NACL, but NACL's can associate with multiple subnets; VPCs automatically get a default NACL which allows all inbound and outbound traffic b/c...
+		# 	* ...NACLs don't care about the state of the traffic
 		* this makes NACL's stateless, meaning they'll just allow anything unless you explicitly define DENY rules at the inbound and outbound levels
 		* each NACL contains a set of rules that ALLOW and DENY traffic in and out of subnets, meaning it has inbound and outbound rules, unlike Security Groups which only have ALLOW
 		* associating a subnet with a new NACL will disassociate the previous association for you
@@ -1216,8 +1216,8 @@ Simple Notification Service (SNS): fully managed; subscribe and send push notifi
 			* Audit: audit the message, then send findings to CloudWatch, S3, or Data Firehose
 			* De-identify: mask/redact data
 			* Deny: blocks data from being sent
-		* good for complying with privacy regulations under HIPAA, PCI, and FedRAMP
-		* only supported for Standard SNS Topics, not FIFO
+		# * good for complying with privacy regulations under HIPAA, PCI, and FedRAMP
+		# * only supported for Standard SNS Topics, not FIFO
 	# * Delivery Policy: defines how SNS/SQS does retries when delivering messages
 	# 	* when the Delivery Policy is exhausted, SNS stops any retries and either discards the message or sends it to the Dead Letter Queue if one exists
 	# 	* Dead Letter Queue: feature of SQS and SNS that isolates problematic messages (like if a message in the queue can't be processed/doesn't succeed) in the queue for debugging and assessment
@@ -1641,7 +1641,7 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 	* frequently identical queries are stored in the cache for fast processing
 	* In-Memory Data Store: data stored In-Memory(RAM); low durability, so risk of data loss, but access is really fast
 	* ElastiCache lets you deploy, run, and scale popular open source-compatible, in-memory data stores
-	# * ElastiCache is only accessible to resources operating in the same VPC; this ensures latency is low
+	# * ElastiCache is only accessible to resources operating in the same VPC (a.k.a: a single Region); this ensures latency is low
 	# * ElastiCache Global Datastores: lets u go multi-AZ and cross-region
 	* has 2 deployment options:
 		* Standard: used for predictable workloads, but u have to manage the cluster and nodes, and ur charged per node and node type (can use w/ AWS Outposts)
@@ -1657,7 +1657,7 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 	# 	* Redis is a key/value store that supports strings, sets, sorted sets, lists, and hashes, while Memcached is a key/value store that only supports strings
 	# 	* Redis AUTH: improves data security in Redis by requiring the user to enter a password before they are allowed to execute Redis commands
 	# 	* MemoryDB: Redis-compatible in-memory database
-	# 		* has additional persistence guarantees over ElastiCache, makingg MemoryDB suitable as a primary database
+	# 		* has additional persistence guarantees over ElastiCache, making MemoryDB suitable as a primary database
 	# 		* the tradeoff being that writes are in milliseconds, whereas ElastiCache is in microseconds, so it's slower
 Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure; it's a PaaS
 	* powered by a CloudFormation template that sets up: 
@@ -1687,7 +1687,7 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 	# 	* and then in those Resources is where u define your Methods (EX: GET, POST, etc.)
 	# 	* u then choose your Integration: which is just what service it calls:
 	# 		* Lambda, HTTP endpoints outside the AWS Network, some mock, any aws service, or a VPC Link
-	# 		* VPC Link: a way to connect to aws resources within a private VPC
+	# 		* VPC Link: lets API Gateway connect to aws resources within a VPC
 	# * when you create an HTTP API, you have to define an API container, and multiple Routes: the urls you define EX: /projects; they can be nested too EX: /projects/-id-/edit
 	# 	* the Methods are part of the Routes when u create your Routes, so u aren't defining 2 seperate things like u are with REST API calls when doing Resources and Methods
 	# 	* u then choose your Integration:
@@ -1727,7 +1727,7 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 	* Same Origin Policy: concept of the Web Application Security Model where a browser permits 1 webpage to run scripts contained on a 2nd webpage, but only if both webpages have the same origin
 		* used to prevent XSS attacks
 		* they ignore tools like Postman or Curl
-	# * CloudWatch Execution Logging: API logging that lets you capture user requests and response payloads as well as error traces
+	# * CloudWatch Execution Logging: API logging that lets you capture user requests and responses as well as error traces
 	# 	* API Gateway manages the CloudWatch Logs by creating the necessary Log Streams and Log Groups, and reports the above data ^ to those Streams
 	# * CloudWatch Access Logging: API logging that lets you as an API developer, log who has accessed your API and how the caller accessed it (which method)
 	# 	* you can also require authorization of your API through AWS Cognito or custom Lambda you can write
@@ -1770,7 +1770,7 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 			# 	* unicode strings w/ a max length limit of 256 characters
 			# 	* Data Streams uses MD5 hash to map Partition Keys to Shards
 			# * you can have multiple consumers, but you must manually configure them
-			# * retention periods can be set to have data persist in the stream from 24(default) to 365 days, however you incur additional charges anytime the retention period is set to over 24 hours
+			# * retention periods can be set to have data persist in the stream from 24 hours(default) to 365 days, however you incur additional charges anytime the retention period is set to over 24 hours
 			# 	* it takes several minutes for the retention period to update once changed
 			# * data in the stream is ordered
 			# * has 2 Capacity Modes:
@@ -1804,7 +1804,7 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 		# * Managed Service for Apache Fink (formally Kinesis Data Analytics): producer and consumer are either Kinesis Firehose or Kinesis Data Streams...
 		# 	* ...with the intermediary being Managed Service for Apache Fink for use in data analytics
 		# 	* data that passes through Managed Service for Apache Fink is run through custom SQL you write, which then outputs to the output stream
-		# 	* really good for real-time analytics
+		 # 	* really good for real-time analytics
 Storage Gateway: lets you extend or backup on-premise storage to the cloud
 	* securely connects your on-premise software appliance: a VM that connects your on-prem to cloud, to cloud storage
 	* scalable and cost effective
@@ -1840,9 +1840,9 @@ Storage Gateway: lets you extend or backup on-premise storage to the cloud
 Misc:
 
 the default termination policy when scaling-in services:
-	* If there are instances in multiple Availability Zones, choose the Availability Zone with the most instances and at least one instance that is not protected from scale in.
-	* If there is more than one Availability Zone with this number of instances, choose the Availability Zone with the instances that use the oldest launch configuration.
-	* Determine which unprotected instances in the selected Availability Zone use the oldest launch configuration.
+	* If there are instances in multiple AZs, choose the AZ with the most instances and at least one instance that is not protected from scale in.
+	* If there is more than one AZ with this number of instances, choose the AZ with the instances that use the oldest launch configuration.
+	* Determine which unprotected instances in the selected AZ use the oldest launch configuration.
 	* If there is one such instance, terminate it.
 	* If there are multiple instances to terminate based on the above criteria, determine which unprotected instances are closest to the next billing hour
 	* If there is one such instance, terminate it.
@@ -1868,11 +1868,11 @@ AWS site-to-Site VPN: lets you connect your AWS VPC to your on-premise network
 		* Target Gateway: refers to the target for the VPN (in this case aws)
 		* Virtual Private Gateway: refers to the target endpoint in aws for the VPN (in this case your VPC)
 		* Transit Gateway
-	* to have an site-to-site VPN connection btwn your on-premise and AWS, you need to configure an Internet-routable static IP of your Customer Gateway for your on-prem
+	* to have a site-to-site VPN connection btwn your on-premise and AWS, you need to configure an Internet-routable static IP of your Customer Gateway for your on-prem
 	* you can enable AWS Global Accelerator with your AWS site-to-site VPN
 VPN's use IP Security (IPSec) and TLS Tunnels to secure your private connections and sessions
 If data is taking a long time to transfer in your VPN's, you can increase the speed by enabling ECMP
-	* ECMP: each VPN Tunnel in AWS has 2 VPN Endpoints. Equal Cost Multi-Path is used to carry traffic to both Endpoints instead of just 1, which increases data transfer speeds for a VPN
+	* Equal Cost Multi-Path (ECMP): each VPN Tunnel in AWS has 2 VPN Endpoints. Equal Cost Multi-Path is used to carry traffic to both Endpoints instead of just 1, which increases data transfer speeds for a VPN
 BGP: a protocol that manages the routed peering, prefix advertisement, and routing of packets btwn different networks across the Internet using ASN to uniquely identify each network
 	* you would consider this when talking about trying to connect other networks to the one you're trying to host on using VPN connections by referencing your host network's Virtual Private Gateway
 	* make sure the other networks don't have any overlapping IP's, and that BGP ASN is unique at each of these other networks
@@ -1906,10 +1906,10 @@ to move the master account of one organization to another:
 		* cause the master account cannot be deleted
 Resource Access Manager lets you share something from 1 Organization to the AWS Accounts of another Organization, NOT to the Organization itself
 Cloudfront vs S3 Transfer Acceleration vs S3 Cross-Region replication:
-	* Cloudfront is the cheepest, the other 2 cost money
+	* Cloudfront is the cheepest (u have the option to use the free tier), the other 2 cost money
 	* you use cross-region replication for DR and low latency access locally in S3
 	* you would use Transfer Acceleration if people from around the world using S3 are uploading to one location, or you regularly send TB's of data across Regions
-	* you would use cloudfront if people around the world are trying to download things from S3, but they're slow
+	* you would use Cloudfront if people around the world are trying to download things from S3, but they're slow
 reasons why a compute resource might be stuck in the RUNNABLE state:
 	* awslogs agent isn't configured
 	* insufficient resources
@@ -1924,13 +1924,13 @@ reasons why a compute resource might be stuck in the RUNNABLE state:
 		* data replication is gonna be determined by your Recovery Time Objective (RTO) and your Recovery Point Objective (RPO)
 AWS Glue: serverless data integration service that makes it easier to discover, prepare, and combine data for analytics, machine learning, and app development
 	* you can then query all that data using Athena, EMR, and Redshift Spectrum
-	* discover and connect to more than 70 data sources and manage your data in a ccentralized data catalog
+	* discover and connect to more than 70 data sources and manage your data in a centralized data catalog
 	* AWS Glue Table: used to define data schemas and metadata
 		* u must specify the data format as JSON, CSV, XML, or Parquet
 		* data can be sourced from S3, Kinesis, or Kafka
 	* AWS Glue Database: container for multiple Glue Tables
 	* AWS Glue Crawler: used to crawl data and updates/creates your Glue dashboard with Tables, which can be used to perform ETL (Extract, Transform, Load) operations
-	* AWS Glue Classifier: component of Crawler that is used to analyze a targeted data source and generates the schema to use, for the Tables
+		* AWS Glue Classifier: component of Crawler that is used to analyze a targeted data source and generates the schema to use for the Tables
 		* can crawl from S3, Redshift, Snowflake, RDS, DynamoDB, MongoDB, Delta Lake, or Apache Iceberge Tables in S3
 		* it can crawl on-demand or based on a schedule
 	* Jobs: represents the types of things u can do in AWS Glue
@@ -1946,8 +1946,8 @@ AWS Glue: serverless data integration service that makes it easier to discover, 
 				* once ur done making your pipeline it also gives u the python script version of it which u can download and run
 		* you can create Jobs in Visual ETL(AWS Glue Studio), Jupyter Notebooks(IDE), or the script editor within aws
 		* the DPUs for a Job are determined by the number of worker nodes u assign, as well as what type they are
-	* AWS Glue Data Catalog: fully managed, serverless catalog service that is compatible w/ Apache Hive Metastore
-		* makes it easy to store, annotate, and share metadata about their data
+	* AWS Glue Data Catalog: fully managed, serverless catalog service for all your metadata in aws Glue; compatible w/ Apache Hive Metastore
+		* makes it easy to store, annotate, and share metadata
 		* you only pay for what u use
 		* integrates with S3, RDS, Redshift, Athena, Glue ETL, and EMR
 		* 2 Table formats:
