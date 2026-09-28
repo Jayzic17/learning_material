@@ -15,8 +15,8 @@ hybrid deployment model: companies that use a mix btwn cloud and on-premise mode
 regions: a location on earth that contains multiple availability zones
 	* each region has at least 2 AZ's, every region is physically isolated from one another, AWS largest region is US-EAST-1, and billing is always in US-EAST-1
 	* not all services are available in all regions and < 10ms latency btwn AZs
-availability zones: discrete AWS data centers
-edge locations: an AWS data center that is owned and run by a trusted AWS partner; offers low latency access for customers
+Availability Zones: discrete AWS data centers
+Edge Locations: an AWS data center that is owned and run by a trusted AWS partner; offers low latency access for customers
 	* endpoints of Amazon's Content Delivery Network (CDN) that are used to cache content, so that latency is reduced as much as possible for customers
 	* edge locations allow users to have low latency requests no matter where they are geographically located
 multi-AZ: distributing your companies instances over multiple AZ's in case one goes down
@@ -32,7 +32,7 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 			# * default on demand instance limit is 20 per Region; you can bypass this by submitting a limit increase form to AWS
 		* reserved instances(RI): useful for apps with predictable usage, apps that require reserved capacity, users who want to make their payments upfront to reduce costs even further
 			* you commit to a 1-3 year contract. Best used for predictable workloads and/or if you want to reserve servers for specific timeframes. Best long-term solution
-			* reserved instances can be sold at the Reserved Instance Marketplace, and can be shared btwn multiple accounts in the same org 
+			# * reserved instances can be sold at the Reserved Instance Marketplace, and can be shared btwn multiple accounts in the same org 
 			* EC2 reserved pricing: TERM x CLASS OFFERING x PAYMENT OPTION
 				* 1 or 3-year contracts; the longer the TERM, the greater the savings
 				* all upfront, partial upfront, and no upfront; the greater the PAYMENT OPTION (all upfront being the best), the greater the savings
@@ -55,11 +55,11 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 			* spot instances are designed for small applications and/or have flexible start and end times
 			* spot instances can be terminated at any time if AWS needs the servers for on-demand customers. You don't get charged after AWS terminates it, but you do if you're the one that terminated it
 		* dedicated hosts: useful for regulatory requirements that don't support multi-tenancy; also good for licensing of software
-			* can be purchased on-demand, which gets charged hourly
+			# * can be purchased on-demand, which gets charged hourly
 			* only 70% savings compared to on-demand, so most expensive, but the trade-off is you get a single tenant deployment as opposed to a multi-tenant one
 	* you can apply roles to EC2 instances
 	# * Capacity Reservations(a.k.a Instance Savings Plan): lets you reserve a specific instance type/family of EC2s for a specific Region and AZ
-		* is charged at the instance type's on demand rate, whether an instance is running or not
+		# * is charged at the instance type's on demand rate, whether an instance is running or not
 		* automatically reduces your cost on the selected instance family in that region regardless of AZ, size, OS or tenancy
 		* give you the flexibility to change your usage between instances within a family in that region
 		* EX: you can move from c5.xlarge running Windows to c5.2xlarge running Linux and automatically benefit from the Savings Plan prices
@@ -74,8 +74,8 @@ multi-tenant: multiple companies sharing the same physical server
 single-tenant: one company gets their own physical server
 SSM: simple sessions manager; it's what you use to start, record, and log all user sessions that go on in your servers
 AMI: amazon machine image; disk image copy of your server
-auto-scaling groups: allows you to increase or decrease the number of servers automatically
-elastic load balancer: allows you manage the load traffic across all of your servers
+Auto-scaling Groups(ASG): allows you to increase or decrease the number of servers automatically
+Elastic Load Balancer(ELB): allows you manage the load traffic across all of your servers
 	* load balancers come in 4 different flavors:
 		* CLB (Classic) is the legacy service that offered Layer 4 and 7 load balancing; was intended for apps that use the EC2 - Classic Network; has now been split up into ALB and NLB
 		* NLB (Network) Layer 4 -> IP Protocol data; optimized for volatile traffic; has low-latencies; handles TCP and UDP traffic; very important for high performance ex: video games
@@ -192,7 +192,7 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CloudFront: cloud distribution network; you use it to copy your data to multiple edge locations, so that users can access that data as quick as possible
-	* content delivery network (CDN); content is cached to nearest edge location for ~24 hrs, so don't have to keep downloading something from the origin
+	# * content delivery network (CDN); content is cached to nearest edge location for ~24 hrs, so don't have to keep downloading something from the origin
 	* you can use CloudFront to store dynamic websites, streaming, and interactive content 
 	* 2 types of distributions in CloudFront:
 		* Web Distributions: websites
@@ -253,7 +253,7 @@ AWS marketplace: place where you can buy and download AWS stuff already made by 
 	* you can even use it to download services as alternatives/replacements to similar services already offered in aws
 cost explorer: allows you to visually see the billing of each member associated with your account
 	* allows you to visualize and understand your AWS costs and usage over time; you use it to explore costs AFTER they've been incurred
-	* gives highly accurate cost forecasts for up to 12 months ahead
+	# * gives highly accurate cost forecasts for up to 12 months ahead
 AWS budgets: lets you set up alarms in the event you go over budget, or are about to. Can be budgets based on cost, usage, or reservation (EC2, RDS, Redshift, ElasticCache). can track by mnth, qt, or yr
 	* used to set custom budgets and it alerts you if your costs exceed or are forecasted to exceed your budget amount; used to budget costs BEFORE they have been incurred
 TCO calculator: total cost of ownership; provides reports and presentations that show how much your business would save if you switched from on-premise to cloud. It's only an approximation!
@@ -319,7 +319,7 @@ AWS Organizations: allows you to manage billing, control access, security, compl
 		* root/paying account should be used for billing purposes only
 VPC: virtual private cloud; portion of the AWS cloud network in a region you specify where you can launch AWS services and also launch VPN's
 VPC peering: a network connection btwn 2 VPC's that allows you to route traffic btwn the two
-	* the 2 VPC's can be in separate AWS accounts in different regions and STILL be able to share data with each other
+	# * the 2 VPC's can be in separate AWS accounts in different regions and STILL be able to share data with each other
 	* can be used to replicate data to geographically distinct locations for redundancy, disaster recovery, and fault-tolerance
 AWS Transit Gateway: simplifies the connection management of multiple VPC's across multiple accounts in a company's network
 	* acts as a central hub for which all connections connect to, and then Transit Gateway routes traffic where it needs to go
@@ -339,10 +339,10 @@ CodeDeploy: allows you to deploy code to your on-premise architecture and/or EC2
 	* fully managed deployment service that automates software deployments to compute services
 OpsWorks: allows you to programmatically configure how servers are configured, managed, and deployed; uses managed instances of Chef and Puppet (configuration management tools)
 	* configuration management tools: DevOps tools that automate the process of making code changes, deploying them, and tracking them
-	* OpsWorks Stacks: lets you manage applications and servers on AWS and on-prem by modeling your application as a Stack with different Layers
-		* Stack: a collection of instances/Layers that are managed together for serving a common task (EX: hosting a web application = web app + DB + ELB)
-		* you can deploy and configure EC2's in each Layer or connect other aws resources such as RDS, ELB's, etc.
-		* a common use-case is to have multiple Stacks that represent multiple environments (EX: DEV, PROD)
+	# * OpsWorks Stacks: lets you manage applications and servers on AWS and on-prem by modeling your application as a Stack with different Layers
+	# 	* Stack: a collection of instances/Layers that are managed together for serving a common task (EX: hosting a web application = web app + DB + ELB)
+	# 	* you can deploy and configure EC2's in each Layer or connect other aws resources such as RDS, ELB's, etc.
+	# 	* a common use-case is to have multiple Stacks that represent multiple environments (EX: DEV, PROD)
 CodePipeline: fully managed delivery service that helps you automate your releases in your release pipeline for all your application and infrastructure updates
 	* for CodePipeline, if you want to automatically kick off a pipeline in response to code changes in S3, make sure periodic checks are disabled to allow for events-based triggering of CodePipeline
 codeCommit: fully managed source control service that hosts secure Git-based repos
@@ -359,7 +359,7 @@ EBS: Elastic Block Storage; a hard drive you attach to an EC2 server (ex: SSD, H
 		* Magnetic: lower cost than SSD
 			* throughput optimized HDD
 			* Cold HDD
-			* Magnetic
+			* Magnetic(standard)
 	* EBS is used for installing databases and OS's; you can change the size of the disk, but doesn't do it automatically; virtual disk attached to an EC2
 	* you can use EBS snapshots to save a copy of your storage for fault tolerance and disaster recovery
 		* the amount of data you store in snapshots affects EBS pricing
@@ -376,14 +376,14 @@ AWS Snow Family: physically moving data in or out of the cloud to and from S3
 # 	* multiple layers of security encryption protection
 # 	* can collect IoT data using AWS IoT Greengrass
 # 	* physically smaller than Snowball Edge
-Snowball Edge: same as Snowcone, but with more local processing, edge-computing workloads, and device configuration options
-	* has an LCD display, can use in a cluster of groups of 3 to 16 devices, and can do local processing and edge-computing workloads
-	* 5 options for device configurations:
-		* storage optimized (for data transfer): 100TB (80TB usable)
-		* storage optimized: 210TB
-		* storage optimized w/ EC2-compatible compute: 80TB, 40 vCPUs, 80GB memory
-		* compute optimized: 28TB SSD, 104 vCPUs, 416GB memory
-		* compute optimized (GPU): same as the P3 instance type in EC2
+# Snowball Edge: same as Snowcone, but with more local processing, edge-computing workloads, and device configuration options
+# 	* has an LCD display, can use in a cluster of groups of 3 to 16 devices, and can do local processing and edge-computing workloads
+# 	* 5 options for device configurations:
+# 		* storage optimized (for data transfer): 100TB (80TB usable)
+# 		* storage optimized: 210TB
+# 		* storage optimized w/ EC2-compatible compute: 80TB, 40 vCPUs, 80GB memory
+# 		* compute optimized: 28TB SSD, 104 vCPUs, 416GB memory
+# 		* compute optimized (GPU): same as the P3 instance type in EC2
 Snowmobile: a whole-ass shipping container pulled by a semi (100PB)
 	* has security features like GPS tracking, Alarm monitoring, 24/7 video surveillance, and an optional security vehicle escort
 
@@ -398,7 +398,7 @@ WorkMail: essentially the Outlook of AWS
 Pinpoint: Marketing campaign management system for sending targeted emails, SMS, notifications, and voice messages
 SES: Simple Email Service; same as Pinpoint, but it's more for when you send out messages as part of your application, like "purchase confirmation" and "one-time code" msg's; good for marketers
 Direct Connect: Dedicated network connection from your on-premise to the AWS network; it's like having a direct fibre optic cable straight to AWS, so really lowers the latency
-Site-to-Site VPN: securely connecting your on-premise to your AWS network  
+Site-to-Site VPN: securely connecting your work devices to your AWS network  
 Client VPN: securely connecting your clients to your AWS network
 Active Directory: lets you integrate directory-aware workloads and AWS resources in conjunction; allows the organization of hierarchies of data across multiple dimensions   
 CloudTrail: logs all API calls btwn AWS services, so you can see who created a bucket, launched an EC2 instance, etc.
@@ -427,9 +427,9 @@ API Gateway: used for creating and communicating with API: it's how applications
 AWS WAF: protects your web applications from the 10 most common web exploits; can use rules and rulesets to allow and deny HTTP requests; can be added to CloudFront and Application Load Balancer
 	* web application firewall; operates at layer 7; protects you from the most common web exploits for layers 1-7
 AWS certificate manager: used for issuing verified certificates for SSL/HTTPS on AWS resources like ELB, WAF, etc.
-AWS Shield: managed DDoS protection service for apps on AWS; protects you from Layer 3,4, and 7 attacks; when you route traffic through Route53 or CloudFront, you're using AWS Shield Standard
-	* protects you from DDoS attacks; everyone has a shield by default
-AWS Shield Advanced: protection against larger DDoS'; $3000/yr; visibility into attacks, 24/7 access to DDoS experts, available on: Route53, CloudFront, ELB, Elastic IP, and AWS Global Accelerator
+# AWS Shield: managed DDoS protection service for apps on AWS; protects you from Layer 3,4, and 7 attacks; when you route traffic through Route53 or CloudFront, you're using AWS Shield Standard
+# 	* protects you from DDoS attacks; everyone has a shield by default
+# AWS Shield Advanced: protection against larger DDoS'; $3000/yr; visibility into attacks, 24/7 access to DDoS experts, available on: Route53, CloudFront, ELB, Elastic IP, and AWS Global Accelerator
 AWS Global Accelerator: you use it to create accelerators to improve availability and performance of you applications
 	* done by using amazon's dedicated network to direct your user traffic to optimal endpoints in the AWS global network
 	* this prevents packet loss, latency, and improves the user's performance by 60%
@@ -562,11 +562,11 @@ Transcribe: converts speech into text
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Serverless Application Repository: allows you to deploy pre-made server less applications
+Serverless Application Repository: allows you to deploy pre-made serverless applications
 AWS Outposts: a way of extending AWS compute services to your own on-premise data centers
 EC2 Image Builder: lets you build custom EC2 images for Linux and Windows
 SNS: used for sending notifications that are triggered by AWS services, whereas SES is optimized for just emails; can send html emails, receive emails, email templates, custom domain names, etc.
-always design for failure: meaning redundantly duplicate stuff across multiple availability zones
+always design for failure: meaning redundantly duplicate stuff across multiple AZs
 Route53: how you get and manage domains, domain names, and domain traffic; Route53 is global just like IAM and S3; also use it to reroute network traffic to other IP's
 	* DNS is how you use domain names to look up IP addresses 
 # Amazon Neptune: a Graph Database; supports multi-AZ
@@ -614,7 +614,7 @@ Aurora Serverless: same as Aurora, but only runs when you need it
 ECS: Elastic Container Service; servers that come preconfigured with Docker running on it for launching Microservices
 	* Docker is a container orchestration tool that automates scheduling, deploying, networking, health-monitoring, and management of containers (Microservices)
 Fargate: same as ECS, but you don't have to worry about EC2 servers; AWS covers it for you, so you only pay for the runtime and computing time of your containers
-AWS Batch: uses spot pricing to launch a bunch of EC2 servers for you to run batch workloads for any kind of AWS computing service
+# AWS Batch: uses spot pricing to launch a bunch of EC2 servers for you to run batch workloads for any kind of AWS computing service
 EKS: same as ECS, but instead it runs on Kubernetes
 AWS database migration service: allows you to quickly and securely migrate entire databases to AWS
 AWS Server Migration Service: allows you to migrate on-premise workloads and/or servers to AWS
