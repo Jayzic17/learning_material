@@ -382,7 +382,7 @@ EC2:
 		# * deprecating an AMI refers to when at what time/date u want the AMI to be deregistered
 		# * disabling an AMI prevents the AMI from being used, but unlike deregistering it still allows you to reenable it later
 		# * AMIs can have the following settings:
-		# 	* Public: any AWS account can use It
+		# 	* Public: any AWS account can use it
 		# 	* Explicit: specific Accounts/Organization can use it
 		# 	* Implicit: only the AMI owner can launch it 
 		# * AMIs have 2 virtualization types:
@@ -441,8 +441,8 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 			* ...create an AMI using the encrypted Snapshot, and then use that AMI to create an EC2 instance
 	# * SSD: really high I/O; can be used as a boot volume
 	# 	* General Purpose SSD(gp2): good for general usage w/o specific requirements; good for web apps and most workloads; IOPS 16,000; throughput 250MB/s
-	# 	* General Purpose SSD(gp3): up to 20% lower cost per GB than gp2; IOPS 16,000; throughput 250MB/s
-	# 	* Provisioned IOPS SSD(io1): when you require really fast IO and throughput; use when IOPS >= 16,000 || throughput >= 500 MB/s; use on mission-critical low latency/high throughput workloads
+	# 	* General Purpose SSD(gp3): up to 20% lower cost per GB than gp2; IOPS 80,000; throughput 2,000MB/s
+	# 	* Provisioned IOPS SSD(io1): when you require really fast IO and throughput; IOPS 64,000; throughput 1,000MB/s; use on mission-critical low latency/high throughput workloads
 	# 		* calculating optimal configuration of IOPS and queue length for Provisioned IOPS SSD volumes: maintain a ratio of 50:1
 	# 	* io2 Block Express (the new io2): higher throughput and IOPS than io1; supports larger storage capacity; up to 256,000 IOPS; throughput up to 4,000MB/s
 	* HDD: good for long continuous throughput of data, but really bad with a lot of very small reads and writes (think about the writing arm on the record); can't be used as a boot volume
@@ -655,7 +655,7 @@ RDS: scalable, managed(not fully), relational database service
 	# 	* uses SSD block storage in order to utilize temporary tables for greater performance
 	# 	* sorts, hash aggregations, high-load JOINs, and Common Table Expressions(CTEs) can make good use of temporary tables
 	# 	* only available for specific RDS Instance Class and db offering combos
-	* IAM Authentification: lets you authenticate to an RDS instance using an IAM authentification token instead of having to use credentials
+	# * IAM Authentification: lets you authenticate to an RDS instance using an IAM authentification token instead of having to use credentials
 		# * works for MySQL, MariaDB, and Postgres; each token has a TTL of 15 minutes
 	# * Kerberos Authentification: Kerberos is a network authentification protocol which is integrated into Microsoft Active Directory
 	# 	* works with AWS Directory Service for Microsoft Active Directory and your own on-premise AD
@@ -689,7 +689,7 @@ RDS: scalable, managed(not fully), relational database service
 		* launch an EC2 and connect to it via SSH or Sessions Manager
 		* using AWS Client VPN 
 		* using AWS Direct Connect
-		* ...but you CAN'T use CloudShell
+		# * ...but you CAN'T use CloudShell
 	# * Amazon RDS Extended Support: lets you run ur RDS db type(MySQL, Postgres, etc.) on a major version above what RDS normally allows at most, but for an additional cost
 	# * Enhanced Monitoring: a feature of RDS; Enhanced Monitoring metrics are stored in CloudWatch logs for 30 days;
 	# 	* different from CloudWatch metrics, where CloudWatch takes data at the hypervisor layer of the DB, whereas Enhanced Monitoring gathers it from an agent on the DB instance
@@ -1327,7 +1327,7 @@ KMS: secure key management, encryption, and decryption
 	# * it's regional, not global
 	* manages Customer Master Keys (CMKs) i.e keys you or aws create
 		* 3 types of CMK's:
-			* Customer Managed: allows key rotation, controlled via key policies, can be enabled/disabled, you can view and manage it, and is dedicated to your account
+			# * Customer Managed: allows key rotation, controlled via key policies, can be enabled/disabled, you can view and manage it, and is dedicated to your account
 			# * AWS Managed CMK(default): free, only the aws service you use it for can use it, so can't manage it, but it's dedicated to your account and you can view it 
 			# * AWS Owned CMK: used by aws on a shared basis across many aws accounts, so you can't view them and they aren't dedicated to your account, but you can manage them
 		* 2 types of encryption:
