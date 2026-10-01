@@ -1818,19 +1818,19 @@ Storage Gateway: lets you extend or backup on-premise storage to the cloud
 			* access your files through a Network File System(NFS) or SMB mount point (SMB is an internet protocol used for NFS'); i.e they're both just ways of accessing the files
 			* ownership, permissions, and timestamps are all stored within the S3 metadata of the object associated with that file
 			* now that they're objects you get all the benefits of S3 like Bucket Policies, Versioning, Lifecycle Management, Cross-Region Replication, etc.	
-		* Volume Gateway: stores copies of your hard disk drives in S3; used for backup; uses the Internet Small Computer Systems Interface(iSCSI) block protocol
-			* data is backed up as point-in-time snapshots of the volumes, and stored in the cloud as AWS EBS Snapshots
+		// * Volume Gateway: stores copies of your hard disk drives in S3; used for backup; uses the Internet Small Computer Systems Interface(iSCSI) block protocol
+		// 	* data is backed up as point-in-time snapshots of the volumes, and stored in the cloud as AWS EBS Snapshots
 				* Snapshots are incremental backups that only capture changed blocks in the volume
 				* all Snapshots are compressed
 			* 2 methods of storing the volumes:
-				* Stored Volumes: primary data is on-premise, while asynchronous backups are uploaded to AWS
+				// * Stored Volumes: primary data is on-premise, while asynchronous backups are uploaded to AWS
 					* low latency access to entire datasets, while providing durable off-site backups
-					* Stored Volumes can be between 1GB - 16TB
-				* Cached Volumes: primary data is AWS S3, while most frequently accessed files remain cached on-premise
+					// * Stored Volumes can be between 1GB - 16TB
+				// * Cached Volumes: primary data is AWS S3, while most frequently accessed files remain cached on-premise
 					* minimizes the need to scale your on-premise, while still giving your apps low latency data access
 					* create storage volumes in AWS and attach them as iSCSI devices from your on-premises' servers
 						* your gateway stores data you write to these volumes in S3 and retains recently read data in your on-premise storage gateway cache
-					* cached volumes can be between 1GB - 32TB in size
+					// * cached volumes can be between 1GB - 32TB in size
 		* Tape Gateway(VTL): virtual tape library (literally electric tape); used for archiving to S3 Glacier
 			* store data on virtual tape cartridges that you create on your tape gateway
 			* each tape gateway is pre-configured with a media changer and tape drives, which are available to your existing backup applications as iSCSI devices
