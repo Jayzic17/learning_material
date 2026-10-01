@@ -1785,7 +1785,7 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 			* you can convert incoming data to other file formats; you can also compress the data; you can also secure the data
 				* you can transform data before it's sent to consumers using Lambda, but whatever u transform it to has to be less than 6MB
 			* you pay only for data that is consumed
-			* simpler setup than On Demand Kunesis Data Streams w/ less customization
+			* simpler setup than On Demand Kinesis Data Streams w/ less customization
 			# * 4 kinds of producers u can define:
 			# 	* Kinesis Data Streams
 			# 	* Amazon Managed Streaming for Apache Kafka(MSK)
