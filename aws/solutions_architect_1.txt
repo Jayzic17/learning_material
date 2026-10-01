@@ -396,8 +396,8 @@ WorkMail: essentially the Outlook of AWS
 Pinpoint: Marketing campaign management system for sending targeted emails, SMS, notifications, and voice messages
 SES: Simple Email Service; same as Pinpoint, but it's more for when you send out messages as part of your application, like "purchase confirmation" and "one-time code" msg's; good for marketers
 Direct Connect: Dedicated network connection from your on-premise to the AWS network; it's like having a direct fibre optic cable straight to AWS, so really lowers the latency
-// Site-to-Site VPN: securely connecting your work devices to your AWS network  
-Client VPN: securely connecting your clients to your AWS network
+// Site-to-Site VPN: securely connecting your on-prem to AWS
+// Client VPN: securely connecting your devices to your AWS network
 Active Directory: lets you integrate directory-aware workloads and AWS resources in conjunction; allows the organization of hierarchies of data across multiple dimensions   
 CloudTrail: logs all API calls btwn AWS services, so you can see who created a bucket, launched an EC2 instance, etc.
 	* monitors all API calls; good for auditing changes in your cloud; you can collect logs by making a bucket in the root account, then have all linked accounts write to it

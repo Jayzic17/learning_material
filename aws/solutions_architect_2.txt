@@ -1999,7 +1999,7 @@ Migrating from IPv4 to IPv6:
 		* update Route Table for IPv6 to IGW
 		* update Security Group rules to include IPv6 address ranges
 		* migrate over any EC2 instance types that don't support IPv6
-AWS Client VPN: fully managed client-based VPN srvice that lets you access aws resources from your laptop or phone
+AWS Client VPN: fully managed client-based VPN service that lets you access aws resources from your laptop or phone
 	* install any OpenVPN-based client and then use AWS Client VPN
 	* has 2 roles:
 		* Administrators: responsible to setting up and configuring the service
