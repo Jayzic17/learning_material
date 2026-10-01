@@ -785,7 +785,7 @@ Database Migration Service (DMS): migrate relational db's, data warehouses, NoSQ
 		# * AWS Schema Conversion Tool: helps you create some or all of the target tables, indexes, views, triggers, etc. during migration of db's, so you don't have to tediously do that manually
 	* supports homogenous migrations (EX: an Oracle db -> another Oracle db), and heterogeneous migrations (EX: a Microsoft SQL Server db -> an Amazon Aurora db)
 	# * you need AWS Schema Conversion Tool if you are to do a heterogenous migration
-Elastic Map Reduce(EMR): used to process large amounts of data using Apache services running Hadoop; used to run petabyte-scale analysis at <1/2 the cost of similar on-prem solutions and 3x faster than Apache Spark
+// # Elastic Map Reduce(EMR): used to process large amounts of data using Apache services running Hadoop; used to run petabyte-scale analysis at <1/2 the cost of similar on-prem solutions and 3x faster than Apache Spark
 	* solution used for Big Data
 	* it's a cluster of EC2 nodes; you can set the node types to be different so that each node has a separate role within the cluster with different software installed
 	* Node Types:
@@ -1331,7 +1331,7 @@ KMS: secure key management, encryption, and decryption
 			// # * AWS Managed CMK(default): free, only the aws service you use it for can use it, so can't manage it, but it's dedicated to your account and you can view it 
 			// # * AWS Owned CMK: used by aws on a shared basis across many aws accounts, so you can't view them and they aren't dedicated to your account, but you can manage them
 		* 2 types of encryption:
-			* Symmetric(default): same key used for encryption and decryption
+			// # * Symmetric(default): same key used for encryption and decryption
 				* uses AES-256
 				* never leaves aws unencrypted
 				* must call KMS APIs to use

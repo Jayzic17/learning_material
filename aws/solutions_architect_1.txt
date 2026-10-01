@@ -13,7 +13,7 @@ cloud deployment model: "public cloud"; companies that fully utilize cloud compu
 on-premise deployment model: "private cloud," companies that host their own servers and data centers on-site; ex: government
 hybrid deployment model: companies that use a mix btwn cloud and on-premise models; ex: banks and legacy on-premise companies
 regions: a location on earth that contains multiple availability zones
-	* each region has at least 2 AZ's, every region is physically isolated from one another, AWS largest region is US-EAST-1, and billing is always in US-EAST-1
+	// * each region has at least 2 AZ's, every region is physically isolated from one another, AWS largest region is US-EAST-1, and billing is always in US-EAST-1
 	* not all services are available in all regions and < 10ms latency btwn AZs
 Availability Zones: discrete AWS data centers
 Edge Locations: an AWS data center that is owned and run by a trusted AWS partner; offers low latency access for customers
@@ -95,8 +95,7 @@ Elastic Load Balancer(ELB): allows you manage the load traffic across all of you
 U2F Security Key: a type of MFA device that customers can use to protect their AWS resources
 S3: simple storage service; allows you to manage your buckets: it's where you put your objects
 	* object storage for immutable files; files can be from 0 bytes to 5 TB; unlimited storage; it's key/value storage; 99.99% availability, and 11 x 9's durability
-	* buckets in S3 must be unique globally
-		* S3 does not exist in any VPC because it's global
+	// * buckets in S3 must be unique globally, even though buckets are created per Region
 	* objects in S3 consist of:
 		* key: name of the object
 		* value: data of the object
@@ -182,7 +181,6 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 		* aws won't let u turn on Requester Pays for S3 static websites u make...
 	* S3 integrates with life cycling rules and can use MFA with S3
 	* use S3 when you got large files to store; ex: audio, video, and images
-	* S3 is a regional AWS service that gives global views
 	* S3 is used for storing objects; can't install databases or OS's on it
 	* Cross-Region Replication: allows you to have duplicative buckets in multiple regions
 	# * Amazon S3 Transfer Acceleration: this way when users transfer something in S3, they use an optimized network path within Amazon's Edge Network to Edge Locations, as opposed to just the regular internet
@@ -398,7 +396,7 @@ WorkMail: essentially the Outlook of AWS
 Pinpoint: Marketing campaign management system for sending targeted emails, SMS, notifications, and voice messages
 SES: Simple Email Service; same as Pinpoint, but it's more for when you send out messages as part of your application, like "purchase confirmation" and "one-time code" msg's; good for marketers
 Direct Connect: Dedicated network connection from your on-premise to the AWS network; it's like having a direct fibre optic cable straight to AWS, so really lowers the latency
-Site-to-Site VPN: securely connecting your work devices to your AWS network  
+// Site-to-Site VPN: securely connecting your work devices to your AWS network  
 Client VPN: securely connecting your clients to your AWS network
 Active Directory: lets you integrate directory-aware workloads and AWS resources in conjunction; allows the organization of hierarchies of data across multiple dimensions   
 CloudTrail: logs all API calls btwn AWS services, so you can see who created a bucket, launched an EC2 instance, etc.
@@ -460,7 +458,7 @@ Lightsail: simple cloud servers; so it's EC2 but the intention is for simple web
 Key Management Service: (KMS) lets you create and manage encryption keys; multi-tenant HSM; uses envelope encryption; a lot of AWS services allow you to encrypt your data with KMS
 	* regional; manages your keys for encryption and decryption for S3 objects; KMS is on shared physical hardware (multi-tenant)
 HSM: hardware security module; specific type of hardware for storing encryption keys; extremely secure at AWS data centers; stored in memory, so there's never a write to disk
-	* single-tenant; more expensive than KMS; complies with FIPS 140-2 level 3; can use it for multi-AZ
+	// * single-tenant; more expensive than KMS; complies with FIPS 140-2 level 3; can use it for multi-AZ
 Envelope Encryption: encrypting your encryption key with a master key; pretty much just an additional layer of security
 Amazon Macie: fully managed machine learning service that monitors your S3 bucket usage by analyzing your CloudTrail logs to detect and alert you on unauthorized access or potential data leaks
 	* security service that uses machine learning to identify whether stuff in your S3 contains PII to prevent ID theft; gives you dashboards, reporting, and alerts on those discoveries
@@ -587,8 +585,8 @@ Route53: how you get and manage domains, domain names, and domain traffic; Route
 # 		* Gremlin Host Language Embedding: lets u embed Gremlin with whatever programming language u want
 # 	* OpenCypher: another SQL, but for Graph Databases; easier to use than Gremlin, but Gremlin is more proficient
 AWS systems manager: the HQ of where you control your entire AWS infrastructure as well as manage operational and automative tasks across all your AWS resources (databases + servers)
-DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relational database system
-	* DynamoDB is also scalable, can be used in multiple AZ's, but you wouldn't use DynamoDB if you got complex queries like JOINs
+// DynamoDB: NoSQL server-less key/value database, Cassandra-based; a non-relational database system
+// 	* DynamoDB is also scalable, can be used in multiple AZ's, but you wouldn't use DynamoDB if you got complex queries like JOINs
 	* automatically scales to increases in throughput capacity and offers extremely low latency
 Global Tables: DynamoDB replication service that automatically replicates data across multiple regions globally, thus offering low latency to global users
 	* good for big, global applications
@@ -609,7 +607,7 @@ DAX: (DynamoDB Accelerator): in-memory cache for DynamoDB which delivers 10x per
 # 	* has in-transit and at-rest encryption
 # 	* u can only connect to DocumentDB via TLS
 Aurora: relational database; database is fully managed; Aurora MySQL is 5x faster than traditional MySQL and Aurora Postgres is 3x faster than traditional Postgres
-	* Aurora is scalable, can be used in multiple AZ's, and you would use Aurora if you got complex queries like JOINs 
+	// * Aurora is scalable, can be used in multiple AZ's, and you would use Aurora if you got complex queries like JOINs 
 Aurora Serverless: same as Aurora, but only runs when you need it
 ECS: Elastic Container Service; servers that come preconfigured with Docker running on it for launching Microservices
 	* Docker is a container orchestration tool that automates scheduling, deploying, networking, health-monitoring, and management of containers (Microservices)
