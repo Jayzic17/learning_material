@@ -249,7 +249,7 @@ AWS trusted advisor: a service that advises you on saving money, security, perfo
 	* to unlock Trusted Advisor, you need to upgrade your support plan to Business
 AWS marketplace: place where you can buy and download AWS stuff already made by other people for AWS
 	* you can even use it to download services as alternatives/replacements to similar services already offered in aws
-cost explorer: allows you to visually see the billing of each member associated with your account
+Cost Explorer: allows you to visually see the billing of each member associated with your account
 	* allows you to visualize and understand your AWS costs and usage over time; you use it to explore costs AFTER they've been incurred
 	// # * gives highly accurate cost forecasts for up to 12 months ahead
 AWS budgets: lets you set up alarms in the event you go over budget, or are about to. Can be budgets based on cost, usage, or reservation (EC2, RDS, Redshift, ElasticCache). can track by mnth, qt, or yr
@@ -546,7 +546,7 @@ Opex: (operational expenses) refers to ongoing expenses
 tags: words that act as meta-data for making relationships btwn resources
 	* tags also help with automating stuff, for example if all EC2 instances have a similar tag, you can automate a process to have them all do something by referencing that tag
 Tag Editor: where you edit and use tags
-AWS cost allocation tags: tags that lets you organize your resource costs to help you track and categorize your AWS costs
+AWS Cost Allocation tags: tags that lets you organize your resource costs to help you track and categorize your AWS costs
 Rekognition: converts images into tags/text; kind of like those questions that ask you "which of these pictures have stop signs?"
 resource groups: group of resources that share one or more of the same tag
 AWS Config: monitors the configuration of your AWS resources

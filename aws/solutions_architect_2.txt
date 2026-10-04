@@ -424,8 +424,8 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 		# * EBS supports live configuration changes while in production, meaning you can tweak volume type, size, and IOPS capacity w/o interruptions
 		# * EBS volumes can be used even while a Snapshot is in progress
 	* EBS volumes will always be in the same AZ as its associative EC2 instance
-	* Instance Store: similar to EBS, but they're temporary, created from a template stored in S3, can only terminate instances (can't stop them), and data will be lost if it...
-		* ...fails a health check or is terminated
+	// * Instance Store: similar to EBS, but they're temporary, created from a template stored in S3, can only terminate instances (can't stop them), and data will be lost if it...
+	// 	* ...fails a health check or is terminated; is high-throughput and low-latency
 		* good for temporary backup and storing an app's cache, logs, or other random data; but most times you'll use EBS for persistent data use-cases
 		* you cannot add Instance Store volumes once the EC2 instance is launched, u would have to do it before it's launched
 	* EBS volumes vs Instance Store volumes: 
@@ -1032,7 +1032,7 @@ Direct Connect:
 		* any outbound traffic that gets sent outside the aws network
 	# * Link Aggregation Group(LAG): a setup you can specify in Direct Connect that uses the LACP Protocol to aggregate multiple Direct Connect connections at a single Direct Connect endpoint
 	# 	* all LAGs operate in active/active mode, meaning all of the Direct Connect connections in a LAG are active
-Global Accelerator: routes traffic to the closest Edge Location through an optimized path in the AWS global network by using Anycast static IP addresses
+// Global Accelerator: routes TCP and UDP traffic to the closest Edge Location through an optimized path in the AWS global network by using Anycast static IP addresses
 	* 2 Accelerator types:
 		// # * Standard: automatically route to the nearest healthy endpoint
 		// # * Custom: route to specific EC2 instances
@@ -1593,7 +1593,11 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	# 	* also 1st 400,000 GB seconds per month are free, then $0.0000166667 for every GB second after that
 	# 	* billing is rounded up to the nearest 100 milliseconds
 	# 	* the memory allocated to each Lambda function affects the price you pay for Lambda per month
-	* by default you can have 1000 Lambda functions running concurrently
+	// * by default you can have 1000 Lambda functions running concurrently
+	// 	* Provisioned Concurrency: reduces Cold Starts by pre-initializing a concurrent # of Lambda's on a server in order to keep it warm
+	// 		* good for predictable and scheduled traffic
+	// 	* Reserved Concurrency: sets aside a specific amount of concurrency for a single Lambda, which limits the maximum # of executions that Lambda can have
+	// 		* prevents a single Lambda function from consuming all your account's available concurrency and reducing performance impacts on resources downstream
 	* /tmp directory has a max size of 500MB
 	# * Lambda doesn't run in a VPC by default; you can set it to be a VPC to interact with some services like RDS, but the lambda will lose internet access as a result
 	* you can set timeouts to be a maximum of 15 minutes
@@ -1899,6 +1903,7 @@ RAID 6: RAID 0, but with MORE redundancy
 	* minimum of 4 disks required
 Compute Savings Plan: you use this plan when you want to get big money savings on EC2's, Lambdas, and/or Fargate instances under the condition that you commit to a 1-3 year contract
 	* similar to Reserved Instances, but Reserved Instances only gets you savings on EC2's, whereas Compute Savings Plan can also apply to Fargate and Lambda
+		// * this is why it's not as cheap as RI, cause RI restrics you to just EC2's
 	* Compute Savings Plans provide the most flexibility and help to reduce your costs by up to 66%. These plans automatically apply to EC2 instance usage regardless of instance family, size, AZ, Region, OS or tenancy
 	* EX: you can change from C4 to M5 instances, shift a workload from EU (Ireland) to EU (London), or move a workload from EC2 to Fargate or Lambda at any time and automatically continue to pay the Savings Plans price
 to move the master account of one organization to another:
@@ -1967,6 +1972,7 @@ poll-based event sources for Lambda:
 	* SQS
 	* Kinesis
 	* DynamoDB
+// AWS Instance Scheduler: lets you automatically start and stop EC2 and/or RDS instances on a schedule you define; helps to reduce costs
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
