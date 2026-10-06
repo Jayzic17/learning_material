@@ -37,8 +37,8 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 				* 1 or 3-year contracts; the longer the TERM, the greater the savings
 				* all upfront, partial upfront, and no upfront; the greater the PAYMENT OPTION (all upfront being the best), the greater the savings
 				* CLASS OFFERINGs:
-					# * standard: 75% savings compared to on-demand pricing, lets you change RI attributes, and can be bought and sold at the RI Marketplace, but can't be exchanged for a different RI
-					# * convertible: 54% savings compared to on-demand pricing, but doesn't let you change RI attributes, in which case u would have to exchange it for a different RI
+					# * standard: 75% savings compared to on-demand pricing, lets you change RI attributes, and can be bought and sold at the RI Marketplace, but can't be exchanged for different RI's
+					# * convertible: 54% savings compared to on-demand pricing, doesn't let you change RI attributes, but you CAN exchange your instances for different RI's
 					# 	* can't be bought or sold at the RI Marketplace 
 					* scheduled: allows you to reserve servers for specific timeframes
 			* when u purchase a reserved instance, u determine the scope(doesn't affect pricing):
@@ -63,7 +63,8 @@ EC2: elastic cloud compute; it's a name that Amazon gives their servers
 		* automatically reduces your cost on the selected instance family in that region regardless of AZ, size, OS or tenancy
 		* give you the flexibility to change your usage between instances within a family in that region
 		* EX: you can move from c5.xlarge running Windows to c5.2xlarge running Linux and automatically benefit from the Savings Plan prices
-	* EC2 auto recovery: used to automatically recover your EC2 instances when CloudWatch detects a problem with that EC2 server; like if it's broken or something 
+	* EC2 auto recovery: used to automatically recover your EC2 instances when CloudWatch detects a problem with that EC2 server; like if it's broken or something
+		// * when recovered, the instance maintains its instance ID, private IP, EIP, and attached EBS volumes
 	* factors that impact the price paid for an EC2 instance:
 		* the instance type
 		* load balancing
@@ -171,7 +172,8 @@ S3: simple storage service; allows you to manage your buckets: it's where you pu
 			  |	* S3 IA: (Infrequently Accessed) this is for data that is accessed less frequently, but once needed requires rapid access
 			  | 	* cheaper than S3, but you're charged a retrieval fee, 50% less than Standard, 99.9% availability
 			  | * S3 One Zone: for when you want S3 IA w/o the multiple availability zones thing, 20% less than IA
-			  |	* S3 Intelligent tiering: uses machine learning to move data through the above 3 access tiers ^ to optimize cost and performance
+			  |	* S3 Intelligent Tiering: uses machine learning to move data through ALL access tiers to optimize cost and performance
+			//   |		* it's always more expensive than just picking the regular tiers, but unless you know your bucket usage with 100% certainty, than just go with Intelligent Tiering 
 			  | * S3 Glacier Instant Retrieval
 			  | * S3 Glacier Flexible Retrieval
 			  |		* for archiving and long-term backup; lower cost than S3 Buckets, but takes a while to get data from there and you're charged every time you request info from those buckets
@@ -551,6 +553,11 @@ Rekognition: converts images into tags/text; kind of like those questions that a
 resource groups: group of resources that share one or more of the same tag
 AWS Config: monitors the configuration of your AWS resources
 	* lets you assess, audit, and evaluate the configurations of your AWS resources; unlike OpsWorks which sets up those configurations as opposed to auditing them
+	// * Managed Rules: prebuilt compliance rules provided by AWS that AWS Config can use to check whether your AWS resources follow common config/security/compliance requirements
+	// * Custom Rules: compliance rules u create yourself
+// Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
+// 	* Auto-remediation Actions: automated steps that detect config/security/compliance problems and then automatically fixes it
+// 	* typically used in conjunction with AWS Config to detect and remediate config, security, and compliance problems
 Parameter Store: server-less storage for passwords and connection strings; can store them using KMS or as plaintext; can also set Time To Live to expire those; free; limit of 10,000 params per account
 Secrets Manager: similar to Parameter Store, but costs money; auto rotate passwords for you, can generate random passwords for you, and applies the new password in RDS for you; no storage limit
 Security Hub: a central location where you can view all security alerts and findings in your company across all AWS security services, across all AWS accounts in your company (god view)

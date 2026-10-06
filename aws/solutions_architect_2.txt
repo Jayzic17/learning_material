@@ -165,7 +165,7 @@ S3: secure, durable, highly scalable object storage
 			* Governance Mode: users can't overwrite or delete an object version or alter the lock settings unless they have special permissions
 			* Compliance Mode: users can't overwrite or delete the object, even the Root Account user; ensures object can't be fucked with for the duration of its retention period
 	* Retention Period: protects an object version for a set amount of time; after the time expires the object can be overwritten and deleted, unless you put a Legal Hold on the object
-	* Object Legal Hold: prevFents an object version from being overwritten or deleted; it remains in effect until removed; can be freely placed and removed
+	* Object Legal Hold: prevents an object version from being overwritten or deleted; it remains in effect until removed; can be freely placed and removed
 		* only users who have PutObjectLegalHold permissions can place and remove Legal Holds
 	* Glacier Vault Lock: same as S3 Object Lock, but with Glacier; lets you enforce compliance controls for S3 Glacier Vaults; can specify a WORM model and lock the policy from future edits
 	* S3 Object Prefixes: the middle portion of an object's location address (not including the bucket name); EX: mybucketname/folder1/subfolder1/myfile.jpg -> folder1/subfolder1
@@ -366,8 +366,7 @@ EC2:
 			* ...a mapping that specifies the volumes to attach to the instance when it's launched
 		# * Launch Templates: is what you use to manage revisions to your AMIs, so like v1.0, then v1.1, etc...
 		# * AMIs are region specific
-		# * Systems Manager Automation: helps you automate the process of configuring and managing EC2 instances and AWS resources by using runbooks
-			# * lets you routinely patch your AMIs w/ security updates and bake those into your AMIs
+		# * u can use Systems Manager Automation to routinely patch your AMIs w/ security updates and bake those into your AMIs
 		# * AMIs help you keep changes made to your OS, app, sys packages, etc. you can use Systems Manager Automation to routinely patch your AMI's security, and AMIs are used with...
 		# 	* ...LaunchConfigurations, so if you want to update multiple instances, just make a new copy of your LaunchConfiguration and use it with the new AMI you created containing those updates
 		# 	* you can't edit the current LaunchConfiguration live; gotta create a new one, cause it doesn't include versioning
@@ -639,8 +638,8 @@ RDS: scalable, managed(not fully), relational database service
 	# 	* Manual Snapshots: these backups persist even after you delete the original RDS instance unlike Automated Backups
 	# 		* you can then share these snapshots cross-region and cross-account, export them to S3, but there's an additional charge for each snapshot u take
 	# 	* your database has to be in the "available" state in order to perform backups
-	* when recovering data, AWS will take the most recent daily backup and apply transactional log data relevant to that day, which allows for recovery down to the second inside the Retention Period
-		* when you recover data using Automated Backup or Manual Snapshots a new RDS instance is created for the restored database, and this new instance will have a new DNS endpoint as well
+	// * when recovering data, AWS will take the most recent daily backup and apply transactional log data relevant to that day, which allows for recovery down to the second inside the Retention Period
+	// 	* when you recover data using Automated Backup or Manual Snapshots a new RDS instance is created for the restored database, and this new instance will have a new DNS endpoint as well
 	* RDS Encryption: feature that provides encryption of your RDS DB data at rest using AES-256
 		* you can turn on encryption for all RDS engines via KMS. It will also encrypt your automated backups, Snapshots, and replicas
 	* In-Transit encryption is provided by default via the databases DNS Endpoint
@@ -1315,6 +1314,10 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 		# 	* if your Origin is EC2 then use CloudFront
 		# 	* S3 presigned urls are different than CloudFront Signed urls: they both give you access to a private S3 objects for a limited time, but the ladder requires you provide access credentials first
 	# * CloudFront Access Logs: captures requests made to your CDN that gets who made the request, where, when, and how 
+	// * besides the free tier, CloudFront has 3 other pricing classes:
+	// 	* Price Class 100: only uses the least-expensive Edge Locations (US, Canada, and Europe)
+	// 	* Price Class 200: Price Class 100, plus additional Edge Locations in Asia, Middle East, and Africa
+	// 	* All
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1327,8 +1330,9 @@ KMS: secure key management, encryption, and decryption
 	// # * it's regional, not global
 	* manages Customer Master Keys (CMKs) i.e keys you or aws create
 		* 3 types of CMK's:
-			// # * Customer Managed: allows key rotation, controlled via key policies, can be enabled/disabled, you can view and manage it, and is dedicated to your account
+			// # * Customer Managed: allows key rotation, controlled via key policies, can be enabled/disabled, you can view and manage it, and u can share things you encrypt w/ it w/ other accounts
 			// # * AWS Managed CMK(default): free, only the aws service you use it for can use it, so can't manage it, but it's dedicated to your account and you can view it 
+				// * since it's dedicated to a single account, things encrypted by it would instead need to be encrypted w/ Customer Managed CMK's if u want to share it w/ other accounts
 			// # * AWS Owned CMK: used by aws on a shared basis across many aws accounts, so you can't view them and they aren't dedicated to your account, but you can manage them
 		* 2 types of encryption:
 			// # * Symmetric(default): same key used for encryption and decryption
@@ -1478,7 +1482,7 @@ AWS CLI:
 	# 	* Aurora PostgreSQL
 	* 2 types of configurations for Aurora:
 		* Aurora Provisioned(default): Aurora cluster contains a primary db that performs reads, writes, and optionally up to 15 Aurora Replicas
-			* the primary db will not be created for you by default. You have to create your db instances after creating your Aurora cluster
+			// * the primary db will not be created for you by default. You have to create your db instances after creating your Aurora cluster
 			* scaling is manual, capacity is fixed based on instance size, scaling is manual, and read/write scaling is fixed based on instance type and Read Replicas
 			* used for stable and predictable workloads, cost is based on the instance runtime and storage, starting and stopping is manual, and maintenance has to be performed during MWs
 		* Aurora Serverless v2: fully-manages the autoscaling configuration for Aurora. the DB will automatically start up, shut down, and scale capacity up/down based on your application
@@ -1541,6 +1545,7 @@ Redshift: AWS-managed petabyte-scale data warehouse
 	# * Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
 	# * Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
 	# * Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
+	// * Redshift Pause and Resume: lets you temporarily stop a Redshift cluster when you aren't using it, so you don't pay for compute while it's paused; data is retained
 CloudFormation: Infrastructure as Code
 	* uses YAML or JSON files
 	* the anatomy of a CloudFormation Template:
@@ -1557,6 +1562,7 @@ CloudFormation: Infrastructure as Code
 	* ROLLBACK_IN_PROGRESS is when CloudFormation encounters an error
 	* any CloudFormation templates larger than 0.05MB are too large to upload directly and need to be imported via a S3 bucket
 	* CloudFormation Drift Detection: used to detect changes made to property values of aws resources outside of what your CloudFormation templates already define
+	// * Stack Policies: protects specific resources in a CloudFormation stack from being accidentally updated/deleted; u include it when writting your CloudFormation templates
 CloudTrail: logs and monitors API calls and actions btwn AWS services
 	* enables governance, compliance, operational auditing, and risk auditing on your AWS account
 	* CloudTrail event logs are SSE encrypted by default
@@ -1564,7 +1570,7 @@ CloudTrail: logs and monitors API calls and actions btwn AWS services
 	# * CloudTrail already logs your stuff by default with logs lasting 90 days via Event History; if you need more than 90 days you have to create a Trail
 	# 	* Trail: logs that output to S3; for when you want to keep logs over 90 days old; they don't have a GUI like Event History, so you have to use Amazon Athena if you want to analyze them
 			* can be set to log all regions(cross-region), can be set to log across all accounts in an Organization(cross-account), and can encrypt your logs using Server Side Encryption using KMS
-			* Log File Validation: to see whether or not someone has tampered with your logs; available with Trails
+			// * Log File Validation: to see whether or not someone has tampered with your logs; available with Trails
 	* CloudTrail can be set to deliver events to a CloudWatch log when specific API activity occurs
 	* 2 types of events in CloudTrail:
 		* Management Events: tracks management operations; turned on by default; can't be turned off
@@ -1600,6 +1606,7 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	// 		* prevents a single Lambda function from consuming all your account's available concurrency and reducing performance impacts on resources downstream
 	* /tmp directory has a max size of 500MB
 	# * Lambda doesn't run in a VPC by default; you can set it to be a VPC to interact with some services like RDS, but the lambda will lose internet access as a result
+		// * to enable Internet access if a Lambda is stuck in a VPC, place it in a private subnet w/ a route to a NAT Gateway in a public subnet
 	* you can set timeouts to be a maximum of 15 minutes
 	* Cold Start: if a lambda is invoked and the server is turned off, the server has to turn on and copy your code over. This causes a delay between when the lambda starts and when it runs
 		* can cause delays in the user experience, so if your app relies on being very responsive, then serverless functions might not be what you need
@@ -1632,6 +1639,7 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	* 2 ways to get Lambda function version: AWS_LAMBDA_FUNCTION_VERSION or getFunctionVersion
 	# * if Lambda functions fail (when invoked asynchronously), they will automatically retry by themselves 2 more times with 1 minute btwn the 1st 2 tries, and 2 minutes btwn the 2nd and 3rd tries
 		# * when it is invoked synchronously however, there is no automatic retry attempts
+	// * Lambda Function URLs: lets you give a Lambda function its own HTTPS endpoint that can be invoked by somebody outside of aws over the Internet
 	* Lambda function deployment types:
 		* Canary: traffic is shifted in 2 increments:
 			* 1st increment: % of traffic that's shifted to your updated lambda functions
@@ -1665,6 +1673,7 @@ ElastiCache: fully managed caching service; runs on either Redis or Memcached
 	# 	* MemoryDB: Redis-compatible in-memory database
 	# 		* has additional persistence guarantees over ElastiCache, making MemoryDB suitable as a primary database
 	# 		* the tradeoff being that writes are in milliseconds, whereas ElastiCache is in microseconds, so it's slower
+	* 
 Elastic Beanstalk: quickly deploy and manage apps on AWS w/o having to worry about infrastructure; it's a PaaS
 	* powered by a CloudFormation template that sets up: 
 		* ELB, ASGs, RDS, preconfigured/custom EC2's, CloudWatch, SNS, security(rotating passwords), the ability to run Dockerized environments...
@@ -1806,7 +1815,7 @@ Amazon Kinesis: fully managed, scalable, real-time data streaming service. Takes
 			# 		* Inline Partitioning: you provide a JQ expression to parse JSON, which returns the key/values
 			# 		* Lambda: Lambda function parses the data, which returns the key/values
 			# 	* once enabled, it CANNOT be turned off
-		* Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Rekognition(Machine Learning)
+		// * Kinesis Video Streams: producers are video and audio data, consumers are ML software or services that process video and audio data EX: SageMaker, Rekognition(Machine Learning)
 		# * Managed Service for Apache Fink (formally Kinesis Data Analytics): producer and consumer are either Kinesis Firehose or Kinesis Data Streams...
 		# 	* ...with the intermediary being Managed Service for Apache Fink for use in data analytics
 		# 	* data that passes through Managed Service for Apache Fink is run through custom SQL you write, which then outputs to the output stream
@@ -1859,6 +1868,7 @@ AWS Security Token Service (STS): gives out limited-temporary credentials for IA
 	* all STS requests go to a single endpoint at: https://sts.amazonaws.com
 	* it's not an aws service u access through the aws console it's strictly from using the AWS CLI/SDK
 		* returns an AccessKeyID, SecretAccessKey, SessionToken, and Expiration
+	// * SAML Federation 2.0: allows external users to authenticate through their corporate Identity Provider(IdP) and receive temporary AWS credentials via STS
 Amazon MQ: used for messaging queuing kind of like SQS/SNS; it's a AMQP message broker service that uses industry standard APIs and protocols, making it easy to switch from any standard message broker to Amazon MQ w/o rewriting code
 	* good for if you want to move your existing messaging service to the cloud quickly and easily
 	* u have the option of choosing Rabbit MQ (higher performance w/ advanced messaging capabilities) or Active MQ (slower performance with basic messaging capabilities)
@@ -2136,7 +2146,7 @@ Amazon Managed Streaming for Apache Kafka (Amazon MSK): fully-managed service th
 		* Serverless: you don't have to manage Nodes and u pay for what you use
 	* has direct integrations with S3 and EventBridge Pipes 
 	* MSK Connect: lets u send the streaming data to and from your Apache Kafka cluster with other systems such as db's, file systems, etc.
-
+// Database-per-service: a microservices architecture pattern where each microservice owns and manages its own database
 
 
 
