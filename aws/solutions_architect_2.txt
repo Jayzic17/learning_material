@@ -9,7 +9,7 @@ IAM: manage Users and their level of access to the AWS console
 		* you'll want to store your credentials in your User's home, so something like: ~/.aws/credentials or ~/.aws/config
 			* they both do exactly the same thing, so doesn't matter which u use. The only caviate is that ~/.aws/credentials takes precidence when evaluating access
 			* some common config parameters include: aws_access_key_id, aws_secret_access_key, output, and region
-			* you can fill either file with a bunch of Named Profiles:
+			* you can fill either file with a bunch of Named Profiles
 				* [profile wcpprod]
 				  role_arn              = ...
 				  aws_access_key_id     = ...
@@ -456,7 +456,7 @@ EBS: virtual hard drive in the cloud you attach to individual EC2 instances
 	* IOPS: input/output per second; how fast are the reads and writes?
 	* throughput: refers to the speed of the data transfer to and from storage; EX: in the analogy of water flowing through a pipe, throughput is the water
 	* bandwidth: the highest possible data transfer speed along a network; EX: in the analogy of water flowing through a pipe, bandwidth is the pipe
-	// # * Data Lifecycle Manager (DLM): A feature of EBS that lets you automate the creation, retention, and deletion of snapshots taken to back up your EBS instances
+	// # * Data Lifecycle Manager(DLM): A feature of EBS that lets you automate the creation, retention, and deletion of snapshots taken to back up your EBS instances
 CloudWatch: monitors your cloud
 	* monitors: EC2's, Autoscaling Groups, ELB's, Route53 Health Checks, EBS volumes, Storage Gateways, and CloudFront
 	* will monitor EC2's every 5 minutes by default
@@ -746,7 +746,7 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 	// # 	* maintains 5 minute incremental backups of your data for you
 	// # 	* this is not enabled by default
 	* Streams: time-ordered sequence of item changes in a table; contains data like inserts, updates, and deletes
-		* this data(Stream Records) are stored for 24 hours in a Shard: a collection of Stream Records
+		// * this data(Stream Records) are stored for 24 hours in a Shard: a collection of Stream Records
 		* can use them in conjunction with Lambda
 	* Global Tables: fully managed multi-master, multi-Region replication solution for DynamoDB used for redundancy, Disaster Recovery, and/or High-Availability
 		* you would use this for an application that is distributed world-wide
@@ -771,6 +771,10 @@ DynamoDB: fully-managed key-value and document store(JSON) DB; NoSQL; guarantees
 			* no 2 Items can have the same Primary Key when using Simple Primary Keys
 		* Composite Primary Key: when ur using both a Partition and a Sort Key
 			* 2 Items can have the same Primary Key when using Composite Primary Keys, as long as the Sort Key is unique
+		// * how to prevent Hot Partitions: frequent calls to a single Partition cause all the calls contain the same Partition Key:
+		// 	* High-Cardinality Partition Key: design your Partition Key such that it naturally has many distinct values (e.g pkey####: allows for 9999 unique Partition Keys)
+		// 	* Write Sharding: if you're in a situation where u can't just design your Partition Key to always be unique, artificially add variations afterwards to make them distinct
+		// 		* e.g the Partition Key naturally/always comes back to me as: pkey, so afterwards I'll just add a random/hash value at the end each time 
 	* 2 different types of Read Consistency available to avoid inconsistent reads of data:
 		// # * Eventual Consistent Reads (default): when copies are being updated it's possible to read an inconsistent copy
 		// # * Strongly Consistent Reads: when copies are being updated you won't be able to read till all copies are updated, guaranteed consistency but with slower reads
@@ -1283,7 +1287,8 @@ CloudFront: CDN that creates cached copies of your websites at Edge Locations ba
 	* Invalidators: you can manually invalidate cache on specific files; this means forcing the cache to immediately expire and then refresh the cached content
 		// # * refreshing the cache costs money because of transfer costs to update Edge Locations; it's called invalidating the cache
 	* Error Pages: you can create custom error responses to HTTP 5xx's by referencing custom error pages you create
-	* Restrictions: you can blacklist or whitelist countries via geo-restriction 
+	* Restrictions: you can blacklist or whitelist countries via geo-restriction
+	// * CloudFront Cache Policies: controls which cookies, query strings, and headers are forwarded to each Edge Location, making cached content personalized at each Edge Location
 	* Lambda@Edge Functions: Lambda functions that override the behavior of requests and responses in CloudFront
 		* allows your Lambda functions to execute in AWS locations closer to the user
 		* Supports python and Node.js
@@ -1351,6 +1356,7 @@ KMS: secure key management, encryption, and decryption
 				* this is used outside of aws by users who can't call KMS APIs
 				// # * AWS services w/ KMS don't support asymmetric CMK's
 				* is used to sign messages and verify signatures
+	// * in the event u delete a KMS key, in the time it takes before the key is actually deleted, it is disabled and cannot be used for encrypt or decrypt operations, while deletion can still be cancelled
 	* good for S3 objects, database passwords, and API keys that are stored in Parameter Store
 	// # * can encrypt and decrypt data up to 4KB in size per call
 	# * you pay per API call and per CMK key
@@ -1545,7 +1551,10 @@ Redshift: AWS-managed petabyte-scale data warehouse
 	# * Redshift Spectrum: a feature of Redshift that lets you query data stored in S3 to be used in OLAP analytics, so that you can use it in conjunction with data already stored in Redshift
 	# * Cross-Region Snapshots Copy: a feature of Redshift that lets you make snapshots of your entire Redshift cluster to another region in the event of a region outage
 	# * Redshift Enhanced VPC Routing: feature of Redshift that forces all COPY and UNLOAD traffic between your cluster and data to remain inside your VPC and not transit the Internet
-	// * Redshift Pause and Resume: lets you temporarily stop a Redshift cluster when you aren't using it, so you don't pay for compute while it's paused; data is retained
+	// * Redshift Pause and Resume: lets you temporarily stop a Redshift cluster when you aren't using it, so you don't pay for compute while it's paused; data is retained; good for long predictable workloads
+	// * Redshift Serverless: cheaper than Redshift Pause and Resume; you pay based on RPU's consumed; good for short and unpredictable workloads
+	// * Redshift Row/Column-Level Security: filters rows/columns returned by queries based on the user or role executing the query on a single table
+	// 	* each user/role sees only their data without having the need to maintain separate tables or views for each user/role
 CloudFormation: Infrastructure as Code
 	* uses YAML or JSON files
 	* the anatomy of a CloudFormation Template:
@@ -1583,6 +1592,7 @@ AWS Lambda: run code w/o provisioning and managing servers; they're serverless f
 	* can set the time of a Lambda to be 3 seconds(default), 1 second(min), or 15 minutes(max)
 	# * can set the storage of a Lambda to be 512MB(default, min) or 10GB(max)
 	# * can set the memory of a Lambda to be 128MB(default, min) or 10GB(max)
+	// * Lambda Power Tuning: an open-source tool that helps you find the optimal memory setting for a Lambda function by testing it at different memory allocations
 	* can be invoked in 2 ways:
 		* Sync Invocations: data that waits for a response
 		* Async Invocations: data that immediately returns to an async aws service (EX: SNS/SQS, another Lambda, EventBridge)
@@ -1751,6 +1761,7 @@ API Gateway: fully managed; creates, publishes, maintains, monitors, and secures
 		* CORS
 		* Resource Policies
 		* Lambda Authorizers: Lambda functions that control access to your API method's authentication, headers, paths, query strings, and parameters
+			// * Authorization Caching: lets u cache authorization results for identical JWT tokens, thus reducing Lambda invocations
 		* Cognito User Pools
 		* Client-Side SSL Certificates
 		# * API Usage Plans: let you provide API keys to your customers and then track and limit the methods for each API key

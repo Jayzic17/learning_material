@@ -88,6 +88,7 @@ Elastic Load Balancer(ELB): allows you manage the load traffic across all of you
 			# * Server Name Indication(SNI): Feature of ALB that allows multiple domains to serve SSL traffic over the same IP address by including the hostname that the user is trying to connect to
 				# * you can host multiple TLS-secured applications, each with its own TLS certificate behind a single ALB by binding all the certificates to the same listener on your ALB
 			# * Request Tracing: feature of ALB that lets you monitor ALB by adding a header to HTTP requests with trace identifier information
+			// * ALB's also support WebSocket connections through HTTP(S) Listeners
 			* ALB's and NLB's both support Dynamic Host Port Mapping
 		* GWLB (Gateway): routes traffic to virtual applicances (to analyze for security) before routing it to the actual target
 
@@ -254,6 +255,7 @@ AWS marketplace: place where you can buy and download AWS stuff already made by 
 Cost Explorer: allows you to visually see the billing of each member associated with your account
 	* allows you to visualize and understand your AWS costs and usage over time; you use it to explore costs AFTER they've been incurred
 	// # * gives highly accurate cost forecasts for up to 12 months ahead
+	// * Data Transfer Filter: shows u exactly how much is spent on cross-region data transfers
 AWS budgets: lets you set up alarms in the event you go over budget, or are about to. Can be budgets based on cost, usage, or reservation (EC2, RDS, Redshift, ElasticCache). can track by mnth, qt, or yr
 	* used to set custom budgets and it alerts you if your costs exceed or are forecasted to exceed your budget amount; used to budget costs BEFORE they have been incurred
 TCO calculator: total cost of ownership; provides reports and presentations that show how much your business would save if you switched from on-premise to cloud. It's only an approximation!
