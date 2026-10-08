@@ -2083,7 +2083,7 @@ AWS Amplify: an opinionated framework (meaning it's a framework that makes stron
 		* Amplify Studio: IDE
 	* has direct integrations with Cognito, API Gateway, S3, DynamoDB, Lambda, etc.
 	* works with a bunch of the most popular JavaScript frameworks
-Amazon AppFlow: a managed integration service for data transfer btwn data sources in aws and other cloud data sources (EX: S3 <-> Google Sheets)
+// Amazon AppFlow: a managed integration service for data transfer btwn data sources in aws and other cloud data sources (EX: S3 <-> Google Sheets)
 	* 3 Flow Triggers:
 		* run on demand: manually running the flow
 		* run on event: running the flow in response to an event from a SaaS application
